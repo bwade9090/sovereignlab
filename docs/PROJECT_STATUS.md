@@ -25,6 +25,7 @@
 - Added typed settings, offline smoke tests, repository policies, and agent onboarding instructions.
 - Passed the complete M0 offline validation suite and verified ignore rules for secrets, local environments, raw data, model weights, private traces, and generated artifacts.
 - Initialized the local Git repository on branch `main`.
+- Created root commit `9f2853a` (`chore: establish reproducible project foundation`).
 
 ## Current validation evidence
 
@@ -45,7 +46,7 @@ Validated on Windows with Python 3.12.13:
 
 ## Immediate next action
 
-Create the foundation commit and publish it after GitHub CLI authentication is restored.
+Restore GitHub CLI authentication, create the public `bwade9090/sovereignlab` repository, and push `main`.
 
 After publication, begin M1 with exactly one design task: define and validate the source-manifest and benchmark-record schemas before downloading documents or calling paid APIs.
 
