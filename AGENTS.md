@@ -4,14 +4,15 @@ This file applies to the entire repository. It is the onboarding contract for hu
 
 ## Mission
 
-Build an evaluation-first, bilingual Mistral deployment lab that produces auditable Korean/English macroeconomic briefings from temporally valid official evidence. The project must prove fine-tuning, advanced RAG, deterministic tool use, evaluation, and production integration without overstating results.
+Build **KOR-RTD**, a provenance-contracted point-in-time (vintage) data layer for Korean macroeconomic statistics, and **K-VINTAGE**, a bilingual Korean/English benchmark whose gold answers depend on the data vintage available at each question's `as_of` date — with the SovereignLab briefing pipeline as the reference implementation and public baseline suite. Preserve evaluation-first rigor without overstating results: techniques (fine-tuning, RAG, deterministic tools) are means, not the mission, and temporal-leakage rate is the headline metric.
 
 ## Read before changing anything
 
-1. `docs/project/01_project_charter.md` — approved product and evaluation contract.
+1. `docs/project/01_project_charter.md` — approved product and evaluation contract (v2).
 2. `docs/PROJECT_STATUS.md` — current milestone, completed work, next action, blockers, and validation evidence.
-3. `docs/decisions/` — accepted architecture and process decisions.
-4. The closest additional `AGENTS.md`, if a subdirectory adds one later.
+3. `docs/decisions/` — accepted architecture and process decisions (ADR 0003 records the v2 reorientation).
+4. `docs/discovery/01_concept_upgrade_proposal.md` — background rationale for v2: verified data facts, judged alternatives, risk register.
+5. The closest additional `AGENTS.md`, if a subdirectory adds one later.
 
 The charter is the scope authority. Do not expand sources, agents, UI, or infrastructure before the current milestone gate passes.
 
@@ -29,7 +30,14 @@ The charter is the scope authority. Do not expand sources, agents, UI, or infras
 
 - Freeze evaluation schemas and evidence-disjoint splits before model optimization.
 - Keep Korean and English results separately reportable.
-- Never let an `as_of` evidence packet include a source published after its cutoff.
+- Never let an `as_of` evidence packet include a source published after its cutoff — nor a data vintage/edition that did not exist at the cutoff.
+- Harvester outputs are append-only: never rewrite, backdate, or backfill a committed snapshot; public commit history is the proof of capture dates.
+- Never commit raw ECOS/KOSIS observation values before the per-series KOGL redistribution ruling is recorded.
+- Report the two gold-set tiers separately (40 human-reviewed core vs machine-generated probes); never merge them into one count.
+- Qualify every "first" claim: "to our knowledge" + "for official statistics" + cite prior art (arXiv 2605.23497, Dallas Fed real-time OECD dataset, OECD MEI revisions database). Never claim "first Korean macro benchmark."
+- Do not claim OECD edition/backfill ranges beyond what a recorded verification spike confirmed.
+- When mentioning Korea's AI Basic Act, describe it precisely: it regulates "high-impact" (고영향) AI under a voluntary verification/certification regime — not "high-risk" AI with mandatory testing.
+- Frame the project as complementing public statistical infrastructure; never as exposing defects in official APIs.
 - Treat LLM judges as secondary diagnostics until calibrated against human review.
 - Derive every CV number and README performance claim from committed artifacts and a reproducible command.
 - Preserve negative results and failure taxonomies.
@@ -46,6 +54,8 @@ The charter is the scope authority. Do not expand sources, agents, UI, or infras
 
 ## Local setup and required checks
 
+Development happens on multiple machines; `.venv` is machine-local and must be recreated on each. Nothing in the repository may depend on machine-specific paths.
+
 Windows PowerShell:
 
 ```powershell
@@ -57,13 +67,24 @@ python -m ruff format --check .
 python -m pytest
 ```
 
-If the user-level Python launcher is unavailable on the current Codex workstation, use the documented Python 3.12 runtime in `docs/PROJECT_STATUS.md` to create `.venv`; commands after activation remain standard.
+macOS or Linux:
+
+```bash
+python3.12 -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements.txt
+python -m ruff check .
+python -m ruff format --check .
+python -m pytest
+```
+
+If the user-level Python launcher is unavailable on the Windows workstation, use the documented Python 3.12 runtime in `docs/PROJECT_STATUS.md` to create `.venv`; commands after activation remain standard.
 
 ## Repository map
 
 - `src/sovereignlab/` — importable application and evaluation code.
 - `tests/` — offline tests; network calls must be mocked or replayed unless explicitly marked.
-- `data/` — public benchmark and metadata policy; ignored raw/interim material.
+- `data/` — public benchmark and metadata policy; ignored raw/interim material. The KOR-RTD archive layer (edition consolidations, harvester snapshots, manifests) lives here.
 - `artifacts/` — generated outputs policy; generated content is ignored by default.
 - `docs/project/` — charter and customer-facing scope.
 - `docs/discovery/` — role-gap and project-selection research.

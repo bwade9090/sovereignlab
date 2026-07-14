@@ -18,3 +18,4 @@ Accepted records are not silently rewritten. Supersede them with a new ADR and c
 
 - [0001 — Project foundation and compute boundary](0001-project-foundation.md)
 - [0002 — Evidence schema contract](0002-evidence-schema-contract.md)
+- [0003 — K-VINTAGE on KOR-RTD reorientation and vintage-aware tool semantics](0003-kvintage-reorientation.md)

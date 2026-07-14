@@ -1,10 +1,14 @@
 # SovereignLab
 
-> Evaluation-driven Mistral deployment for auditable Korean/English economic research.
+> What did the data say *then*? Vintage-conditioned evaluation and auditable briefings for Korean/English economic research.
 
 **Status:** foundation phase; public implementation is in progress. No model-performance claims have been made yet.
 
-SovereignLab is a four-week, evaluation-first customer pilot for a high-stakes financial or public-sector workflow. Given a bilingual policy question and an optional `as_of` date, the target system will route the request to temporally filtered document retrieval, an official OECD SDMX data tool, both, or a justified abstention. It will return a cited briefing together with a machine-readable evidence and verification trace.
+Korea's official statistics APIs (ECOS, KOSIS) expose latest values only — they offer no "as-of" query path — and no Korean equivalent of the St. Louis Fed's ALFRED archive exists. SovereignLab builds three things in four weeks:
+
+1. **KOR-RTD** — a provenance-contracted point-in-time data layer for Korean macroeconomics: consolidated OECD edition histories plus a scheduled public harvester that forward-captures the latest-only official APIs (append-only, checksummed; commit history is the proof of capture dates).
+2. **K-VINTAGE** — a bilingual Korean/English benchmark whose gold answers are computed from the data vintage available at each question's `as_of` date. To our knowledge the first such benchmark for official statistics (prior art cited in the datasheet: arXiv 2605.23497 statutory as-of QA, the Dallas Fed real-time OECD dataset, the OECD MEI revisions database).
+3. **A reference briefing system** — given a bilingual policy question and an optional `as_of` date, it routes to temporally filtered document retrieval, a deterministic vintage-resolving data tool, both, or a justified abstention, and returns a cited briefing with a machine-readable evidence and verification trace.
 
 ## What will be tested
 
@@ -12,14 +16,14 @@ The project will compare four variants under one frozen benchmark:
 
 1. Closed-book Mistral generation.
 2. Temporal hybrid RAG.
-3. Temporal RAG plus deterministic SDMX tools.
+3. Temporal RAG plus the deterministic vintage-resolving as-of tool.
 4. The same system with a LoRA-tuned evidence router/tool planner.
 
-Primary measurements include routing macro-F1, tool-argument validity, Korean/English retrieval recall, citation correctness, numerical provenance, temporal leakage, abstention, latency, and cost.
+**Temporal-leakage rate is the headline per-variant metric** — a system that answers from revised values that did not exist at `as_of` is caught mechanically, with no LLM judge. Further measurements: routing macro-F1, tool-argument validity, Korean/English retrieval recall, citation correctness, numerical provenance, abstention, latency, and cost.
 
 ## Current milestone
 
-The approved charter, project constraints, evaluation contract, and staged CV language are documented. M1a adds strict source-manifest and benchmark-record models, synchronized JSON Schema, synthetic fixtures, and dataset-wide temporal/split leakage checks. See [project status](docs/PROJECT_STATUS.md) for the exact next action and validation evidence.
+Charter v2 (the K-VINTAGE on KOR-RTD reorientation) is approved and documented; see [ADR 0003](docs/decisions/0003-kvintage-reorientation.md) for the decision and [the proposal](docs/discovery/01_concept_upgrade_proposal.md) for the rationale. M1a froze strict source-manifest and benchmark-record models with synchronized JSON Schema, synthetic fixtures, and dataset-wide temporal/split leakage checks. Next: the week-1 verification spikes — see [project status](docs/PROJECT_STATUS.md) for the exact ordered next actions.
 
 ## Quick start
 
@@ -51,7 +55,8 @@ Copy `.env.example` to `.env` only when an API-backed experiment is approved. Of
 
 ## Documentation
 
-- [Approved project charter](docs/project/01_project_charter.md)
+- [Approved project charter (v2)](docs/project/01_project_charter.md)
+- [Concept upgrade proposal (v2 rationale)](docs/discovery/01_concept_upgrade_proposal.md)
 - [Evidence schema contract](docs/project/02_evidence_schema_contract.md)
 - [Current status and handoff](docs/PROJECT_STATUS.md)
 - [Role-gap and project-selection analysis](docs/discovery/00_role_gap_analysis.md)
