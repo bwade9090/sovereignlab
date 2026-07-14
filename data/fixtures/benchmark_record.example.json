@@ -1,0 +1,32 @@
+{
+  "annotation": {
+    "annotated_at": "2026-07-14T08:00:00Z",
+    "annotated_by": "fixture-author",
+    "reviewed_at": "2026-07-14T09:00:00Z",
+    "reviewed_by": "fixture-reviewer",
+    "status": "approved"
+  },
+  "as_of": "2024-05-31",
+  "document_evidence": [
+    {
+      "locator": {
+        "page": 3,
+        "section": "Growth outlook"
+      },
+      "source_id": "example-outlook-2024-05-en",
+      "supports_claim": "The example forecast was revised upward."
+    }
+  ],
+  "evidence_group_id": "example-release-2024-05",
+  "expected_route": "documents",
+  "language": "en",
+  "parallel_group_id": "example-parallel-001",
+  "question": "As of May 2024, why was the example growth forecast revised?",
+  "record_id": "example-doc-en-001",
+  "reference_answer": "The example report attributes the revision to stronger exports.",
+  "schema_version": "1.0.0",
+  "split": "test",
+  "tags": [
+    "temporal"
+  ]
+}

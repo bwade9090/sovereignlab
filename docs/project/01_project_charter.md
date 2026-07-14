@@ -1,10 +1,10 @@
 # SovereignLab project charter
 
-- Status: proposed v1; ready for review
+- Status: approved v1
 - Date: 2026-07-14
 - Delivery target: four weeks, approximately 80 total hours
 - Initial budget ceiling: USD 100 for model APIs and rented compute
-- Repository intent: public open source under `bwade9090`
+- Repository: public at `https://github.com/bwade9090/sovereignlab`
 
 ## 1. Product thesis
 
@@ -207,10 +207,10 @@ Every paid operation will be opt-in, logged by experiment, and preceded by a sma
 - The user-level Python installation does not currently execute correctly.
 - A working bundled Python 3.12.13 runtime is available and can create the project `.venv` in the next setup step.
 - Git 2.51 and GitHub CLI 2.89 are installed.
-- GitHub CLI currently recognizes `bwade9090`, but its token is invalid; reauthentication is required immediately before creating or pushing the public repository.
+- GitHub CLI is authenticated as `bwade9090`; local `main` tracks `origin/main`.
 
-## 12. Review decisions requested
+## 12. Approved decisions
 
-1. Approve Korean macroeconomic surveillance as the initial workflow.
-2. Approve the 40-question, four-route benchmark contract.
-3. Approve the Week-one compatibility spike and documented fallback from Ministral 3 3B if required.
+1. Korean macroeconomic surveillance is the initial workflow.
+2. The gold benchmark targets 40 questions across four exclusive routes.
+3. The Week-one compatibility spike starts with Ministral 3 3B and permits the documented fallback if required.

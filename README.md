@@ -19,7 +19,7 @@ Primary measurements include routing macro-F1, tool-argument validity, Korean/En
 
 ## Current milestone
 
-The approved charter, project constraints, evaluation contract, and staged CV language are documented. The codebase currently contains only the reproducible Python foundation and configuration smoke tests. See [project status](docs/PROJECT_STATUS.md) for the exact next action and validation evidence.
+The approved charter, project constraints, evaluation contract, and staged CV language are documented. M1a adds strict source-manifest and benchmark-record models, synchronized JSON Schema, synthetic fixtures, and dataset-wide temporal/split leakage checks. See [project status](docs/PROJECT_STATUS.md) for the exact next action and validation evidence.
 
 ## Quick start
 
@@ -52,6 +52,7 @@ Copy `.env.example` to `.env` only when an API-backed experiment is approved. Of
 ## Documentation
 
 - [Approved project charter](docs/project/01_project_charter.md)
+- [Evidence schema contract](docs/project/02_evidence_schema_contract.md)
 - [Current status and handoff](docs/PROJECT_STATUS.md)
 - [Role-gap and project-selection analysis](docs/discovery/00_role_gap_analysis.md)
 - [Milestone-gated CV bullets](docs/application/00_cv_bullets.md)

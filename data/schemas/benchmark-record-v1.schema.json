@@ -1,0 +1,360 @@
+{
+  "$defs": {
+    "AnnotationProvenance": {
+      "additionalProperties": false,
+      "description": "Who created and reviewed a benchmark item, and when.",
+      "properties": {
+        "annotated_at": {
+          "format": "date-time",
+          "title": "Annotated At",
+          "type": "string"
+        },
+        "annotated_by": {
+          "maxLength": 10000,
+          "minLength": 1,
+          "title": "Annotated By",
+          "type": "string"
+        },
+        "reviewed_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reviewed At"
+        },
+        "reviewed_by": {
+          "anyOf": [
+            {
+              "maxLength": 10000,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reviewed By"
+        },
+        "status": {
+          "$ref": "#/$defs/AnnotationStatus"
+        }
+      },
+      "required": [
+        "status",
+        "annotated_by",
+        "annotated_at"
+      ],
+      "title": "AnnotationProvenance",
+      "type": "object"
+    },
+    "AnnotationStatus": {
+      "description": "Human-review maturity of a benchmark item.",
+      "enum": [
+        "draft",
+        "reviewed",
+        "approved"
+      ],
+      "title": "AnnotationStatus",
+      "type": "string"
+    },
+    "BenchmarkSplit": {
+      "description": "Evidence-disjoint dataset partitions.",
+      "enum": [
+        "train",
+        "dev",
+        "test"
+      ],
+      "title": "BenchmarkSplit",
+      "type": "string"
+    },
+    "DocumentEvidence": {
+      "additionalProperties": false,
+      "description": "Expected documentary support for one reference claim.",
+      "properties": {
+        "locator": {
+          "$ref": "#/$defs/EvidenceLocator"
+        },
+        "source_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+          "title": "Source Id",
+          "type": "string"
+        },
+        "supports_claim": {
+          "maxLength": 10000,
+          "minLength": 1,
+          "title": "Supports Claim",
+          "type": "string"
+        }
+      },
+      "required": [
+        "source_id",
+        "locator",
+        "supports_claim"
+      ],
+      "title": "DocumentEvidence",
+      "type": "object"
+    },
+    "EvidenceLocator": {
+      "additionalProperties": false,
+      "description": "A stable locator within a documentary source.",
+      "properties": {
+        "fragment_id": {
+          "anyOf": [
+            {
+              "maxLength": 128,
+              "minLength": 3,
+              "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Fragment Id"
+        },
+        "page": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Page"
+        },
+        "section": {
+          "anyOf": [
+            {
+              "maxLength": 500,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Section"
+        }
+      },
+      "title": "EvidenceLocator",
+      "type": "object"
+    },
+    "EvidenceRoute": {
+      "description": "The mutually exclusive evidence plans evaluated by the router.",
+      "enum": [
+        "documents",
+        "data",
+        "documents_and_data",
+        "abstain"
+      ],
+      "title": "EvidenceRoute",
+      "type": "string"
+    },
+    "JsonValue": {},
+    "LanguageCode": {
+      "description": "Languages supported by the MVP plus undetermined/non-linguistic sources.",
+      "enum": [
+        "ko",
+        "en",
+        "und"
+      ],
+      "title": "LanguageCode",
+      "type": "string"
+    },
+    "ToolExpectation": {
+      "additionalProperties": false,
+      "description": "Expected deterministic tool call and facts derived from its response.",
+      "properties": {
+        "arguments": {
+          "additionalProperties": {
+            "$ref": "#/$defs/JsonValue"
+          },
+          "title": "Arguments",
+          "type": "object"
+        },
+        "expected_facts": {
+          "items": {
+            "maxLength": 10000,
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Expected Facts",
+          "type": "array"
+        },
+        "source_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+          "title": "Source Id",
+          "type": "string"
+        },
+        "tool_name": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+          "title": "Tool Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "source_id",
+        "tool_name",
+        "arguments",
+        "expected_facts"
+      ],
+      "title": "ToolExpectation",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "One auditable routing/evidence task in the bilingual gold benchmark.",
+  "properties": {
+    "abstention_reason": {
+      "anyOf": [
+        {
+          "maxLength": 10000,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Abstention Reason"
+    },
+    "annotation": {
+      "$ref": "#/$defs/AnnotationProvenance"
+    },
+    "as_of": {
+      "anyOf": [
+        {
+          "format": "date",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "As Of"
+    },
+    "document_evidence": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/DocumentEvidence"
+      },
+      "title": "Document Evidence",
+      "type": "array"
+    },
+    "evidence_group_id": {
+      "maxLength": 128,
+      "minLength": 3,
+      "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+      "title": "Evidence Group Id",
+      "type": "string"
+    },
+    "expected_route": {
+      "$ref": "#/$defs/EvidenceRoute"
+    },
+    "language": {
+      "$ref": "#/$defs/LanguageCode"
+    },
+    "parallel_group_id": {
+      "anyOf": [
+        {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Parallel Group Id"
+    },
+    "question": {
+      "maxLength": 2000,
+      "minLength": 5,
+      "title": "Question",
+      "type": "string"
+    },
+    "record_id": {
+      "maxLength": 128,
+      "minLength": 3,
+      "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+      "title": "Record Id",
+      "type": "string"
+    },
+    "reference_answer": {
+      "anyOf": [
+        {
+          "maxLength": 10000,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Reference Answer"
+    },
+    "schema_version": {
+      "const": "1.0.0",
+      "default": "1.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "split": {
+      "$ref": "#/$defs/BenchmarkSplit"
+    },
+    "tags": {
+      "default": [],
+      "items": {
+        "maxLength": 128,
+        "minLength": 3,
+        "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+        "type": "string"
+      },
+      "title": "Tags",
+      "type": "array"
+    },
+    "tool_expectations": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/ToolExpectation"
+      },
+      "title": "Tool Expectations",
+      "type": "array"
+    }
+  },
+  "required": [
+    "record_id",
+    "split",
+    "evidence_group_id",
+    "language",
+    "question",
+    "expected_route",
+    "annotation"
+  ],
+  "title": "BenchmarkRecord",
+  "type": "object"
+}

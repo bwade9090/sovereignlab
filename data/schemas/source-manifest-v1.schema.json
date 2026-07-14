@@ -1,0 +1,227 @@
+{
+  "$defs": {
+    "LanguageCode": {
+      "description": "Languages supported by the MVP plus undetermined/non-linguistic sources.",
+      "enum": [
+        "ko",
+        "en",
+        "und"
+      ],
+      "title": "LanguageCode",
+      "type": "string"
+    },
+    "PublicationDateBasis": {
+      "description": "How the source availability date was established.",
+      "enum": [
+        "publisher_metadata",
+        "content_date",
+        "http_header",
+        "retrieval_date_fallback"
+      ],
+      "title": "PublicationDateBasis",
+      "type": "string"
+    },
+    "RedistributionPolicy": {
+      "additionalProperties": false,
+      "description": "Source-specific redistribution decision and its evidence.",
+      "properties": {
+        "license_name": {
+          "anyOf": [
+            {
+              "maxLength": 10000,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "License Name"
+        },
+        "license_url": {
+          "anyOf": [
+            {
+              "format": "uri",
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "License Url"
+        },
+        "notes": {
+          "anyOf": [
+            {
+              "maxLength": 10000,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Notes"
+        },
+        "status": {
+          "$ref": "#/$defs/RedistributionStatus"
+        }
+      },
+      "required": [
+        "status"
+      ],
+      "title": "RedistributionPolicy",
+      "type": "object"
+    },
+    "RedistributionStatus": {
+      "description": "What may be published from a retrieved source snapshot.",
+      "enum": [
+        "allowed",
+        "metadata_only",
+        "restricted",
+        "unknown"
+      ],
+      "title": "RedistributionStatus",
+      "type": "string"
+    },
+    "SourceKind": {
+      "description": "Evidence source categories with distinct downstream handling.",
+      "enum": [
+        "document",
+        "dataset",
+        "api"
+      ],
+      "title": "SourceKind",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "One immutable, release-specific snapshot of an official source.",
+  "properties": {
+    "byte_size": {
+      "exclusiveMinimum": 0,
+      "title": "Byte Size",
+      "type": "integer"
+    },
+    "canonical_url": {
+      "format": "uri",
+      "minLength": 1,
+      "title": "Canonical Url",
+      "type": "string"
+    },
+    "content_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Content Sha256",
+      "type": "string"
+    },
+    "document_family": {
+      "maxLength": 128,
+      "minLength": 3,
+      "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+      "title": "Document Family",
+      "type": "string"
+    },
+    "language": {
+      "$ref": "#/$defs/LanguageCode"
+    },
+    "media_type": {
+      "pattern": "^[a-z0-9][a-z0-9.+-]*/[a-z0-9][a-z0-9.+-]*$",
+      "title": "Media Type",
+      "type": "string"
+    },
+    "publication_date_basis": {
+      "$ref": "#/$defs/PublicationDateBasis"
+    },
+    "publication_date_notes": {
+      "anyOf": [
+        {
+          "maxLength": 10000,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Publication Date Notes"
+    },
+    "published_on": {
+      "format": "date",
+      "title": "Published On",
+      "type": "string"
+    },
+    "publisher": {
+      "maxLength": 10000,
+      "minLength": 1,
+      "title": "Publisher",
+      "type": "string"
+    },
+    "redistribution": {
+      "$ref": "#/$defs/RedistributionPolicy"
+    },
+    "release_label": {
+      "anyOf": [
+        {
+          "maxLength": 256,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Release Label"
+    },
+    "retrieved_at": {
+      "format": "date-time",
+      "title": "Retrieved At",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0.0",
+      "default": "1.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "source_id": {
+      "maxLength": 128,
+      "minLength": 3,
+      "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+      "title": "Source Id",
+      "type": "string"
+    },
+    "source_kind": {
+      "$ref": "#/$defs/SourceKind"
+    },
+    "title": {
+      "maxLength": 10000,
+      "minLength": 1,
+      "title": "Title",
+      "type": "string"
+    }
+  },
+  "required": [
+    "source_id",
+    "source_kind",
+    "publisher",
+    "title",
+    "document_family",
+    "language",
+    "published_on",
+    "publication_date_basis",
+    "retrieved_at",
+    "canonical_url",
+    "media_type",
+    "content_sha256",
+    "byte_size",
+    "redistribution"
+  ],
+  "title": "SourceManifest",
+  "type": "object"
+}

@@ -1,5 +1,5 @@
 [tool.pytest.ini_options]
-addopts = "-ra --strict-config --strict-markers"
+addopts = "-ra --strict-config --strict-markers --basetemp=.pytest_tmp"
 pythonpath = ["src"]
 testpaths = ["tests"]
 

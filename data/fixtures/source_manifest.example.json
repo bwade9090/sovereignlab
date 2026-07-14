@@ -1,0 +1,21 @@
+{
+  "byte_size": 12345,
+  "canonical_url": "https://example.org/outlook/2024-05.pdf",
+  "content_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "document_family": "economic-outlook",
+  "language": "en",
+  "media_type": "application/pdf",
+  "publication_date_basis": "publisher_metadata",
+  "published_on": "2024-05-23",
+  "publisher": "Example Public Institution",
+  "redistribution": {
+    "notes": "Synthetic fixture; no source content is redistributed.",
+    "status": "metadata_only"
+  },
+  "release_label": "May 2024",
+  "retrieved_at": "2026-07-14T08:00:00Z",
+  "schema_version": "1.0.0",
+  "source_id": "example-outlook-2024-05-en",
+  "source_kind": "document",
+  "title": "Example Economic Outlook"
+}

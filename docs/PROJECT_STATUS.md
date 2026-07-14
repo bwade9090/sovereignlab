@@ -3,8 +3,8 @@
 - Last updated: 2026-07-14
 - Owner: Hyungbae Cho (`bwade9090`)
 - Delivery window: four weeks, approximately 80 hours
-- Current milestone: M1 — evidence schema contract (ready to start)
-- Overall state: M0 complete and published
+- Current milestone: M1a — evidence schema contract
+- Overall state: implemented and validated; ready for Hyungbae's review
 
 ## Approved baseline
 
@@ -28,6 +28,10 @@
 - Created root commit `9f2853a` (`chore: establish reproducible project foundation`).
 - Recorded the foundation handoff in commit `be01b1f`.
 - Created `bwade9090/sovereignlab`, configured `origin`, and pushed `main`.
+- Implemented strict `SourceManifest`, `BenchmarkRecord`, and `BenchmarkBundle` contracts.
+- Generated synchronized public JSON Schema files and synthetic JSON examples.
+- Added temporal cutoff, source-kind/reference, annotation-state, route-shape, and evidence/parallel split-leakage checks.
+- Recorded the evidence-contract rationale in ADR 0002 and the M1a contract document.
 
 ## Current validation evidence
 
@@ -45,10 +49,12 @@ Validated on Windows with Python 3.12.13:
 - `python -m ruff format --check .` — 3 files already formatted.
 - `python -m pytest --cov=sovereignlab --cov-report=term-missing` — 3 passed; 100% coverage of the 13 executable foundation statements.
 - `git check-ignore` — confirmed `.venv`, `.env`, `data/raw`, `models`, generated `artifacts`, and `traces/private` are excluded.
+- `python scripts/export_json_schemas.py` — deterministically regenerated both public schema files.
+- `python -m pytest --cov=sovereignlab --cov-report=term-missing` — 45 passed; 100% statement and branch coverage across 241 statements and 60 branches.
 
 ## Immediate next action
 
-Begin M1 with exactly one design task: define and validate the source-manifest and benchmark-record schemas before downloading documents or calling paid APIs.
+Review M1a. After approval, begin M1b with a read-only source/licensing reconnaissance to select exactly two initial BOK/OECD releases. Do not download or commit source content until each redistribution decision is recorded.
 
 ## Blockers and environment notes
 
