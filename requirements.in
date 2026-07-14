@@ -1,0 +1,14 @@
+# Direct dependencies. Regenerate requirements.txt only after reviewed upgrades.
+
+# Runtime foundation
+httpx>=0.28,<1
+mistralai>=1.9,<2
+pydantic>=2.11,<3
+pydantic-settings>=2.9,<3
+PyYAML>=6,<7
+tenacity>=9,<10
+
+# Test and quality foundation
+pytest>=8,<10
+pytest-cov>=6,<8
+ruff>=0.12,<1

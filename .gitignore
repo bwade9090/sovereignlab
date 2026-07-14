@@ -1,0 +1,38 @@
+# Python environments and caches
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Editors and operating systems
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Local data, model weights, and generated artifacts
+data/raw/**
+data/interim/**
+models/**
+artifacts/**
+traces/private/**
+!data/README.md
+!artifacts/README.md
+
+# Build outputs
+build/
+dist/
+*.egg-info/
