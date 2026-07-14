@@ -3,8 +3,8 @@
 - Last updated: 2026-07-14
 - Owner: Hyungbae Cho (`bwade9090`)
 - Delivery window: four weeks, approximately 80 hours
-- Current milestone: M0 — repository and reproducibility foundation
-- Overall state: complete locally; public push pending GitHub reauthentication
+- Current milestone: M1 — evidence schema contract (ready to start)
+- Overall state: M0 complete and published
 
 ## Approved baseline
 
@@ -13,7 +13,7 @@
 - Evaluation contract: 40 reviewed Korean/English questions across `documents`, `data`, `documents_and_data`, and `abstain`.
 - Fine-tuning plan: test Ministral 3 3B QLoRA first; fall back to a supported Mistral 7B/Nemo checkpoint if the documented compatibility gate fails.
 - Initial spend ceiling: USD 100.
-- Repository intent: public GitHub under `bwade9090`.
+- Repository: public at `https://github.com/bwade9090/sovereignlab`.
 
 ## Completed
 
@@ -26,6 +26,8 @@
 - Passed the complete M0 offline validation suite and verified ignore rules for secrets, local environments, raw data, model weights, private traces, and generated artifacts.
 - Initialized the local Git repository on branch `main`.
 - Created root commit `9f2853a` (`chore: establish reproducible project foundation`).
+- Recorded the foundation handoff in commit `be01b1f`.
+- Created `bwade9090/sovereignlab`, configured `origin`, and pushed `main`.
 
 ## Current validation evidence
 
@@ -46,16 +48,14 @@ Validated on Windows with Python 3.12.13:
 
 ## Immediate next action
 
-Restore GitHub CLI authentication, create the public `bwade9090/sovereignlab` repository, and push `main`.
-
-After publication, begin M1 with exactly one design task: define and validate the source-manifest and benchmark-record schemas before downloading documents or calling paid APIs.
+Begin M1 with exactly one design task: define and validate the source-manifest and benchmark-record schemas before downloading documents or calling paid APIs.
 
 ## Blockers and environment notes
 
 - No local training GPU; rented GPU is planned only for the reviewed QLoRA spike.
 - The workstation's user-level Python launcher does not currently execute reliably.
 - Working bootstrap runtime used to create `.venv`: `C:\Users\BOK\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe` (Python 3.12.13).
-- GitHub CLI 2.89 recognizes `bwade9090`, but the stored token is invalid. Reauthentication is required before repository creation/push.
+- GitHub CLI 2.89 is authenticated as `bwade9090`; `main` tracks `origin/main`.
 
 ## Spend ledger
 
