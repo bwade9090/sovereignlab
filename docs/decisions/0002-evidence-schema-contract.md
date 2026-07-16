@@ -2,6 +2,8 @@
 
 - Status: accepted
 - Date: 2026-07-14
+- Related: ADR 0005 partially supersedes decision 5 only for its typed historical-archive
+  exception; all other cutoff and provenance rules remain in force.
 
 ## Context
 

@@ -2,7 +2,11 @@
 
 - Status: accepted
 - Date: 2026-07-14
-- Related: supplements ADR 0002 (does not supersede it); full rationale and candidate comparison in `docs/discovery/01_concept_upgrade_proposal.md`; implemented as charter v2.
+- Related: supplements ADR 0002 (does not supersede it); full rationale and candidate comparison in
+  `docs/discovery/01_concept_upgrade_proposal.md`; implemented as charter v2. ADR 0004 supersedes
+  only decision 6's KOGL-only wording. ADR 0005 supersedes only decision 1's date-label shorthand
+  and decision 3's optional-`1.1.0` expectation; the remaining gates and raw-publication
+  prohibition remain in force and are synchronized in charter v2.2.
 
 ## Context
 
@@ -44,7 +48,10 @@ A multi-agent study (five researchers, six ideation lenses, seven judged candida
 
 ## Revisit triggers
 
-- A week-1 spike fails: `DF_MEI_ARCHIVE` is inaccessible, the EO edition range is insufficient for any forecast-vintage questions, KOGL rulings block most of the harvester basket, or the employer review disallows the public harvester.
+- A week-1 spike fails: `DF_MEI_ARCHIVE` is inaccessible, the EO edition range is insufficient
+  for any forecast-vintage questions, source-specific rights rulings (replacing the original
+  KOGL-only terminology under ADR 0004) block most of the harvester basket, or the employer review
+  disallows the public harvester.
 - The OECD live revisions dataflow is withdrawn or restructured (the `NonProductionDataflow` annotation makes this non-hypothetical); committed snapshots keep published results reproducible, but new collection would need a replacement source.
 - A concurrent vintage-conditioned benchmark is published during the window (the point-in-time finance-LLM space is moving fast in 2026) — in that case, reposition K-VINTAGE against it honestly rather than contesting priority.
 - Human annotation shows vintage questions cannot be expressed within the four exclusive routes (also ADR 0002 trigger #3).

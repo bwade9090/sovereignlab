@@ -1,0 +1,306 @@
+{
+  "catalog_id": "kor-rtd-rights-2026-07-16",
+  "decisions": [
+    {
+      "approval_record_reference": "docs/decisions/0004-source-specific-redistribution-evidence.md#approval-record",
+      "approval_recorded_at": "2026-07-16T05:48:20Z",
+      "approved_by": "Hyungbae Cho",
+      "attribution": {
+        "fields": [
+          "publisher",
+          "original_producer",
+          "statistic_name",
+          "retrieval_date",
+          "source_url"
+        ],
+        "template": "출처: ECOS({publisher}; 작성기관: {original_producer}; {statistic_name}; 표 200Y108/항목 10601), 조회일 {retrieval_date}. KOR-RTD에서 빈티지 구조로 가공함. {source_url}"
+      },
+      "content_class": "ecos_bok_authored",
+      "decision_basis": "Owner-approved official cross-source mapping: ECOS maps 200Y108/10601 to the quarterly seasonally adjusted real domestic-expenditure-on-GDP title; KOSIS maps the same title and frequency to Bank of Korea; an official Bank of Korea GDP release corroborates the producer. Approval was recorded in ADR 0004 on 2026-07-16.",
+      "decision_id": "ecos-200y108-10601-rights-v1",
+      "decision_state": "allowed",
+      "evidence": [
+        {
+          "accessed_on": "2026-07-15",
+          "assertion": "Exact ECOS item code, table title, item title, and quarterly frequency.",
+          "claims": [
+            "series_scope",
+            "title_frequency"
+          ],
+          "kind": "source_metadata",
+          "observed": {
+            "frequency": "Q",
+            "item_id": "10601",
+            "item_title": "국내총생산에 대한 지출",
+            "mapping_title": "국내총생산에 대한 지출(계절조정, 실질, 분기)",
+            "source_system": "ecos",
+            "table_id": "200Y108",
+            "table_title": "2.1.2.2.2. 국내총생산에 대한 지출(계절조정, 실질, 분기)"
+          },
+          "official_url": "https://ecos.bok.or.kr/api/StatisticItemList/sample/json/kr/21/21/200Y108/"
+        },
+        {
+          "accessed_on": "2026-07-15",
+          "assertion": "Exact ECOS table title and quarterly frequency; ORG_NAME is null and is not producer evidence.",
+          "claims": [
+            "title_frequency"
+          ],
+          "kind": "source_metadata",
+          "observed": {
+            "frequency": "Q",
+            "mapping_title": "국내총생산에 대한 지출(계절조정, 실질, 분기)",
+            "source_system": "ecos",
+            "table_id": "200Y108",
+            "table_title": "2.1.2.2.2. 국내총생산에 대한 지출(계절조정, 실질, 분기)"
+          },
+          "official_url": "https://ecos.bok.or.kr/api/StatisticTableList/sample/json/kr/1/10/200Y108/"
+        },
+        {
+          "accessed_on": "2026-07-16",
+          "assertion": "Official KOSIS catalog maps the equivalent title and quarterly frequency to Bank of Korea and domestic statistics.",
+          "claims": [
+            "original_producer",
+            "title_frequency",
+            "content_category"
+          ],
+          "kind": "official_cross_source_catalog",
+          "observed": {
+            "frequency": "Q",
+            "kosis_content_category": "domestic_statistics",
+            "mapping_title": "국내총생산에 대한 지출(계절조정, 실질, 분기)",
+            "original_producer": "한국은행",
+            "source_system": "kosis",
+            "table_title": "국내총생산에 대한 지출(계절조정, 실질, 분기)"
+          },
+          "official_url": "https://kosis.kr/serviceInfo/newContrainDataDetail.do?boardIdx=1976017&boardOrgId=301"
+        },
+        {
+          "accessed_on": "2026-07-16",
+          "assertion": "Official Bank of Korea GDP release corroborates the producer, title, and quarterly frequency.",
+          "claims": [
+            "original_producer",
+            "title_frequency"
+          ],
+          "kind": "official_publisher_release",
+          "observed": {
+            "frequency": "Q",
+            "mapping_title": "국내총생산에 대한 지출(계절조정, 실질, 분기)",
+            "original_producer": "한국은행",
+            "source_system": "other_official"
+          },
+          "official_url": "https://www.bok.or.kr/portal/bbs/B0000501/view.do?menuNo=200690&nttId=10097644"
+        }
+      ],
+      "frequency": "Q",
+      "intended_operations": [
+        "use",
+        "process",
+        "redistribute",
+        "noncommercial_use"
+      ],
+      "item_id": "10601",
+      "item_title": "국내총생산에 대한 지출",
+      "operation_rules": [
+        {
+          "operation": "use",
+          "status": "permitted"
+        },
+        {
+          "operation": "process",
+          "status": "permitted"
+        },
+        {
+          "operation": "redistribute",
+          "status": "permitted"
+        },
+        {
+          "operation": "commercial_use",
+          "status": "permitted"
+        },
+        {
+          "operation": "noncommercial_use",
+          "status": "permitted"
+        },
+        {
+          "notes": "ECOS statistics must not be arbitrarily changed or distorted.",
+          "operation": "distort",
+          "status": "prohibited"
+        }
+      ],
+      "original_producer": "한국은행",
+      "producer_mapping_basis": "owner_approved_official_cross_source_title_frequency_mapping",
+      "producer_mapping_title": "국내총생산에 대한 지출(계절조정, 실질, 분기)",
+      "publisher": "한국은행",
+      "rights_instrument_accessed_on": "2026-07-16",
+      "rights_instrument_id": "ecos-use-guide-2026-07-16",
+      "rights_instrument_url": "https://ecos.bok.or.kr/",
+      "schema_version": "1.0.0",
+      "source_system": "ecos",
+      "table_id": "200Y108",
+      "table_title": "2.1.2.2.2. 국내총생산에 대한 지출(계절조정, 실질, 분기)",
+      "third_party_status": "first_party",
+      "unit": "십억원"
+    },
+    {
+      "approval_record_reference": "docs/decisions/0004-source-specific-redistribution-evidence.md#approval-record",
+      "approval_recorded_at": "2026-07-16T05:48:20Z",
+      "approved_by": "Hyungbae Cho",
+      "attribution": {
+        "fields": [
+          "publisher",
+          "original_producer",
+          "statistic_name",
+          "retrieval_date",
+          "source_url"
+        ],
+        "template": "출처: ECOS({publisher}; 작성기관: {original_producer}; {statistic_name}; 표 301Y017/항목 SA000), 조회일 {retrieval_date}. KOR-RTD에서 빈티지 구조로 가공함. {source_url}"
+      },
+      "content_class": "ecos_bok_authored",
+      "decision_basis": "ECOS table metadata directly identifies Bank of Korea as ORG_NAME for 301Y017; exact item metadata maps SA000 to current account. An official Bank of Korea balance-of-payments release corroborates the classification. Approval was recorded in ADR 0004 on 2026-07-16.",
+      "decision_id": "ecos-301y017-sa000-rights-v1",
+      "decision_state": "allowed",
+      "evidence": [
+        {
+          "accessed_on": "2026-07-15",
+          "assertion": "Exact ECOS table/item scope, titles, and monthly frequency for SA000.",
+          "claims": [
+            "series_scope",
+            "title_frequency"
+          ],
+          "kind": "source_metadata",
+          "observed": {
+            "frequency": "M",
+            "item_id": "SA000",
+            "item_title": "경상수지",
+            "mapping_title": "경상수지(계절조정)",
+            "source_system": "ecos",
+            "table_id": "301Y017",
+            "table_title": "2.5.1.2. 경상수지(계절조정)"
+          },
+          "official_url": "https://ecos.bok.or.kr/api/StatisticItemList/sample/json/kr/1/10/301Y017/"
+        },
+        {
+          "accessed_on": "2026-07-15",
+          "assertion": "Exact ECOS table metadata names Bank of Korea as producer and gives the monthly title/frequency.",
+          "claims": [
+            "original_producer",
+            "title_frequency"
+          ],
+          "kind": "source_metadata",
+          "observed": {
+            "frequency": "M",
+            "mapping_title": "경상수지(계절조정)",
+            "original_producer": "한국은행",
+            "source_system": "ecos",
+            "table_id": "301Y017",
+            "table_title": "2.5.1.2. 경상수지(계절조정)"
+          },
+          "official_url": "https://ecos.bok.or.kr/api/StatisticTableList/sample/json/kr/1/10/301Y017/"
+        },
+        {
+          "accessed_on": "2026-07-16",
+          "assertion": "Official Bank of Korea balance-of-payments release corroborates the producer, title, and monthly frequency.",
+          "claims": [
+            "original_producer",
+            "title_frequency"
+          ],
+          "kind": "official_publisher_release",
+          "observed": {
+            "frequency": "M",
+            "mapping_title": "경상수지(계절조정)",
+            "original_producer": "한국은행",
+            "source_system": "other_official"
+          },
+          "official_url": "https://www.bok.or.kr/portal/bbs/B0000501/view.do?menuNo=201264&nttId=10098323"
+        }
+      ],
+      "frequency": "M",
+      "intended_operations": [
+        "use",
+        "process",
+        "redistribute",
+        "noncommercial_use"
+      ],
+      "item_id": "SA000",
+      "item_title": "경상수지",
+      "operation_rules": [
+        {
+          "operation": "use",
+          "status": "permitted"
+        },
+        {
+          "operation": "process",
+          "status": "permitted"
+        },
+        {
+          "operation": "redistribute",
+          "status": "permitted"
+        },
+        {
+          "operation": "commercial_use",
+          "status": "permitted"
+        },
+        {
+          "operation": "noncommercial_use",
+          "status": "permitted"
+        },
+        {
+          "notes": "ECOS statistics must not be arbitrarily changed or distorted.",
+          "operation": "distort",
+          "status": "prohibited"
+        }
+      ],
+      "original_producer": "한국은행",
+      "producer_mapping_basis": "direct_source_metadata",
+      "producer_mapping_title": "경상수지(계절조정)",
+      "publisher": "한국은행",
+      "rights_instrument_accessed_on": "2026-07-16",
+      "rights_instrument_id": "ecos-use-guide-2026-07-16",
+      "rights_instrument_url": "https://ecos.bok.or.kr/",
+      "schema_version": "1.0.0",
+      "source_system": "ecos",
+      "table_id": "301Y017",
+      "table_title": "2.5.1.2. 경상수지(계절조정)",
+      "third_party_status": "first_party",
+      "unit": "백만달러"
+    }
+  ],
+  "instruments": [
+    {
+      "accessed_on": "2026-07-16",
+      "applicable_content_classes": [
+        "ecos_bok_authored",
+        "ecos_other_authored"
+      ],
+      "applicable_source_systems": [
+        "ecos"
+      ],
+      "instrument_id": "ecos-use-guide-2026-07-16",
+      "issuer": "한국은행",
+      "license_identifier": null,
+      "official_url": "https://ecos.bok.or.kr/",
+      "schema_version": "1.0.0",
+      "terms_evidence": {
+        "accessed_on": "2026-07-16",
+        "assertion": "한국은행 작성 ECOS 통계는 출처를 명시하면 상업·비상업 목적의 사용, 가공 및 재배포가 허용된다. 타기관 작성 통계는 출처를 명시한 비상업적 이용만 일반 지침에 명시되며, 공개 원자료 재배포는 별도 근거가 없으면 fail closed로 취급한다. 모든 통계는 출처표시와 무왜곡 의무를 따른다.",
+        "claims": [
+          "rights_terms"
+        ],
+        "kind": "publisher_use_guide",
+        "official_url": "https://ecos.bok.or.kr/"
+      },
+      "terms_summary": "한국은행 작성 ECOS 통계는 출처를 명시하면 상업·비상업 목적의 사용, 가공 및 재배포가 허용된다. 타기관 작성 통계는 출처를 명시한 비상업적 이용만 일반 지침에 명시되며, 공개 원자료 재배포는 별도 근거가 없으면 fail closed로 취급한다. 모든 통계는 출처표시와 무왜곡 의무를 따른다.",
+      "title": "ECOS 통계정보이용지침",
+      "verification_capture": {
+        "byte_size": 365214,
+        "capture_url": "https://ecos.bok.or.kr/static/js/main.360c53e9.chunk.js",
+        "captured_at": "2026-07-16T02:03:32Z",
+        "content_sha256": "bea6909910e2c2c341d3e72a581442addcd515d16b700845c74368fbb39a6080"
+      }
+    }
+  ],
+  "project_use_profile": "noncommercial_public_research",
+  "recorded_at": "2026-07-16T05:48:20Z",
+  "schema_version": "1.0.0",
+  "supersedes_catalog_id": null
+}

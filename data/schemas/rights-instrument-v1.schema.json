@@ -1,0 +1,390 @@
+{
+  "$defs": {
+    "ContentClass": {
+      "description": "Publisher category that selects the applicable branch of a use guide.",
+      "enum": [
+        "ecos_bok_authored",
+        "ecos_other_authored",
+        "kosis_domestic_statistics",
+        "kosis_easy_view_statistics",
+        "kosis_international_statistics",
+        "kosis_north_korea_statistics",
+        "kosis_publication",
+        "oecd_data",
+        "other_official_data"
+      ],
+      "title": "ContentClass",
+      "type": "string"
+    },
+    "EvidenceClaim": {
+      "description": "Facts an evidence record explicitly asserts.",
+      "enum": [
+        "rights_terms",
+        "series_scope",
+        "original_producer",
+        "title_frequency",
+        "content_category"
+      ],
+      "title": "EvidenceClaim",
+      "type": "string"
+    },
+    "EvidenceObservation": {
+      "additionalProperties": false,
+      "description": "Structured facts observed at one official evidence URL.",
+      "properties": {
+        "frequency": {
+          "anyOf": [
+            {
+              "maxLength": 10000,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Frequency"
+        },
+        "item_id": {
+          "anyOf": [
+            {
+              "maxLength": 256,
+              "minLength": 1,
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]*$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Item Id"
+        },
+        "item_title": {
+          "anyOf": [
+            {
+              "maxLength": 10000,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Item Title"
+        },
+        "kosis_content_category": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/KosisContentCategory"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "mapping_title": {
+          "anyOf": [
+            {
+              "maxLength": 10000,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Mapping Title"
+        },
+        "original_producer": {
+          "anyOf": [
+            {
+              "maxLength": 10000,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Original Producer"
+        },
+        "source_system": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SourceSystem"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "table_id": {
+          "anyOf": [
+            {
+              "maxLength": 256,
+              "minLength": 1,
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]*$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Table Id"
+        },
+        "table_title": {
+          "anyOf": [
+            {
+              "maxLength": 10000,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Table Title"
+        }
+      },
+      "title": "EvidenceObservation",
+      "type": "object"
+    },
+    "InstrumentVerificationCapture": {
+      "additionalProperties": false,
+      "description": "Optional immutable capture proof for a dynamic official use-guide page.",
+      "properties": {
+        "byte_size": {
+          "exclusiveMinimum": 0,
+          "title": "Byte Size",
+          "type": "integer"
+        },
+        "capture_url": {
+          "format": "uri",
+          "minLength": 1,
+          "title": "Capture Url",
+          "type": "string"
+        },
+        "captured_at": {
+          "format": "date-time",
+          "title": "Captured At",
+          "type": "string"
+        },
+        "content_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Content Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "capture_url",
+        "captured_at",
+        "content_sha256",
+        "byte_size"
+      ],
+      "title": "InstrumentVerificationCapture",
+      "type": "object"
+    },
+    "KosisContentCategory": {
+      "description": "KOSIS use-guide categories with materially different redistribution terms.",
+      "enum": [
+        "domestic_statistics",
+        "easy_view_statistics",
+        "international_statistics",
+        "north_korea_statistics",
+        "publication"
+      ],
+      "title": "KosisContentCategory",
+      "type": "string"
+    },
+    "RightsEvidence": {
+      "additionalProperties": false,
+      "description": "One official URL and the structured claims observed there.",
+      "properties": {
+        "accessed_on": {
+          "format": "date",
+          "title": "Accessed On",
+          "type": "string"
+        },
+        "assertion": {
+          "maxLength": 10000,
+          "minLength": 1,
+          "title": "Assertion",
+          "type": "string"
+        },
+        "claims": {
+          "items": {
+            "$ref": "#/$defs/EvidenceClaim"
+          },
+          "minItems": 1,
+          "title": "Claims",
+          "type": "array"
+        },
+        "kind": {
+          "$ref": "#/$defs/RightsEvidenceKind"
+        },
+        "observed": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/EvidenceObservation"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "official_url": {
+          "format": "uri",
+          "minLength": 1,
+          "title": "Official Url",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "official_url",
+        "accessed_on",
+        "claims",
+        "assertion"
+      ],
+      "title": "RightsEvidence",
+      "type": "object"
+    },
+    "RightsEvidenceKind": {
+      "description": "Official evidence types supporting producer/category and rights mappings.",
+      "enum": [
+        "source_metadata",
+        "publisher_use_guide",
+        "official_cross_source_catalog",
+        "official_publisher_release",
+        "dataset_terms",
+        "producer_specific_terms"
+      ],
+      "title": "RightsEvidenceKind",
+      "type": "string"
+    },
+    "SourceSystem": {
+      "description": "Official systems for which the rights contract has an explicit policy branch.",
+      "enum": [
+        "ecos",
+        "kosis",
+        "oecd",
+        "other_official"
+      ],
+      "title": "SourceSystem",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "One immutable capture of an official licence or publisher use guide.",
+  "properties": {
+    "accessed_on": {
+      "format": "date",
+      "title": "Accessed On",
+      "type": "string"
+    },
+    "applicable_content_classes": {
+      "items": {
+        "$ref": "#/$defs/ContentClass"
+      },
+      "minItems": 1,
+      "title": "Applicable Content Classes",
+      "type": "array"
+    },
+    "applicable_source_systems": {
+      "items": {
+        "$ref": "#/$defs/SourceSystem"
+      },
+      "minItems": 1,
+      "title": "Applicable Source Systems",
+      "type": "array"
+    },
+    "instrument_id": {
+      "maxLength": 128,
+      "minLength": 3,
+      "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+      "title": "Instrument Id",
+      "type": "string"
+    },
+    "issuer": {
+      "maxLength": 10000,
+      "minLength": 1,
+      "title": "Issuer",
+      "type": "string"
+    },
+    "license_identifier": {
+      "anyOf": [
+        {
+          "maxLength": 10000,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "License Identifier"
+    },
+    "official_url": {
+      "format": "uri",
+      "minLength": 1,
+      "title": "Official Url",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0.0",
+      "default": "1.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "terms_evidence": {
+      "$ref": "#/$defs/RightsEvidence"
+    },
+    "terms_summary": {
+      "maxLength": 10000,
+      "minLength": 1,
+      "title": "Terms Summary",
+      "type": "string"
+    },
+    "title": {
+      "maxLength": 10000,
+      "minLength": 1,
+      "title": "Title",
+      "type": "string"
+    },
+    "verification_capture": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/InstrumentVerificationCapture"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    }
+  },
+  "required": [
+    "instrument_id",
+    "issuer",
+    "title",
+    "official_url",
+    "accessed_on",
+    "applicable_source_systems",
+    "applicable_content_classes",
+    "terms_summary",
+    "terms_evidence"
+  ],
+  "title": "RightsInstrument",
+  "type": "object"
+}

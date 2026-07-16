@@ -19,3 +19,8 @@ Accepted records are not silently rewritten. Supersede them with a new ADR and c
 - [0001 — Project foundation and compute boundary](0001-project-foundation.md)
 - [0002 — Evidence schema contract](0002-evidence-schema-contract.md)
 - [0003 — K-VINTAGE on KOR-RTD reorientation and vintage-aware tool semantics](0003-kvintage-reorientation.md)
+  — **accepted; decision 6's KOGL-only wording partially superseded by ADR 0004**
+- [0004 — Source-specific redistribution evidence](0004-source-specific-redistribution-evidence.md)
+  — **accepted 2026-07-16**
+- [0005 — Edition availability and vintage contract](0005-edition-availability-and-vintage-contract.md)
+  — **accepted 2026-07-16**

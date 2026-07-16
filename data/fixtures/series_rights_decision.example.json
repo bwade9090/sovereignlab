@@ -1,0 +1,89 @@
+{
+  "approval_record_reference": "docs/decisions/9999-example.md#approval-record",
+  "approval_recorded_at": "2026-07-16T08:00:00Z",
+  "approved_by": "fixture-owner",
+  "attribution": {
+    "fields": [
+      "publisher",
+      "original_producer",
+      "statistic_name",
+      "retrieval_date",
+      "source_url"
+    ],
+    "template": "Source: {publisher} ({original_producer}), {statistic_name}, retrieved {retrieval_date}. {source_url}"
+  },
+  "content_class": "other_official_data",
+  "decision_basis": "Synthetic owner-approved ruling for contract tests.",
+  "decision_id": "example-series-rights-001",
+  "decision_state": "allowed",
+  "evidence": [
+    {
+      "accessed_on": "2026-07-16",
+      "assertion": "The exact synthetic scope is produced by the example institution.",
+      "claims": [
+        "series_scope",
+        "original_producer",
+        "title_frequency"
+      ],
+      "kind": "source_metadata",
+      "observed": {
+        "frequency": "monthly",
+        "item_id": "ITEM_001",
+        "item_title": "Synthetic Index",
+        "mapping_title": "Synthetic Statistics Table",
+        "original_producer": "Example Public Institution",
+        "source_system": "other_official",
+        "table_id": "TABLE_001",
+        "table_title": "Synthetic Statistics Table"
+      },
+      "official_url": "https://example.org/api/tables/TABLE_001"
+    },
+    {
+      "accessed_on": "2026-07-16",
+      "assertion": "Synthetic terms permit attributed non-commercial redistribution.",
+      "claims": [
+        "rights_terms"
+      ],
+      "kind": "publisher_use_guide",
+      "official_url": "https://example.org/rights/statistics"
+    }
+  ],
+  "frequency": "monthly",
+  "intended_operations": [
+    "use",
+    "process",
+    "redistribute",
+    "noncommercial_use"
+  ],
+  "item_id": "ITEM_001",
+  "item_title": "Synthetic Index",
+  "operation_rules": [
+    {"operation": "use", "status": "permitted"},
+    {"operation": "process", "status": "permitted"},
+    {"operation": "redistribute", "status": "permitted"},
+    {"operation": "noncommercial_use", "status": "permitted"},
+    {
+      "notes": "Synthetic terms prohibit distortion.",
+      "operation": "distort",
+      "status": "prohibited"
+    },
+    {
+      "notes": "Synthetic terms prohibit re-identification.",
+      "operation": "reidentify",
+      "status": "prohibited"
+    }
+  ],
+  "original_producer": "Example Public Institution",
+  "producer_mapping_basis": "direct_source_metadata",
+  "producer_mapping_title": "Synthetic Statistics Table",
+  "publisher": "Example Public Institution",
+  "rights_instrument_accessed_on": "2026-07-16",
+  "rights_instrument_id": "example-statistics-use-guide",
+  "rights_instrument_url": "https://example.org/rights/statistics",
+  "schema_version": "1.0.0",
+  "source_system": "other_official",
+  "table_id": "TABLE_001",
+  "table_title": "Synthetic Statistics Table",
+  "third_party_status": "first_party",
+  "unit": "index"
+}

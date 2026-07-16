@@ -2,7 +2,8 @@
 
 > What did the data say *then*? Vintage-conditioned evaluation and auditable briefings for Korean/English economic research.
 
-**Status:** foundation phase; public implementation is in progress. No model-performance claims have been made yet.
+**Status:** M1b verification and vintage-contract groundwork are in progress. No model-performance
+claims have been made yet.
 
 Korea's official statistics APIs (ECOS, KOSIS) expose latest values only — they offer no "as-of" query path — and no Korean equivalent of the St. Louis Fed's ALFRED archive exists. SovereignLab builds three things in four weeks:
 
@@ -23,7 +24,26 @@ The project will compare four variants under one frozen benchmark:
 
 ## Current milestone
 
-Charter v2 (the K-VINTAGE on KOR-RTD reorientation) is approved and documented; see [ADR 0003](docs/decisions/0003-kvintage-reorientation.md) for the decision and [the proposal](docs/discovery/01_concept_upgrade_proposal.md) for the rationale. M1a froze strict source-manifest and benchmark-record models with synchronized JSON Schema, synthetic fixtures, and dataset-wide temporal/split leakage checks. Next: the week-1 verification spikes — see [project status](docs/PROJECT_STATUS.md) for the exact ordered next actions.
+Charter v2.2 (the K-VINTAGE on KOR-RTD reorientation, source-rights amendment, and fail-closed
+edition-availability contract) is approved and documented; see
+[ADR 0003](docs/decisions/0003-kvintage-reorientation.md),
+[ADR 0004](docs/decisions/0004-source-specific-redistribution-evidence.md), and
+[ADR 0005](docs/decisions/0005-edition-availability-and-vintage-contract.md), with background in
+[the proposal](docs/discovery/01_concept_upgrade_proposal.md). M1a froze strict source-manifest and
+benchmark-record models with synchronized JSON Schema, synthetic fixtures, and dataset-wide
+temporal/split leakage checks. M1b has now verified the primary OECD examples, fixed the claimable
+recent Economic Outlook range at EO114–EO119, and exposed two contract gaps: monthly edition labels
+do not prove day-level availability, and ECOS/KOSIS do not expose the assumed per-series KOGL field.
+Their official use guides instead govern reuse through the original producer or content category.
+The current-account candidate is directly identified as Bank of Korea-produced; official
+title/frequency evidence supports the same classification for the GDP candidate. The owner approved
+ADR 0004, that mapping, and `allowed` rulings for both candidates on 2026-07-16; charter v2.1 records
+the source-rights amendment. The standalone rights catalog and both approved metadata records are
+implemented without changing the existing evidence contract. ADR 0005 and charter v2.2 now approve
+the availability ledger, `Asia/Seoul` end-of-day semantics, fail-closed resolver, and coordinated
+contract `2.0.0` migration. That migration is deliberately left for the next-machine work unit, so
+resolver and raw-manifest integration remain gated as listed in
+[project status](docs/PROJECT_STATUS.md).
 
 ## Quick start
 
@@ -55,10 +75,13 @@ Copy `.env.example` to `.env` only when an API-backed experiment is approved. Of
 
 ## Documentation
 
-- [Approved project charter (v2)](docs/project/01_project_charter.md)
+- [Approved project charter (v2.2)](docs/project/01_project_charter.md)
 - [Concept upgrade proposal (v2 rationale)](docs/discovery/01_concept_upgrade_proposal.md)
 - [Evidence schema contract](docs/project/02_evidence_schema_contract.md)
+- [Source-rights catalog contract](docs/project/03_rights_catalog_contract.md)
+- [MacBook continuation handoff](docs/project/04_macbook_handoff.md)
 - [Current status and handoff](docs/PROJECT_STATUS.md)
+- [Week-1 verification log](docs/discovery/03_week1_verification_log.md)
 - [Role-gap and project-selection analysis](docs/discovery/00_role_gap_analysis.md)
 - [Milestone-gated CV bullets](docs/application/00_cv_bullets.md)
 - [Architecture decisions](docs/decisions/README.md)
@@ -70,4 +93,9 @@ This is an independent open-source project using public information. It is not a
 
 ## License
 
-Apache-2.0. See [LICENSE](LICENSE).
+Original project code and documentation are licensed under Apache-2.0 unless noted otherwise; see
+[LICENSE](LICENSE). Third-party source data and redistributed observations are not relicensed under
+Apache-2.0. They remain subject to the originating provider's terms and attribution requirements
+recorded in their manifests and rights decisions. Benchmark, model, and generated-data artifacts
+will state their own licences when published; see the
+[data licensing boundary](data/README.md#licensing-boundary).

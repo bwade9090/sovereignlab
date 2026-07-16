@@ -1,8 +1,9 @@
 # SovereignLab project charter
 
-- Status: approved v2
-- Date: 2026-07-14 (v2 reorientation; supersedes v1 of the same date)
-- Reorientation rationale: `docs/discovery/01_concept_upgrade_proposal.md` and ADR 0003
+- Status: approved v2.2
+- Date: 2026-07-16 (v2.2 edition-availability amendment; supersedes v2.1 approved earlier that day;
+  substantive v2.2 changes are limited to §§3, 5, 7, and the decision index in §12)
+- Decision basis: `docs/discovery/01_concept_upgrade_proposal.md` and ADRs 0003–0005
 - Delivery target: four weeks, approximately 80 total hours
 - Initial budget ceiling: USD 100 for model APIs and rented compute
 - Repository: public at `https://github.com/bwade9090/sovereignlab`
@@ -70,21 +71,55 @@ The evidence router must emit a typed plan with one of four routes:
 
 This routing and tool behavior is the primary LoRA target. Changing economic facts remain in retrieval and official APIs rather than being memorized in model weights.
 
-The flagship deterministic capability is the **as-of resolver**: `as_of -> max(EDITION <= as_of)` over OECD SDMX edition histories, so "what did the data say then" receives a computed gold answer. A system that answers from the latest value is caught mechanically — no LLM judge involved. **Temporal-leakage rate is a headline per-variant metric, not a footnote.**
+The flagship deterministic capability is the **as-of resolver**. It treats `EDITION` as an opaque
+ordering identity, first resolves which editions were demonstrably available from the immutable
+`EditionAvailabilityLedger`, then selects the newest definitely available edition. A date-only
+`as_of` means the inclusive end of that calendar day in `Asia/Seoul`. An incomplete or ambiguous
+availability frontier abstains; the resolver never invents a publication day from a `YYYYMM` label
+or silently falls back from a missing selected row. A system that answers from a later vintage is
+caught mechanically — no LLM judge involved. **Temporal-leakage rate is a headline per-variant
+metric, not a footnote.** ADR 0005 is the full invariant.
 
 ## 4. Evidence scope (KOR-RTD)
 
 ### Vintage data
 
 1. **Primary (live):** the OECD SDMX revisions dataflow `DSD_STES_REVISIONS@DF_STES_REVISIONS` — verified 2026-07-14 as key-free and free of charge, with Korean editions from Feb-1999 to Jul-2026 (example: the KOR CPI 2005-01 observation carries 258 archived editions; Korea's 2025-Q1 real GDP was revised from 572,057.7 to 574,984.3 billion KRW between the June and July 2026 editions). A `NonProductionDataflow` annotation was observed and must be disclosed in the datasheet.
-2. **Cross-check (frozen archive):** `DF_MEI_ARCHIVE` — **week-1 spike required**: verification attempts returned conflicting results (one 404, one successful query). No backfill-range claim may be published until the spike settles it.
-3. **Forecast vintages:** recent OECD Economic Outlook edition dataflows only — live-confirmed range is `DF_EO_114`–`DF_EO_118` plus current `DF_EO`. Wider ranges (e.g. "EO60–119") may not be claimed until verified.
+2. **Cross-check (frozen archive):** `DF_MEI_ARCHIVE` — verified 2026-07-15 on the archive tenant;
+   the corresponding public-tenant requests return 404. Its structure declares 300 monthly edition
+   codes, while the KOR quarterly real-GDP slice contains 299 because `200904` has no records. The
+   flow is marked `NonProductionDataflow=true`, so it is a frozen cross-check rather than a
+   guaranteed production endpoint.
+3. **Forecast vintages:** recent public OECD Economic Outlook edition dataflows only — verified KOR
+   observation coverage is EO114–EO119. Archive catalog continuity and sampled EO60/107/114
+   observations do not prove continuous KOR backfill; deep EO60–EO113 coverage may not be claimed.
 
 ### Forward capture
 
 A scheduled public harvester (GitHub Actions, weekly) snapshots a curated basket of **at most 12** ECOS/KOSIS series plus BOK publication metadata into append-only, checksummed files under `SourceManifest`. Both APIs are latest-only, so these snapshots create the vintage record; **public commit history is the proof of capture dates and of no backfill**. The harvester must be committed in week 1 so history starts accruing immediately.
 
-**KOGL gate:** KOGL (Korea Open Government License, 공공누리) is the license scheme for Korean public data; each ECOS/KOSIS series carries a KOGL type in its metadata, and only types permitting redistribution allow raw values in this public repository. A per-series ruling (recorded KOGL type plus the resulting decision) is a week-1 gate. No raw ECOS/KOSIS values are committed before the ruling; restricted series fall back to checksum-diff plus a fetch script. The candidate basket and selection criteria are recorded in `docs/discovery/02_verification_queries.md`; the final basket is fixed at the week-1 gate with the owner's sign-off.
+**Source-specific rights gate:** the project is non-commercial, but non-commercial purpose alone is
+not a raw-redistribution grant. Before any ECOS/KOSIS observation is committed, the exact series
+must have an owner-approved source-specific classification and attribution ruling under ADR 0004:
+
+- Bank of Korea-produced ECOS statistics are `allowed` for attributed use, processing, and
+  redistribution with no distortion.
+- Other-producer ECOS statistics may be used non-commercially with attribution, but raw public
+  redistribution fails closed unless a producer-specific instrument expressly permits it.
+- In-scope KOSIS domestic macro statistics are `allowed` for attributed use, reuse, processing, and
+  redistribution, subject to no distortion, no re-identification, and no paid standalone sale of
+  unchanged raw information.
+- KOSIS international and North Korea statistics are excluded from redistributed observations;
+  publications follow their individual KOGL notices.
+
+The ruling is a reusable producer/category and attribution mapping for one exact series, not a new
+licence investigation for every snapshot. A later capture may reuse it only while its scope,
+producer/category, applicable instrument, intended operations, and attribution remain unchanged.
+The first approved ECOS scopes are `200Y108/10601` and `301Y017/SA000`, both classified as Bank of
+Korea-produced and `allowed`; ADR 0004 records the direct and cross-source producer evidence. No
+raw value is committed until the strict rights records and manifest enforcement required by the
+current milestone are implemented. Restricted scopes fall back to metadata, checksum-diff, and a
+fetch script.
 
 ### Contrast tool and exclusions
 
@@ -113,6 +148,10 @@ The repository will not automatically redistribute full source documents. Source
 **Tier 2 — machine-generated probes: 200–300 deterministic data-route items** (revision traps and as-of lookups), with a documented human audit of a sample. **The two tiers are always reported separately** — never merged into a single "N-question benchmark" figure.
 
 Gold answers for data-route items are **computed** by the as-of resolver and remain regenerable by a public script; human review is recorded alongside, not replaced.
+
+Every temporal data-route record requires `as_of`, a selected edition, and typed availability
+evidence under ADR 0005. The evidence/benchmark contract therefore migrates to `2.0.0`; current
+`1.0.0` records remain valid only under their original non-vintage rules until migration.
 
 **Prerequisite artifact:** a number-normalization specification (raw 10^12 XDC scale vs "billion KRW" presentation, 조/억 conventions, seasonal-adjustment series variants, rounding tolerances) must be frozen **before** question authoring begins.
 
@@ -171,14 +210,22 @@ The **hybrid mode is a committed demo**: a small local/quantized router plus a M
 
 ### Week 1 — Verification spikes and vintage groundwork (20 hours)
 
-- **Verification spikes, all results recorded in writing before any dependent claim:** `DF_MEI_ARCHIVE` accessibility; actual OECD EO edition range; per-series KOGL redistribution rulings; license status of OECD archive content published before 2024-07-01; a one-hour written employer-risk review (personal-capacity public activity), committed as a decision record.
-- As-of resolver over the live revisions dataflow (~6–8 h).
+- **Verification spikes, all results recorded in writing before any dependent claim:**
+  `DF_MEI_ARCHIVE` accessibility; actual OECD EO edition range; source-specific ECOS/KOSIS
+  redistribution classifications and attribution rulings; license status of OECD archive content
+  published before 2024-07-01; a one-hour written employer-risk review (personal-capacity public
+  activity), committed as a decision record.
+- Edition-availability ledger, case-sensitive SDMX parser, and fail-closed as-of resolver over the
+  live revisions dataflow (~6–8 h), following ADR 0005.
 - Harvester cron + `SourceManifest` wiring, committed so snapshot history starts (~3–5 h).
 - Number-normalization specification.
-- Extend tool-expectation schemas with vintage/edition semantics (ADR 0003 decision #3; non-gating for the week-1 gate).
-- Charter v2 / ADR 0003 documentation (this change).
+- Migrate the evidence/benchmark contract to `2.0.0` with mandatory vintage/edition semantics,
+  immutable availability evidence, migration notes, regenerated schemas, fixtures, and tests.
+- Charter v2.2 / ADR 0003–0005 documentation.
 - One-step Ministral 3 3B QLoRA compatibility spike on rented compute (unchanged from v1).
-- **Gate:** spike results recorded; claimable backfill range fixed; KOGL rulings recorded; employer review done; the resolver reproduces the verified example values; fine-tuning model path selected.
+- **Gate:** spike results recorded; claimable backfill range fixed; source-specific rights rulings
+  recorded and enforceable; employer review done; the resolver reproduces the verified example
+  values; fine-tuning model path selected.
 
 ### Week 2 — Benchmark and baselines (20 hours)
 
@@ -194,7 +241,10 @@ The **hybrid mode is a committed demo**: a small local/quantized router plus a M
 - Route/tool training examples from evidence-disjoint sources; JSONL validation and documented sample audit.
 - LoRA runs limited to 2–3 configurations; select or reject via the frozen promotion rule.
 - Four-variant evaluation with the temporal-leakage headline numbers.
-- **Primary live event: the next OECD edition rollover, expected ~2026-08-01** (editions roll monthly; the demo material is already secured because the July edition contains new Korean GDP revisions, so a slipped rollover falls back to the July-vs-June diff): the pipeline writes a bilingual cited note within 48 hours (same-day targeted), committed with CI timestamps.
+- **Primary live event: the next observed OECD edition rollover** (the exact date is unverified and
+  must be detected by append-only polling; fallback = the July-vs-June diff, subject to availability
+  provenance): the pipeline writes a bilingual cited note within 48 hours (same-day targeted),
+  committed with CI timestamps.
 - **Gate:** adapter promoted or rejected by the frozen rule; leakage numbers reproduced from committed artifacts.
 
 ### Week 4 — Release and application package (20 hours)
@@ -279,3 +329,12 @@ Vintage data costs $0: all OECD SDMX endpoints used are verified key-free and fr
 3. The gold set is two-tier: 40 human-reviewed core questions across four exclusive routes, plus 200–300 machine-generated data-route probes, always reported separately.
 4. The Week-one compatibility spike starts with Ministral 3 3B and permits the documented fallback if required (unchanged from v1).
 5. The pre-committed cut ladder in §7 is binding.
+6. **v2.1 source-rights amendment approved (2026-07-16):** ADR 0004 replaces the KOGL-only premise
+   with official source-specific producer/category and attribution rulings. The project has no
+   commercial-use path; a future commercial mode triggers rights review. The two initial ECOS
+   scopes `200Y108/10601` and `301Y017/SA000` are approved as Bank of Korea-produced and `allowed`.
+7. **v2.2 edition-availability amendment approved (2026-07-16):** ADR 0005's immutable ledger,
+   fail-closed resolver, `Asia/Seoul` inclusive end-of-day cutoff, contract `2.0.0` migration, and
+   narrow partial supersessions of ADR 0002 decision 5 and ADR 0003 decisions 1/3 are approved.
+   Separately, OECD archive observations remain `metadata_only` pending dataset-specific and
+   third-party-rights confirmation; no raw OECD redistribution is approved.

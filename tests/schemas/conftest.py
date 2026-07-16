@@ -7,17 +7,35 @@ import pytest
 from sovereignlab.schemas import (
     AnnotationProvenance,
     AnnotationStatus,
+    AttributionField,
+    AttributionRequirement,
     BenchmarkRecord,
     BenchmarkSplit,
+    ContentClass,
     DocumentEvidence,
+    EvidenceClaim,
     EvidenceLocator,
+    EvidenceObservation,
     EvidenceRoute,
+    InstrumentVerificationCapture,
     LanguageCode,
+    OperationRule,
+    OperationStatus,
+    ProducerMappingBasis,
+    ProjectUseProfile,
     PublicationDateBasis,
     RedistributionPolicy,
     RedistributionStatus,
+    RightsCatalog,
+    RightsEvidence,
+    RightsEvidenceKind,
+    RightsInstrument,
+    RightsOperation,
+    SeriesRightsDecision,
     SourceKind,
     SourceManifest,
+    SourceSystem,
+    ThirdPartyStatus,
     ToolExpectation,
 )
 
@@ -30,6 +48,147 @@ def annotation() -> AnnotationProvenance:
         annotated_at=datetime(2026, 7, 14, 8, 0, tzinfo=UTC),
         reviewed_by="fixture-reviewer",
         reviewed_at=datetime(2026, 7, 14, 9, 0, tzinfo=UTC),
+    )
+
+
+@pytest.fixture
+def rights_instrument() -> RightsInstrument:
+    terms_summary = "Synthetic terms permit attributed non-commercial redistribution."
+    return RightsInstrument(
+        instrument_id="example-statistics-use-guide",
+        issuer="Example Public Institution",
+        title="Example Statistics Information Use Guide",
+        official_url="https://example.org/rights/statistics",
+        accessed_on=date(2026, 7, 16),
+        applicable_source_systems=(SourceSystem.OTHER_OFFICIAL,),
+        applicable_content_classes=(ContentClass.OTHER_OFFICIAL_DATA,),
+        terms_summary=terms_summary,
+        terms_evidence=RightsEvidence(
+            kind=RightsEvidenceKind.PUBLISHER_USE_GUIDE,
+            official_url="https://example.org/rights/statistics",
+            accessed_on=date(2026, 7, 16),
+            claims=(EvidenceClaim.RIGHTS_TERMS,),
+            assertion=terms_summary,
+        ),
+        verification_capture=InstrumentVerificationCapture(
+            capture_url="https://example.org/rights/statistics.js",
+            captured_at=datetime(2026, 7, 16, 7, 0, tzinfo=UTC),
+            content_sha256="c" * 64,
+            byte_size=4_096,
+        ),
+    )
+
+
+@pytest.fixture
+def series_rights_decision(rights_instrument: RightsInstrument) -> SeriesRightsDecision:
+    return SeriesRightsDecision(
+        decision_id="example-series-rights-001",
+        publisher="Example Public Institution",
+        original_producer="Example Public Institution",
+        source_system=SourceSystem.OTHER_OFFICIAL,
+        table_id="TABLE_001",
+        item_id="ITEM_001",
+        table_title="Synthetic Statistics Table",
+        item_title="Synthetic Index",
+        producer_mapping_title="Synthetic Statistics Table",
+        frequency="monthly",
+        unit="index",
+        content_class=ContentClass.OTHER_OFFICIAL_DATA,
+        producer_mapping_basis=ProducerMappingBasis.DIRECT_SOURCE_METADATA,
+        evidence=(
+            RightsEvidence(
+                kind=RightsEvidenceKind.SOURCE_METADATA,
+                official_url="https://example.org/api/tables/TABLE_001",
+                accessed_on=date(2026, 7, 16),
+                claims=(
+                    EvidenceClaim.SERIES_SCOPE,
+                    EvidenceClaim.ORIGINAL_PRODUCER,
+                    EvidenceClaim.TITLE_FREQUENCY,
+                ),
+                assertion="The exact synthetic scope is produced by the example institution.",
+                observed=EvidenceObservation(
+                    source_system=SourceSystem.OTHER_OFFICIAL,
+                    table_id="TABLE_001",
+                    item_id="ITEM_001",
+                    table_title="Synthetic Statistics Table",
+                    item_title="Synthetic Index",
+                    mapping_title="Synthetic Statistics Table",
+                    frequency="monthly",
+                    original_producer="Example Public Institution",
+                ),
+            ),
+            RightsEvidence(
+                kind=RightsEvidenceKind.PUBLISHER_USE_GUIDE,
+                official_url=rights_instrument.official_url,
+                accessed_on=rights_instrument.accessed_on,
+                claims=(EvidenceClaim.RIGHTS_TERMS,),
+                assertion=rights_instrument.terms_summary,
+            ),
+        ),
+        rights_instrument_id=rights_instrument.instrument_id,
+        rights_instrument_url=rights_instrument.official_url,
+        rights_instrument_accessed_on=rights_instrument.accessed_on,
+        third_party_status=ThirdPartyStatus.FIRST_PARTY,
+        operation_rules=(
+            OperationRule(operation=RightsOperation.USE, status=OperationStatus.PERMITTED),
+            OperationRule(operation=RightsOperation.PROCESS, status=OperationStatus.PERMITTED),
+            OperationRule(
+                operation=RightsOperation.REDISTRIBUTE,
+                status=OperationStatus.PERMITTED,
+            ),
+            OperationRule(
+                operation=RightsOperation.NONCOMMERCIAL_USE,
+                status=OperationStatus.PERMITTED,
+            ),
+            OperationRule(
+                operation=RightsOperation.DISTORT,
+                status=OperationStatus.PROHIBITED,
+                notes="Synthetic terms prohibit distortion.",
+            ),
+            OperationRule(
+                operation=RightsOperation.REIDENTIFY,
+                status=OperationStatus.PROHIBITED,
+                notes="Synthetic terms prohibit re-identification.",
+            ),
+        ),
+        intended_operations=(
+            RightsOperation.USE,
+            RightsOperation.PROCESS,
+            RightsOperation.REDISTRIBUTE,
+            RightsOperation.NONCOMMERCIAL_USE,
+        ),
+        attribution=AttributionRequirement(
+            fields=(
+                AttributionField.PUBLISHER,
+                AttributionField.ORIGINAL_PRODUCER,
+                AttributionField.STATISTIC_NAME,
+                AttributionField.RETRIEVAL_DATE,
+                AttributionField.SOURCE_URL,
+            ),
+            template=(
+                "Source: {publisher} ({original_producer}), {statistic_name}, "
+                "retrieved {retrieval_date}. {source_url}"
+            ),
+        ),
+        decision_state=RedistributionStatus.ALLOWED,
+        decision_basis="Synthetic owner-approved ruling for contract tests.",
+        approved_by="fixture-owner",
+        approval_recorded_at=datetime(2026, 7, 16, 8, 0, tzinfo=UTC),
+        approval_record_reference="docs/decisions/9999-example.md#approval-record",
+    )
+
+
+@pytest.fixture
+def rights_catalog(
+    rights_instrument: RightsInstrument,
+    series_rights_decision: SeriesRightsDecision,
+) -> RightsCatalog:
+    return RightsCatalog(
+        catalog_id="example-rights-catalog-001",
+        recorded_at=datetime(2026, 7, 16, 9, 0, tzinfo=UTC),
+        project_use_profile=ProjectUseProfile.NONCOMMERCIAL_PUBLIC_RESEARCH,
+        instruments=(rights_instrument,),
+        decisions=(series_rights_decision,),
     )
 
 

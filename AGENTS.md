@@ -8,9 +8,11 @@ Build **KOR-RTD**, a provenance-contracted point-in-time (vintage) data layer fo
 
 ## Read before changing anything
 
-1. `docs/project/01_project_charter.md` — approved product and evaluation contract (v2).
+1. `docs/project/01_project_charter.md` — approved product and evaluation contract (v2.2).
 2. `docs/PROJECT_STATUS.md` — current milestone, completed work, next action, blockers, and validation evidence.
-3. `docs/decisions/` — accepted architecture and process decisions (ADR 0003 records the v2 reorientation).
+3. `docs/decisions/` — accepted architecture and process decisions (ADR 0003 records the v2
+   reorientation; ADR 0004 records the v2.1 source-rights amendment; ADR 0005 records the v2.2
+   fail-closed edition-availability contract).
 4. `docs/discovery/01_concept_upgrade_proposal.md` — background rationale for v2: verified data facts, judged alternatives, risk register.
 5. The closest additional `AGENTS.md`, if a subdirectory adds one later.
 
@@ -32,7 +34,16 @@ The charter is the scope authority. Do not expand sources, agents, UI, or infras
 - Keep Korean and English results separately reportable.
 - Never let an `as_of` evidence packet include a source published after its cutoff — nor a data vintage/edition that did not exist at the cutoff.
 - Harvester outputs are append-only: never rewrite, backdate, or backfill a committed snapshot; public commit history is the proof of capture dates.
-- Never commit raw ECOS/KOSIS observation values before the per-series KOGL redistribution ruling is recorded.
+- Never commit raw ECOS/KOSIS observations unless the exact series has an owner-approved
+  source-specific classification and attribution ruling. Bank of Korea-produced ECOS statistics
+  and in-scope KOSIS domestic macro statistics may be `allowed` under their official use guides;
+  other-producer ECOS raw redistribution fails closed without an express producer-specific basis.
+  KOSIS international/North Korea statistics are not redistributed, and publications follow their
+  individual KOGL notices.
+- Current `SourceManifest` 1.0 has no typed rights-decision link. No raw observation may be
+  committed until the accepted contract is implemented and cross-validates that link.
+- Treat the project and its public data artifacts as non-commercial. Any future commercial-use path
+  requires an owner review and a superseding rights decision before collection or publication.
 - Report the two gold-set tiers separately (40 human-reviewed core vs machine-generated probes); never merge them into one count.
 - Qualify every "first" claim: "to our knowledge" + "for official statistics" + cite prior art (arXiv 2605.23497, Dallas Fed real-time OECD dataset, OECD MEI revisions database). Never claim "first Korean macro benchmark."
 - Do not claim OECD edition/backfill ranges beyond what a recorded verification spike confirmed.
@@ -46,6 +57,8 @@ The charter is the scope authority. Do not expand sources, agents, UI, or infras
 ## Data, security, and cost
 
 - Use public sources only. Never add confidential Bank of Korea or applicant data.
+- Repository Apache-2.0 terms cover original project code and documentation unless noted; they do
+  not relicense source observations, which retain their recorded provider terms and attribution.
 - Do not commit downloaded source documents until redistribution rights are documented.
 - Never commit API keys, tokens, `.env`, credentials, private traces, or model weights.
 - Paid API, OCR, embedding, or GPU operations require a smoke test and an entry in the project status/cost record.

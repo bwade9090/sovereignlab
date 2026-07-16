@@ -1,0 +1,30 @@
+{
+  "accessed_on": "2026-07-16",
+  "applicable_content_classes": [
+    "other_official_data"
+  ],
+  "applicable_source_systems": [
+    "other_official"
+  ],
+  "instrument_id": "example-statistics-use-guide",
+  "issuer": "Example Public Institution",
+  "official_url": "https://example.org/rights/statistics",
+  "schema_version": "1.0.0",
+  "terms_summary": "Synthetic terms permit attributed non-commercial redistribution.",
+  "terms_evidence": {
+    "accessed_on": "2026-07-16",
+    "assertion": "Synthetic terms permit attributed non-commercial redistribution.",
+    "claims": [
+      "rights_terms"
+    ],
+    "kind": "publisher_use_guide",
+    "official_url": "https://example.org/rights/statistics"
+  },
+  "title": "Example Statistics Information Use Guide",
+  "verification_capture": {
+    "byte_size": 4096,
+    "capture_url": "https://example.org/rights/statistics.js",
+    "captured_at": "2026-07-16T07:00:00Z",
+    "content_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+  }
+}
