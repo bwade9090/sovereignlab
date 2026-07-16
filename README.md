@@ -89,7 +89,7 @@ Copy `.env.example` to `.env` only when an API-backed experiment is approved. Of
 
 ## Responsible disclosure
 
-This is an independent open-source project using public information. It is not affiliated with or endorsed by the Bank of Korea, OECD, or Mistral AI. Source redistribution and model/data licenses will be documented before artifacts are published.
+This project is conducted in a personal capacity and is not affiliated with the Bank of Korea. It is an independent open-source project using public information, and it is not affiliated with or endorsed by the OECD or Mistral AI either. Source redistribution and model/data licenses will be documented before artifacts are published.
 
 ## License
 

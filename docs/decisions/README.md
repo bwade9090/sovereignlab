@@ -24,3 +24,5 @@ Accepted records are not silently rewritten. Supersede them with a new ADR and c
   — **accepted 2026-07-16**
 - [0005 — Edition availability and vintage contract](0005-edition-availability-and-vintage-contract.md)
   — **accepted 2026-07-16**
+- [0006 — Employer-risk review for personal-capacity public activity](0006-employer-risk-review.md)
+  — **accepted 2026-07-17 (owner-authored answers)**

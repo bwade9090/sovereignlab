@@ -1,13 +1,13 @@
 # SovereignLab project status
 
-- Last updated: 2026-07-16
+- Last updated: 2026-07-17
 - Owner: Hyungbae Cho (`bwade9090`)
 - Delivery window: four weeks, approximately 80 hours
 - Current milestone: M1b — week-1 verification spikes and vintage groundwork (charter v2.2 §7,
   Week 1)
 - Overall state: source-rights policy, two initial ECOS rulings, strict standalone rights catalog,
-  and the edition-availability decision are complete; contract `2.0.0`, resolver/raw-manifest
-  integration, and the owner-authored employer review remain open
+  the edition-availability decision, and the owner-authored employer-risk review (ADR 0006) are
+  complete; contract `2.0.0` and resolver/raw-manifest integration remain open
 
 ## Approved baseline
 
@@ -47,6 +47,12 @@
   approved OECD `metadata_only pending dataset-specific and third-party-rights confirmation`.
   These are governance outcomes only; the ledger, resolver, parser, migration, and manifest link are
   not implemented in this handoff.
+- **Employer-risk review (2026-07-17):** ADR 0006 records the owner's verbatim answers covering
+  workplace rules, disclaimers, the public harvester, automated release notes, Bank of Korea
+  branding, and the Git-history workstation path. Outcomes: proceed unchanged; a single English
+  personal-capacity disclaimer added to the README; no history rewrite (the remediation question is
+  closed); charter §9's release-note labeling rule remains in force. The sole owner-authored week-1
+  artifact is complete.
 
 ## Current validation evidence
 
@@ -80,6 +86,13 @@ implementation: Python 3.12.13; `python scripts/export_json_schemas.py` regenera
 formatted); `python -m pytest --cov=sovereignlab --cov-report=term-missing` passed all 147 tests
 with 100% statement/branch coverage (633 statements, 218 branches); `git diff --check` clean. No
 raw observation endpoint or paid operation was used.
+
+Validated 2026-07-17 on macOS after recording ADR 0006 and creating the Homebrew Python 3.12
+environment: Python 3.12.13; `python scripts/export_json_schemas.py` regenerated all five contracts
+with no diff; `python -m ruff check .` clean; `python -m ruff format --check .` clean (17 files
+already formatted); `python -m pytest --cov=sovereignlab --cov-report=term-missing` passed all 147
+tests with 100% statement/branch coverage (633 statements, 218 branches). Documentation-only
+change; no observation endpoint or paid operation was used.
 
 ## M1b verification spike record (2026-07-15)
 
@@ -214,7 +227,7 @@ response bodies.
   implementation adds manifest cross-validation. Source observations retain provider terms and are
   not relicensed under repository Apache-2.0.
 
-### Owner decisions closed; one owner-authored artifact remains
+### Owner decisions closed
 
 - On 2026-07-16 the owner approved ADR 0005 in full: the edition-availability ledger, fail-closed
   resolver, `Asia/Seoul` end-of-day cutoff, evidence/benchmark contract `2.0.0` path, and narrow
@@ -222,50 +235,46 @@ response bodies.
 - The owner also approved `OECD metadata_only pending dataset-specific and third-party-rights
   confirmation`. This closes the current publication decision without approving raw OECD
   redistribution.
-- The owner must still personally write the one-hour employer-risk review required by charter §7.
-  It must cover the public harvester, personal-capacity disclaimers, automated release notes, Bank
-  of Korea branding, and whether the workstation path in earlier Git history needs remediation. An
-  agent may provide questions but may not author the review; completion requires the owner's text
-  to be committed as a decision record.
+- On 2026-07-17 the owner completed the one-hour employer-risk review required by charter §7,
+  answering an agent-provided question list in their own words; ADR 0006 commits those verbatim
+  answers as the decision record. All week-1 owner decisions are now closed.
 
 ## Immediate next action (M1b — do these in order)
 
-1. **Complete the sole owner-authored artifact.** Hyungbae writes and commits the one-hour
-   employer-risk review described above. ADR 0005, charter v2.2, the OECD metadata-only ruling, ADR
-   0004, both ECOS rulings, and the standalone rights catalog are approved and complete.
-2. Implement accepted ADR 0005 as one reviewable contract work unit: the
+1. Implement accepted ADR 0005 as one reviewable contract work unit: the
    `EditionAvailabilityLedger`, evidence/benchmark `2.0.0` migration, and typed
    `SourceManifest`-to-rights-decision linkage. Regenerate public schemas and update migration
    notes, synthetic fixtures, and tests in the same change. **No raw ECOS/KOSIS value is committed
    before the typed link and cross-record validation exist.**
-3. Implement the offline, fail-closed as-of resolver over
+2. Implement the offline, fail-closed as-of resolver over
    `DSD_STES_REVISIONS@DF_STES_REVISIONS` (~6–8 h). It must select the flow edition from verified
    `available_by`/absence evidence before looking up the exact series-period row, abstain across an
    unresolved newer-edition frontier, and reproduce only demonstrable examples.
-4. Commit the weekly harvester cron + `SourceManifest` and availability-ledger wiring (~3–5 h) so
+3. Commit the weekly harvester cron + `SourceManifest` and availability-ledger wiring (~3–5 h) so
    public snapshot history starts accruing immediately after the rights gate permits it.
-5. Freeze the number-normalization specification before any question authoring.
-6. Run the already-planned one-step Ministral 3 3B QLoRA compatibility spike on rented compute only
+4. Freeze the number-normalization specification before any question authoring.
+5. Run the already-planned one-step Ministral 3 3B QLoRA compatibility spike on rented compute only
    after its smoke test; record cost in the spend ledger.
 
 Week-1 gate (charter v2.2 §7): **not passed**. Endpoint/range spikes, source-rights policy, two
-per-series rights records, the strict rights catalog, the availability design, and the OECD
-metadata-only ruling are complete. Contract `2.0.0`/manifest integration, the owner employer
-review, resolver regression, and fine-tuning path must still be fixed before the gate closes. If
-the gate slips, invoke the pre-committed cut ladder immediately.
+per-series rights records, the strict rights catalog, the availability design, the OECD
+metadata-only ruling, and the owner employer-risk review (ADR 0006) are complete. Contract
+`2.0.0`/manifest integration, resolver regression, and the fine-tuning path must still be fixed
+before the gate closes. If the gate slips, invoke the pre-committed cut ladder immediately.
 
 ## Blockers and environment notes
 
 - No machine has a training GPU; rented GPU is planned only for the reviewed QLoRA spike.
 - Development spans multiple machines. `.venv` is machine-local — recreate it per the README quick start on whichever machine picks this up. Nothing in the repo may depend on machine-specific paths.
-- Windows workstation note: the user-level Python launcher is unreliable there; use the workstation's documented bundled Python 3.12.13 runtime to create `.venv` (local path recorded outside the repository; an earlier revision of this file recorded the literal path — whether that history needs remediation is an input to the week-1 employer-risk review).
-- Rights gate: ADR 0004, charter v2.2, the standalone catalog, and both approved ECOS rows are
-  complete. Raw publication still waits for the accepted contract's typed manifest-link
-  implementation and the owner-written employer-risk review.
+- Windows workstation note: the user-level Python launcher is unreliable there; use the workstation's documented bundled Python 3.12.13 runtime to create `.venv` (local path recorded outside the repository; an earlier revision of this file recorded the literal path — ADR 0006 closed that question with the owner's decision that no history remediation is needed).
+- Rights gate: ADR 0004, charter v2.2, the standalone catalog, both approved ECOS rows, and the
+  owner employer-risk review (ADR 0006) are complete. Raw publication now waits only on the
+  accepted contract's typed manifest-link implementation.
 - Vintage semantics: OECD monthly `EDITION` codes do not encode availability dates. Accepted ADR
   0005 defines the required evidence ledger and fail-closed behavior, but the implementation is
   absent; unknown editions must abstain.
-- macOS laptop note: no system `python3.12` is installed (Anaconda 3.11 and Homebrew 3.13 are present). Either install `python@3.12` via Homebrew, or use Python 3.13 — the pinned requirements were verified on 2026-07-14 to install cleanly and pass ruff plus all 45 tests on Python 3.13.13 on this machine. The project standard remains Python 3.12 (ADR 0001).
+- macOS laptop note: `python@3.12` was installed via Homebrew on 2026-07-17 and is the interpreter
+  for the machine-local `.venv` (project standard per ADR 0001).
 - GitHub CLI is authenticated as `bwade9090`; `main` tracks `origin/main`.
 - Live-event calendar: primary = the next observed OECD edition rollover (the exact date is not yet
   verified; append-only polling must detect it); fallback = the July-vs-June edition diff, subject to
@@ -282,6 +291,7 @@ the gate slips, invoke the pre-committed cut ladder immediately.
 | 2026-07-16 | ECOS/KOSIS official use-guide and producer verification | $0.00 | Public policy/metadata reads only; no observation or paid call |
 | 2026-07-16 | Rights catalog contract and two approved ECOS metadata rows | $0.00 | Offline code/schema/tests; no observation payload or paid call |
 | 2026-07-16 | Charter v2.2 approval and cross-machine handoff | $0.00 | Documentation, offline validation, commit/push only |
+| 2026-07-17 | Employer-risk review record (ADR 0006) and macOS 3.12 environment | $0.00 | Documentation and offline validation only; no paid call |
 
 **Cumulative external spend: $0.00 / $100.00**
 
@@ -297,7 +307,7 @@ Read in this order, in full, before changing anything:
 6. `docs/discovery/01_concept_upgrade_proposal.md` — background: why v2 exists, verified data facts, judged alternatives, risk register.
 
 Then start with "Immediate next action" item 1. Do not start dependent data collection, document
-ingestion, model training, or UI work before the owner-authored artifact and implementation gates
-are resolved. Do not weaken the qualification rules for "first" claims or the rights/append-only
+ingestion, model training, or UI work before the implementation gates (contract `2.0.0`, typed
+manifest-rights link, resolver) are resolved. Do not weaken the qualification rules for "first" claims or the rights/append-only
 rules in `AGENTS.md`. Update this file whenever a milestone state, blocker, cost, spike result, or
 next action changes.
