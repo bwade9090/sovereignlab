@@ -209,6 +209,17 @@
           "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
           "title": "Tool Name",
           "type": "string"
+        },
+        "vintage": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/VintageEvidence"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
         }
       },
       "required": [
@@ -218,6 +229,30 @@
         "expected_facts"
       ],
       "title": "ToolExpectation",
+      "type": "object"
+    },
+    "VintageEvidence": {
+      "additionalProperties": false,
+      "description": "The ledger-resolved data vintage one temporal tool expectation must use.",
+      "properties": {
+        "ledger_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+          "title": "Ledger Id",
+          "type": "string"
+        },
+        "selected_edition": {
+          "pattern": "^[0-9]{4}(0[1-9]|1[0-2])$",
+          "title": "Selected Edition",
+          "type": "string"
+        }
+      },
+      "required": [
+        "ledger_id",
+        "selected_edition"
+      ],
+      "title": "VintageEvidence",
       "type": "object"
     }
   },
@@ -318,8 +353,8 @@
       "title": "Reference Answer"
     },
     "schema_version": {
-      "const": "1.0.0",
-      "default": "1.0.0",
+      "const": "2.0.0",
+      "default": "2.0.0",
       "title": "Schema Version",
       "type": "string"
     },

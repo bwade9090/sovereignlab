@@ -13,7 +13,13 @@ from pydantic import (
     model_validator,
 )
 
-from sovereignlab.schemas.common import SCHEMA_VERSION, Identifier, NonEmptyText, StrictModel
+from sovereignlab.schemas.availability import EditionCode
+from sovereignlab.schemas.common import (
+    EVIDENCE_SCHEMA_VERSION,
+    Identifier,
+    NonEmptyText,
+    StrictModel,
+)
 from sovereignlab.schemas.source import LanguageCode
 
 QuestionText = Annotated[str, StringConstraints(min_length=5, max_length=2_000)]
@@ -88,6 +94,13 @@ class DocumentEvidence(StrictModel):
     supports_claim: NonEmptyText
 
 
+class VintageEvidence(StrictModel):
+    """The ledger-resolved data vintage one temporal tool expectation must use."""
+
+    ledger_id: Identifier
+    selected_edition: EditionCode
+
+
 class ToolExpectation(StrictModel):
     """Expected deterministic tool call and facts derived from its response."""
 
@@ -95,12 +108,13 @@ class ToolExpectation(StrictModel):
     tool_name: Identifier
     arguments: dict[str, JsonValue]
     expected_facts: tuple[NonEmptyText, ...] = Field(min_length=1)
+    vintage: VintageEvidence | None = None
 
 
 class BenchmarkRecord(StrictModel):
     """One auditable routing/evidence task in the bilingual gold benchmark."""
 
-    schema_version: Literal["1.0.0"] = SCHEMA_VERSION
+    schema_version: Literal["2.0.0"] = EVIDENCE_SCHEMA_VERSION
     record_id: Identifier
     split: BenchmarkSplit
     evidence_group_id: Identifier
@@ -145,6 +159,10 @@ class BenchmarkRecord(StrictModel):
 
         if "temporal" in self.tags and self.as_of is None:
             raise ValueError("temporal benchmark item requires as_of")
+        if self.as_of is None and any(
+            expectation.vintage is not None for expectation in self.tool_expectations
+        ):
+            raise ValueError("vintage evidence requires as_of")
         if len(set(self.tags)) != len(self.tags):
             raise ValueError("benchmark tags must be unique")
         return self

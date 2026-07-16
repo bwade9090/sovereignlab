@@ -12,10 +12,12 @@ The rights catalog turns publisher use guides and producer/category mappings int
 metadata before KOR-RTD captures observations. It distinguishes permission to use a portal from
 permission to process and publicly redistribute one exact series.
 
-The catalog contains no observations. It also does not yet authorize a raw commit: ADR 0005 and the
-coordinated contract `2.0.0` migration are accepted but not implemented, so `SourceManifest` has
-no typed link to a series decision. Until that accepted contract is implemented with its
-cross-record validator, raw ECOS/KOSIS capture stays blocked.
+The catalog contains no observations. Since 2026-07-17, `SourceManifest` 2.0.0 carries the typed
+`rights_decision` link to one catalog decision, and `BenchmarkBundle` 2.0.0 cross-validates that
+link (see `docs/project/05_evidence_contract_2_0_migration.md`): an `allowed` data manifest must
+name a matching-scope `allowed`, unexpired decision in a bundled catalog. Raw ECOS/KOSIS capture
+remains blocked operationally until the harvester produces real manifests that pass this
+validation.
 
 ## 2. Public models
 

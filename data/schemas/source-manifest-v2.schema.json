@@ -97,6 +97,72 @@
       ],
       "title": "SourceKind",
       "type": "string"
+    },
+    "SourceRightsReference": {
+      "additionalProperties": false,
+      "description": "Typed link from one data snapshot to its owner-approved series rights decision.",
+      "properties": {
+        "catalog_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+          "title": "Catalog Id",
+          "type": "string"
+        },
+        "decision_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+          "title": "Decision Id",
+          "type": "string"
+        },
+        "item_id": {
+          "maxLength": 256,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]*$",
+          "title": "Item Id",
+          "type": "string"
+        },
+        "source_system": {
+          "$ref": "#/$defs/SourceSystem"
+        },
+        "table_id": {
+          "maxLength": 256,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]*$",
+          "title": "Table Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "catalog_id",
+        "decision_id",
+        "source_system",
+        "table_id",
+        "item_id"
+      ],
+      "title": "SourceRightsReference",
+      "type": "object"
+    },
+    "SourceSystem": {
+      "description": "Official systems for which the rights contract has an explicit policy branch.",
+      "enum": [
+        "ecos",
+        "kosis",
+        "oecd",
+        "other_official"
+      ],
+      "title": "SourceSystem",
+      "type": "string"
+    },
+    "VintageSemantics": {
+      "description": "Whether a snapshot is a latest-only response or a consolidated edition archive.",
+      "enum": [
+        "latest_only",
+        "historical_archive"
+      ],
+      "title": "VintageSemantics",
+      "type": "string"
     }
   },
   "additionalProperties": false,
@@ -183,9 +249,20 @@
       "title": "Retrieved At",
       "type": "string"
     },
+    "rights_decision": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/SourceRightsReference"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
     "schema_version": {
-      "const": "1.0.0",
-      "default": "1.0.0",
+      "const": "2.0.0",
+      "default": "2.0.0",
       "title": "Schema Version",
       "type": "string"
     },
@@ -204,6 +281,10 @@
       "minLength": 1,
       "title": "Title",
       "type": "string"
+    },
+    "vintage_semantics": {
+      "$ref": "#/$defs/VintageSemantics",
+      "default": "latest_only"
     }
   },
   "required": [

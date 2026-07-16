@@ -3,16 +3,18 @@
 import json
 from pathlib import Path
 
+from sovereignlab.schemas.availability import EditionAvailabilityLedger
 from sovereignlab.schemas.benchmark import BenchmarkRecord
 from sovereignlab.schemas.rights import RightsCatalog, RightsInstrument, SeriesRightsDecision
 from sovereignlab.schemas.source import SourceManifest
 
 SCHEMA_MODELS = {
-    "benchmark-record-v1.schema.json": BenchmarkRecord,
+    "benchmark-record-v2.schema.json": BenchmarkRecord,
+    "edition-availability-ledger-v1.schema.json": EditionAvailabilityLedger,
     "rights-catalog-v1.schema.json": RightsCatalog,
     "rights-instrument-v1.schema.json": RightsInstrument,
     "series-rights-decision-v1.schema.json": SeriesRightsDecision,
-    "source-manifest-v1.schema.json": SourceManifest,
+    "source-manifest-v2.schema.json": SourceManifest,
 }
 
 

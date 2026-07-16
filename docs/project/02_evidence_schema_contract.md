@@ -1,6 +1,8 @@
 # M1a evidence schema contract
 
-- Status: implemented; ready for review
+- Status: superseded by contract `2.0.0` on 2026-07-17 — see
+  `docs/project/05_evidence_contract_2_0_migration.md` (ADR 0005). The 1.0.0 rules below remain
+  the historical record; documents and latest-only sources keep these cutoff semantics under 2.0.0.
 - Date: 2026-07-14
 - Schema version: `1.0.0`
 - Scope: provenance snapshots, benchmark records, and cross-record integrity only

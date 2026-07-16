@@ -7,11 +7,13 @@ from typing import Literal
 from pydantic import AnyHttpUrl, AwareDatetime, Field, PositiveInt, model_validator
 
 from sovereignlab.schemas.common import (
-    SCHEMA_VERSION,
+    EVIDENCE_SCHEMA_VERSION,
+    ExternalIdentifier,
     Identifier,
     MediaType,
     NonEmptyText,
     Sha256,
+    SourceSystem,
     StrictModel,
 )
 
@@ -50,6 +52,13 @@ class PublicationDateBasis(StrEnum):
     RETRIEVAL_DATE_FALLBACK = "retrieval_date_fallback"
 
 
+class VintageSemantics(StrEnum):
+    """Whether a snapshot is a latest-only response or a consolidated edition archive."""
+
+    LATEST_ONLY = "latest_only"
+    HISTORICAL_ARCHIVE = "historical_archive"
+
+
 class RedistributionPolicy(StrictModel):
     """Source-specific redistribution decision and its evidence."""
 
@@ -70,10 +79,20 @@ class RedistributionPolicy(StrictModel):
         return self
 
 
+class SourceRightsReference(StrictModel):
+    """Typed link from one data snapshot to its owner-approved series rights decision."""
+
+    catalog_id: Identifier
+    decision_id: Identifier
+    source_system: SourceSystem
+    table_id: ExternalIdentifier
+    item_id: ExternalIdentifier
+
+
 class SourceManifest(StrictModel):
     """One immutable, release-specific snapshot of an official source."""
 
-    schema_version: Literal["1.0.0"] = SCHEMA_VERSION
+    schema_version: Literal["2.0.0"] = EVIDENCE_SCHEMA_VERSION
     source_id: Identifier
     source_kind: SourceKind
     publisher: NonEmptyText
@@ -89,6 +108,8 @@ class SourceManifest(StrictModel):
     content_sha256: Sha256
     byte_size: PositiveInt
     redistribution: RedistributionPolicy
+    vintage_semantics: VintageSemantics = VintageSemantics.LATEST_ONLY
+    rights_decision: SourceRightsReference | None = None
     release_label: NonEmptyText | None = Field(default=None, max_length=256)
 
     @model_validator(mode="after")
@@ -100,4 +121,19 @@ class SourceManifest(StrictModel):
             and self.publication_date_notes is None
         ):
             raise ValueError("retrieval-date fallback requires publication_date_notes")
+        return self
+
+    @model_validator(mode="after")
+    def enforce_vintage_and_rights_linkage(self) -> "SourceManifest":
+        is_data_source = self.source_kind in {SourceKind.DATASET, SourceKind.API}
+        if self.vintage_semantics is VintageSemantics.HISTORICAL_ARCHIVE and not is_data_source:
+            raise ValueError("historical-archive vintage semantics require a data source")
+        if self.rights_decision is not None and not is_data_source:
+            raise ValueError("series rights decisions apply only to data sources")
+        if (
+            self.redistribution.status is RedistributionStatus.ALLOWED
+            and is_data_source
+            and self.rights_decision is None
+        ):
+            raise ValueError("allowed data redistribution requires a typed rights decision link")
         return self

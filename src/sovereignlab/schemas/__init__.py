@@ -1,5 +1,16 @@
 """Public schema API for SovereignLab evidence and evaluation data."""
 
+from sovereignlab.schemas.availability import (
+    AvailabilityAssertion,
+    AvailabilityEvidence,
+    AvailabilityEvidenceBasis,
+    EditionAbstentionReason,
+    EditionAvailabilityLedger,
+    EditionAvailabilityRecord,
+    EditionCutoffState,
+    EditionResolutionStatus,
+    EditionSelection,
+)
 from sovereignlab.schemas.benchmark import (
     AnnotationProvenance,
     AnnotationStatus,
@@ -9,6 +20,7 @@ from sovereignlab.schemas.benchmark import (
     EvidenceLocator,
     EvidenceRoute,
     ToolExpectation,
+    VintageEvidence,
 )
 from sovereignlab.schemas.bundle import BenchmarkBundle
 from sovereignlab.schemas.rights import (
@@ -39,6 +51,8 @@ from sovereignlab.schemas.source import (
     RedistributionStatus,
     SourceKind,
     SourceManifest,
+    SourceRightsReference,
+    VintageSemantics,
 )
 
 __all__ = [
@@ -46,11 +60,20 @@ __all__ = [
     "AnnotationStatus",
     "AttributionField",
     "AttributionRequirement",
+    "AvailabilityAssertion",
+    "AvailabilityEvidence",
+    "AvailabilityEvidenceBasis",
     "BenchmarkBundle",
     "BenchmarkRecord",
     "BenchmarkSplit",
     "ContentClass",
     "DocumentEvidence",
+    "EditionAbstentionReason",
+    "EditionAvailabilityLedger",
+    "EditionAvailabilityRecord",
+    "EditionCutoffState",
+    "EditionResolutionStatus",
+    "EditionSelection",
     "EvidenceClaim",
     "EvidenceLocator",
     "EvidenceObservation",
@@ -73,7 +96,10 @@ __all__ = [
     "SeriesRightsDecision",
     "SourceKind",
     "SourceManifest",
+    "SourceRightsReference",
     "SourceSystem",
     "ThirdPartyStatus",
     "ToolExpectation",
+    "VintageEvidence",
+    "VintageSemantics",
 ]

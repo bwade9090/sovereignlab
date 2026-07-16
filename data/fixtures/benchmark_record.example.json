@@ -24,7 +24,7 @@
   "question": "As of May 2024, why was the example growth forecast revised?",
   "record_id": "example-doc-en-001",
   "reference_answer": "The example report attributes the revision to stronger exports.",
-  "schema_version": "1.0.0",
+  "schema_version": "2.0.0",
   "split": "test",
   "tags": [
     "temporal"

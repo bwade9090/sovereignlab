@@ -1,0 +1,47 @@
+{
+  "captured_at": "2026-07-14T08:00:00Z",
+  "complete_through": "2026-07-14T08:00:00Z",
+  "cutoff_semantics": "inclusive_end_of_day",
+  "cutoff_timezone": "Asia/Seoul",
+  "dataflow_id": "EXAMPLE:DSD_EXAMPLE@DF_EXAMPLE",
+  "dataflow_version": "1.0",
+  "editions": [
+    {
+      "available_by": "2024-05-10T09:00:00Z",
+      "edition": "202405",
+      "evidence": [
+        {
+          "asserted_instant": "2024-05-10T09:00:00Z",
+          "basis": "sdmx_constraint_valid_from",
+          "constraint_id": "CR_A_DF_EXAMPLE",
+          "constraint_version": "1.0",
+          "notes": "Synthetic fixture; the constraint region contained this edition.",
+          "source_manifest_ids": [
+            "example-oecd-sdmx-api"
+          ],
+          "supports": "available_by"
+        }
+      ],
+      "status": "resolved"
+    },
+    {
+      "edition": "202406",
+      "evidence": [
+        {
+          "asserted_instant": "2024-05-10T09:00:00Z",
+          "basis": "first_observed_at",
+          "notes": "Synthetic fixture; the capture at this instant did not contain the edition.",
+          "source_manifest_ids": [
+            "example-oecd-sdmx-api"
+          ],
+          "supports": "last_absent_at"
+        }
+      ],
+      "last_absent_at": "2024-05-10T09:00:00Z",
+      "status": "unresolved"
+    }
+  ],
+  "generated_at": "2026-07-14T09:00:00Z",
+  "ledger_id": "example-availability-ledger-001",
+  "schema_version": "1.0.0"
+}

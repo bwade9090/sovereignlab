@@ -6,8 +6,9 @@
 - Current milestone: M1b — week-1 verification spikes and vintage groundwork (charter v2.2 §7,
   Week 1)
 - Overall state: source-rights policy, two initial ECOS rulings, strict standalone rights catalog,
-  the edition-availability decision, and the owner-authored employer-risk review (ADR 0006) are
-  complete; contract `2.0.0` and resolver/raw-manifest integration remain open
+  the edition-availability decision, the owner-authored employer-risk review (ADR 0006), and the
+  implemented contract unit — `EditionAvailabilityLedger` 1.0.0, evidence/benchmark `2.0.0`, typed
+  manifest-rights link — are complete; the as-of resolver and harvester remain open
 
 ## Approved baseline
 
@@ -53,6 +54,25 @@
   personal-capacity disclaimer added to the README; no history rewrite (the remediation question is
   closed); charter §9's release-note labeling rule remains in force. The sole owner-authored week-1
   artifact is complete.
+- **Contract 2.0.0 + availability ledger 1.0.0 (2026-07-17):** accepted ADR 0005 implemented as one
+  work unit (`docs/project/05_evidence_contract_2_0_migration.md`): strict
+  `EditionAvailabilityLedger` with the four approved evidence bases, UTC canonical instants,
+  window/evidence equality invariants, `Asia/Seoul` end-of-day cutoff computation, ADR 0005 state
+  derivation, and structured fail-closed edition selection; `SourceManifest` 2.0.0 with
+  `vintage_semantics` and the typed `rights_decision` link (required for `allowed` data snapshots);
+  `BenchmarkRecord` 2.0.0 with per-tool-expectation vintage evidence; `BenchmarkBundle` 2.0.0
+  cross-validating ledgers, rights links, and gold vintages against ledger-resolved selections while
+  keeping the 1.0 cutoff rule for documents and latest-only sources. A 23-agent adversarial review
+  then confirmed and closed seven findings before commit: superseded catalogs/ledgers can no longer
+  authorize links or vintages, one series scope cannot span multiple active bundled catalogs,
+  rights expiry compares instants (`valid_until` inclusive through end-of-day `Asia/Seoul`)
+  independent of serialization offset, conservative publisher-date evidence survives DST gaps via
+  UTC-instant comparison, calendar overflows raise validation errors instead of raw
+  `OverflowError`, the ADR-mandated mid-day-capture/same-day-cutoff and `complete_through`
+  boundary tests were added, and the edition-inventory-must-match-constraint rule is disclosed as
+  an operational harvester obligation. Rights contracts stay 1.0.0 byte-identical; v1 evidence
+  schemas removed (history preserves them); 226 tests at 100% statement/branch coverage. No real
+  ledger, manifest, or observation was committed.
 
 ## Current validation evidence
 
@@ -93,6 +113,14 @@ with no diff; `python -m ruff check .` clean; `python -m ruff format --check .` 
 already formatted); `python -m pytest --cov=sovereignlab --cov-report=term-missing` passed all 147
 tests with 100% statement/branch coverage (633 statements, 218 branches). Documentation-only
 change; no observation endpoint or paid operation was used.
+
+Validated 2026-07-17 on macOS after implementing the ADR 0005 contract unit and applying the
+adversarial-review fixes: Python 3.12.13; `python scripts/export_json_schemas.py` exported six
+contracts (`-v2` evidence schemas plus the new availability ledger; rights schemas byte-identical);
+`python -m ruff check .` clean; `python -m ruff format --check .` clean (19 files);
+`python -m pytest --cov=sovereignlab --cov-report=term-missing` passed all 226 tests with 100%
+statement/branch coverage (923 statements, 350 branches); `git diff --check` clean. Offline
+code/schema/tests only; no observation endpoint or paid operation was used.
 
 ## M1b verification spike record (2026-07-15)
 
@@ -222,10 +250,10 @@ response bodies.
   the owner accepted that mapping on 2026-07-16. Both series now have validated `allowed` records in
   `data/rights/kor-rtd-rights-2026-07-16.json` with exact scope, official evidence, permitted
   operations, attribution template, and aware approval-record timestamp.
-- The independent catalog does not itself authorize raw publication. Existing `SourceManifest` 1.0
-  has no typed decision link, so raw capture remains blocked until the accepted contract
-  implementation adds manifest cross-validation. Source observations retain provider terms and are
-  not relicensed under repository Apache-2.0.
+- The independent catalog does not itself authorize raw publication. At the time of this spike,
+  `SourceManifest` 1.0 had no typed decision link; the 2026-07-17 contract `2.0.0` implementation
+  added that link and its bundle cross-validation. Source observations retain provider terms and
+  are not relicensed under repository Apache-2.0.
 
 ### Owner decisions closed
 
@@ -241,38 +269,40 @@ response bodies.
 
 ## Immediate next action (M1b — do these in order)
 
-1. Implement accepted ADR 0005 as one reviewable contract work unit: the
-   `EditionAvailabilityLedger`, evidence/benchmark `2.0.0` migration, and typed
-   `SourceManifest`-to-rights-decision linkage. Regenerate public schemas and update migration
-   notes, synthetic fixtures, and tests in the same change. **No raw ECOS/KOSIS value is committed
-   before the typed link and cross-record validation exist.**
-2. Implement the offline, fail-closed as-of resolver over
-   `DSD_STES_REVISIONS@DF_STES_REVISIONS` (~6–8 h). It must select the flow edition from verified
-   `available_by`/absence evidence before looking up the exact series-period row, abstain across an
-   unresolved newer-edition frontier, and reproduce only demonstrable examples.
-3. Commit the weekly harvester cron + `SourceManifest` and availability-ledger wiring (~3–5 h) so
-   public snapshot history starts accruing immediately after the rights gate permits it.
-4. Freeze the number-normalization specification before any question authoring.
-5. Run the already-planned one-step Ministral 3 3B QLoRA compatibility spike on rented compute only
+1. Implement the offline, fail-closed as-of resolver over
+   `DSD_STES_REVISIONS@DF_STES_REVISIONS` (~6–8 h): the case-sensitive SDMX-CSV parser plus
+   series-period row lookup on top of the implemented ledger selection (`select_edition` already
+   enforces the frontier rule). It must reproduce only the demonstrable examples recorded in this
+   file, enforce the ledger-to-manifest `dataflow_id` join, and emit evidence packets that expose
+   only the selected observation row.
+2. Commit the weekly harvester cron + `SourceManifest` and availability-ledger wiring (~3–5 h) so
+   public snapshot history starts accruing immediately after the rights gate permits it. The first
+   real ledger records `202607.available_by=2026-07-08T09:33:35.737Z` and keeps `202606`
+   unresolved per ADR 0005 decision 10.
+3. Freeze the number-normalization specification before any question authoring.
+4. Run the already-planned one-step Ministral 3 3B QLoRA compatibility spike on rented compute only
    after its smoke test; record cost in the spend ledger.
 
 Week-1 gate (charter v2.2 §7): **not passed**. Endpoint/range spikes, source-rights policy, two
 per-series rights records, the strict rights catalog, the availability design, the OECD
-metadata-only ruling, and the owner employer-risk review (ADR 0006) are complete. Contract
-`2.0.0`/manifest integration, resolver regression, and the fine-tuning path must still be fixed
-before the gate closes. If the gate slips, invoke the pre-committed cut ladder immediately.
+metadata-only ruling, the owner employer-risk review (ADR 0006), and the contract `2.0.0`/ledger
+1.0.0/manifest-rights integration are complete. Resolver regression against the verified examples,
+the harvester, and the fine-tuning path must still be fixed before the gate closes. If the gate
+slips, invoke the pre-committed cut ladder immediately.
 
 ## Blockers and environment notes
 
 - No machine has a training GPU; rented GPU is planned only for the reviewed QLoRA spike.
 - Development spans multiple machines. `.venv` is machine-local — recreate it per the README quick start on whichever machine picks this up. Nothing in the repo may depend on machine-specific paths.
 - Windows workstation note: the user-level Python launcher is unreliable there; use the workstation's documented bundled Python 3.12.13 runtime to create `.venv` (local path recorded outside the repository; an earlier revision of this file recorded the literal path — ADR 0006 closed that question with the owner's decision that no history remediation is needed).
-- Rights gate: ADR 0004, charter v2.2, the standalone catalog, both approved ECOS rows, and the
-  owner employer-risk review (ADR 0006) are complete. Raw publication now waits only on the
-  accepted contract's typed manifest-link implementation.
-- Vintage semantics: OECD monthly `EDITION` codes do not encode availability dates. Accepted ADR
-  0005 defines the required evidence ledger and fail-closed behavior, but the implementation is
-  absent; unknown editions must abstain.
+- Rights gate: ADR 0004, charter v2.2, the standalone catalog, both approved ECOS rows, the owner
+  employer-risk review (ADR 0006), and the typed manifest-rights link with bundle cross-validation
+  are complete. Raw publication now waits only on real harvester manifests that pass that
+  validation.
+- Vintage semantics: OECD monthly `EDITION` codes do not encode availability dates. The
+  `EditionAvailabilityLedger` contract and fail-closed selection are implemented; unknown editions
+  abstain mechanically. No real ledger exists yet — the first one ships with the harvester
+  captures.
 - macOS laptop note: `python@3.12` was installed via Homebrew on 2026-07-17 and is the interpreter
   for the machine-local `.venv` (project standard per ADR 0001).
 - GitHub CLI is authenticated as `bwade9090`; `main` tracks `origin/main`.
@@ -292,6 +322,7 @@ before the gate closes. If the gate slips, invoke the pre-committed cut ladder i
 | 2026-07-16 | Rights catalog contract and two approved ECOS metadata rows | $0.00 | Offline code/schema/tests; no observation payload or paid call |
 | 2026-07-16 | Charter v2.2 approval and cross-machine handoff | $0.00 | Documentation, offline validation, commit/push only |
 | 2026-07-17 | Employer-risk review record (ADR 0006) and macOS 3.12 environment | $0.00 | Documentation and offline validation only; no paid call |
+| 2026-07-17 | ADR 0005 contract unit implementation and adversarial review | $0.00 | Offline code/schema/tests; agent review under subscription, no project API/GPU call |
 
 **Cumulative external spend: $0.00 / $100.00**
 

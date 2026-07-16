@@ -22,9 +22,10 @@ recorded in its source manifest and owner-approved series rights decision.
 
 The operational gate accepted in ADR 0004 remains fail closed: no raw observation may be committed
 until its exact producer or KOSIS content category, applicable rights instrument, attribution,
-permitted operations, and owner approval are present in strict rights records. Current
-`SourceManifest` 1.0 remains unchanged; raw manifest integration stays blocked until a later
-accepted contract is implemented with the typed link and cross-record validator.
+permitted operations, and owner approval are present in strict rights records. `SourceManifest`
+2.0.0 implements the typed rights-decision link and `BenchmarkBundle` 2.0.0 cross-validates it
+(`docs/project/05_evidence_contract_2_0_migration.md`); an `allowed` data manifest without a
+matching owner-approved decision fails validation.
 
 Repository layout:
 

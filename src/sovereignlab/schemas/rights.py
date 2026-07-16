@@ -18,36 +18,21 @@ from pydantic import (
 
 from sovereignlab.schemas.common import (
     SCHEMA_VERSION,
+    ExternalIdentifier,
     Identifier,
     NonEmptyText,
     Sha256,
+    SourceSystem,
     StrictModel,
 )
 from sovereignlab.schemas.source import RedistributionStatus
 
-ExternalIdentifier = Annotated[
-    str,
-    StringConstraints(
-        min_length=1,
-        max_length=256,
-        pattern=r"^[A-Za-z0-9][A-Za-z0-9._:/-]*$",
-    ),
-]
 ApprovalRecordReference = Annotated[
     str,
     StringConstraints(
         pattern=r"^docs/decisions/[0-9]{4}-[a-z0-9-]+\.md#approval-record$",
     ),
 ]
-
-
-class SourceSystem(StrEnum):
-    """Official systems for which the rights contract has an explicit policy branch."""
-
-    ECOS = "ecos"
-    KOSIS = "kosis"
-    OECD = "oecd"
-    OTHER_OFFICIAL = "other_official"
 
 
 class KosisContentCategory(StrEnum):

@@ -1,10 +1,13 @@
 """Shared strict types for versioned public data contracts."""
 
+from enum import StrEnum
 from typing import Annotated
 
 from pydantic import BaseModel, ConfigDict, StringConstraints
 
 SCHEMA_VERSION = "1.0.0"
+EVIDENCE_SCHEMA_VERSION = "2.0.0"
+AVAILABILITY_SCHEMA_VERSION = "1.0.0"
 
 Identifier = Annotated[
     str,
@@ -20,6 +23,23 @@ MediaType = Annotated[
     str,
     StringConstraints(pattern=r"^[a-z0-9][a-z0-9.+-]*/[a-z0-9][a-z0-9.+-]*$"),
 ]
+ExternalIdentifier = Annotated[
+    str,
+    StringConstraints(
+        min_length=1,
+        max_length=256,
+        pattern=r"^[A-Za-z0-9][A-Za-z0-9._:/-]*$",
+    ),
+]
+
+
+class SourceSystem(StrEnum):
+    """Official systems for which the rights contract has an explicit policy branch."""
+
+    ECOS = "ecos"
+    KOSIS = "kosis"
+    OECD = "oecd"
+    OTHER_OFFICIAL = "other_official"
 
 
 class StrictModel(BaseModel):

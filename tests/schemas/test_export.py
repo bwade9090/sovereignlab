@@ -9,6 +9,7 @@ import pytest
 from sovereignlab.schemas import (
     BenchmarkBundle,
     BenchmarkRecord,
+    EditionAvailabilityLedger,
     RightsCatalog,
     RightsInstrument,
     SeriesRightsDecision,
@@ -37,6 +38,17 @@ def test_synthetic_json_examples_form_a_valid_bundle() -> None:
     bundle = BenchmarkBundle(sources=(source,), records=(record,))
 
     assert bundle.records[0].record_id == "example-doc-en-001"
+
+
+def test_synthetic_availability_ledger_example_validates() -> None:
+    ledger = EditionAvailabilityLedger.model_validate_json(
+        (ROOT / "data" / "fixtures" / "edition_availability_ledger.example.json").read_text(
+            encoding="utf-8"
+        )
+    )
+
+    assert ledger.ledger_id == "example-availability-ledger-001"
+    assert [record.edition for record in ledger.editions] == ["202405", "202406"]
 
 
 def test_synthetic_rights_examples_form_a_valid_catalog() -> None:

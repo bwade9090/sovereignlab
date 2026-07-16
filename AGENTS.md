@@ -40,8 +40,10 @@ The charter is the scope authority. Do not expand sources, agents, UI, or infras
   other-producer ECOS raw redistribution fails closed without an express producer-specific basis.
   KOSIS international/North Korea statistics are not redistributed, and publications follow their
   individual KOGL notices.
-- Current `SourceManifest` 1.0 has no typed rights-decision link. No raw observation may be
-  committed until the accepted contract is implemented and cross-validates that link.
+- `SourceManifest` 2.0.0 requires a typed rights-decision link on every `allowed` data snapshot,
+  and bundle validation cross-checks it against the committed rights catalog. No raw observation
+  may be committed unless that link validates and the referenced decision is owner-approved
+  `allowed`.
 - Treat the project and its public data artifacts as non-commercial. Any future commercial-use path
   requires an owner review and a superseding rights decision before collection or publication.
 - Report the two gold-set tiers separately (40 human-reviewed core vs machine-generated probes); never merge them into one count.

@@ -62,6 +62,25 @@ def test_route_rejects_inconsistent_evidence(
         )
 
 
+def test_vintage_evidence_requires_as_of(
+    annotation: AnnotationProvenance,
+    tool_expectation: ToolExpectation,
+) -> None:
+    expectation_payload = tool_expectation.model_dump(mode="python")
+    expectation_payload["vintage"] = {
+        "ledger_id": "example-availability-ledger-001",
+        "selected_edition": "202405",
+    }
+
+    with pytest.raises(ValidationError, match="vintage evidence requires as_of"):
+        _record(
+            annotation=annotation,
+            route=EvidenceRoute.DATA,
+            tools=(ToolExpectation.model_validate(expectation_payload),),
+            reference_answer="Unreachable without a cutoff.",
+        )
+
+
 def test_temporal_tag_requires_as_of(annotation: AnnotationProvenance) -> None:
     with pytest.raises(ValidationError, match="requires as_of"):
         _record(

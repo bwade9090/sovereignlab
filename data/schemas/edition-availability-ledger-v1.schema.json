@@ -1,0 +1,297 @@
+{
+  "$defs": {
+    "AvailabilityAssertion": {
+      "description": "Which ledger-record field one evidence entry supports.",
+      "enum": [
+        "available_by",
+        "not_before",
+        "last_absent_at"
+      ],
+      "title": "AvailabilityAssertion",
+      "type": "string"
+    },
+    "AvailabilityEvidence": {
+      "additionalProperties": false,
+      "description": "One manifest-backed availability assertion with an approved evidence basis.",
+      "properties": {
+        "asserted_instant": {
+          "format": "date-time",
+          "title": "Asserted Instant",
+          "type": "string"
+        },
+        "basis": {
+          "$ref": "#/$defs/AvailabilityEvidenceBasis"
+        },
+        "constraint_id": {
+          "anyOf": [
+            {
+              "maxLength": 256,
+              "minLength": 1,
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]*$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Constraint Id"
+        },
+        "constraint_version": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9]+(\\.[0-9]+)*$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Constraint Version"
+        },
+        "notes": {
+          "anyOf": [
+            {
+              "maxLength": 10000,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Notes"
+        },
+        "publisher_date": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Publisher Date"
+        },
+        "publisher_timezone": {
+          "anyOf": [
+            {
+              "maxLength": 64,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Publisher Timezone"
+        },
+        "source_manifest_ids": {
+          "items": {
+            "maxLength": 128,
+            "minLength": 3,
+            "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Source Manifest Ids",
+          "type": "array"
+        },
+        "supports": {
+          "$ref": "#/$defs/AvailabilityAssertion"
+        }
+      },
+      "required": [
+        "basis",
+        "supports",
+        "asserted_instant",
+        "source_manifest_ids"
+      ],
+      "title": "AvailabilityEvidence",
+      "type": "object"
+    },
+    "AvailabilityEvidenceBasis": {
+      "description": "The only availability-evidence bases ADR 0005 permits.",
+      "enum": [
+        "publisher_timestamp",
+        "publisher_date_conservative",
+        "sdmx_constraint_valid_from",
+        "first_observed_at"
+      ],
+      "title": "AvailabilityEvidenceBasis",
+      "type": "string"
+    },
+    "EditionAvailabilityRecord": {
+      "additionalProperties": false,
+      "description": "The evidence-backed availability window of one opaque edition code.",
+      "properties": {
+        "available_by": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Available By"
+        },
+        "edition": {
+          "pattern": "^[0-9]{4}(0[1-9]|1[0-2])$",
+          "title": "Edition",
+          "type": "string"
+        },
+        "evidence": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/AvailabilityEvidence"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "last_absent_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Last Absent At"
+        },
+        "not_before": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Not Before"
+        },
+        "status": {
+          "$ref": "#/$defs/EditionResolutionStatus"
+        }
+      },
+      "required": [
+        "edition",
+        "status"
+      ],
+      "title": "EditionAvailabilityRecord",
+      "type": "object"
+    },
+    "EditionResolutionStatus": {
+      "description": "Whether an edition's first-availability instant is demonstrated.",
+      "enum": [
+        "resolved",
+        "unresolved"
+      ],
+      "title": "EditionResolutionStatus",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "One immutable, append-only availability snapshot for a single dataflow.",
+  "properties": {
+    "captured_at": {
+      "format": "date-time",
+      "title": "Captured At",
+      "type": "string"
+    },
+    "complete_through": {
+      "format": "date-time",
+      "title": "Complete Through",
+      "type": "string"
+    },
+    "cutoff_semantics": {
+      "const": "inclusive_end_of_day",
+      "default": "inclusive_end_of_day",
+      "title": "Cutoff Semantics",
+      "type": "string"
+    },
+    "cutoff_timezone": {
+      "maxLength": 64,
+      "minLength": 1,
+      "title": "Cutoff Timezone",
+      "type": "string"
+    },
+    "dataflow_id": {
+      "maxLength": 256,
+      "minLength": 3,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._@:-]*$",
+      "title": "Dataflow Id",
+      "type": "string"
+    },
+    "dataflow_version": {
+      "pattern": "^[0-9]+(\\.[0-9]+)*$",
+      "title": "Dataflow Version",
+      "type": "string"
+    },
+    "editions": {
+      "items": {
+        "$ref": "#/$defs/EditionAvailabilityRecord"
+      },
+      "minItems": 1,
+      "title": "Editions",
+      "type": "array"
+    },
+    "generated_at": {
+      "format": "date-time",
+      "title": "Generated At",
+      "type": "string"
+    },
+    "ledger_id": {
+      "maxLength": 128,
+      "minLength": 3,
+      "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+      "title": "Ledger Id",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0.0",
+      "default": "1.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "supersedes_ledger_id": {
+      "anyOf": [
+        {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Supersedes Ledger Id"
+    }
+  },
+  "required": [
+    "ledger_id",
+    "dataflow_id",
+    "dataflow_version",
+    "generated_at",
+    "captured_at",
+    "complete_through",
+    "cutoff_timezone",
+    "editions"
+  ],
+  "title": "EditionAvailabilityLedger",
+  "type": "object"
+}

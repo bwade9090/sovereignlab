@@ -9,10 +9,16 @@ from sovereignlab.schemas import (
     AnnotationStatus,
     AttributionField,
     AttributionRequirement,
+    AvailabilityAssertion,
+    AvailabilityEvidence,
+    AvailabilityEvidenceBasis,
     BenchmarkRecord,
     BenchmarkSplit,
     ContentClass,
     DocumentEvidence,
+    EditionAvailabilityLedger,
+    EditionAvailabilityRecord,
+    EditionResolutionStatus,
     EvidenceClaim,
     EvidenceLocator,
     EvidenceObservation,
@@ -34,9 +40,12 @@ from sovereignlab.schemas import (
     SeriesRightsDecision,
     SourceKind,
     SourceManifest,
+    SourceRightsReference,
     SourceSystem,
     ThirdPartyStatus,
     ToolExpectation,
+    VintageEvidence,
+    VintageSemantics,
 )
 
 
@@ -236,6 +245,145 @@ def api_source() -> SourceManifest:
             status=RedistributionStatus.METADATA_ONLY,
             notes="Synthetic fixture.",
         ),
+    )
+
+
+@pytest.fixture
+def archive_source() -> SourceManifest:
+    return SourceManifest(
+        source_id="example-archive-flow",
+        source_kind=SourceKind.DATASET,
+        publisher="Example Public Institution",
+        title="Example consolidated edition archive",
+        document_family="sdmx-archive",
+        language=LanguageCode.UNDETERMINED,
+        published_on=date(2026, 7, 14),
+        publication_date_basis=PublicationDateBasis.PUBLISHER_METADATA,
+        retrieved_at=datetime(2026, 7, 14, 8, 0, tzinfo=UTC),
+        canonical_url="https://example.org/api/sdmx/archive",
+        media_type="text/csv",
+        content_sha256="d" * 64,
+        byte_size=8_192,
+        redistribution=RedistributionPolicy(
+            status=RedistributionStatus.METADATA_ONLY,
+            notes="Synthetic fixture.",
+        ),
+        vintage_semantics=VintageSemantics.HISTORICAL_ARCHIVE,
+    )
+
+
+@pytest.fixture
+def allowed_api_source(
+    rights_catalog: RightsCatalog,
+    series_rights_decision: SeriesRightsDecision,
+) -> SourceManifest:
+    return SourceManifest(
+        source_id="example-allowed-api",
+        source_kind=SourceKind.API,
+        publisher="Example Public Institution",
+        title="Example redistributable API snapshot",
+        document_family="official-api",
+        language=LanguageCode.UNDETERMINED,
+        published_on=date(2026, 7, 16),
+        publication_date_basis=PublicationDateBasis.PUBLISHER_METADATA,
+        retrieved_at=datetime(2026, 7, 16, 10, 0, tzinfo=UTC),
+        canonical_url="https://example.org/api/tables/TABLE_001",
+        media_type="application/json",
+        content_sha256="e" * 64,
+        byte_size=1_024,
+        redistribution=RedistributionPolicy(
+            status=RedistributionStatus.ALLOWED,
+            license_name="Example Statistics Information Use Guide",
+        ),
+        rights_decision=SourceRightsReference(
+            catalog_id=rights_catalog.catalog_id,
+            decision_id=series_rights_decision.decision_id,
+            source_system=SourceSystem.OTHER_OFFICIAL,
+            table_id="TABLE_001",
+            item_id="ITEM_001",
+        ),
+    )
+
+
+@pytest.fixture
+def availability_ledger() -> EditionAvailabilityLedger:
+    return EditionAvailabilityLedger(
+        ledger_id="example-availability-ledger-001",
+        dataflow_id="EXAMPLE:DSD_EXAMPLE@DF_EXAMPLE",
+        dataflow_version="1.0",
+        generated_at=datetime(2026, 7, 14, 9, 0, tzinfo=UTC),
+        captured_at=datetime(2026, 7, 14, 8, 0, tzinfo=UTC),
+        complete_through=datetime(2026, 7, 14, 8, 0, tzinfo=UTC),
+        cutoff_timezone="Asia/Seoul",
+        editions=(
+            EditionAvailabilityRecord(
+                edition="202405",
+                status=EditionResolutionStatus.RESOLVED,
+                available_by=datetime(2024, 5, 10, 9, 0, tzinfo=UTC),
+                evidence=(
+                    AvailabilityEvidence(
+                        basis=AvailabilityEvidenceBasis.SDMX_CONSTRAINT_VALID_FROM,
+                        supports=AvailabilityAssertion.AVAILABLE_BY,
+                        asserted_instant=datetime(2024, 5, 10, 9, 0, tzinfo=UTC),
+                        source_manifest_ids=("example-oecd-sdmx-api",),
+                        constraint_id="CR_A_DF_EXAMPLE",
+                        constraint_version="1.0",
+                    ),
+                ),
+            ),
+            EditionAvailabilityRecord(
+                edition="202406",
+                status=EditionResolutionStatus.RESOLVED,
+                available_by=datetime(2024, 6, 12, 9, 0, tzinfo=UTC),
+                last_absent_at=datetime(2024, 6, 11, 9, 0, tzinfo=UTC),
+                evidence=(
+                    AvailabilityEvidence(
+                        basis=AvailabilityEvidenceBasis.FIRST_OBSERVED_AT,
+                        supports=AvailabilityAssertion.AVAILABLE_BY,
+                        asserted_instant=datetime(2024, 6, 12, 9, 0, tzinfo=UTC),
+                        source_manifest_ids=("example-oecd-sdmx-api",),
+                    ),
+                    AvailabilityEvidence(
+                        basis=AvailabilityEvidenceBasis.FIRST_OBSERVED_AT,
+                        supports=AvailabilityAssertion.LAST_ABSENT_AT,
+                        asserted_instant=datetime(2024, 6, 11, 9, 0, tzinfo=UTC),
+                        source_manifest_ids=("example-oecd-sdmx-api",),
+                    ),
+                ),
+            ),
+        ),
+    )
+
+
+@pytest.fixture
+def archive_record(
+    annotation: AnnotationProvenance,
+    archive_source: SourceManifest,
+    availability_ledger: EditionAvailabilityLedger,
+) -> BenchmarkRecord:
+    return BenchmarkRecord(
+        record_id="example-vintage-en-001",
+        split=BenchmarkSplit.TEST,
+        evidence_group_id="example-vintage-group-001",
+        language=LanguageCode.ENGLISH,
+        question="As of May 2024, what did the archived synthetic series report?",
+        as_of=date(2024, 5, 31),
+        expected_route=EvidenceRoute.DATA,
+        tool_expectations=(
+            ToolExpectation(
+                source_id=archive_source.source_id,
+                tool_name="asof_resolver",
+                arguments={"series": "SYN", "period": "2024-Q1"},
+                expected_facts=("The selected edition reports the synthetic value.",),
+                vintage=VintageEvidence(
+                    ledger_id=availability_ledger.ledger_id,
+                    selected_edition="202405",
+                ),
+            ),
+        ),
+        reference_answer="The May 2024 edition reported the synthetic value.",
+        annotation=annotation,
+        tags=("temporal",),
     )
 
 
