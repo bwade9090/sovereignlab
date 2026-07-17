@@ -355,6 +355,12 @@ class SeriesRightsDecision(StrictModel):
             raise ValueError(
                 "ECOS other-authored classification requires a named third-party producer"
             )
+        if self.content_class is ContentClass.OECD_DATA and (
+            self.publisher != "OECD"
+            or self.original_producer != "OECD"
+            or self.third_party_status is not ThirdPartyStatus.FIRST_PARTY
+        ):
+            raise ValueError("OECD data classification requires OECD as first-party producer")
         if self.original_producer is None and self.kosis_content_category is None:
             raise ValueError("series rights decision requires a producer or KOSIS content category")
         if (
@@ -457,8 +463,6 @@ class SeriesRightsDecision(StrictModel):
         if not required_intended.issubset(self.intended_operations):
             raise ValueError("allowed decision is missing required intended operations")
 
-        if self.content_class is ContentClass.OECD_DATA:
-            raise ValueError("OECD data cannot be raw allowed under the current policy")
         if self.content_class in {
             ContentClass.KOSIS_INTERNATIONAL_STATISTICS,
             ContentClass.KOSIS_NORTH_KOREA_STATISTICS,

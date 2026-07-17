@@ -24,11 +24,12 @@ The project will compare four variants under one frozen benchmark:
 
 ## Current milestone
 
-Charter v2.2 (the K-VINTAGE on KOR-RTD reorientation, source-rights amendment, and fail-closed
+Charter v2.3 (the K-VINTAGE on KOR-RTD reorientation, source-rights amendments, and fail-closed
 edition-availability contract) is approved and documented; see
 [ADR 0003](docs/decisions/0003-kvintage-reorientation.md),
 [ADR 0004](docs/decisions/0004-source-specific-redistribution-evidence.md), and
-[ADR 0005](docs/decisions/0005-edition-availability-and-vintage-contract.md), with background in
+[ADR 0005](docs/decisions/0005-edition-availability-and-vintage-contract.md), and
+[ADR 0007](docs/decisions/0007-kosis-cpi-oecd-cli-rights.md), with background in
 [the proposal](docs/discovery/01_concept_upgrade_proposal.md). M1a froze strict source-manifest and
 benchmark-record models with synchronized JSON Schema, synthetic fixtures, and dataset-wide
 temporal/split leakage checks. M1b has now verified the primary OECD examples, fixed the claimable
@@ -46,9 +47,11 @@ one contract unit ([migration notes](docs/project/05_evidence_contract_2_0_migra
 `2.0.0`, and the typed manifest-to-rights-decision link with bundle cross-validation. The offline
 as-of resolver and weekly append-only harvester are implemented. The first real, metadata-only OECD
 availability capture mechanically records all 330 current edition codes while resolving only
-`202607`; no raw observation is committed. Default-branch workflow activation, the optional ECOS
-repository secret, number normalization, and the QLoRA compatibility spike remain the open items
-listed in [project status](docs/PROJECT_STATUS.md).
+`202607`. ADR 0007 and the current rights catalog additionally authorize only the national KOSIS
+total CPI (`101/DT_1J22003/T/T10`) and OECD Korea monthly amplitude-adjusted CLI revision series;
+all neighboring scopes remain blocked. Default-branch workflow activation, repository secrets,
+number normalization, and the QLoRA compatibility spike remain the open items listed in
+[project status](docs/PROJECT_STATUS.md).
 
 ## Quick start
 
@@ -78,11 +81,13 @@ python -m pytest
 
 Copy `.env.example` to `.env` only when an API-backed experiment is approved. Offline checks and
 the OECD constraint-metadata capture do not require an API key. `ECOS_API_KEY` activates only the
-two exact series authorized by the committed rights catalog; a missing key is an explicit skip.
+two exact ECOS series authorized by the committed rights catalog; `KOSIS_API_KEY` activates only
+the national total-CPI scope. A missing key is an explicit skip. Local `.env` values are ignored by
+Git and are not automatically copied to GitHub repository secrets.
 
 ## Documentation
 
-- [Approved project charter (v2.2)](docs/project/01_project_charter.md)
+- [Approved project charter (v2.3)](docs/project/01_project_charter.md)
 - [Concept upgrade proposal (v2 rationale)](docs/discovery/01_concept_upgrade_proposal.md)
 - [Evidence schema contract (1.0, superseded)](docs/project/02_evidence_schema_contract.md)
 - [Source-rights catalog contract](docs/project/03_rights_catalog_contract.md)

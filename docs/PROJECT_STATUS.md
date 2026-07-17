@@ -3,21 +3,23 @@
 - Last updated: 2026-07-17
 - Owner: Hyungbae Cho (`bwade9090`)
 - Delivery window: four weeks, approximately 80 hours
-- Current milestone: M1b — week-1 verification spikes and vintage groundwork (charter v2.2 §7,
+- Current milestone: M1b — week-1 verification spikes and vintage groundwork (charter v2.3 §7,
   Week 1)
-- Overall state: source-rights policy, two initial ECOS rulings, strict standalone rights catalog,
+- Overall state: source-rights policy, two ECOS plus exact KOSIS CPI and OECD CLI rulings, strict
+  append-only rights catalogs,
   the edition-availability decision, the owner-authored employer-risk review (ADR 0006), and the
   implemented contract unit — `EditionAvailabilityLedger` 1.0.0, evidence/benchmark `2.0.0`, typed
   manifest-rights link — plus the offline fail-closed as-of resolver and weekly append-only
-  harvester implementation are complete. The first real OECD metadata capture and ledger are
-  committed on the feature branch; activation on the default branch, the ECOS repository secret,
+  harvester implementation are complete. Real append-only ECOS/KOSIS forward snapshots and the
+  one-time OECD Korea CLI revision archive now validate against their manifests and rights
+  decisions on the feature branch. Default-branch workflow activation, GitHub repository secrets,
   the number-normalization specification, and the fine-tuning compatibility path remain open
 
 ## Approved baseline
 
-- Product direction: **K-VINTAGE on KOR-RTD** (charter v2.2; source-rights and edition-availability
-  amendments approved 2026-07-16; core rationale in
-  `docs/discovery/01_concept_upgrade_proposal.md`; decisions recorded as ADRs 0003–0005).
+- Product direction: **K-VINTAGE on KOR-RTD** (charter v2.3; source-rights and
+  edition-availability amendments approved 2026-07-16–17; core rationale in
+  `docs/discovery/01_concept_upgrade_proposal.md`; decisions recorded as ADRs 0003–0007).
   - KOR-RTD: point-in-time data layer — OECD edition-history consolidation + weekly append-only forward-capture harvester for the latest-only ECOS/KOSIS APIs.
   - K-VINTAGE: two-tier bilingual benchmark (40 human-reviewed core + 200–300 machine-generated
     data-route probes, always reported separately) with regenerable point-in-time gold answers and a
@@ -104,9 +106,23 @@
   owner-approved `metadata_only` policy. Optional ECOS capture is restricted in code to the two
   owner-approved scopes (`200Y108/10601`, `301Y017/SA000`), validates the rights catalog via
   `BenchmarkBundle`, sanitizes the key from committed URLs, and skips explicitly when no key is
-  configured. No KOSIS scope is collected because none has an owner-approved exact-series ruling.
-  The current repository and GitHub environment have no `ECOS_API_KEY`, so the first capture
-  intentionally contains no raw observation.
+  configured. At that capture, no KOSIS scope had an owner-approved exact-series ruling and neither
+  the local nor GitHub environment had `ECOS_API_KEY`, so it intentionally contained no raw
+  observation. ADR 0007 and the later capture below supersede that operational state.
+- **ADR 0007 exact-scope activation + first observation captures (2026-07-17):** the owner approved
+  KOSIS national monthly total CPI `101/DT_1J22003/T/T10` and OECD Korea monthly
+  amplitude-adjusted CLI revision series
+  `DSD_STES_REVISIONS@DF_STES_REVISIONS/KOR.M.LI_AA.IX._T`. Charter v2.3 and a new append-only
+  rights catalog preserve the two ECOS decisions and narrowly supersede the OECD metadata-only
+  ruling for that single first-party series. The weekly harvester now validates and captures the
+  KOSIS scope when `KOSIS_API_KEY` exists; local ECOS/KOSIS keys produced real snapshots of 265
+  quarterly GDP rows (`1960Q1`–`2026Q1`), 557 monthly current-account rows
+  (`198001`–`202605`), and 738 monthly CPI rows (`196501`–`202606`). A separate one-time/manual
+  CLI capture stored 75,060 rows, 239 editions (`200604`–`202607`), and periods
+  `1990-01`–`2026-06` in a 21,734,727-byte consolidated CSV. All four observation artifacts pass
+  typed rights-bundle, byte-size, and SHA-256 validation. A real resolver check selected only
+  edition `202607`, period `2026-05`, value `102.66` for `as_of=2026-07-09`. A repository-wide
+  secret comparison confirmed neither local key appears in tracked or untracked publishable files.
 
 ## Current validation evidence
 
@@ -176,6 +192,19 @@ availability-constraint XML is 17,827 bytes / SHA-256
 XML is 23,251 bytes / SHA-256
 `40b9f6e25f0187992f679fd5e8ae8215182076d8e280b71ca74b737d204334e6`. Both are key-free
 metadata-only responses and contain no observations. No paid operation occurred.
+
+Validated 2026-07-17 on macOS after ADR 0007 implementation and the first approved observation
+captures: Python 3.12.13; `python scripts/export_json_schemas.py` regenerated all six contracts;
+`python -m ruff check .` and `python -m ruff format --check .` were clean; `python -m pytest
+--cov=sovereignlab --cov-branch --cov-report=term-missing` passed all 314 tests with 100% statement
+and branch coverage (1,535 statements, 528 branches); `git diff --check` was clean. Observation
+SHA-256 values are GDP `75c96ce62270a8a6c2a3c6bebaef981945b41f37f62cab6911698ce64d8dd9ea`,
+current account `8f71259c202ed7cc4d6b2eebea5123215547b6ffd3f653ef734fdd8564bd9389`,
+KOSIS CPI `f1336aba6ea64fcb7d438d008ba564d25d35e6f0f4d6d8d0ef0f8ec1954834d6`, and
+OECD CLI `ac7d0f9a2517870173885f1d45e2edea90f54cd485e2f539c73afddde566f058`.
+Every manifest matches the committed bytes and exact owner-approved rights decision. API use and
+the key-free OECD download cost $0; the local secrets remain ignored and absent from publishable
+files.
 
 ## M1b verification spike record (2026-07-15)
 
@@ -260,7 +289,7 @@ response bodies.
   the corresponding bundle rule require the accepted `2.0.0` contract rather than ADR 0003's expected
   optional `1.1.0` field.
 
-### OECD rights — base terms verified; dataset-specific check remains
+### OECD rights — base terms verified; exact CLI scope later approved
 
 - The [OECD Open Access Policy](https://www.oecd.org/en/about/oecd-open-by-default-policy.html)
   says content published before 2024-07-01 is governed by OECD Terms & Conditions, not by the later
@@ -271,9 +300,9 @@ response bodies.
   apply. It requires OECD attribution and propagation of that acknowledgement requirement to
   sublicensees.
 - `DF_MEI_ARCHIVE` structure/CSV metadata exposed no licence, restriction, or third-party-rights
-  field. Until the Data Explorer source metadata or written confirmation settles that residual
-  condition, record the source as `OECD Terms & Conditions; third-party metadata check pending`,
-  **not** `CC BY 4.0`, and keep archive observations metadata-only.
+  field. It remains `metadata_only`, not `CC BY 4.0`. ADR 0007 later completed the exact
+  first-party review only for Korea monthly amplitude-adjusted CLI
+  `KOR.M.LI_AA.IX._T`; that decision does not extend to `DF_MEI_ARCHIVE` or another OECD series.
 
 ### ECOS/KOSIS rights — policy, initial rulings, and catalog implemented
 
@@ -316,29 +345,33 @@ response bodies.
   resolver, `Asia/Seoul` end-of-day cutoff, evidence/benchmark contract `2.0.0` path, and narrow
   partial supersessions of ADR 0002 decision 5 and ADR 0003 decisions 1/3.
 - The owner also approved `OECD metadata_only pending dataset-specific and third-party-rights
-  confirmation`. This closes the current publication decision without approving raw OECD
-  redistribution.
+  confirmation`. ADR 0007 later superseded that interim ruling only for exact first-party CLI scope
+  `KOR.M.LI_AA.IX._T`; all other OECD observation scopes retain it.
 - On 2026-07-17 the owner completed the one-hour employer-risk review required by charter §7,
   answering an agent-provided question list in their own words; ADR 0006 commits those verbatim
-  answers as the decision record. All week-1 owner decisions are now closed.
+  answers as the decision record.
+- On 2026-07-17 the owner approved KOSIS CPI and OECD Composite leading indicator (Korea). ADR 0007
+  translates those names to exact official scope IDs and records the narrow rights decisions;
+  charter v2.3 and the append-only 2026-07-17 catalog are synchronized. All current week-1 owner
+  decisions are closed.
 
 ## Immediate next action (M1b — do these in order)
 
 1. Review and merge `codex/m1b-harvester` into the default branch so the weekly schedule starts;
-   add the repository `ECOS_API_KEY` secret and manually dispatch one smoke run if the owner wants
-   the two approved ECOS series to begin accruing immediately. Without that secret the workflow
-   remains useful and succeeds with OECD constraint metadata only; it must not broaden ECOS/KOSIS
-   scope.
+   local `.env` keys do not activate GitHub Actions. Add repository `ECOS_API_KEY` and
+   `KOSIS_API_KEY` secrets and manually dispatch one smoke run only with separate owner
+   authorization for that external security-state change. Without repository secrets the workflow
+   remains useful and succeeds with OECD constraint metadata only.
 2. Freeze the number-normalization specification before any question authoring.
 3. Run the already-planned one-step Ministral 3 3B QLoRA compatibility spike on rented compute only
    after its smoke test; record cost in the spend ledger.
 
-Week-1 gate (charter v2.2 §7): **not passed**. Endpoint/range spikes, source-rights policy, two
-per-series rights records, the strict rights catalog, the availability design, the OECD
-metadata-only ruling, the owner employer-risk review (ADR 0006), and the contract `2.0.0`/ledger
-1.0.0/manifest-rights integration, resolver regression, harvester implementation, and first real
-metadata-only ledger are complete. The workflow must reach the default branch, and the
-number-normalization specification and fine-tuning path must still be fixed before the gate closes.
+Week-1 gate (charter v2.3 §7): **not passed**. Endpoint/range spikes, exact source-rights policy and
+four approved series decisions, the strict catalogs, availability design, owner employer-risk
+review, contract `2.0.0`/ledger 1.0.0/manifest-rights integration, resolver regression, harvester,
+real forward snapshots, and the approved CLI consolidation are complete. The workflow must reach
+the default branch, and the number-normalization specification and fine-tuning path must still be
+fixed before the gate closes.
 If the gate slips, invoke the pre-committed cut ladder immediately.
 
 ## Blockers and environment notes
@@ -346,11 +379,10 @@ If the gate slips, invoke the pre-committed cut ladder immediately.
 - No machine has a training GPU; rented GPU is planned only for the reviewed QLoRA spike.
 - Development spans multiple machines. `.venv` is machine-local — recreate it per the README quick start on whichever machine picks this up. Nothing in the repo may depend on machine-specific paths.
 - Windows workstation note: the user-level Python launcher is unreliable there; use the workstation's documented bundled Python 3.12.13 runtime to create `.venv` (local path recorded outside the repository; an earlier revision of this file recorded the literal path — ADR 0006 closed that question with the owner's decision that no history remediation is needed).
-- Rights gate: ADR 0004, charter v2.2, the standalone catalog, both approved ECOS rows, the owner
-  employer-risk review (ADR 0006), and the typed manifest-rights link with bundle cross-validation
-  are complete. The ECOS path generates and validates real harvester manifests, but activation is
-  blocked on an `ECOS_API_KEY` repository secret. KOSIS remains excluded because there is no
-  owner-approved exact-series ruling.
+- Rights gate: ADRs 0004/0007, charter v2.3, the append-only catalog chain, two approved ECOS rows,
+  exact KOSIS CPI and OECD CLI rows, and typed manifest-rights bundle validation are complete. The
+  local snapshots are captured; scheduled ECOS/KOSIS activation still requires GitHub repository
+  secrets, which are distinct from the ignored local `.env`.
 - Vintage semantics: OECD monthly `EDITION` codes do not encode availability dates. The
   `EditionAvailabilityLedger`, fail-closed selection, and selected-row resolver are implemented;
   unknown editions abstain mechanically. The first real ledger resolves only `202607`; all 329
@@ -380,6 +412,7 @@ If the gate slips, invoke the pre-committed cut ladder immediately.
 | 2026-07-17 | ADR 0005 contract unit implementation and adversarial review | $0.00 | Offline code/schema/tests; agent review under subscription, no project API/GPU call |
 | 2026-07-17 | Offline as-of resolver + temporary official-response regression | $0.00 | Key-free OECD reads; temporary responses deleted; no paid call |
 | 2026-07-17 | Weekly harvester implementation + first OECD constraint capture | $0.00 | Key-free metadata-only OECD reads; no observation or paid call |
+| 2026-07-17 | Exact KOSIS CPI/CLI rights implementation + first approved captures | $0.00 | Free official APIs and key-free OECD download; no paid call |
 
 **Cumulative external spend: $0.00 / $100.00**
 
@@ -388,10 +421,10 @@ If the gate slips, invoke the pre-committed cut ladder immediately.
 Read in this order, in full, before changing anything:
 
 1. `AGENTS.md` — working protocol, evidence rules, setup, repository map.
-2. `docs/project/01_project_charter.md` — the v2.2 scope authority.
+2. `docs/project/01_project_charter.md` — the v2.3 scope authority.
 3. This file — current milestone, next action, gates, blockers.
 4. `docs/project/04_macbook_handoff.md` — machine setup and exact continuation order.
-5. Accepted ADRs 0001–0006 in `docs/decisions/`.
+5. Accepted ADRs 0001–0007 in `docs/decisions/`.
 6. `docs/project/05_evidence_contract_2_0_migration.md` — the implemented contract the resolver
    and harvester build on.
 7. `docs/discovery/01_concept_upgrade_proposal.md` — background: why v2 exists, verified data facts, judged alternatives, risk register.

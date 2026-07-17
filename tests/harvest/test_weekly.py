@@ -70,11 +70,33 @@ def _ecos_response(table_id: str, item_id: str) -> bytes:
     ).encode()
 
 
+def _kosis_response() -> bytes:
+    return json.dumps(
+        [
+            {
+                "ORG_ID": "101",
+                "TBL_ID": "DT_1J22003",
+                "TBL_NM": "소비자물가지수(2020\uff1d100)",
+                "ITM_ID": "T",
+                "ITM_NM": "소비자물가지수(총지수)",
+                "PRD_SE": "M",
+                "PRD_DE": "202606",
+                "UNIT_NM": "2020\uff1d100",
+                "C1": "T10",
+                "C1_NM": "전국",
+                "DT": "116.3",
+            }
+        ],
+        ensure_ascii=False,
+    ).encode()
+
+
 def _client(
     *,
     available: bytes | None = None,
     content: bytes | None = None,
     ecos_payloads: dict[str, bytes] | None = None,
+    kosis_payload: bytes | None = None,
     status_code: int = 200,
 ) -> httpx.Client:
     available_body = _constraint_xml(content=False) if available is None else available
@@ -92,6 +114,8 @@ def _client(
         for table_id, payload in payloads.items():
             if f"/{table_id}/" in url:
                 return httpx.Response(200, content=payload, request=request)
+        if "statisticsParameterData.do" in url and kosis_payload is not None:
+            return httpx.Response(200, content=kosis_payload, request=request)
         raise AssertionError(f"unexpected request: {url}")
 
     return httpx.Client(transport=httpx.MockTransport(handler))
@@ -103,6 +127,7 @@ def _run(
     *,
     captured_at: datetime = CAPTURED_AT,
     key: SecretStr | None = None,
+    kosis_key: SecretStr | None = None,
     rights_catalog: RightsCatalog | None = None,
 ) -> weekly.HarvestSummary:
     with client:
@@ -110,6 +135,7 @@ def _run(
             repository_root,
             client=client,
             ecos_api_key=key,
+            kosis_api_key=kosis_key,
             rights_catalog=rights_catalog,
             now=lambda: captured_at,
         )
@@ -129,6 +155,8 @@ def test_oecd_only_capture_writes_valid_manifest_backed_first_ledger(tmp_path: P
 
     assert summary.ecos_skipped_missing_key
     assert summary.ecos_series_captured == ()
+    assert summary.kosis_skipped_missing_key
+    assert summary.kosis_series_captured == ()
     assert len(summary.archive_paths) == 2
     assert len(summary.manifest_paths) == 2
     ledger = _load_ledger(tmp_path, summary)
@@ -258,6 +286,76 @@ def test_ecos_capture_is_rights_linked_and_never_persists_the_key(
 def test_ecos_key_requires_a_rights_catalog(tmp_path: Path) -> None:
     with pytest.raises(ValueError, match="requires the committed rights catalog"):
         _run(tmp_path, _client(), key=SecretStr("test-key"))
+
+
+def test_kosis_capture_is_rights_linked_and_never_persists_the_key(
+    tmp_path: Path,
+) -> None:
+    key_value = "private-kosis-test-key"
+    catalog = weekly.load_rights_catalog(Path.cwd())
+    summary = _run(
+        tmp_path,
+        _client(kosis_payload=_kosis_response()),
+        kosis_key=SecretStr(key_value),
+        rights_catalog=catalog,
+    )
+
+    assert not summary.kosis_skipped_missing_key
+    assert summary.kosis_series_captured == ("101/DT_1J22003/T/T10",)
+    assert len(summary.manifest_paths) == 3
+    repository_bytes = b"".join(path.read_bytes() for path in tmp_path.rglob("*") if path.is_file())
+    assert key_value.encode() not in repository_bytes
+    manifest_path = next(
+        tmp_path / path for path in summary.manifest_paths if Path(path).name.startswith("kosis-")
+    )
+    manifest = SourceManifest.model_validate_json(manifest_path.read_text(encoding="utf-8"))
+    BenchmarkBundle(sources=(manifest,), records=(), rights_catalogs=(catalog,))
+    assert manifest.rights_decision is not None
+    assert manifest.rights_decision.decision_id == "kosis-101-dt-1j22003-t-t10-rights-v1"
+    assert manifest.rights_decision.item_id == "T/T10"
+    assert "%7Bapi-key%7D" in str(manifest.canonical_url)
+
+
+def test_kosis_key_requires_a_rights_catalog(tmp_path: Path) -> None:
+    with pytest.raises(ValueError, match="requires the committed rights catalog"):
+        _run(tmp_path, _client(), kosis_key=SecretStr("test-key"))
+
+
+@pytest.mark.parametrize(
+    ("payload", "message"),
+    [
+        (b"not-json", "invalid KOSIS"),
+        (json.dumps({"error": "not-a-list"}).encode(), "empty, invalid"),
+        (b"[]", "empty, invalid"),
+        (json.dumps([{}] * 1001).encode(), "exceeds"),
+        (
+            _kosis_response().replace(b'"ORG_ID": "101"', b'"ORG_ID": "wrong"'),
+            "outside",
+        ),
+        (_kosis_response().replace(b'"202606"', b'"202613"'), "invalid monthly"),
+        (
+            json.dumps(
+                json.loads(_kosis_response()) + json.loads(_kosis_response()),
+                ensure_ascii=False,
+            ).encode(),
+            "duplicate",
+        ),
+        (_kosis_response().replace(b'"116.3"', b'" "'), "blank"),
+    ],
+)
+def test_invalid_kosis_responses_fail_closed(
+    tmp_path: Path,
+    payload: bytes,
+    message: str,
+) -> None:
+    catalog = weekly.load_rights_catalog(Path.cwd())
+    with pytest.raises(ValueError, match=message):
+        _run(
+            tmp_path,
+            _client(kosis_payload=payload),
+            kosis_key=SecretStr("test-key"),
+            rights_catalog=catalog,
+        )
 
 
 @pytest.mark.parametrize(

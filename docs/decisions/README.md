@@ -26,3 +26,5 @@ Accepted records are not silently rewritten. Supersede them with a new ADR and c
   — **accepted 2026-07-16**
 - [0006 — Employer-risk review for personal-capacity public activity](0006-employer-risk-review.md)
   — **accepted 2026-07-17 (owner-authored answers)**
+- [0007 — Expand approved capture scopes to KOSIS CPI and OECD Korea CLI](0007-kosis-cpi-oecd-cli-rights.md)
+  — **accepted 2026-07-17 (owner-approved exact scopes)**

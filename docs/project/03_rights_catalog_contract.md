@@ -63,8 +63,8 @@ The canonical Pydantic models and tests reject:
 - raw-allowed KOSIS international/North Korea data, domestic/easy-view rulings missing their
   no-sale/no-reidentification rules or detailed attribution, and publications without licensed
   dataset-specific terms;
-- raw-allowed other-producer ECOS data without a producer-specific instrument, or any OECD
-  `allowed` record under this contract;
+- raw-allowed other-producer ECOS data without a producer-specific instrument, or OECD data not
+  classified by exact source metadata as first-party OECD-produced;
 - commercial intended use under the fixed non-commercial profile, expired rulings, unknown or
   mismatched instruments, approval before instrument access, evidence/capture after catalog
   recording, and a catalog that supersedes itself.
@@ -77,6 +77,8 @@ The canonical Pydantic models and tests reject:
 - Synthetic examples: `data/fixtures/rights_instrument.example.json` and
   `data/fixtures/series_rights_decision.example.json`
 - First owner-approved metadata catalog: `data/rights/kor-rtd-rights-2026-07-16.json`
+- Current append-only catalog: `data/rights/kor-rtd-rights-2026-07-17.json` (adds only the exact
+  KOSIS CPI and OECD Korea CLI scopes approved in ADR 0007)
 - Tests: `tests/schemas/test_rights.py` and `tests/schemas/test_export.py`
 
 The first catalog records `allowed` decisions for `200Y108/10601` and `301Y017/SA000`. The GDP
@@ -84,6 +86,10 @@ decision preserves the normalized title/frequency join and both official sides o
 current-account decision records exact ECOS scope and producer observations. Their
 `approval_recorded_at` values mean when the accepted decision was written into the catalog, while
 `approval_record_reference` points to ADR 0004's version-controlled approval record.
+
+The second catalog preserves those ECOS decisions and adds the exact KOSIS CPI and OECD Korea CLI
+decisions approved in ADR 0007. It narrowly supersedes ADR 0004's OECD metadata-only ruling only
+for `KOR.M.LI_AA.IX._T`; no other OECD observation scope is allowed.
 
 ## 6. Reproduction and versioning
 

@@ -1,0 +1,32 @@
+{
+  "byte_size": 96329,
+  "canonical_url": "https://ecos.bok.or.kr/api/StatisticSearch/%7Bapi-key%7D/json/kr/1/1000/200Y108/Q/1960Q1/2026Q3/10601",
+  "content_sha256": "75c96ce62270a8a6c2a3c6bebaef981945b41f37f62cab6911698ce64d8dd9ea",
+  "document_family": "ecos-200y108-10601",
+  "language": "ko",
+  "media_type": "application/json",
+  "publication_date_basis": "retrieval_date_fallback",
+  "publication_date_notes": "ECOS is latest-only; retrieval date is the earliest defensible date for these exact response bytes.",
+  "published_on": "2026-07-17",
+  "publisher": "한국은행",
+  "redistribution": {
+    "license_name": "ECOS Statistics Information Use Guide",
+    "license_url": "https://ecos.bok.or.kr/",
+    "notes": "Attributed Bank of Korea-produced series approved in ADR 0004.",
+    "status": "allowed"
+  },
+  "release_label": "Weekly forward capture 20260717t115242998550z",
+  "retrieved_at": "2026-07-17T11:52:43.237532Z",
+  "rights_decision": {
+    "catalog_id": "kor-rtd-rights-2026-07-17",
+    "decision_id": "ecos-200y108-10601-rights-v1",
+    "item_id": "10601",
+    "source_system": "ecos",
+    "table_id": "200Y108"
+  },
+  "schema_version": "2.0.0",
+  "source_id": "ecos-200y108-10601-20260717t115242998550z",
+  "source_kind": "api",
+  "title": "국내총생산에 대한 지출(계절조정, 실질, 분기)",
+  "vintage_semantics": "latest_only"
+}

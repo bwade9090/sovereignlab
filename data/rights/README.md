@@ -14,5 +14,8 @@ not contain source observations.
   `rights_decision` reference, and bundle validation cross-checks scope, state, and expiry. The
   catalog itself still authorizes nothing without that validated link.
 
-The first catalog records only ECOS/KOSIS rights metadata and the two approved Bank of
-Korea-produced ECOS candidates. No observation endpoint response is included.
+The 2026-07-16 catalog records the first two approved Bank of Korea-produced ECOS scopes. The
+append-only 2026-07-17 catalog supersedes it with two narrowly approved additions: KOSIS national
+monthly total CPI `101/DT_1J22003/T/T10` and OECD Korea monthly amplitude-adjusted CLI revision
+series `DSD_STES_REVISIONS@DF_STES_REVISIONS/KOR.M.LI_AA.IX._T`. Catalog files contain rights
+metadata only; observation responses live separately under manifest control.

@@ -1,0 +1,32 @@
+{
+  "byte_size": 285394,
+  "canonical_url": "https://kosis.kr/openapi/Param/statisticsParameterData.do?apiKey=%7Bapi-key%7D&method=getList&itmId=T&objL1=T10&objL2=&objL3=&objL4=&objL5=&objL6=&objL7=&objL8=&format=json&jsonVD=Y&prdSe=M&startPrdDe=196501&endPrdDe=202607&orgId=101&tblId=DT_1J22003",
+  "content_sha256": "f1336aba6ea64fcb7d438d008ba564d25d35e6f0f4d6d8d0ef0f8ec1954834d6",
+  "document_family": "kosis-101-dt-1j22003-t-t10",
+  "language": "ko",
+  "media_type": "application/json",
+  "publication_date_basis": "retrieval_date_fallback",
+  "publication_date_notes": "KOSIS is latest-only; retrieval date is the earliest defensible date for these exact national CPI response bytes.",
+  "published_on": "2026-07-17",
+  "publisher": "국가데이터처",
+  "redistribution": {
+    "license_name": "KOSIS Statistics Information Use Guide",
+    "license_url": "https://kosis.kr/nsistN/kosisUseGuide.do",
+    "notes": "Attributed national CPI scope approved in ADR 0007; unchanged raw standalone sale, distortion, and re-identification are prohibited.",
+    "status": "allowed"
+  },
+  "release_label": "Weekly forward capture 20260717t115242998550z",
+  "retrieved_at": "2026-07-17T11:52:43.896254Z",
+  "rights_decision": {
+    "catalog_id": "kor-rtd-rights-2026-07-17",
+    "decision_id": "kosis-101-dt-1j22003-t-t10-rights-v1",
+    "item_id": "T/T10",
+    "source_system": "kosis",
+    "table_id": "DT_1J22003"
+  },
+  "schema_version": "2.0.0",
+  "source_id": "kosis-101-dt-1j22003-t-t10-20260717t115242998550z",
+  "source_kind": "api",
+  "title": "소비자물가지수(총지수), 전국",
+  "vintage_semantics": "latest_only"
+}

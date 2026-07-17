@@ -584,15 +584,26 @@ def test_allowed_decision_requires_all_project_operations(
         SeriesRightsDecision.model_validate(payload)
 
 
-def test_oecd_data_cannot_be_raw_allowed(series_rights_decision: SeriesRightsDecision) -> None:
+def test_oecd_data_requires_exact_first_party_classification(
+    series_rights_decision: SeriesRightsDecision,
+) -> None:
     payload = _other_source_payload(
         series_rights_decision,
         SourceSystem.OECD,
         ContentClass.OECD_DATA,
     )
 
-    with pytest.raises(ValidationError, match="OECD data cannot be raw allowed"):
+    with pytest.raises(ValidationError, match="OECD as first-party producer"):
         SeriesRightsDecision.model_validate(payload)
+
+    payload.update(
+        publisher="OECD",
+        original_producer="OECD",
+        third_party_status=ThirdPartyStatus.FIRST_PARTY,
+    )
+    payload["evidence"] = (_scope_evidence(payload, SourceSystem.OECD),)
+
+    assert SeriesRightsDecision.model_validate(payload).content_class is ContentClass.OECD_DATA
 
 
 @pytest.mark.parametrize(

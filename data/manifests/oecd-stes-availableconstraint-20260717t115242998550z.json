@@ -1,0 +1,23 @@
+{
+  "byte_size": 17827,
+  "canonical_url": "https://sdmx.oecd.org/public/rest/availableconstraint/OECD.SDD.STES,DSD_STES_REVISIONS%40DF_STES_REVISIONS,4.0/all/all/EDITION?mode=exact",
+  "content_sha256": "e7a3fab8730a2d9e4644ccb78844d721c263a2b235d4575fa850d1f0c71be06f",
+  "document_family": "oecd-stes-constraint",
+  "language": "und",
+  "media_type": "application/xml",
+  "publication_date_basis": "retrieval_date_fallback",
+  "publication_date_notes": "Dynamic constraint bytes; retrieval date is the earliest defensible publication date for this exact capture.",
+  "published_on": "2026-07-17",
+  "publisher": "OECD",
+  "redistribution": {
+    "notes": "Owner-approved OECD interim ruling permits metadata publication only; this artifact is constraint metadata and contains no observations.",
+    "status": "metadata_only"
+  },
+  "release_label": "Append-only constraint capture 20260717t115242998550z",
+  "retrieved_at": "2026-07-17T11:52:42.980784Z",
+  "schema_version": "2.0.0",
+  "source_id": "oecd-stes-availableconstraint-20260717t115242998550z",
+  "source_kind": "api",
+  "title": "OECD STES exact edition availability constraint",
+  "vintage_semantics": "latest_only"
+}

@@ -19,14 +19,13 @@ def main() -> None:
     from sovereignlab.harvest.weekly import load_rights_catalog, run_weekly_capture
 
     settings = Settings()
-    rights_catalog = (
-        load_rights_catalog(repository_root) if settings.ecos_api_key is not None else None
-    )
+    rights_catalog = load_rights_catalog(repository_root)
     with httpx.Client(follow_redirects=True, timeout=60.0) as client:
         summary = run_weekly_capture(
             repository_root,
             client=client,
             ecos_api_key=settings.ecos_api_key,
+            kosis_api_key=settings.kosis_api_key,
             rights_catalog=rights_catalog,
         )
     print(json.dumps(summary.__dict__, ensure_ascii=False, sort_keys=True))

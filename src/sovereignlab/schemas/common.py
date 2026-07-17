@@ -28,7 +28,7 @@ ExternalIdentifier = Annotated[
     StringConstraints(
         min_length=1,
         max_length=256,
-        pattern=r"^[A-Za-z0-9][A-Za-z0-9._:/-]*$",
+        pattern=r"^[A-Za-z0-9][A-Za-z0-9._@:/-]*$",
     ),
 ]
 

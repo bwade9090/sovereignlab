@@ -72,15 +72,21 @@ def test_synthetic_rights_examples_form_a_valid_catalog() -> None:
     assert catalog.decisions == (decision,)
 
 
-def test_committed_ecos_rights_catalog_validates() -> None:
-    catalog = RightsCatalog.model_validate_json(
+def test_committed_rights_catalogs_validate_as_an_append_only_chain() -> None:
+    previous = RightsCatalog.model_validate_json(
         (ROOT / "data" / "rights" / "kor-rtd-rights-2026-07-16.json").read_text(encoding="utf-8")
     )
+    catalog = RightsCatalog.model_validate_json(
+        (ROOT / "data" / "rights" / "kor-rtd-rights-2026-07-17.json").read_text(encoding="utf-8")
+    )
 
-    assert catalog.catalog_id == "kor-rtd-rights-2026-07-16"
+    assert catalog.catalog_id == "kor-rtd-rights-2026-07-17"
+    assert catalog.supersedes_catalog_id == previous.catalog_id
     assert {decision.decision_id for decision in catalog.decisions} == {
         "ecos-200y108-10601-rights-v1",
         "ecos-301y017-sa000-rights-v1",
+        "kosis-101-dt-1j22003-t-t10-rights-v1",
+        "oecd-stes-revisions-kor-m-li-aa-rights-v1",
     }
     assert all(decision.decision_state.value == "allowed" for decision in catalog.decisions)
 

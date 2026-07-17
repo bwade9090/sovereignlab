@@ -21,6 +21,7 @@ class Settings(BaseSettings):
     log_level: str = "INFO"
     mistral_api_key: SecretStr | None = Field(default=None, validation_alias="MISTRAL_API_KEY")
     ecos_api_key: SecretStr | None = Field(default=None, validation_alias="ECOS_API_KEY")
+    kosis_api_key: SecretStr | None = Field(default=None, validation_alias="KOSIS_API_KEY")
 
     model_config = SettingsConfigDict(
         env_file=".env",

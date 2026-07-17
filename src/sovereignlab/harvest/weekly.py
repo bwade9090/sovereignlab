@@ -7,7 +7,7 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from datetime import UTC, date, datetime
 from pathlib import Path
-from urllib.parse import quote
+from urllib.parse import quote, urlencode
 from xml.etree import ElementTree
 
 import httpx
@@ -45,7 +45,8 @@ OECD_CONTENT_CONSTRAINT_URL = (
     "https://sdmx.oecd.org/public/rest/contentconstraint/OECD.SDD.STES/"
     "CR_A_DSD_STES_REVISIONS%40DF_STES_REVISIONS/4.0?references=none"
 )
-RIGHTS_CATALOG_PATH = Path("data/rights/kor-rtd-rights-2026-07-16.json")
+RIGHTS_CATALOG_PATH = Path("data/rights/kor-rtd-rights-2026-07-17.json")
+KOSIS_API_URL = "https://kosis.kr/openapi/Param/statisticsParameterData.do"
 _LEDGER_PREFIX = "oecd-stes-ledger-"
 _AVAILABLE_PREFIX = "oecd-stes-availableconstraint-"
 _CONTENT_PREFIX = "oecd-stes-contentconstraint-"
@@ -81,6 +82,18 @@ class _EcosSeriesSpec:
 
 
 @dataclass(frozen=True)
+class _KosisSeriesSpec:
+    organisation_id: str
+    table_id: str
+    api_item_id: str
+    geography_id: str
+    rights_item_id: str
+    start_period: str
+    title: str
+    decision_id: str
+
+
+@dataclass(frozen=True)
 class _PendingArtifact:
     path: Path
     body: bytes
@@ -96,6 +109,8 @@ class HarvestSummary:
     archive_paths: tuple[str, ...]
     ecos_series_captured: tuple[str, ...]
     ecos_skipped_missing_key: bool
+    kosis_series_captured: tuple[str, ...]
+    kosis_skipped_missing_key: bool
 
 
 _ECOS_SERIES = (
@@ -117,12 +132,24 @@ _ECOS_SERIES = (
     ),
 )
 
+_KOSIS_CPI = _KosisSeriesSpec(
+    organisation_id="101",
+    table_id="DT_1J22003",
+    api_item_id="T",
+    geography_id="T10",
+    rights_item_id="T/T10",
+    start_period="196501",
+    title="소비자물가지수(총지수), 전국",
+    decision_id="kosis-101-dt-1j22003-t-t10-rights-v1",
+)
+
 
 def run_weekly_capture(
     repository_root: Path,
     *,
     client: httpx.Client,
     ecos_api_key: SecretStr | None = None,
+    kosis_api_key: SecretStr | None = None,
     rights_catalog: RightsCatalog | None = None,
     now: Callable[[], datetime] = lambda: datetime.now(UTC),
 ) -> HarvestSummary:
@@ -147,13 +174,13 @@ def run_weekly_capture(
     _validate_constraint_join(available_snapshot, content_snapshot)
 
     ecos_resources: list[tuple[_EcosSeriesSpec, _RetrievedResource]] = []
-    key = ecos_api_key.get_secret_value().strip() if ecos_api_key is not None else ""
+    ecos_key = ecos_api_key.get_secret_value().strip() if ecos_api_key is not None else ""
     capture_reference = max(available.retrieved_at, content.retrieved_at)
-    if key:
+    if ecos_key:
         if rights_catalog is None:
             raise ValueError("ECOS capture requires the committed rights catalog")
         for spec in _ECOS_SERIES:
-            request_url, public_url = _ecos_urls(spec, key, capture_reference.date())
+            request_url, public_url = _ecos_urls(spec, ecos_key, capture_reference.date())
             resource = _fetch(
                 client,
                 request_url,
@@ -163,6 +190,21 @@ def run_weekly_capture(
             )
             _validate_ecos_response(resource.body, spec)
             ecos_resources.append((spec, resource))
+
+    kosis_key = kosis_api_key.get_secret_value().strip() if kosis_api_key is not None else ""
+    kosis_resource: _RetrievedResource | None = None
+    if kosis_key:
+        if rights_catalog is None:
+            raise ValueError("KOSIS capture requires the committed rights catalog")
+        request_url, public_url = _kosis_urls(_KOSIS_CPI, kosis_key, capture_reference.date())
+        kosis_resource = _fetch(
+            client,
+            request_url,
+            public_url=public_url,
+            media_type="application/json",
+            now=now,
+        )
+        _validate_kosis_response(kosis_resource.body, _KOSIS_CPI)
 
     generated_at = _canonical_now(now)
     constraint_captured_at = max(available.retrieved_at, content.retrieved_at)
@@ -210,6 +252,18 @@ def run_weekly_capture(
         )
         manifests.append(manifest)
         artifacts.append(_raw_artifact(repository_root, manifest, resource.body, suffix=".json"))
+    if kosis_resource is not None:
+        assert rights_catalog is not None
+        manifest = _kosis_manifest(_KOSIS_CPI, kosis_resource, rights_catalog.catalog_id, token)
+        BenchmarkBundle(
+            sources=(manifest,),
+            records=(),
+            rights_catalogs=(rights_catalog,),
+        )
+        manifests.append(manifest)
+        artifacts.append(
+            _raw_artifact(repository_root, manifest, kosis_resource.body, suffix=".json")
+        )
 
     current_by_id = {manifest.source_id: manifest for manifest in manifests}
     evidence_manifests = _load_evidence_manifests(repository_root, ledger, current_by_id)
@@ -235,7 +289,13 @@ def run_weekly_capture(
             str(item.path.relative_to(repository_root)) for item in artifacts[: len(manifests)]
         ),
         ecos_series_captured=tuple(f"{spec.table_id}/{spec.item_id}" for spec, _ in ecos_resources),
-        ecos_skipped_missing_key=not bool(key),
+        ecos_skipped_missing_key=not bool(ecos_key),
+        kosis_series_captured=(
+            (f"{_KOSIS_CPI.organisation_id}/{_KOSIS_CPI.table_id}/{_KOSIS_CPI.rights_item_id}",)
+            if kosis_resource is not None
+            else ()
+        ),
+        kosis_skipped_missing_key=not bool(kosis_key),
     )
 
 
@@ -556,6 +616,51 @@ def _ecos_manifest(
     )
 
 
+def _kosis_manifest(
+    spec: _KosisSeriesSpec,
+    resource: _RetrievedResource,
+    catalog_id: str,
+    token: str,
+) -> SourceManifest:
+    return SourceManifest(
+        source_id=f"kosis-101-dt-1j22003-t-t10-{token}",
+        source_kind=SourceKind.API,
+        publisher="국가데이터처",
+        title=spec.title,
+        document_family="kosis-101-dt-1j22003-t-t10",
+        language=LanguageCode.KOREAN,
+        published_on=resource.retrieved_at.date(),
+        publication_date_basis=PublicationDateBasis.RETRIEVAL_DATE_FALLBACK,
+        publication_date_notes=(
+            "KOSIS is latest-only; retrieval date is the earliest defensible date for these exact "
+            "national CPI response bytes."
+        ),
+        retrieved_at=resource.retrieved_at,
+        canonical_url=resource.public_url,
+        media_type=resource.media_type,
+        content_sha256=hashlib.sha256(resource.body).hexdigest(),
+        byte_size=len(resource.body),
+        redistribution=RedistributionPolicy(
+            status=RedistributionStatus.ALLOWED,
+            license_name="KOSIS Statistics Information Use Guide",
+            license_url="https://kosis.kr/nsistN/kosisUseGuide.do",
+            notes=(
+                "Attributed national CPI scope approved in ADR 0007; unchanged raw standalone "
+                "sale, distortion, and re-identification are prohibited."
+            ),
+        ),
+        rights_decision=SourceRightsReference(
+            catalog_id=catalog_id,
+            decision_id=spec.decision_id,
+            source_system=SourceSystem.KOSIS,
+            table_id=spec.table_id,
+            item_id=spec.rights_item_id,
+        ),
+        vintage_semantics=VintageSemantics.LATEST_ONLY,
+        release_label=f"Weekly forward capture {token}",
+    )
+
+
 def _ecos_urls(spec: _EcosSeriesSpec, api_key: str, captured_on: date) -> tuple[str, str]:
     end_period = _ecos_end_period(spec.cycle, captured_on)
     tail = (
@@ -565,6 +670,31 @@ def _ecos_urls(spec: _EcosSeriesSpec, api_key: str, captured_on: date) -> tuple[
     request_url = f"https://ecos.bok.or.kr/api/StatisticSearch/{quote(api_key, safe='')}/{tail}"
     public_url = f"https://ecos.bok.or.kr/api/StatisticSearch/%7Bapi-key%7D/{tail}"
     return request_url, public_url
+
+
+def _kosis_urls(spec: _KosisSeriesSpec, api_key: str, captured_on: date) -> tuple[str, str]:
+    common = {
+        "method": "getList",
+        "itmId": spec.api_item_id,
+        "objL1": spec.geography_id,
+        "objL2": "",
+        "objL3": "",
+        "objL4": "",
+        "objL5": "",
+        "objL6": "",
+        "objL7": "",
+        "objL8": "",
+        "format": "json",
+        "jsonVD": "Y",
+        "prdSe": "M",
+        "startPrdDe": spec.start_period,
+        "endPrdDe": f"{captured_on.year}{captured_on.month:02d}",
+        "orgId": spec.organisation_id,
+        "tblId": spec.table_id,
+    }
+    request_query = urlencode({"apiKey": api_key, **common})
+    public_query = urlencode({"apiKey": "{api-key}", **common})
+    return f"{KOSIS_API_URL}?{request_query}", f"{KOSIS_API_URL}?{public_query}"
 
 
 def _ecos_end_period(cycle: str, captured_on: date) -> str:
@@ -595,6 +725,41 @@ def _validate_ecos_response(payload: bytes, spec: _EcosSeriesSpec) -> None:
         for row in rows
     ):
         raise ValueError("ECOS response contains rows outside the approved series scope")
+
+
+def _validate_kosis_response(payload: bytes, spec: _KosisSeriesSpec) -> None:
+    try:
+        rows = json.loads(payload)
+    except json.JSONDecodeError as error:
+        raise ValueError("invalid KOSIS statistics response") from error
+    if not isinstance(rows, list) or not rows or len(rows) > 1000:
+        raise ValueError("KOSIS response is empty, invalid, or exceeds the capture limit")
+
+    periods: set[str] = set()
+    expected = {
+        "ORG_ID": spec.organisation_id,
+        "TBL_ID": spec.table_id,
+        "TBL_NM": "소비자물가지수(2020\uff1d100)",
+        "ITM_ID": spec.api_item_id,
+        "ITM_NM": "소비자물가지수(총지수)",
+        "PRD_SE": "M",
+        "UNIT_NM": "2020\uff1d100",
+        "C1": spec.geography_id,
+        "C1_NM": "전국",
+    }
+    for row in rows:
+        if not isinstance(row, dict) or any(
+            row.get(key) != value for key, value in expected.items()
+        ):
+            raise ValueError("KOSIS response contains rows outside the approved CPI scope")
+        period = row.get("PRD_DE")
+        if not isinstance(period, str) or _EDITION_PATTERN.fullmatch(period) is None:
+            raise ValueError("KOSIS response contains an invalid monthly period")
+        if period in periods:
+            raise ValueError("KOSIS response contains a duplicate monthly period")
+        periods.add(period)
+        if not isinstance(row.get("DT"), str) or not row["DT"].strip():
+            raise ValueError("KOSIS response contains a blank observation")
 
 
 def _latest_ledger(repository_root: Path) -> EditionAvailabilityLedger | None:
@@ -688,7 +853,12 @@ def _json_artifact(path: Path, payload: object) -> _PendingArtifact:
 
 
 def _archive_path(repository_root: Path, source_id: str, suffix: str) -> Path:
-    family = "ecos" if source_id.startswith("ecos-") else "oecd-stes"
+    if source_id.startswith("ecos-"):
+        family = "ecos"
+    elif source_id.startswith("kosis-"):
+        family = "kosis"
+    else:
+        family = "oecd-stes"
     return repository_root / "data" / "archive" / family / f"{source_id}{suffix}"
 
 

@@ -1,0 +1,32 @@
+{
+  "byte_size": 21734727,
+  "canonical_url": "https://sdmx.oecd.org/public/rest/data/OECD.SDD.STES,DSD_STES_REVISIONS%40DF_STES_REVISIONS,4.0/KOR.M.LI_AA...?format=csvfilewithlabels",
+  "content_sha256": "ac7d0f9a2517870173885f1d45e2edea90f54cd485e2f539c73afddde566f058",
+  "document_family": "oecd-stes-cli-kor-li-aa",
+  "language": "und",
+  "media_type": "text/csv",
+  "publication_date_basis": "retrieval_date_fallback",
+  "publication_date_notes": "Dynamic consolidated edition response; retrieval date identifies these exact bytes.",
+  "published_on": "2026-07-17",
+  "publisher": "OECD",
+  "redistribution": {
+    "license_name": "OECD Terms & Conditions — Data",
+    "license_url": "https://www.oecd.org/en/about/terms-conditions.html",
+    "notes": "Exact OECD-produced Korea CLI scope approved in ADR 0007; attribution required and no OECD endorsement is implied.",
+    "status": "allowed"
+  },
+  "release_label": "Consolidated revision archive capture 20260717t115302688498z",
+  "retrieved_at": "2026-07-17T11:53:02.688498Z",
+  "rights_decision": {
+    "catalog_id": "kor-rtd-rights-2026-07-17",
+    "decision_id": "oecd-stes-revisions-kor-m-li-aa-rights-v1",
+    "item_id": "KOR.M.LI_AA.IX._T",
+    "source_system": "oecd",
+    "table_id": "DSD_STES_REVISIONS@DF_STES_REVISIONS"
+  },
+  "schema_version": "2.0.0",
+  "source_id": "oecd-stes-cli-kor-li-aa-20260717t115302688498z",
+  "source_kind": "api",
+  "title": "Korea composite leading indicator (CLI), amplitude adjusted, revision archive",
+  "vintage_semantics": "historical_archive"
+}

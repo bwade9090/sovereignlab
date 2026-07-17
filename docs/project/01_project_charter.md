@@ -1,9 +1,9 @@
 # SovereignLab project charter
 
-- Status: approved v2.2
-- Date: 2026-07-16 (v2.2 edition-availability amendment; supersedes v2.1 approved earlier that day;
-  substantive v2.2 changes are limited to §§3, 5, 7, and the decision index in §12)
-- Decision basis: `docs/discovery/01_concept_upgrade_proposal.md` and ADRs 0003–0005
+- Status: approved v2.3
+- Date: 2026-07-17 (v2.3 exact-source rights amendment; supersedes v2.2 approved 2026-07-16;
+  substantive v2.3 changes are limited to §§4, 7, and the decision index in §12)
+- Decision basis: `docs/discovery/01_concept_upgrade_proposal.md` and ADRs 0003–0007
 - Delivery target: four weeks, approximately 80 total hours
 - Initial budget ceiling: USD 100 for model APIs and rented compute
 - Repository: public at `https://github.com/bwade9090/sovereignlab`
@@ -116,10 +116,18 @@ The ruling is a reusable producer/category and attribution mapping for one exact
 licence investigation for every snapshot. A later capture may reuse it only while its scope,
 producer/category, applicable instrument, intended operations, and attribution remain unchanged.
 The first approved ECOS scopes are `200Y108/10601` and `301Y017/SA000`, both classified as Bank of
-Korea-produced and `allowed`; ADR 0004 records the direct and cross-source producer evidence. No
-raw value is committed until the strict rights records and manifest enforcement required by the
-current milestone are implemented. Restricted scopes fall back to metadata, checksum-diff, and a
-fetch script.
+Korea-produced and `allowed`; ADR 0004 records the direct and cross-source producer evidence. ADR
+0007 additionally approves the exact KOSIS national monthly total-CPI scope
+`101/DT_1J22003/T/T10`. No neighboring KOSIS table, item, geography, or content category is implied.
+No raw value is committed unless the strict rights record and typed manifest enforcement validate.
+Restricted scopes fall back to metadata, checksum-diff, and a fetch script.
+
+The only approved raw OECD observation scope is the OECD-produced Korea monthly
+amplitude-adjusted CLI revision series
+`DSD_STES_REVISIONS@DF_STES_REVISIONS/KOR.M.LI_AA.IX._T` recorded in ADR 0007. It is captured as
+a one-time/manual consolidated archive with OECD attribution and no-implied-endorsement wording,
+not downloaded in full every week. All other OECD observation scopes remain `metadata_only`
+unless a later owner-approved decision records exact source and rights evidence.
 
 ### Contrast tool and exclusions
 
@@ -221,7 +229,7 @@ The **hybrid mode is a committed demo**: a small local/quantized router plus a M
 - Number-normalization specification.
 - Migrate the evidence/benchmark contract to `2.0.0` with mandatory vintage/edition semantics,
   immutable availability evidence, migration notes, regenerated schemas, fixtures, and tests.
-- Charter v2.2 / ADR 0003–0005 documentation.
+- Charter v2.3 / ADR 0003–0007 documentation.
 - One-step Ministral 3 3B QLoRA compatibility spike on rented compute (unchanged from v1).
 - **Gate:** spike results recorded; claimable backfill range fixed; source-specific rights rulings
   recorded and enforceable; employer review done; the resolver reproduces the verified example
@@ -336,5 +344,11 @@ Vintage data costs $0: all OECD SDMX endpoints used are verified key-free and fr
 7. **v2.2 edition-availability amendment approved (2026-07-16):** ADR 0005's immutable ledger,
    fail-closed resolver, `Asia/Seoul` inclusive end-of-day cutoff, contract `2.0.0` migration, and
    narrow partial supersessions of ADR 0002 decision 5 and ADR 0003 decisions 1/3 are approved.
-   Separately, OECD archive observations remain `metadata_only` pending dataset-specific and
-   third-party-rights confirmation; no raw OECD redistribution is approved.
+   OECD archive observations were initially retained as `metadata_only` pending exact
+   dataset/source review; decision 8 records the sole later exception.
+8. **v2.3 exact-source rights amendment approved (2026-07-17):** ADR 0007 approves only KOSIS
+   national monthly total CPI scope `101/DT_1J22003/T/T10` and the OECD-produced Korea monthly
+   amplitude-adjusted CLI revision scope
+   `DSD_STES_REVISIONS@DF_STES_REVISIONS/KOR.M.LI_AA.IX._T`. The former joins the weekly
+   forward-capture basket; the latter is a one-time/manual consolidated archive. All neighboring
+   scopes remain blocked or `metadata_only` according to ADR 0004.

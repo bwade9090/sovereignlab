@@ -1,0 +1,23 @@
+{
+  "byte_size": 23251,
+  "canonical_url": "https://sdmx.oecd.org/public/rest/contentconstraint/OECD.SDD.STES/CR_A_DSD_STES_REVISIONS%40DF_STES_REVISIONS/4.0?references=none",
+  "content_sha256": "40b9f6e25f0187992f679fd5e8ae8215182076d8e280b71ca74b737d204334e6",
+  "document_family": "oecd-stes-constraint",
+  "language": "und",
+  "media_type": "application/xml",
+  "publication_date_basis": "retrieval_date_fallback",
+  "publication_date_notes": "Dynamic constraint bytes; retrieval date is the earliest defensible publication date for this exact capture.",
+  "published_on": "2026-07-17",
+  "publisher": "OECD",
+  "redistribution": {
+    "notes": "Owner-approved OECD interim ruling permits metadata publication only; this artifact is constraint metadata and contains no observations.",
+    "status": "metadata_only"
+  },
+  "release_label": "Append-only constraint capture 20260717t115242998550z",
+  "retrieved_at": "2026-07-17T11:52:42.998550Z",
+  "schema_version": "2.0.0",
+  "source_id": "oecd-stes-contentconstraint-20260717t115242998550z",
+  "source_kind": "api",
+  "title": "OECD STES content constraint with validFrom",
+  "vintage_semantics": "latest_only"
+}
