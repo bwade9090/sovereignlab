@@ -39,7 +39,11 @@
   `sovereignlab.normalization`: exact Decimal rules cover the two ECOS scopes, KOSIS CPI, OECD CLI,
   and the verified OECD GDP XDC-to-billion-KRW transform; Korean unit conversion, presentation
   rounding, tolerance, and variant fail-closed behavior are tested.
-- macOS validation at handoff (2026-07-17, Python 3.12.13 via Homebrew): 323 tests passed with
+- `experiments/qlora/` contains the pinned Ministral 3 BF16/NF4 one-step compatibility harness. Its
+  zero-cost public-Hub metadata/config and four-row synthetic-fixture preflight passes without
+  weight downloads. The actual paid CUDA/BF16 step remains blocked on a selected provider/account;
+  no fine-tuning success is claimed yet.
+- macOS validation at handoff (2026-07-17, Python 3.12.13 via Homebrew): 337 tests passed with
   100% statement/branch coverage; ruff check/format clean;
   `python scripts/export_json_schemas.py` deterministic (six contracts).
 
@@ -78,8 +82,8 @@ git diff --exit-code
 1. Review and merge `codex/m1b-harvester` so the default-branch weekly schedule activates. Add the
    `ECOS_API_KEY` and `KOSIS_API_KEY` repository secrets and manually dispatch a smoke run only
    after separate owner authorization; local `.env` values do not configure GitHub Actions.
-2. Run the Ministral 3 3B QLoRA compatibility spike on rented compute only after its smoke test;
-   record cost in the spend ledger.
+2. Select/authorize a CUDA/BF16 rental provider and run the preflighted one-step Ministral 3 3B
+   QLoRA command; record the exact provider, GPU, time, memory, result, and cost.
 
 ## 5. Hard stops
 

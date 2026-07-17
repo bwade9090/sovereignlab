@@ -55,6 +55,10 @@ grading rules are frozen in the
 [number-normalization specification](docs/project/06_number_normalization_spec.md); see
 [project status](docs/PROJECT_STATUS.md) for the continuation order.
 
+The QLoRA spike's free checkpoint/fixture preflight and isolated paid-GPU one-step harness live in
+[`experiments/qlora/`](experiments/qlora/README.md). The preflight passes without downloading model
+weights; the paid step has not run and no training result is claimed.
+
 ## Quick start
 
 Requires Python 3.12.

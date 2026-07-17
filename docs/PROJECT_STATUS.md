@@ -13,7 +13,8 @@
   harvester implementation are complete. Real append-only ECOS/KOSIS forward snapshots and the
   one-time OECD Korea CLI revision archive now validate against their manifests and rights
   decisions on the feature branch. Default-branch workflow activation, GitHub repository secrets,
-  and the fine-tuning compatibility path remain open; number-normalization 1.0.0 is frozen
+  and the paid fine-tuning compatibility step remain open; number-normalization 1.0.0 and the
+  zero-cost QLoRA preflight are complete
 
 ## Approved baseline
 
@@ -131,6 +132,16 @@
   GDP XDC example maps by `10^-9` to billion KRW; neighboring GDP/CLI variants fail closed. Five
   exact MVP rules cover the two approved ECOS series, KOSIS national CPI, OECD Korea CLI, and the
   verified OECD quarterly real-GDP revision series. Rights approval remains a separate gate.
+- **Ministral 3 QLoRA zero-cost preflight (2026-07-17):** an isolated spike under
+  `experiments/qlora/` pins the public BF16 checkpoint
+  `mistralai/Ministral-3-3B-Instruct-2512-BF16` at commit
+  `b6d637bef2393152b3da2b2fde72eecdee30557e` plus direct GPU dependencies. The free preflight
+  verifies public/ungated state, Apache-2.0 model-card license, architecture and text/vision
+  dimensions, required Hub files, and four synthetic bilingual route examples without downloading
+  weights. The paid harness uses NF4 double quantization, language-model-only all-linear LoRA,
+  exactly one optimizer step, finite/nonzero-gradient checks, adapter-change verification, and
+  adapter-only safetensors output. Local preflight passed. No supported GPU-provider CLI,
+  credential, or CUDA device is available in the current environment, so the paid step has not run.
 
 ## Current validation evidence
 
@@ -220,6 +231,12 @@ and format check were clean; `python -m pytest --cov=sovereignlab --cov-branch
 statements, 534 branches); `git diff --check` was clean. One key-free in-memory OECD read confirmed
 the exact GDP code dimensions `KOR.Q.B1GQ_Q.XDC._T`, raw XDC units, and the previously recorded
 value; no response was saved and no paid operation occurred.
+
+Validated 2026-07-17 on macOS after adding the isolated QLoRA compatibility harness: the 14
+CPU-only harness tests and real public-Hub preflight passed; the latter returned
+`preflight_passed`, four examples, zero weight downloads, and $0 cost. Full ruff and format checks
+were clean; all 337 tests passed with 100% SovereignLab statement/branch coverage (1,598 statements,
+534 branches); `git diff --check` was clean. The paid GPU step remains unexecuted.
 
 ## M1b verification spike record (2026-07-15)
 
@@ -377,8 +394,9 @@ response bodies.
    `KOSIS_API_KEY` secrets and manually dispatch one smoke run only with separate owner
    authorization for that external security-state change. Without repository secrets the workflow
    remains useful and succeeds with OECD constraint metadata only.
-2. Run the already-planned one-step Ministral 3 3B QLoRA compatibility spike on rented compute only
-   after its smoke test; record cost in the spend ledger.
+2. Select and authorize a rented CUDA/BF16 provider, then run the already-preflighted one-step
+   Ministral 3 3B QLoRA compatibility command. Record provider, GPU, wall time, peak memory,
+   outcome, and exact cost in the spend ledger.
 
 Week-1 gate (charter v2.3 §7): **not passed**. Endpoint/range spikes, exact source-rights policy and
 four approved series decisions, the strict catalogs, availability design, owner employer-risk
@@ -389,7 +407,9 @@ If the gate slips, invoke the pre-committed cut ladder immediately.
 
 ## Blockers and environment notes
 
-- No machine has a training GPU; rented GPU is planned only for the reviewed QLoRA spike.
+- No machine has a training GPU. The QLoRA metadata/fixture preflight passed, but no supported
+  rented-GPU provider CLI or credential is configured; the paid one-step run needs an explicit
+  provider/account path.
 - Development spans multiple machines. `.venv` is machine-local — recreate it per the README quick start on whichever machine picks this up. Nothing in the repo may depend on machine-specific paths.
 - Windows workstation note: the user-level Python launcher is unreliable there; use the workstation's documented bundled Python 3.12.13 runtime to create `.venv` (local path recorded outside the repository; an earlier revision of this file recorded the literal path — ADR 0006 closed that question with the owner's decision that no history remediation is needed).
 - Rights gate: ADRs 0004/0007, charter v2.3, the append-only catalog chain, two approved ECOS rows,
@@ -426,6 +446,7 @@ If the gate slips, invoke the pre-committed cut ladder immediately.
 | 2026-07-17 | Offline as-of resolver + temporary official-response regression | $0.00 | Key-free OECD reads; temporary responses deleted; no paid call |
 | 2026-07-17 | Weekly harvester implementation + first OECD constraint capture | $0.00 | Key-free metadata-only OECD reads; no observation or paid call |
 | 2026-07-17 | Exact KOSIS CPI/CLI rights implementation + first approved captures | $0.00 | Free official APIs and key-free OECD download; no paid call |
+| 2026-07-17 | Ministral 3 QLoRA metadata/fixture preflight | $0.00 | Public Hub metadata/config only; no weights or GPU |
 
 **Cumulative external spend: $0.00 / $100.00**
 

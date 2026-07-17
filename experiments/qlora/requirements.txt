@@ -1,0 +1,8 @@
+# Isolated GPU-spike environment; do not add these heavy packages to the CPU project runtime.
+torch==2.13.0
+transformers==5.14.1
+peft==0.19.1
+bitsandbytes==0.49.2
+accelerate==1.14.0
+mistral-common==1.11.5
+safetensors==0.8.0
