@@ -10,7 +10,6 @@ from pydantic import AfterValidator, AwareDatetime, Field, StringConstraints, mo
 
 from sovereignlab.schemas.common import (
     AVAILABILITY_SCHEMA_VERSION,
-    ExternalIdentifier,
     Identifier,
     NonEmptyText,
     StrictModel,
@@ -101,7 +100,7 @@ class AvailabilityEvidence(StrictModel):
     source_manifest_ids: tuple[Identifier, ...] = Field(min_length=1)
     publisher_date: date | None = None
     publisher_timezone: TimezoneName | None = None
-    constraint_id: ExternalIdentifier | None = None
+    constraint_id: SdmxFlowReference | None = None
     constraint_version: SdmxArtefactVersion | None = None
     notes: NonEmptyText | None = None
 

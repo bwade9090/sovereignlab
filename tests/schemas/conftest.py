@@ -326,7 +326,7 @@ def availability_ledger() -> EditionAvailabilityLedger:
                         supports=AvailabilityAssertion.AVAILABLE_BY,
                         asserted_instant=datetime(2024, 5, 10, 9, 0, tzinfo=UTC),
                         source_manifest_ids=("example-oecd-sdmx-api",),
-                        constraint_id="CR_A_DF_EXAMPLE",
+                        constraint_id="CR_A_DSD_EXAMPLE@DF_EXAMPLE",
                         constraint_version="1.0",
                     ),
                 ),

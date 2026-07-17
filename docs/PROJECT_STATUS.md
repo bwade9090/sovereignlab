@@ -8,7 +8,8 @@
 - Overall state: source-rights policy, two initial ECOS rulings, strict standalone rights catalog,
   the edition-availability decision, the owner-authored employer-risk review (ADR 0006), and the
   implemented contract unit — `EditionAvailabilityLedger` 1.0.0, evidence/benchmark `2.0.0`, typed
-  manifest-rights link — are complete; the as-of resolver and harvester remain open
+  manifest-rights link — plus the offline fail-closed as-of resolver are complete; the harvester,
+  number-normalization specification, and fine-tuning compatibility path remain open
 
 ## Approved baseline
 
@@ -20,7 +21,7 @@
     data-route probes, always reported separately) with regenerable point-in-time gold answers and a
     public script. Accepted ADR 0005 replaces the charter's original
     `max(EDITION <= as_of)` shorthand with edition-level availability evidence and fail-closed
-    resolution; implementation remains the next-machine work unit.
+    resolution; ledger selection and the manifest-bound selected-row resolver are implemented.
   - The briefing pipeline remains as reference implementation and four-variant public baseline suite; temporal-leakage rate is the headline metric.
 - Evaluation contract: 40 reviewed Korean/English core questions across `documents`, `data`, `documents_and_data`, and `abstain` (unchanged) + tier-2 probes.
 - Fine-tuning plan: Ministral 3 3B QLoRA first, documented Mistral 7B/Nemo fallback; hyperparameter matrix capped at 2–3 configurations.
@@ -73,6 +74,21 @@
   an operational harvester obligation. Rights contracts stay 1.0.0 byte-identical; v1 evidence
   schemas removed (history preserves them); 226 tests at 100% statement/branch coverage. No real
   ledger, manifest, or observation was committed.
+- **Offline fail-closed as-of resolver (2026-07-17):** `sovereignlab.vintage` adds strict STES
+  query/result types, exact case-sensitive SDMX-CSV code-column parsing (including safe coexistence
+  of `MEASURE`/`Measure`), manifest byte-size/SHA-256 verification, canonical URL-to-ledger
+  `agency:dataflow` and explicit-version joining, ledger-first selection, and selected-row-only
+  evidence packets. Missing, duplicate, or blank selected rows; malformed CSV; unverifiable or
+  mismatched dataflows; content mismatch; unsupported source semantics/media; incomplete ledger
+  frontiers; and calendar overflow all return structured abstentions without edition codes or
+  values. Synthetic tests prove later rows never appear in success or abstention output. A
+  temporary, uncommitted official-response regression reproduced the previously recorded GDP
+  response hash and selected `202607` for `as_of=2026-07-09`, returning only the verified raw XDC
+  value `574984300000000`; the CPI response again contained 258 editions (`200502`–`202607`) with
+  its recorded hash. The temporary response files were deleted. This check also found and fixed a
+  ledger-schema bug: real OECD constraint IDs contain `@`, so `constraint_id` now uses the approved
+  SDMX artefact-reference pattern; the public schema and synthetic fixture were regenerated. No
+  real ledger, manifest, or observation was committed.
 
 ## Current validation evidence
 
@@ -121,6 +137,16 @@ contracts (`-v2` evidence schemas plus the new availability ledger; rights schem
 `python -m pytest --cov=sovereignlab --cov-report=term-missing` passed all 226 tests with 100%
 statement/branch coverage (923 statements, 350 branches); `git diff --check` clean. Offline
 code/schema/tests only; no observation endpoint or paid operation was used.
+
+Validated 2026-07-17 on macOS after implementing the offline as-of resolver and the constraint-ID
+contract correction: Python 3.12.13; `python scripts/export_json_schemas.py` regenerated all six
+contracts; `python -m ruff check .` clean; `python -m ruff format --check .` clean; `python -m
+pytest --cov=sovereignlab --cov-report=term-missing` passed all 255 tests with 100% statement/branch
+coverage. A read-only, key-free official-response regression used workstation temporary files only:
+GDP 4,770 bytes / SHA-256 `484ba74366c07d1911e70988aa202fcbe1bc384b0f743aae2b70bf6d9dc497fa`;
+CPI 63,799 bytes / SHA-256
+`0e45f924a9c2a4742729f649893c54e836200ca268171e7897f1748cd7c3a572`. Both matched the
+2026-07-15 verification log exactly; temporary files were deleted and no paid operation occurred.
 
 ## M1b verification spike record (2026-07-15)
 
@@ -269,26 +295,22 @@ response bodies.
 
 ## Immediate next action (M1b — do these in order)
 
-1. Implement the offline, fail-closed as-of resolver over
-   `DSD_STES_REVISIONS@DF_STES_REVISIONS` (~6–8 h): the case-sensitive SDMX-CSV parser plus
-   series-period row lookup on top of the implemented ledger selection (`select_edition` already
-   enforces the frontier rule). It must reproduce only the demonstrable examples recorded in this
-   file, enforce the ledger-to-manifest `dataflow_id` join, and emit evidence packets that expose
-   only the selected observation row.
-2. Commit the weekly harvester cron + `SourceManifest` and availability-ledger wiring (~3–5 h) so
+1. Commit the weekly harvester cron + `SourceManifest` and availability-ledger wiring (~3–5 h) so
    public snapshot history starts accruing immediately after the rights gate permits it. The first
    real ledger records `202607.available_by=2026-07-08T09:33:35.737Z` and keeps `202606`
-   unresolved per ADR 0005 decision 10.
-3. Freeze the number-normalization specification before any question authoring.
-4. Run the already-planned one-step Ministral 3 3B QLoRA compatibility spike on rented compute only
+   unresolved per ADR 0005 decision 10. Derive the ledger edition inventory mechanically from the
+   captured availability constraint and use the canonical
+   `OECD.SDD.STES:DSD_STES_REVISIONS@DF_STES_REVISIONS` dataflow identity expected by the resolver.
+2. Freeze the number-normalization specification before any question authoring.
+3. Run the already-planned one-step Ministral 3 3B QLoRA compatibility spike on rented compute only
    after its smoke test; record cost in the spend ledger.
 
 Week-1 gate (charter v2.2 §7): **not passed**. Endpoint/range spikes, source-rights policy, two
 per-series rights records, the strict rights catalog, the availability design, the OECD
 metadata-only ruling, the owner employer-risk review (ADR 0006), and the contract `2.0.0`/ledger
-1.0.0/manifest-rights integration are complete. Resolver regression against the verified examples,
-the harvester, and the fine-tuning path must still be fixed before the gate closes. If the gate
-slips, invoke the pre-committed cut ladder immediately.
+1.0.0/manifest-rights integration and resolver regression against the verified examples are
+complete. The harvester, number-normalization specification, and fine-tuning path must still be
+fixed before the gate closes. If the gate slips, invoke the pre-committed cut ladder immediately.
 
 ## Blockers and environment notes
 
@@ -300,9 +322,9 @@ slips, invoke the pre-committed cut ladder immediately.
   are complete. Raw publication now waits only on real harvester manifests that pass that
   validation.
 - Vintage semantics: OECD monthly `EDITION` codes do not encode availability dates. The
-  `EditionAvailabilityLedger` contract and fail-closed selection are implemented; unknown editions
-  abstain mechanically. No real ledger exists yet — the first one ships with the harvester
-  captures.
+  `EditionAvailabilityLedger`, fail-closed selection, and selected-row resolver are implemented;
+  unknown editions abstain mechanically. No real ledger exists yet — the first one ships with the
+  harvester captures.
 - macOS laptop note: `python@3.12` was installed via Homebrew on 2026-07-17 and is the interpreter
   for the machine-local `.venv` (project standard per ADR 0001).
 - GitHub CLI is authenticated as `bwade9090`; `main` tracks `origin/main`.
@@ -323,6 +345,7 @@ slips, invoke the pre-committed cut ladder immediately.
 | 2026-07-16 | Charter v2.2 approval and cross-machine handoff | $0.00 | Documentation, offline validation, commit/push only |
 | 2026-07-17 | Employer-risk review record (ADR 0006) and macOS 3.12 environment | $0.00 | Documentation and offline validation only; no paid call |
 | 2026-07-17 | ADR 0005 contract unit implementation and adversarial review | $0.00 | Offline code/schema/tests; agent review under subscription, no project API/GPU call |
+| 2026-07-17 | Offline as-of resolver + temporary official-response regression | $0.00 | Key-free OECD reads; temporary responses deleted; no paid call |
 
 **Cumulative external spend: $0.00 / $100.00**
 
@@ -339,8 +362,8 @@ Read in this order, in full, before changing anything:
    and harvester build on.
 7. `docs/discovery/01_concept_upgrade_proposal.md` — background: why v2 exists, verified data facts, judged alternatives, risk register.
 
-Then start with "Immediate next action" item 1. Do not start dependent data collection, document
-ingestion, model training, or UI work before the implementation gates (contract `2.0.0`, typed
-manifest-rights link, resolver) are resolved. Do not weaken the qualification rules for "first" claims or the rights/append-only
-rules in `AGENTS.md`. Update this file whenever a milestone state, blocker, cost, spike result, or
-next action changes.
+Then start with "Immediate next action" item 1. Do not start document ingestion, benchmark
+authoring, full model training, or UI work before the remaining M1b gates close. The harvester must
+stay within approved rights scopes, and the QLoRA compatibility run remains smoke-test-first. Do not
+weaken the qualification rules for "first" claims or the rights/append-only rules in `AGENTS.md`.
+Update this file whenever a milestone state, blocker, cost, spike result, or next action changes.

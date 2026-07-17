@@ -31,7 +31,7 @@ Canonical model: `src/sovereignlab/schemas/availability.py`; public schema:
 | Windows | `resolved` requires `available_by`; `unresolved` never invents one. When present: `not_before <= available_by`, `last_absent_at < available_by`, and no `available_by`/`last_absent_at` after `generated_at`. |
 | Evidence | Every assertion (`available_by`, `not_before`, `last_absent_at`) requires at least one evidence entry with one of the four ADR 0005 bases and one or more immutable `SourceManifest` IDs. The record value must equal the strongest supported instant (earliest for `available_by`, latest for the absence bounds). |
 | Conservative dates | `publisher_date_conservative` requires an IANA `publisher_timezone` and asserts exactly the start of the following publisher-local day, compared as UTC instants (so DST gaps/folds in the publisher zone stay representable); it can support only `available_by`. |
-| Constraint evidence | `sdmx_constraint_valid_from` requires the constraint ID and version from the captured response. |
+| Constraint evidence | `sdmx_constraint_valid_from` requires the constraint ID and version from the captured response; the SDMX artefact-reference pattern accepts the `@` separator used by the real OECD constraint ID. |
 | Range safety | Dates whose following day overflows the calendar (`9999-12-31`) are rejected as validation errors, never raw `OverflowError`s. |
 
 Derived semantics live on the models: `cutoff_exclusive(as_of)` returns the start of the next
@@ -106,8 +106,10 @@ snapshot legitimately support a 2024 `as_of` without backdating provenance.
 - No raw ECOS/KOSIS observation is committed. The typed link and cross-record validation now
   exist, so the remaining gates are operational: the harvester must produce real manifests whose
   links validate against the committed catalog.
-- The ledger does not yet cross-check `dataflow_id` against the archive manifest it describes;
-  the as-of resolver work unit enforces that join when it builds evidence packets.
+- The contract model itself does not cross-check `dataflow_id` against the archive manifest it
+  describes. The follow-on as-of resolver now enforces that join by extracting the canonical
+  `agency:dataflow` and any explicit version from the manifest URL before it builds an evidence
+  packet.
 - ADR 0005 decision 7's rule that a ledger's edition inventory must match its exact
   availability-constraint snapshot is an operational harvester/resolver obligation: the offline
   bundle sees manifest hashes, not constraint response bytes, so the harvester must derive the

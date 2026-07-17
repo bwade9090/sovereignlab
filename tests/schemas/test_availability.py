@@ -330,12 +330,22 @@ def test_conservative_assertion_accepts_the_safe_instant() -> None:
 
 def test_constraint_fields_require_the_constraint_basis() -> None:
     with pytest.raises(ValidationError, match="constraint fields require"):
-        _evidence(constraint_id="CR_A_DF_EXAMPLE")
+        _evidence(constraint_id="CR_A_DSD_EXAMPLE@DF_EXAMPLE")
 
 
 def test_constraint_basis_requires_constraint_identity() -> None:
     with pytest.raises(ValidationError, match="requires constraint_id and"):
         _evidence(basis=AvailabilityEvidenceBasis.SDMX_CONSTRAINT_VALID_FROM)
+
+
+def test_constraint_id_accepts_the_official_at_separator() -> None:
+    evidence = _evidence(
+        basis=AvailabilityEvidenceBasis.SDMX_CONSTRAINT_VALID_FROM,
+        constraint_id="CR_A_DSD_STES_REVISIONS@DF_STES_REVISIONS",
+        constraint_version="4.0",
+    )
+
+    assert evidence.constraint_id == "CR_A_DSD_STES_REVISIONS@DF_STES_REVISIONS"
 
 
 def test_selection_outcome_must_be_exclusive() -> None:

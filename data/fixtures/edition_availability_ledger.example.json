@@ -13,7 +13,7 @@
         {
           "asserted_instant": "2024-05-10T09:00:00Z",
           "basis": "sdmx_constraint_valid_from",
-          "constraint_id": "CR_A_DF_EXAMPLE",
+          "constraint_id": "CR_A_DSD_EXAMPLE@DF_EXAMPLE",
           "constraint_version": "1.0",
           "notes": "Synthetic fixture; the constraint region contained this edition.",
           "source_manifest_ids": [

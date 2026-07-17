@@ -1,6 +1,6 @@
 # Continuation handoff
 
-- Prepared: 2026-07-16; refreshed 2026-07-17 after ADR 0006 and the contract `2.0.0` unit landed
+- Prepared: 2026-07-16; refreshed 2026-07-17 after the offline as-of resolver landed
 - Authority: charter v2.2; accepted ADRs 0001–0006
 - Branch to continue: `main` from `origin`
 - Current milestone: M1b
@@ -18,12 +18,18 @@
   the typed manifest-to-rights-decision link with bundle cross-validation (including catalog/ledger
   supersession and instant-based expiry). A 23-agent adversarial review's seven confirmed findings
   were fixed before commit.
+- The offline STES as-of resolver is implemented under `src/sovereignlab/vintage/`: exact
+  case-sensitive code-header parsing, manifest size/hash verification, canonical manifest URL to
+  ledger dataflow/version joining, ledger-first fail-closed selection, and selected-row-only output.
+  The official GDP and CPI verification responses were re-read through temporary files and matched
+  the recorded hashes/examples; no response body was committed. The check also corrected the
+  ledger's `constraint_id` pattern so real OECD IDs containing `@` validate.
 - RightsCatalog 1.0 remains byte-identical, with the two owner-approved ECOS metadata decisions
   `200Y108/10601` and `301Y017/SA000` and the OECD `metadata_only` ruling.
 - No raw observation, no real ledger, and no real (non-fixture) manifest is committed. External
   spend remains USD 0.
-- macOS validation at handoff (2026-07-17, Python 3.12.13 via Homebrew): 226 tests passed with
-  100% statement/branch coverage (923 statements, 350 branches); ruff check/format clean;
+- macOS validation at handoff (2026-07-17, Python 3.12.13 via Homebrew): 255 tests passed with
+  100% statement/branch coverage; ruff check/format clean;
   `python scripts/export_json_schemas.py` deterministic (six contracts).
 
 ## 2. Set up the machine
@@ -53,24 +59,19 @@ git diff --exit-code
    next work units build on.
 6. `docs/discovery/03_week1_verification_log.md` — the verified example values the resolver must
    reproduce.
+7. `src/sovereignlab/vintage/resolver.py` and `tests/vintage/` — the implemented resolver boundary
+   the harvester must feed.
 
 ## 4. Exact continuation order
 
-1. Implement the offline, fail-closed as-of resolver over
-   `DSD_STES_REVISIONS@DF_STES_REVISIONS` (~6–8 h): case-sensitive SDMX-CSV parser plus
-   series-period row lookup on top of the ledger's implemented `select_edition`. Reproduce only
-   the verified examples in project status (KOR 2025-Q1 GDP 572,057.7 → 574,984.3 billion KRW
-   between the June and July 2026 editions; KOR CPI 2005-01 edition count), enforce the
-   ledger-to-manifest `dataflow_id` join, and emit evidence packets exposing only the selected
-   row. Tests must cover the ADR 0005 decision-14 scenarios that live at the resolver level
-   (missing/duplicate/blank selected rows, `MEASURE`/`Measure` header coexistence).
-2. Commit the weekly harvester cron + `SourceManifest` and availability-ledger wiring (~3–5 h).
+1. Commit the weekly harvester cron + `SourceManifest` and availability-ledger wiring (~3–5 h).
    The first real ledger derives its edition inventory mechanically from the captured
    availability constraint (never hand-edited), records
    `202607.available_by=2026-07-08T09:33:35.737Z`, and keeps `202606` unresolved per ADR 0005
-   decision 10.
-3. Freeze the number-normalization specification before any question authoring.
-4. Run the Ministral 3 3B QLoRA compatibility spike on rented compute only after its smoke test;
+   decision 10. Use canonical dataflow ID
+   `OECD.SDD.STES:DSD_STES_REVISIONS@DF_STES_REVISIONS` so resolver binding is exact.
+2. Freeze the number-normalization specification before any question authoring.
+3. Run the Ministral 3 3B QLoRA compatibility spike on rented compute only after its smoke test;
    record cost in the spend ledger.
 
 ## 5. Hard stops
