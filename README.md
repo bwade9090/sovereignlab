@@ -49,9 +49,9 @@ as-of resolver and weekly append-only harvester are implemented. The first real,
 availability capture mechanically records all 330 current edition codes while resolving only
 `202607`. ADR 0007 and the current rights catalog additionally authorize only the national KOSIS
 total CPI (`101/DT_1J22003/T/T10`) and OECD Korea monthly amplitude-adjusted CLI revision series;
-all neighboring scopes remain blocked. Default-branch workflow activation, repository secrets,
-and the QLoRA compatibility spike remain open. The exact `Decimal` unit, variant, rounding, and
-grading rules are frozen in the
+all neighboring scopes remain blocked. The default-branch weekly workflow is active; repository
+secrets and the paid QLoRA compatibility step remain open. The exact `Decimal` unit, variant,
+rounding, and grading rules are frozen in the
 [number-normalization specification](docs/project/06_number_normalization_spec.md); see
 [project status](docs/PROJECT_STATUS.md) for the continuation order.
 

@@ -2,7 +2,7 @@
 
 - Prepared: 2026-07-16; refreshed 2026-07-17 after the first approved observation captures
 - Authority: charter v2.3; accepted ADRs 0001–0007
-- Branch to continue: `codex/m1b-harvester` from `origin`
+- Branch to continue: `main` from `origin`
 - Current milestone: M1b
 
 ## 1. What is complete
@@ -54,8 +54,8 @@
 recreate it per the README quick start. From an existing clone:
 
 ```bash
-git switch codex/m1b-harvester
-git pull --ff-only origin codex/m1b-harvester
+git switch main
+git pull --ff-only origin main
 source .venv/bin/activate  # or recreate: python3.12 -m venv .venv && pip install -r requirements.txt
 python scripts/export_json_schemas.py
 python -m ruff check .
@@ -79,9 +79,9 @@ git diff --exit-code
 
 ## 4. Exact continuation order
 
-1. Review and merge `codex/m1b-harvester` so the default-branch weekly schedule activates. Add the
-   `ECOS_API_KEY` and `KOSIS_API_KEY` repository secrets and manually dispatch a smoke run only
-   after separate owner authorization; local `.env` values do not configure GitHub Actions.
+1. Add the `ECOS_API_KEY` and `KOSIS_API_KEY` repository secrets and manually dispatch a smoke run
+   only after separate owner authorization; local `.env` values do not configure GitHub Actions.
+   The active workflow succeeds with OECD metadata only when those secrets are absent.
 2. Select/authorize a CUDA/BF16 rental provider and run the preflighted one-step Ministral 3 3B
    QLoRA command; record the exact provider, GPU, time, memory, result, and cost.
 

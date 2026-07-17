@@ -12,9 +12,9 @@
   manifest-rights link — plus the offline fail-closed as-of resolver and weekly append-only
   harvester implementation are complete. Real append-only ECOS/KOSIS forward snapshots and the
   one-time OECD Korea CLI revision archive now validate against their manifests and rights
-  decisions on the feature branch. Default-branch workflow activation, GitHub repository secrets,
-  and the paid fine-tuning compatibility step remain open; number-normalization 1.0.0 and the
-  zero-cost QLoRA preflight are complete
+  decisions. The harvester is on the default branch, so the key-free OECD metadata schedule is
+  active. GitHub repository secrets and the paid fine-tuning compatibility step remain open;
+  number-normalization 1.0.0 and the zero-cost QLoRA preflight are complete
 
 ## Approved baseline
 
@@ -389,11 +389,10 @@ response bodies.
 
 ## Immediate next action (M1b — do these in order)
 
-1. Review and merge `codex/m1b-harvester` into the default branch so the weekly schedule starts;
-   local `.env` keys do not activate GitHub Actions. Add repository `ECOS_API_KEY` and
+1. Local `.env` keys do not activate GitHub Actions. Add repository `ECOS_API_KEY` and
    `KOSIS_API_KEY` secrets and manually dispatch one smoke run only with separate owner
-   authorization for that external security-state change. Without repository secrets the workflow
-   remains useful and succeeds with OECD constraint metadata only.
+   authorization for that external security-state change. Without repository secrets the active
+   weekly workflow remains useful and succeeds with OECD constraint metadata only.
 2. Select and authorize a rented CUDA/BF16 provider, then run the already-preflighted one-step
    Ministral 3 3B QLoRA compatibility command. Record provider, GPU, wall time, peak memory,
    outcome, and exact cost in the spend ledger.
@@ -401,8 +400,9 @@ response bodies.
 Week-1 gate (charter v2.3 §7): **not passed**. Endpoint/range spikes, exact source-rights policy and
 four approved series decisions, the strict catalogs, availability design, owner employer-risk
 review, contract `2.0.0`/ledger 1.0.0/manifest-rights integration, resolver regression, harvester,
-real forward snapshots, and the approved CLI consolidation are complete. The workflow must reach
-the default branch, and the fine-tuning path must still be fixed before the gate closes.
+real forward snapshots, approved CLI consolidation, number normalization, and default-branch
+workflow activation are complete. The paid fine-tuning compatibility result must still be fixed
+before the gate closes.
 If the gate slips, invoke the pre-committed cut ladder immediately.
 
 ## Blockers and environment notes
@@ -423,9 +423,9 @@ If the gate slips, invoke the pre-committed cut ladder immediately.
 - macOS laptop note: `python@3.12` was installed via Homebrew on 2026-07-17 and is the interpreter
   for the machine-local `.venv` (project standard per ADR 0001).
 - GitHub CLI is authenticated as `bwade9090`; `main` tracks `origin/main`.
-- Active feature branch: `codex/m1b-harvester`, tracking
-  `origin/codex/m1b-harvester`; scheduled workflows do not begin until the workflow reaches the
-  repository's default branch.
+- `main` tracks `origin/main`; the validated `codex/m1b-harvester` work was fast-forwarded to the
+  default branch. The weekly workflow is active there; the remote feature branch is retained as
+  non-authoritative review history and may be removed later by the owner.
 - Live-event calendar: primary = the next observed OECD edition rollover (the exact date is not yet
   verified; append-only polling must detect it); fallback = the July-vs-June edition diff, subject to
   availability provenance; stretch = Korea Q2-2026 advance GDP release (~2026-07-23/24, tight — see
