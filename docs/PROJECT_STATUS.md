@@ -13,7 +13,7 @@
   harvester implementation are complete. Real append-only ECOS/KOSIS forward snapshots and the
   one-time OECD Korea CLI revision archive now validate against their manifests and rights
   decisions on the feature branch. Default-branch workflow activation, GitHub repository secrets,
-  the number-normalization specification, and the fine-tuning compatibility path remain open
+  and the fine-tuning compatibility path remain open; number-normalization 1.0.0 is frozen
 
 ## Approved baseline
 
@@ -123,6 +123,14 @@
   typed rights-bundle, byte-size, and SHA-256 validation. A real resolver check selected only
   edition `202607`, period `2026-05`, value `102.66` for `as_of=2026-07-09`. A repository-wide
   secret comparison confirmed neither local key appears in tracked or untracked publishable files.
+- **Number-normalization specification 1.0.0 (2026-07-17):**
+  `docs/project/06_number_normalization_spec.md` and `sovereignlab.normalization` freeze
+  exact-`Decimal` parsing, case-sensitive exact-scope rule selection, source-string preservation,
+  Korean 원/백만원/억원/십억원/조원 powers-of-ten conversions, explicit canonical units,
+  `ROUND_HALF_UP` presentation, and half-one-displayed-unit grading tolerance. The verified OECD
+  GDP XDC example maps by `10^-9` to billion KRW; neighboring GDP/CLI variants fail closed. Five
+  exact MVP rules cover the two approved ECOS series, KOSIS national CPI, OECD Korea CLI, and the
+  verified OECD quarterly real-GDP revision series. Rights approval remains a separate gate.
 
 ## Current validation evidence
 
@@ -205,6 +213,13 @@ OECD CLI `ac7d0f9a2517870173885f1d45e2edea90f54cd485e2f539c73afddde566f058`.
 Every manifest matches the committed bytes and exact owner-approved rights decision. API use and
 the key-free OECD download cost $0; the local secrets remain ignored and absent from publishable
 files.
+
+Validated 2026-07-17 on macOS after freezing number-normalization 1.0.0: Python 3.12.13; ruff check
+and format check were clean; `python -m pytest --cov=sovereignlab --cov-branch
+--cov-report=term-missing` passed all 323 tests with 100% statement and branch coverage (1,598
+statements, 534 branches); `git diff --check` was clean. One key-free in-memory OECD read confirmed
+the exact GDP code dimensions `KOR.Q.B1GQ_Q.XDC._T`, raw XDC units, and the previously recorded
+value; no response was saved and no paid operation occurred.
 
 ## M1b verification spike record (2026-07-15)
 
@@ -362,16 +377,14 @@ response bodies.
    `KOSIS_API_KEY` secrets and manually dispatch one smoke run only with separate owner
    authorization for that external security-state change. Without repository secrets the workflow
    remains useful and succeeds with OECD constraint metadata only.
-2. Freeze the number-normalization specification before any question authoring.
-3. Run the already-planned one-step Ministral 3 3B QLoRA compatibility spike on rented compute only
+2. Run the already-planned one-step Ministral 3 3B QLoRA compatibility spike on rented compute only
    after its smoke test; record cost in the spend ledger.
 
 Week-1 gate (charter v2.3 §7): **not passed**. Endpoint/range spikes, exact source-rights policy and
 four approved series decisions, the strict catalogs, availability design, owner employer-risk
 review, contract `2.0.0`/ledger 1.0.0/manifest-rights integration, resolver regression, harvester,
 real forward snapshots, and the approved CLI consolidation are complete. The workflow must reach
-the default branch, and the number-normalization specification and fine-tuning path must still be
-fixed before the gate closes.
+the default branch, and the fine-tuning path must still be fixed before the gate closes.
 If the gate slips, invoke the pre-committed cut ladder immediately.
 
 ## Blockers and environment notes

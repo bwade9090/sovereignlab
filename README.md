@@ -50,8 +50,10 @@ availability capture mechanically records all 330 current edition codes while re
 `202607`. ADR 0007 and the current rights catalog additionally authorize only the national KOSIS
 total CPI (`101/DT_1J22003/T/T10`) and OECD Korea monthly amplitude-adjusted CLI revision series;
 all neighboring scopes remain blocked. Default-branch workflow activation, repository secrets,
-number normalization, and the QLoRA compatibility spike remain the open items listed in
-[project status](docs/PROJECT_STATUS.md).
+and the QLoRA compatibility spike remain open. The exact `Decimal` unit, variant, rounding, and
+grading rules are frozen in the
+[number-normalization specification](docs/project/06_number_normalization_spec.md); see
+[project status](docs/PROJECT_STATUS.md) for the continuation order.
 
 ## Quick start
 
@@ -92,6 +94,7 @@ Git and are not automatically copied to GitHub repository secrets.
 - [Evidence schema contract (1.0, superseded)](docs/project/02_evidence_schema_contract.md)
 - [Source-rights catalog contract](docs/project/03_rights_catalog_contract.md)
 - [Evidence contract 2.0.0 and availability-ledger migration](docs/project/05_evidence_contract_2_0_migration.md)
+- [Number-normalization specification 1.0.0](docs/project/06_number_normalization_spec.md)
 - [MacBook continuation handoff](docs/project/04_macbook_handoff.md)
 - [Current status and handoff](docs/PROJECT_STATUS.md)
 - [Week-1 verification log](docs/discovery/03_week1_verification_log.md)
