@@ -13,8 +13,9 @@
   harvester implementation are complete. Real append-only ECOS/KOSIS forward snapshots and the
   one-time OECD Korea CLI revision archive now validate against their manifests and rights
   decisions. The harvester is on the default branch, so the key-free OECD metadata schedule is
-  active. GitHub repository secrets and the paid fine-tuning compatibility step remain open;
-  number-normalization 1.0.0 and the zero-cost QLoRA preflight are complete
+  active. Repository `ECOS_API_KEY` and `KOSIS_API_KEY` Actions secrets are configured; the first
+  manually dispatched secret-backed run and the paid fine-tuning compatibility step remain open.
+  Number-normalization 1.0.0 and the zero-cost QLoRA preflight are complete
 
 ## Approved baseline
 
@@ -389,10 +390,9 @@ response bodies.
 
 ## Immediate next action (M1b — do these in order)
 
-1. Local `.env` keys do not activate GitHub Actions. Add repository `ECOS_API_KEY` and
-   `KOSIS_API_KEY` secrets and manually dispatch one smoke run only with separate owner
-   authorization for that external security-state change. Without repository secrets the active
-   weekly workflow remains useful and succeeds with OECD constraint metadata only.
+1. Repository `ECOS_API_KEY` and `KOSIS_API_KEY` Actions secrets were registered on 2026-07-17
+   without exposing their values. Manually dispatch one append-only workflow smoke run only with
+   separate owner authorization; the next scheduled run will otherwise use the secrets normally.
 2. Select and authorize a rented CUDA/BF16 provider, then run the already-preflighted one-step
    Ministral 3 3B QLoRA compatibility command. Record provider, GPU, wall time, peak memory,
    outcome, and exact cost in the spend ledger.
@@ -414,8 +414,8 @@ If the gate slips, invoke the pre-committed cut ladder immediately.
 - Windows workstation note: the user-level Python launcher is unreliable there; use the workstation's documented bundled Python 3.12.13 runtime to create `.venv` (local path recorded outside the repository; an earlier revision of this file recorded the literal path — ADR 0006 closed that question with the owner's decision that no history remediation is needed).
 - Rights gate: ADRs 0004/0007, charter v2.3, the append-only catalog chain, two approved ECOS rows,
   exact KOSIS CPI and OECD CLI rows, and typed manifest-rights bundle validation are complete. The
-  local snapshots are captured; scheduled ECOS/KOSIS activation still requires GitHub repository
-  secrets, which are distinct from the ignored local `.env`.
+  local snapshots are captured and the two exact GitHub Actions secrets are configured. They remain
+  distinct from the ignored local `.env`; their plaintext cannot be retrieved from GitHub.
 - Vintage semantics: OECD monthly `EDITION` codes do not encode availability dates. The
   `EditionAvailabilityLedger`, fail-closed selection, and selected-row resolver are implemented;
   unknown editions abstain mechanically. The first real ledger resolves only `202607`; all 329
@@ -447,6 +447,7 @@ If the gate slips, invoke the pre-committed cut ladder immediately.
 | 2026-07-17 | Weekly harvester implementation + first OECD constraint capture | $0.00 | Key-free metadata-only OECD reads; no observation or paid call |
 | 2026-07-17 | Exact KOSIS CPI/CLI rights implementation + first approved captures | $0.00 | Free official APIs and key-free OECD download; no paid call |
 | 2026-07-17 | Ministral 3 QLoRA metadata/fixture preflight | $0.00 | Public Hub metadata/config only; no weights or GPU |
+| 2026-07-17 | ECOS/KOSIS GitHub Actions secret registration | $0.00 | Encrypted repository secrets; names/timestamps verified, values not read back |
 
 **Cumulative external spend: $0.00 / $100.00**
 

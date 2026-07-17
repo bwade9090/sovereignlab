@@ -50,8 +50,9 @@ availability capture mechanically records all 330 current edition codes while re
 `202607`. ADR 0007 and the current rights catalog additionally authorize only the national KOSIS
 total CPI (`101/DT_1J22003/T/T10`) and OECD Korea monthly amplitude-adjusted CLI revision series;
 all neighboring scopes remain blocked. The default-branch weekly workflow is active; repository
-secrets and the paid QLoRA compatibility step remain open. The exact `Decimal` unit, variant,
-rounding, and grading rules are frozen in the
+ECOS/KOSIS Actions secrets are configured, while the first manual secret-backed smoke run and paid
+QLoRA compatibility step remain open. The exact `Decimal` unit, variant, rounding, and grading
+rules are frozen in the
 [number-normalization specification](docs/project/06_number_normalization_spec.md); see
 [project status](docs/PROJECT_STATUS.md) for the continuation order.
 
@@ -89,7 +90,8 @@ Copy `.env.example` to `.env` only when an API-backed experiment is approved. Of
 the OECD constraint-metadata capture do not require an API key. `ECOS_API_KEY` activates only the
 two exact ECOS series authorized by the committed rights catalog; `KOSIS_API_KEY` activates only
 the national total-CPI scope. A missing key is an explicit skip. Local `.env` values are ignored by
-Git and are not automatically copied to GitHub repository secrets.
+Git; the two Actions secrets were separately registered on 2026-07-17 and cannot be used to rebuild
+a local `.env` on another machine.
 
 ## Documentation
 

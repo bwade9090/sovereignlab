@@ -33,8 +33,10 @@
   resolved at the official constraint `validFrom`, while the other 329 mechanically inventoried
   editions remain unresolved. A later local run captured the two exact ECOS series and exact KOSIS
   CPI scope; the separate one-time CLI capture stored 75,060 rows across 239 editions. Local keys
-  remain ignored and are absent from publishable files; GitHub repository secrets are still not
-  configured. External spend remains USD 0.
+  remain ignored and are absent from publishable files. Repository `ECOS_API_KEY` and
+  `KOSIS_API_KEY` Actions secrets were registered on 2026-07-17 without exposing their values; the
+  first manually dispatched secret-backed workflow run remains pending. External spend remains
+  USD 0.
 - Number-normalization 1.0.0 is frozen in `docs/project/06_number_normalization_spec.md` and
   `sovereignlab.normalization`: exact Decimal rules cover the two ECOS scopes, KOSIS CPI, OECD CLI,
   and the verified OECD GDP XDC-to-billion-KRW transform; Korean unit conversion, presentation
@@ -79,9 +81,9 @@ git diff --exit-code
 
 ## 4. Exact continuation order
 
-1. Add the `ECOS_API_KEY` and `KOSIS_API_KEY` repository secrets and manually dispatch a smoke run
-   only after separate owner authorization; local `.env` values do not configure GitHub Actions.
-   The active workflow succeeds with OECD metadata only when those secrets are absent.
+1. The repository `ECOS_API_KEY` and `KOSIS_API_KEY` Actions secrets are configured. Manually
+   dispatch one append-only workflow smoke run only after separate owner authorization; otherwise
+   let the next weekly schedule use them normally.
 2. Select/authorize a CUDA/BF16 rental provider and run the preflighted one-step Ministral 3 3B
    QLoRA command; record the exact provider, GPU, time, memory, result, and cost.
 
