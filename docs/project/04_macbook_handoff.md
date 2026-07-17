@@ -1,8 +1,8 @@
 # Continuation handoff
 
-- Prepared: 2026-07-16; refreshed 2026-07-17 after the offline as-of resolver landed
+- Prepared: 2026-07-16; refreshed 2026-07-17 after the weekly harvester landed
 - Authority: charter v2.2; accepted ADRs 0001–0006
-- Branch to continue: `main` from `origin`
+- Branch to continue: `codex/m1b-harvester` from `origin`
 - Current milestone: M1b
 
 ## 1. What is complete
@@ -26,9 +26,13 @@
   ledger's `constraint_id` pattern so real OECD IDs containing `@` validate.
 - RightsCatalog 1.0 remains byte-identical, with the two owner-approved ECOS metadata decisions
   `200Y108/10601` and `301Y017/SA000` and the OECD `metadata_only` ruling.
-- No raw observation, no real ledger, and no real (non-fixture) manifest is committed. External
-  spend remains USD 0.
-- macOS validation at handoff (2026-07-17, Python 3.12.13 via Homebrew): 255 tests passed with
+- The weekly append-only harvester and GitHub Actions schedule are implemented. The first real
+  key-free OECD constraint capture and manifest-backed ledger contain no observations; `202607` is
+  resolved at the official constraint `validFrom`, while the other 329 mechanically inventoried
+  editions remain unresolved. The optional ECOS path is restricted to the two approved series and
+  skips because neither the local environment nor GitHub has `ECOS_API_KEY`. No KOSIS scope is
+  collected. External spend remains USD 0.
+- macOS validation at handoff (2026-07-17, Python 3.12.13 via Homebrew): 288 tests passed with
   100% statement/branch coverage; ruff check/format clean;
   `python scripts/export_json_schemas.py` deterministic (six contracts).
 
@@ -39,8 +43,8 @@
 recreate it per the README quick start. From an existing clone:
 
 ```bash
-git switch main
-git pull --ff-only origin main
+git switch codex/m1b-harvester
+git pull --ff-only origin codex/m1b-harvester
 source .venv/bin/activate  # or recreate: python3.12 -m venv .venv && pip install -r requirements.txt
 python scripts/export_json_schemas.py
 python -m ruff check .
@@ -59,17 +63,14 @@ git diff --exit-code
    next work units build on.
 6. `docs/discovery/03_week1_verification_log.md` — the verified example values the resolver must
    reproduce.
-7. `src/sovereignlab/vintage/resolver.py` and `tests/vintage/` — the implemented resolver boundary
-   the harvester must feed.
+7. `src/sovereignlab/vintage/resolver.py`, `src/sovereignlab/harvest/weekly.py`, and their tests —
+   the implemented resolver and append-only capture boundaries.
 
 ## 4. Exact continuation order
 
-1. Commit the weekly harvester cron + `SourceManifest` and availability-ledger wiring (~3–5 h).
-   The first real ledger derives its edition inventory mechanically from the captured
-   availability constraint (never hand-edited), records
-   `202607.available_by=2026-07-08T09:33:35.737Z`, and keeps `202606` unresolved per ADR 0005
-   decision 10. Use canonical dataflow ID
-   `OECD.SDD.STES:DSD_STES_REVISIONS@DF_STES_REVISIONS` so resolver binding is exact.
+1. Review and merge `codex/m1b-harvester` so the default-branch weekly schedule activates. Add the
+   `ECOS_API_KEY` repository secret and manually dispatch a smoke run only when the owner is ready
+   to start the two approved ECOS series; missing-key OECD-only runs are valid.
 2. Freeze the number-normalization specification before any question authoring.
 3. Run the Ministral 3 3B QLoRA compatibility spike on rented compute only after its smoke test;
    record cost in the spend ledger.

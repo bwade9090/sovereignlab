@@ -1,0 +1,1684 @@
+{
+  "captured_at": "2026-07-17T10:19:06.273935Z",
+  "complete_through": "2026-07-17T10:19:05.341298Z",
+  "cutoff_semantics": "inclusive_end_of_day",
+  "cutoff_timezone": "Asia/Seoul",
+  "dataflow_id": "OECD.SDD.STES:DSD_STES_REVISIONS@DF_STES_REVISIONS",
+  "dataflow_version": "4.0",
+  "editions": [
+    {
+      "edition": "199902",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "199903",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "199904",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "199905",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "199906",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "199907",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "199908",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "199909",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "199910",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "199911",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "199912",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200001",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200002",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200003",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200004",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200005",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200006",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200007",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200008",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200009",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200010",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200011",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200012",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200101",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200102",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200103",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200104",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200105",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200106",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200107",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200108",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200109",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200110",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200111",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200112",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200201",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200202",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200203",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200204",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200205",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200206",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200207",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200208",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200209",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200210",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200211",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200212",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200301",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200302",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200303",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200304",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200305",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200306",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200307",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200308",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200309",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200310",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200311",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200312",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200401",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200402",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200403",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200404",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200405",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200406",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200407",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200408",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200409",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200410",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200411",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200412",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200501",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200502",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200503",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200504",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200505",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200506",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200507",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200508",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200509",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200510",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200511",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200512",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200601",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200602",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200603",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200604",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200605",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200606",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200607",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200608",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200609",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200610",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200611",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200612",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200701",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200702",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200703",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200704",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200705",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200706",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200707",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200708",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200709",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200710",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200711",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200712",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200801",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200802",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200803",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200804",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200805",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200806",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200807",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200808",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200809",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200810",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200811",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200812",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200901",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200902",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200903",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200904",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200905",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200906",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200907",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200908",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200909",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200910",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200911",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "200912",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201001",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201002",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201003",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201004",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201005",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201006",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201007",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201008",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201009",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201010",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201011",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201012",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201101",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201102",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201103",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201104",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201105",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201106",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201107",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201108",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201109",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201110",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201111",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201112",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201201",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201202",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201203",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201204",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201205",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201206",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201207",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201208",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201209",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201210",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201211",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201212",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201301",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201302",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201303",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201304",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201305",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201306",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201307",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201308",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201309",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201310",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201311",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201312",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201401",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201402",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201403",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201404",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201405",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201406",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201407",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201408",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201409",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201410",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201411",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201412",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201501",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201502",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201503",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201504",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201505",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201506",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201507",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201508",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201509",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201510",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201511",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201512",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201601",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201602",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201603",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201604",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201605",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201606",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201607",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201608",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201609",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201610",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201611",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201612",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201701",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201702",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201703",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201704",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201705",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201706",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201707",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201708",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201709",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201710",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201711",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201712",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201801",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201802",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201803",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201804",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201805",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201806",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201807",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201808",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201809",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201810",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201811",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201812",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201901",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201902",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201903",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201904",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201905",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201906",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201907",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201908",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201909",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201910",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201911",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "201912",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202001",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202002",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202003",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202004",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202005",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202006",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202007",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202008",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202009",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202010",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202011",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202012",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202101",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202102",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202103",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202104",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202105",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202106",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202107",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202108",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202109",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202110",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202111",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202112",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202201",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202202",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202203",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202204",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202205",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202206",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202207",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202208",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202209",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202210",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202211",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202212",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202301",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202302",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202303",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202304",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202305",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202306",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202307",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202308",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202309",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202310",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202311",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202312",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202401",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202402",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202403",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202404",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202405",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202406",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202407",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202408",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202409",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202410",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202411",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202412",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202501",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202502",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202503",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202504",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202505",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202506",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202507",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202508",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202509",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202510",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202511",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202512",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202601",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202602",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202603",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202604",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202605",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "edition": "202606",
+      "evidence": [],
+      "status": "unresolved"
+    },
+    {
+      "available_by": "2026-07-08T09:33:35.737000Z",
+      "edition": "202607",
+      "evidence": [
+        {
+          "asserted_instant": "2026-07-08T09:33:35.737000Z",
+          "basis": "sdmx_constraint_valid_from",
+          "constraint_id": "CR_A_DSD_STES_REVISIONS@DF_STES_REVISIONS",
+          "constraint_version": "4.0",
+          "source_manifest_ids": [
+            "oecd-stes-availableconstraint-20260717t101906273935z",
+            "oecd-stes-contentconstraint-20260717t101906273935z"
+          ],
+          "supports": "available_by"
+        },
+        {
+          "asserted_instant": "2026-07-17T10:19:05.341298Z",
+          "basis": "first_observed_at",
+          "source_manifest_ids": [
+            "oecd-stes-availableconstraint-20260717t101906273935z"
+          ],
+          "supports": "available_by"
+        }
+      ],
+      "status": "resolved"
+    }
+  ],
+  "generated_at": "2026-07-17T10:19:06.279527Z",
+  "ledger_id": "oecd-stes-ledger-20260717t101906273935z",
+  "schema_version": "1.0.0"
+}

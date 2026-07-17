@@ -8,8 +8,10 @@
 - Overall state: source-rights policy, two initial ECOS rulings, strict standalone rights catalog,
   the edition-availability decision, the owner-authored employer-risk review (ADR 0006), and the
   implemented contract unit — `EditionAvailabilityLedger` 1.0.0, evidence/benchmark `2.0.0`, typed
-  manifest-rights link — plus the offline fail-closed as-of resolver are complete; the harvester,
-  number-normalization specification, and fine-tuning compatibility path remain open
+  manifest-rights link — plus the offline fail-closed as-of resolver and weekly append-only
+  harvester implementation are complete. The first real OECD metadata capture and ledger are
+  committed on the feature branch; activation on the default branch, the ECOS repository secret,
+  the number-normalization specification, and the fine-tuning compatibility path remain open
 
 ## Approved baseline
 
@@ -89,6 +91,22 @@
   ledger-schema bug: real OECD constraint IDs contain `@`, so `constraint_id` now uses the approved
   SDMX artefact-reference pattern; the public schema and synthetic fixture were regenerated. No
   real ledger, manifest, or observation was committed.
+- **Weekly append-only harvester + first real ledger (2026-07-17):**
+  `sovereignlab.harvest.weekly` and `.github/workflows/weekly-harvest.yml` implement a weekly and
+  manually dispatchable capture. Every run joins the key-free OECD exact-availability and content
+  constraints, validates the canonical STES dataflow/version and identical mechanically derived
+  edition inventories, creates checksummed `SourceManifest` 2.0.0 records, advances an immutable
+  availability ledger monotonically, verifies all referenced historical bytes, and refuses an
+  existing path before writing. The initial committed capture contains 330 edition codes
+  (`199902`–`202607`): only `202607` is resolved, with
+  `available_by=2026-07-08T09:33:35.737Z`; the other 329 codes remain unresolved rather than being
+  backfilled. Its two XML artifacts are constraint metadata without observations and carry the
+  owner-approved `metadata_only` policy. Optional ECOS capture is restricted in code to the two
+  owner-approved scopes (`200Y108/10601`, `301Y017/SA000`), validates the rights catalog via
+  `BenchmarkBundle`, sanitizes the key from committed URLs, and skips explicitly when no key is
+  configured. No KOSIS scope is collected because none has an owner-approved exact-series ruling.
+  The current repository and GitHub environment have no `ECOS_API_KEY`, so the first capture
+  intentionally contains no raw observation.
 
 ## Current validation evidence
 
@@ -147,6 +165,17 @@ GDP 4,770 bytes / SHA-256 `484ba74366c07d1911e70988aa202fcbe1bc384b0f743aae2b70b
 CPI 63,799 bytes / SHA-256
 `0e45f924a9c2a4742729f649893c54e836200ca268171e7897f1748cd7c3a572`. Both matched the
 2026-07-15 verification log exactly; temporary files were deleted and no paid operation occurred.
+
+Validated 2026-07-17 on macOS after implementing the weekly harvester and recording its first real
+OECD metadata capture: Python 3.12.13; `python scripts/export_json_schemas.py` was deterministic;
+`python -m ruff check .` and `python -m ruff format --check .` were clean; `python -m pytest
+--cov=sovereignlab --cov-branch --cov-report=term-missing` passed all 288 tests with 100% statement
+and branch coverage (1,371 statements, 478 branches); `git diff --check` was clean. The captured
+availability-constraint XML is 17,827 bytes / SHA-256
+`e7a3fab8730a2d9e4644ccb78844d721c263a2b235d4575fa850d1f0c71be06f`; the content-constraint
+XML is 23,251 bytes / SHA-256
+`40b9f6e25f0187992f679fd5e8ae8215182076d8e280b71ca74b737d204334e6`. Both are key-free
+metadata-only responses and contain no observations. No paid operation occurred.
 
 ## M1b verification spike record (2026-07-15)
 
@@ -295,12 +324,11 @@ response bodies.
 
 ## Immediate next action (M1b — do these in order)
 
-1. Commit the weekly harvester cron + `SourceManifest` and availability-ledger wiring (~3–5 h) so
-   public snapshot history starts accruing immediately after the rights gate permits it. The first
-   real ledger records `202607.available_by=2026-07-08T09:33:35.737Z` and keeps `202606`
-   unresolved per ADR 0005 decision 10. Derive the ledger edition inventory mechanically from the
-   captured availability constraint and use the canonical
-   `OECD.SDD.STES:DSD_STES_REVISIONS@DF_STES_REVISIONS` dataflow identity expected by the resolver.
+1. Review and merge `codex/m1b-harvester` into the default branch so the weekly schedule starts;
+   add the repository `ECOS_API_KEY` secret and manually dispatch one smoke run if the owner wants
+   the two approved ECOS series to begin accruing immediately. Without that secret the workflow
+   remains useful and succeeds with OECD constraint metadata only; it must not broaden ECOS/KOSIS
+   scope.
 2. Freeze the number-normalization specification before any question authoring.
 3. Run the already-planned one-step Ministral 3 3B QLoRA compatibility spike on rented compute only
    after its smoke test; record cost in the spend ledger.
@@ -308,9 +336,10 @@ response bodies.
 Week-1 gate (charter v2.2 §7): **not passed**. Endpoint/range spikes, source-rights policy, two
 per-series rights records, the strict rights catalog, the availability design, the OECD
 metadata-only ruling, the owner employer-risk review (ADR 0006), and the contract `2.0.0`/ledger
-1.0.0/manifest-rights integration and resolver regression against the verified examples are
-complete. The harvester, number-normalization specification, and fine-tuning path must still be
-fixed before the gate closes. If the gate slips, invoke the pre-committed cut ladder immediately.
+1.0.0/manifest-rights integration, resolver regression, harvester implementation, and first real
+metadata-only ledger are complete. The workflow must reach the default branch, and the
+number-normalization specification and fine-tuning path must still be fixed before the gate closes.
+If the gate slips, invoke the pre-committed cut ladder immediately.
 
 ## Blockers and environment notes
 
@@ -319,15 +348,19 @@ fixed before the gate closes. If the gate slips, invoke the pre-committed cut la
 - Windows workstation note: the user-level Python launcher is unreliable there; use the workstation's documented bundled Python 3.12.13 runtime to create `.venv` (local path recorded outside the repository; an earlier revision of this file recorded the literal path — ADR 0006 closed that question with the owner's decision that no history remediation is needed).
 - Rights gate: ADR 0004, charter v2.2, the standalone catalog, both approved ECOS rows, the owner
   employer-risk review (ADR 0006), and the typed manifest-rights link with bundle cross-validation
-  are complete. Raw publication now waits only on real harvester manifests that pass that
-  validation.
+  are complete. The ECOS path generates and validates real harvester manifests, but activation is
+  blocked on an `ECOS_API_KEY` repository secret. KOSIS remains excluded because there is no
+  owner-approved exact-series ruling.
 - Vintage semantics: OECD monthly `EDITION` codes do not encode availability dates. The
   `EditionAvailabilityLedger`, fail-closed selection, and selected-row resolver are implemented;
-  unknown editions abstain mechanically. No real ledger exists yet — the first one ships with the
-  harvester captures.
+  unknown editions abstain mechanically. The first real ledger resolves only `202607`; all 329
+  older codes remain unknown until acceptable historical evidence exists.
 - macOS laptop note: `python@3.12` was installed via Homebrew on 2026-07-17 and is the interpreter
   for the machine-local `.venv` (project standard per ADR 0001).
 - GitHub CLI is authenticated as `bwade9090`; `main` tracks `origin/main`.
+- Active feature branch: `codex/m1b-harvester`, tracking
+  `origin/codex/m1b-harvester`; scheduled workflows do not begin until the workflow reaches the
+  repository's default branch.
 - Live-event calendar: primary = the next observed OECD edition rollover (the exact date is not yet
   verified; append-only polling must detect it); fallback = the July-vs-June edition diff, subject to
   availability provenance; stretch = Korea Q2-2026 advance GDP release (~2026-07-23/24, tight — see
@@ -346,6 +379,7 @@ fixed before the gate closes. If the gate slips, invoke the pre-committed cut la
 | 2026-07-17 | Employer-risk review record (ADR 0006) and macOS 3.12 environment | $0.00 | Documentation and offline validation only; no paid call |
 | 2026-07-17 | ADR 0005 contract unit implementation and adversarial review | $0.00 | Offline code/schema/tests; agent review under subscription, no project API/GPU call |
 | 2026-07-17 | Offline as-of resolver + temporary official-response regression | $0.00 | Key-free OECD reads; temporary responses deleted; no paid call |
+| 2026-07-17 | Weekly harvester implementation + first OECD constraint capture | $0.00 | Key-free metadata-only OECD reads; no observation or paid call |
 
 **Cumulative external spend: $0.00 / $100.00**
 

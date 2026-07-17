@@ -29,6 +29,12 @@ matching owner-approved decision fails validation.
 
 Repository layout:
 
+- `archive/oecd-stes/` — append-only OECD availability/content constraint XML; metadata only and
+  never observation rows under the current ruling.
+- `archive/ecos/` — append-only raw responses for only owner-approved exact ECOS series; files are
+  created only when `ECOS_API_KEY` is configured and the linked rights decision validates.
+- `availability/` — immutable edition-availability ledgers whose inventories are derived from the
+  same captured constraint bytes; historical ledgers are never rewritten.
 - `benchmark/` — reviewed task records and evidence-disjoint split manifests.
 - `fixtures/` — synthetic examples and, later, small redistributable recorded responses used by offline tests.
 - `manifests/` — source URL, publisher, publication date, retrieval time, checksum, language, and license notes.
@@ -37,6 +43,13 @@ Repository layout:
 - `schemas/` — generated public JSON Schema contracts; never edit these by hand.
 - `raw/` — downloaded source material; ignored by Git.
 - `interim/` — local extraction and transformation outputs; ignored by Git.
+
+Run one capture with `python scripts/harvest_weekly.py --repository-root .`. The operation is
+append-only: a reused capture path fails instead of overwriting bytes. The weekly GitHub Actions
+workflow runs the same command, validates the full offline suite, and commits only `archive/`,
+`availability/`, and `manifests/` outputs. Files under `archive/` are marked binary in
+`.gitattributes` so Git cannot change provider line endings and invalidate the manifest hash.
+Public Git history is the capture-date evidence.
 
 Do not commit a PDF, extracted full text, or API response until its redistribution basis is documented. Never place confidential, applicant, or institutional internal data in this repository.
 

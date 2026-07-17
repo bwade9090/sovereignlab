@@ -44,8 +44,11 @@ implemented. On 2026-07-17 the owner-authored employer-risk review was recorded 
 one contract unit ([migration notes](docs/project/05_evidence_contract_2_0_migration.md)): the
 `EditionAvailabilityLedger` 1.0.0 with fail-closed edition selection, evidence/benchmark contract
 `2.0.0`, and the typed manifest-to-rights-decision link with bundle cross-validation. The offline
-as-of resolver, weekly harvester, and first real ledger remain the open items listed in
-[project status](docs/PROJECT_STATUS.md); no raw observation is committed yet.
+as-of resolver and weekly append-only harvester are implemented. The first real, metadata-only OECD
+availability capture mechanically records all 330 current edition codes while resolving only
+`202607`; no raw observation is committed. Default-branch workflow activation, the optional ECOS
+repository secret, number normalization, and the QLoRA compatibility spike remain the open items
+listed in [project status](docs/PROJECT_STATUS.md).
 
 ## Quick start
 
@@ -73,7 +76,9 @@ python -m ruff format --check .
 python -m pytest
 ```
 
-Copy `.env.example` to `.env` only when an API-backed experiment is approved. Offline checks do not require an API key.
+Copy `.env.example` to `.env` only when an API-backed experiment is approved. Offline checks and
+the OECD constraint-metadata capture do not require an API key. `ECOS_API_KEY` activates only the
+two exact series authorized by the committed rights catalog; a missing key is an explicit skip.
 
 ## Documentation
 

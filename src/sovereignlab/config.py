@@ -20,6 +20,7 @@ class Settings(BaseSettings):
     environment: Environment = Environment.DEVELOPMENT
     log_level: str = "INFO"
     mistral_api_key: SecretStr | None = Field(default=None, validation_alias="MISTRAL_API_KEY")
+    ecos_api_key: SecretStr | None = Field(default=None, validation_alias="ECOS_API_KEY")
 
     model_config = SettingsConfigDict(
         env_file=".env",

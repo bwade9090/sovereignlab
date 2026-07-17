@@ -1,0 +1,50 @@
+name: Weekly KOR-RTD capture
+
+on:
+  schedule:
+    - cron: "17 2 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: weekly-kor-rtd-capture
+  cancel-in-progress: false
+
+jobs:
+  harvest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt
+
+      - name: Capture public source state
+        env:
+          ECOS_API_KEY: ${{ secrets.ECOS_API_KEY }}
+        run: python scripts/harvest_weekly.py --repository-root .
+
+      - name: Validate captured artifacts
+        run: |
+          python scripts/export_json_schemas.py
+          python -m pytest
+          git diff --check
+
+      - name: Commit append-only capture
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/archive data/availability data/manifests
+          if git diff --cached --quiet; then
+            echo "No capture artifacts changed."
+            exit 0
+          fi
+          git commit -m "data: capture weekly KOR-RTD snapshot"
+          git push
