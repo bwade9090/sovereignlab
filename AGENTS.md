@@ -12,7 +12,7 @@ Build **KOR-RTD**, a provenance-contracted point-in-time (vintage) data layer fo
 2. `docs/PROJECT_STATUS.md` — current milestone, completed work, next action, blockers, and validation evidence.
 3. `docs/decisions/` — accepted architecture and process decisions (ADR 0003 records the v2
    reorientation; ADR 0004 records the v2.1 source-rights amendment; ADR 0005 records the v2.2
-   fail-closed edition-availability contract).
+   fail-closed edition-availability contract; ADR 0006 records the owner's employer-risk review).
 4. `docs/discovery/01_concept_upgrade_proposal.md` — background rationale for v2: verified data facts, judged alternatives, risk register.
 5. The closest additional `AGENTS.md`, if a subdirectory adds one later.
 

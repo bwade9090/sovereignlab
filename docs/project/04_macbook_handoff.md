@@ -1,7 +1,7 @@
-# MacBook continuation handoff
+# Continuation handoff
 
-- Prepared: 2026-07-16
-- Authority: charter v2.2; accepted ADRs 0001–0005
+- Prepared: 2026-07-16; refreshed 2026-07-17 after ADR 0006 and the contract `2.0.0` unit landed
+- Authority: charter v2.2; accepted ADRs 0001–0006
 - Branch to continue: `main` from `origin`
 - Current milestone: M1b
 
@@ -9,36 +9,33 @@
 
 - Charter v2.2 and ADRs 0003–0005 record the K-VINTAGE/KOR-RTD direction, source-rights policy,
   and fail-closed edition-availability contract.
-- RightsCatalog 1.0 is implemented with synchronized JSON Schemas, synthetic fixtures, and two
-  owner-approved ECOS metadata decisions: `200Y108/10601` and `301Y017/SA000`.
-- The OECD archive ruling is `metadata_only pending dataset-specific and third-party-rights
-  confirmation`; raw OECD redistribution is not approved.
-- `SourceManifest` and benchmark contracts remain at 1.0. No raw observation payload has been
-  added, and external spend remains USD 0.
-- Windows validation at handoff: 147 tests passed with 100% statement/branch coverage
-  (633 statements, 218 branches); ruff and format checks were clean.
+- ADR 0006 (2026-07-17) commits the owner-authored employer-risk review: proceed unchanged, a
+  single English personal-capacity disclaimer in the README, no Git-history rewrite. All week-1
+  owner decisions are closed.
+- The ADR 0005 contract unit is implemented
+  (`docs/project/05_evidence_contract_2_0_migration.md`): `EditionAvailabilityLedger` 1.0.0 with
+  fail-closed edition selection, `SourceManifest`/`BenchmarkRecord`/`BenchmarkBundle` 2.0.0, and
+  the typed manifest-to-rights-decision link with bundle cross-validation (including catalog/ledger
+  supersession and instant-based expiry). A 23-agent adversarial review's seven confirmed findings
+  were fixed before commit.
+- RightsCatalog 1.0 remains byte-identical, with the two owner-approved ECOS metadata decisions
+  `200Y108/10601` and `301Y017/SA000` and the OECD `metadata_only` ruling.
+- No raw observation, no real ledger, and no real (non-fixture) manifest is committed. External
+  spend remains USD 0.
+- macOS validation at handoff (2026-07-17, Python 3.12.13 via Homebrew): 226 tests passed with
+  100% statement/branch coverage (923 statements, 350 branches); ruff check/format clean;
+  `python scripts/export_json_schemas.py` deterministic (six contracts).
 
-## 2. Set up the MacBook
+## 2. Set up the machine
 
-Do not copy the Windows `.venv`. From an existing clone, pull the committed handoff:
+`.venv` is machine-local; never copy it between machines. On the macOS laptop it already exists
+(Homebrew `python@3.12`, created 2026-07-17) — activate and validate. On any other machine,
+recreate it per the README quick start. From an existing clone:
 
 ```bash
 git switch main
 git pull --ff-only origin main
-```
-
-The project standard is Python 3.12. If it is not installed:
-
-```bash
-brew install python@3.12
-```
-
-Then create a machine-local environment and validate the checkout:
-
-```bash
-python3.12 -m venv .venv
-source .venv/bin/activate
-python -m pip install -r requirements.txt
+source .venv/bin/activate  # or recreate: python3.12 -m venv .venv && pip install -r requirements.txt
 python scripts/export_json_schemas.py
 python -m ruff check .
 python -m ruff format --check .
@@ -46,38 +43,45 @@ python -m pytest --cov=sovereignlab --cov-report=term-missing
 git diff --exit-code
 ```
 
-Python 3.13.13 was previously smoke-tested successfully on this Mac, but use 3.12 when practical
-because ADR 0001 defines it as the standard.
-
 ## 3. Read before continuing
 
 1. `AGENTS.md`.
 2. `docs/project/01_project_charter.md`.
 3. `docs/PROJECT_STATUS.md`.
-4. ADRs 0004 and 0005.
-5. `docs/project/03_rights_catalog_contract.md`.
-6. `docs/discovery/03_week1_verification_log.md`.
+4. ADRs 0004, 0005, and 0006.
+5. `docs/project/05_evidence_contract_2_0_migration.md` — the implemented contract surface the
+   next work units build on.
+6. `docs/discovery/03_week1_verification_log.md` — the verified example values the resolver must
+   reproduce.
 
 ## 4. Exact continuation order
 
-1. Hyungbae personally writes and commits the one-hour employer-risk review specified in
-   `docs/PROJECT_STATUS.md`. An agent may supply questions but must not fabricate the owner's
-   review text.
-2. Implement accepted ADR 0005 as one reviewable contract unit:
-   `EditionAvailabilityLedger` 1.0, evidence/benchmark 2.0 migration, migration notes, regenerated
-   schemas, synthetic fixtures, and tests.
-3. In that same governed migration, add the typed `SourceManifest`-to-rights-decision link and
-   cross-record validation required before any raw ECOS/KOSIS capture.
-4. Implement the case-sensitive SDMX parser and fail-closed resolver, then reproduce only the
-   verified examples recorded in project status.
-5. Continue with the harvester, number-normalization specification, and QLoRA smoke test in the
-   order listed in project status.
+1. Implement the offline, fail-closed as-of resolver over
+   `DSD_STES_REVISIONS@DF_STES_REVISIONS` (~6–8 h): case-sensitive SDMX-CSV parser plus
+   series-period row lookup on top of the ledger's implemented `select_edition`. Reproduce only
+   the verified examples in project status (KOR 2025-Q1 GDP 572,057.7 → 574,984.3 billion KRW
+   between the June and July 2026 editions; KOR CPI 2005-01 edition count), enforce the
+   ledger-to-manifest `dataflow_id` join, and emit evidence packets exposing only the selected
+   row. Tests must cover the ADR 0005 decision-14 scenarios that live at the resolver level
+   (missing/duplicate/blank selected rows, `MEASURE`/`Measure` header coexistence).
+2. Commit the weekly harvester cron + `SourceManifest` and availability-ledger wiring (~3–5 h).
+   The first real ledger derives its edition inventory mechanically from the captured
+   availability constraint (never hand-edited), records
+   `202607.available_by=2026-07-08T09:33:35.737Z`, and keeps `202606` unresolved per ADR 0005
+   decision 10.
+3. Freeze the number-normalization specification before any question authoring.
+4. Run the Ministral 3 3B QLoRA compatibility spike on rented compute only after its smoke test;
+   record cost in the spend ledger.
 
 ## 5. Hard stops
 
 - Do not reinterpret `EDITION=YYYYMM` as a publication date.
-- Do not implement a heuristic fallback across an unknown availability frontier.
-- Do not commit raw ECOS/KOSIS observations until the typed manifest-rights link is implemented and
-  the owner-authored employer review is complete.
+- Do not implement a heuristic fallback across an unknown availability frontier; abstention is the
+  correct answer.
+- Do not commit raw ECOS/KOSIS observations unless the manifest's typed `rights_decision` link
+  cross-validates against the committed owner-approved catalog under `BenchmarkBundle` 2.0.0
+  rules.
 - Do not publish raw OECD archive observations under the metadata-only ruling.
 - Do not run paid APIs, OCR, embeddings, or GPU work without a smoke test and spend-ledger entry.
+- Do not weaken the qualification rules for "first" claims or the append-only rules in
+  `AGENTS.md`.

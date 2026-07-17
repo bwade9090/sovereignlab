@@ -333,9 +333,11 @@ Read in this order, in full, before changing anything:
 1. `AGENTS.md` — working protocol, evidence rules, setup, repository map.
 2. `docs/project/01_project_charter.md` — the v2.2 scope authority.
 3. This file — current milestone, next action, gates, blockers.
-4. `docs/project/04_macbook_handoff.md` — exact Mac setup and continuation order.
-5. Accepted ADRs 0001–0005 in `docs/decisions/`.
-6. `docs/discovery/01_concept_upgrade_proposal.md` — background: why v2 exists, verified data facts, judged alternatives, risk register.
+4. `docs/project/04_macbook_handoff.md` — machine setup and exact continuation order.
+5. Accepted ADRs 0001–0006 in `docs/decisions/`.
+6. `docs/project/05_evidence_contract_2_0_migration.md` — the implemented contract the resolver
+   and harvester build on.
+7. `docs/discovery/01_concept_upgrade_proposal.md` — background: why v2 exists, verified data facts, judged alternatives, risk register.
 
 Then start with "Immediate next action" item 1. Do not start dependent data collection, document
 ingestion, model training, or UI work before the implementation gates (contract `2.0.0`, typed

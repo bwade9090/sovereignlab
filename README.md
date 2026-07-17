@@ -39,11 +39,13 @@ The current-account candidate is directly identified as Bank of Korea-produced; 
 title/frequency evidence supports the same classification for the GDP candidate. The owner approved
 ADR 0004, that mapping, and `allowed` rulings for both candidates on 2026-07-16; charter v2.1 records
 the source-rights amendment. The standalone rights catalog and both approved metadata records are
-implemented without changing the existing evidence contract. ADR 0005 and charter v2.2 now approve
-the availability ledger, `Asia/Seoul` end-of-day semantics, fail-closed resolver, and coordinated
-contract `2.0.0` migration. That migration is deliberately left for the next-machine work unit, so
-resolver and raw-manifest integration remain gated as listed in
-[project status](docs/PROJECT_STATUS.md).
+implemented. On 2026-07-17 the owner-authored employer-risk review was recorded as
+[ADR 0006](docs/decisions/0006-employer-risk-review.md), and accepted ADR 0005 was implemented as
+one contract unit ([migration notes](docs/project/05_evidence_contract_2_0_migration.md)): the
+`EditionAvailabilityLedger` 1.0.0 with fail-closed edition selection, evidence/benchmark contract
+`2.0.0`, and the typed manifest-to-rights-decision link with bundle cross-validation. The offline
+as-of resolver, weekly harvester, and first real ledger remain the open items listed in
+[project status](docs/PROJECT_STATUS.md); no raw observation is committed yet.
 
 ## Quick start
 
@@ -77,8 +79,9 @@ Copy `.env.example` to `.env` only when an API-backed experiment is approved. Of
 
 - [Approved project charter (v2.2)](docs/project/01_project_charter.md)
 - [Concept upgrade proposal (v2 rationale)](docs/discovery/01_concept_upgrade_proposal.md)
-- [Evidence schema contract](docs/project/02_evidence_schema_contract.md)
+- [Evidence schema contract (1.0, superseded)](docs/project/02_evidence_schema_contract.md)
 - [Source-rights catalog contract](docs/project/03_rights_catalog_contract.md)
+- [Evidence contract 2.0.0 and availability-ledger migration](docs/project/05_evidence_contract_2_0_migration.md)
 - [MacBook continuation handoff](docs/project/04_macbook_handoff.md)
 - [Current status and handoff](docs/PROJECT_STATUS.md)
 - [Week-1 verification log](docs/discovery/03_week1_verification_log.md)
