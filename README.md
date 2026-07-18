@@ -2,8 +2,8 @@
 
 > What did the data say *then*? Vintage-conditioned evaluation and auditable briefings for Korean/English economic research.
 
-**Status:** M1b verification and vintage-contract groundwork are in progress. No model-performance
-claims have been made yet.
+**Status:** M1b verification and vintage-contract groundwork are complete; M2 benchmark and
+baseline development is next. No model-performance claims have been made yet.
 
 Korea's official statistics APIs (ECOS, KOSIS) expose latest values only — they offer no "as-of" query path — and no Korean equivalent of the St. Louis Fed's ALFRED archive exists. SovereignLab builds three things in four weeks:
 
@@ -50,15 +50,17 @@ availability capture mechanically records all 330 current edition codes while re
 `202607`. ADR 0007 and the current rights catalog additionally authorize only the national KOSIS
 total CPI (`101/DT_1J22003/T/T10`) and OECD Korea monthly amplitude-adjusted CLI revision series;
 all neighboring scopes remain blocked. The default-branch weekly workflow is active; repository
-ECOS/KOSIS Actions secrets are configured, while the first manual secret-backed smoke run and paid
-QLoRA compatibility step remain open. The exact `Decimal` unit, variant, rounding, and grading
-rules are frozen in the
+ECOS/KOSIS Actions secrets are configured; the first manual secret-backed harvester run remains an
+optional separately authorized operational check. The paid QLoRA compatibility step passed on a
+RunPod A40/CUDA 13 host, closing the M1b gate. The exact `Decimal` unit, variant, rounding, and
+grading rules are frozen in the
 [number-normalization specification](docs/project/06_number_normalization_spec.md); see
 [project status](docs/PROJECT_STATUS.md) for the continuation order.
 
 The QLoRA spike's free checkpoint/fixture preflight and isolated paid-GPU one-step harness live in
-[`experiments/qlora/`](experiments/qlora/README.md). The preflight passes without downloading model
-weights; the paid step has not run and no training result is claimed.
+[`experiments/qlora/`](experiments/qlora/README.md). Both the preflight and one-step compatibility
+run pass. This proves the selected training path can load, update, and save an adapter; it is not a
+benchmark training or model-quality result.
 
 ## Quick start
 
@@ -106,6 +108,7 @@ a local `.env` on another machine.
 - [Week-1 verification log](docs/discovery/03_week1_verification_log.md)
 - [Role-gap and project-selection analysis](docs/discovery/00_role_gap_analysis.md)
 - [Milestone-gated CV bullets](docs/application/00_cv_bullets.md)
+- [Application-ready project descriptions](docs/application/01_project_description.md)
 - [Architecture decisions](docs/decisions/README.md)
 - [Contributor and agent rules](AGENTS.md)
 

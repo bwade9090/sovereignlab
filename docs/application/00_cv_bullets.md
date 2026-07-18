@@ -1,18 +1,29 @@
 # SovereignLab CV bullets
 
 - Status: wording bank; use only the section matching the achieved milestone
-- Last updated: 2026-07-14 (rewritten for the charter v2 K-VINTAGE on KOR-RTD reorientation)
+- Last updated: 2026-07-18 (M1b gate passed; M2 wording synchronized)
 - Rule: never replace placeholders with targets or estimates; use measured, reproducible results only
+- Narrative versions: `docs/application/01_project_description.md`
 
 ## Version A — safe to use now (project in progress)
 
 **SovereignLab — K-VINTAGE on KOR-RTD: vintage-conditioned evaluation for high-stakes economic research (Open Source, in progress)**
 
-- Designing **K-VINTAGE**, a bilingual (Korean/English) macroeconomic QA benchmark in which gold answers are computed from the statistical data vintage available at each question's as-of date — to our knowledge the first such benchmark for official statistics — with deterministic grading from OECD SDMX edition histories, evidence-disjoint splits, four evidence-route labels including calibrated abstention, and a public gold-answer regeneration script.
-- Building **KOR-RTD**, a provenance-contracted point-in-time data layer for Korean macroeconomics: consolidated OECD edition histories with per-snapshot SHA-256 checksums and per-source licensing decisions, plus a scheduled public harvester that forward-captures Korea's official statistics APIs (ECOS/KOSIS), which expose latest values only — commit history serving as independently verifiable proof of capture dates.
-- Building the reference briefing service and baseline suite on this layer (temporal RAG + deterministic vintage tool + QLoRA-tuned compact open-weight router evaluated under a pre-frozen promotion rule — Ministral 3 planned, subject to the week-1 compatibility spike), reporting temporal-leakage rate as a deterministically verified headline metric; measured results are inserted only after evaluation runs complete, per this file's disclosure rules.
+- Built the initial **KOR-RTD** point-in-time layer for Korean macroeconomics: strict provenance and
+  source-rights contracts, append-only checksummed ECOS/KOSIS captures, a 75,060-row OECD Korea CLI
+  archive across 239 editions, and a fail-closed resolver that abstains when edition availability
+  at the requested cutoff cannot be proven.
+- Designing **K-VINTAGE**, a bilingual Korean/English benchmark whose gold answers depend on the
+  official-statistics vintage available at each question's `as_of` date, with a planned 40-question
+  human-reviewed core and separately reported deterministic revision probes across document, data,
+  cross-evidence, and abstention routes.
+- Verified the pinned Ministral 3 3B NF4/QLoRA compatibility path on a disposable A40/CUDA 13 GPU
+  and maintain 337 tests at 100% statement/branch coverage; now building temporal RAG, deterministic
+  vintage-tool integration, and the four-variant baseline suite with temporal leakage as the
+  headline metric. No model-quality result is claimed yet.
 
-This version is intentionally phrased with `Designing` and `Building`. It does not imply that the archive, benchmark, or training results already exist.
+This version distinguishes the implemented data/tooling foundation and compatibility result from
+the not-yet-authored benchmark and not-yet-evaluated model variants.
 
 ## Version B — use after the Week 2 baseline is reproducible
 

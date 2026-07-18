@@ -1,10 +1,9 @@
 # SovereignLab project status
 
-- Last updated: 2026-07-17
+- Last updated: 2026-07-18
 - Owner: Hyungbae Cho (`bwade9090`)
 - Delivery window: four weeks, approximately 80 hours
-- Current milestone: M1b — week-1 verification spikes and vintage groundwork (charter v2.3 §7,
-  Week 1)
+- Current milestone: M2 — week-2 benchmark and baselines (charter v2.3 §7, Week 2)
 - Overall state: source-rights policy, two ECOS plus exact KOSIS CPI and OECD CLI rulings, strict
   append-only rights catalogs,
   the edition-availability decision, the owner-authored employer-risk review (ADR 0006), and the
@@ -14,8 +13,9 @@
   one-time OECD Korea CLI revision archive now validate against their manifests and rights
   decisions. The harvester is on the default branch, so the key-free OECD metadata schedule is
   active. Repository `ECOS_API_KEY` and `KOSIS_API_KEY` Actions secrets are configured; the first
-  manually dispatched secret-backed run and the paid fine-tuning compatibility step remain open.
-  Number-normalization 1.0.0 and the zero-cost QLoRA preflight are complete
+  manually dispatched secret-backed run remains an optional separately authorized operational
+  check. Number-normalization 1.0.0, the zero-cost QLoRA preflight, and the paid A40/CUDA 13
+  one-step compatibility run are complete. The M1b week-1 gate passed on 2026-07-18
 
 ## Approved baseline
 
@@ -141,8 +141,22 @@
   dimensions, required Hub files, and four synthetic bilingual route examples without downloading
   weights. The paid harness uses NF4 double quantization, language-model-only all-linear LoRA,
   exactly one optimizer step, finite/nonzero-gradient checks, adapter-change verification, and
-  adapter-only safetensors output. Local preflight passed. No supported GPU-provider CLI,
-  credential, or CUDA device is available in the current environment, so the paid step has not run.
+  adapter-only safetensors output. Local preflight passed; the separately recorded paid result
+  below subsequently closed the compatibility gate.
+- **Ministral 3 QLoRA paid GPU compatibility (2026-07-18):** the pinned harness passed on a
+  RunPod Secure Cloud NVIDIA A40 (46,068 MiB), driver 580.159.04, CUDA 13.0, and Python 3.12.3.
+  `torch 2.13.0+cu130`, `transformers 5.14.1`, `peft 0.19.1`, and `bitsandbytes 0.49.2` loaded the
+  public BF16 checkpoint, attached language-model-only NF4/all-linear LoRA, and completed exactly
+  one optimizer step in 23.439 seconds. The finite loss was `5.192200660705566`; 12,353,536
+  parameters were trainable; peak CUDA allocation was 4,210,338,304 bytes; and the 49,474,005-byte
+  output contained only `adapter_config.json`, `adapter_model.safetensors`, and the generated
+  adapter README. The adapter and base-model cache stayed on the disposable Pod and were deleted.
+  Provisioning preserved three negative operational findings: a custom image without a suitable
+  startup/template path never reached container uptime; RunPod's dedicated SSH key must exist
+  before Pod creation; and the pinned PyTorch wheel requires a host created with minimum CUDA 13.0.
+  Installing the virtual environment on the container disk rather than the network-mounted
+  `/workspace` removed severe metadata-I/O delay. All attempted Pods were deleted, the account
+  returned to `$0` current hourly spend, and the exact balance delta was `$0.2307140223`.
 
 ## Current validation evidence
 
@@ -238,6 +252,17 @@ CPU-only harness tests and real public-Hub preflight passed; the latter returned
 `preflight_passed`, four examples, zero weight downloads, and $0 cost. Full ruff and format checks
 were clean; all 337 tests passed with 100% SovereignLab statement/branch coverage (1,598 statements,
 534 branches); `git diff --check` was clean. The paid GPU step remains unexecuted.
+
+Validated 2026-07-18 after the paid compatibility run and M2 handoff update. The remote RunPod
+check used an NVIDIA A40, driver 580.159.04, CUDA 13.0, and Python 3.12.3; the pinned harness
+returned `gpu_step_passed`, exactly one optimizer step, finite loss `5.192200660705566`, 12,353,536
+trainable parameters, 4,210,338,304 peak CUDA bytes, and 49,474,005 bytes of adapter-only output.
+The output and model cache were deleted with the Pod, all attempted Pods were removed, and current
+hourly spend returned to `$0`. Locally on macOS/Python 3.12.13,
+`python scripts/export_json_schemas.py` remained deterministic; `python -m ruff check .` and
+`python -m ruff format --check .` passed; `python -m pytest --cov=sovereignlab --cov-branch
+--cov-report=term-missing` passed all 337 tests with 100% statement/branch coverage (1,598
+statements, 534 branches); and `git diff --check` was clean.
 
 ## M1b verification spike record (2026-07-15)
 
@@ -388,28 +413,34 @@ response bodies.
   charter v2.3 and the append-only 2026-07-17 catalog are synchronized. All current week-1 owner
   decisions are closed.
 
-## Immediate next action (M1b — do these in order)
+## Immediate next action (M2 — do these in order)
 
-1. Repository `ECOS_API_KEY` and `KOSIS_API_KEY` Actions secrets were registered on 2026-07-17
-   without exposing their values. Manually dispatch one append-only workflow smoke run only with
-   separate owner authorization; the next scheduled run will otherwise use the secrets normally.
-2. Select and authorize a rented CUDA/BF16 provider, then run the already-preflighted one-step
-   Ministral 3 3B QLoRA compatibility command. Record provider, GPU, wall time, peak memory,
-   outcome, and exact cost in the spend ledger.
+1. Freeze the 40-question human-reviewed core authoring matrix: ten records per exclusive route,
+   balanced Korean/English coverage, evidence-disjoint split assignments, and co-location of any
+   parallel translations. Start with one small reviewable batch grounded only in currently
+   validated evidence and keep it separate from machine-generated probes.
+2. Implement publication-date-filtered bilingual document retrieval against the same evidence
+   contract, with offline fixtures before any source-document download or paid embedding call.
+3. Join the router, temporal retrieval, and deterministic as-of tool into the minimal
+   question-to-evidence-packet path before generating the tier-2 probes.
 
-Week-1 gate (charter v2.3 §7): **not passed**. Endpoint/range spikes, exact source-rights policy and
-four approved series decisions, the strict catalogs, availability design, owner employer-risk
-review, contract `2.0.0`/ledger 1.0.0/manifest-rights integration, resolver regression, harvester,
-real forward snapshots, approved CLI consolidation, number normalization, and default-branch
-workflow activation are complete. The paid fine-tuning compatibility result must still be fixed
-before the gate closes.
-If the gate slips, invoke the pre-committed cut ladder immediately.
+Open operational check, not an M2 blocker: manually dispatch one secret-backed append-only
+harvester run only with separate owner authorization; otherwise the next weekly schedule will use
+the configured Actions secrets normally.
+
+Week-1 gate (charter v2.3 §7): **passed 2026-07-18**. Endpoint/range spikes, exact source-rights
+policy and four approved series decisions, strict catalogs, availability design, owner
+employer-risk review, contract `2.0.0`/ledger 1.0.0/manifest-rights integration, resolver
+regression, harvester, real forward snapshots, approved CLI consolidation, number normalization,
+default-branch workflow activation, and the paid Ministral 3 3B QLoRA compatibility result are all
+complete.
 
 ## Blockers and environment notes
 
-- No machine has a training GPU. The QLoRA metadata/fixture preflight passed, but no supported
-  rented-GPU provider CLI or credential is configured; the paid one-step run needs an explicit
-  provider/account path.
+- No development machine has a training GPU. The disposable RunPod A40/CUDA 13 path is verified,
+  `runpodctl` and its dedicated SSH key are configured locally, and no Pod remains active. Any
+  later multi-configuration training still requires a separate paid-operation authorization and
+  spend estimate.
 - Development spans multiple machines. `.venv` is machine-local — recreate it per the README quick start on whichever machine picks this up. Nothing in the repo may depend on machine-specific paths.
 - Windows workstation note: the user-level Python launcher is unreliable there; use the workstation's documented bundled Python 3.12.13 runtime to create `.venv` (local path recorded outside the repository; an earlier revision of this file recorded the literal path — ADR 0006 closed that question with the owner's decision that no history remediation is needed).
 - Rights gate: ADRs 0004/0007, charter v2.3, the append-only catalog chain, two approved ECOS rows,
@@ -448,8 +479,9 @@ If the gate slips, invoke the pre-committed cut ladder immediately.
 | 2026-07-17 | Exact KOSIS CPI/CLI rights implementation + first approved captures | $0.00 | Free official APIs and key-free OECD download; no paid call |
 | 2026-07-17 | Ministral 3 QLoRA metadata/fixture preflight | $0.00 | Public Hub metadata/config only; no weights or GPU |
 | 2026-07-17 | ECOS/KOSIS GitHub Actions secret registration | $0.00 | Encrypted repository secrets; names/timestamps verified, values not read back |
+| 2026-07-18 | RunPod A40/CUDA 13 Ministral 3 QLoRA compatibility | $0.2307140223 | Account balance `$20.0000000000` -> `$19.7692859777`; includes failed provisioning paths and successful 1-step run; all Pods deleted, current spend `$0`/h |
 
-**Cumulative external spend: $0.00 / $100.00**
+**Cumulative external spend: $0.2307140223 / $100.00**
 
 ## Handoff rule (onboarding for a new contributor or AI agent)
 
@@ -464,8 +496,9 @@ Read in this order, in full, before changing anything:
    and harvester build on.
 7. `docs/discovery/01_concept_upgrade_proposal.md` — background: why v2 exists, verified data facts, judged alternatives, risk register.
 
-Then start with "Immediate next action" item 1. Do not start document ingestion, benchmark
-authoring, full model training, or UI work before the remaining M1b gates close. The harvester must
-stay within approved rights scopes, and the QLoRA compatibility run remains smoke-test-first. Do not
-weaken the qualification rules for "first" claims or the rights/append-only rules in `AGENTS.md`.
+Then start with "Immediate next action" item 1. M1b is closed, so the benchmark-authoring and
+minimal retrieval work are now authorized. Do not start full LoRA tuning, UI, or release work before
+the M2 gate closes. The harvester must stay within approved rights scopes, and every later paid
+operation remains smoke-test-first. Do not weaken the qualification rules for "first" claims or the
+rights/append-only rules in `AGENTS.md`.
 Update this file whenever a milestone state, blocker, cost, spike result, or next action changes.

@@ -40,3 +40,26 @@ tensor, no trainable vision/projector parameters, and adapter-only safetensors o
 is ignored. Record provider, GPU, wall time, peak memory, output summary, and actual cost in
 `docs/PROJECT_STATUS.md`; preserve a failure with its taxonomy instead of silently switching
 models. Do not push model weights or adapters from the smoke run.
+
+## Verified RunPod result (2026-07-18)
+
+The paid path passed on RunPod Secure Cloud with an NVIDIA A40 (46,068 MiB), driver 580.159.04,
+CUDA 13.0, and Python 3.12.3. The pinned environment reported `torch 2.13.0+cu130`, completed one
+optimizer step in 23.439 seconds with loss `5.192200660705566`, trained 12,353,536 parameters, and
+peaked at 4,210,338,304 CUDA bytes. The adapter-only directory was 49,474,005 bytes. It was verified
+and then deleted with the Pod; it was never copied into the repository.
+
+The full RunPod balance delta, including discarded provisioning paths and the successful run, was
+USD `0.2307140223`. No Pod or network volume remained afterward. This proves compatibility only;
+it is not a route-quality or benchmark result.
+
+Operational findings:
+
+- `torch==2.13.0` installs the CUDA 13.0 wheel, so create the Pod with a minimum CUDA version of
+  13.0 and verify a 580-series-or-compatible driver before downloading weights.
+- Run `runpodctl doctor` before Pod creation so its dedicated SSH key is injected at boot.
+- Use an official RunPod PyTorch template. The verified template was `runpod-torch-v280`.
+- Put the repository and virtual environment on the container disk (for example `/root`), not the
+  network-mounted `/workspace`; Python package installation on the latter was severely delayed.
+- Set an automatic termination deadline at creation and still delete the Pod explicitly as soon as
+  the result is captured.
