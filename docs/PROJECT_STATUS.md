@@ -156,7 +156,8 @@
   before Pod creation; and the pinned PyTorch wheel requires a host created with minimum CUDA 13.0.
   Installing the virtual environment on the container disk rather than the network-mounted
   `/workspace` removed severe metadata-I/O delay. All attempted Pods were deleted, the account
-  returned to `$0` current hourly spend, and the exact balance delta was `$0.2307140223`.
+  returned to `$0` current hourly spend, and finalized RunPod billing was
+  `$0.23584524099715054`.
 
 ## Current validation evidence
 
@@ -479,9 +480,9 @@ complete.
 | 2026-07-17 | Exact KOSIS CPI/CLI rights implementation + first approved captures | $0.00 | Free official APIs and key-free OECD download; no paid call |
 | 2026-07-17 | Ministral 3 QLoRA metadata/fixture preflight | $0.00 | Public Hub metadata/config only; no weights or GPU |
 | 2026-07-17 | ECOS/KOSIS GitHub Actions secret registration | $0.00 | Encrypted repository secrets; names/timestamps verified, values not read back |
-| 2026-07-18 | RunPod A40/CUDA 13 Ministral 3 QLoRA compatibility | $0.2307140223 | Account balance `$20.0000000000` -> `$19.7692859777`; includes failed provisioning paths and successful 1-step run; all Pods deleted, current spend `$0`/h |
+| 2026-07-18 | RunPod A40/CUDA 13 Ministral 3 QLoRA compatibility | $0.23584524099715054 | Finalized billing for 1,832,105 ms across five A40 provisioning/success Pods; account balance `$20.0000000000` -> `$19.7641547592`; all Pods deleted, current spend `$0`/h |
 
-**Cumulative external spend: $0.2307140223 / $100.00**
+**Cumulative external spend: $0.23584524099715054 / $100.00**
 
 ## Handoff rule (onboarding for a new contributor or AI agent)
 

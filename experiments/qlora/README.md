@@ -50,8 +50,8 @@ peaked at 4,210,338,304 CUDA bytes. The adapter-only directory was 49,474,005 by
 and then deleted with the Pod; it was never copied into the repository.
 
 The full RunPod balance delta, including discarded provisioning paths and the successful run, was
-USD `0.2307140223`. No Pod or network volume remained afterward. This proves compatibility only;
-it is not a route-quality or benchmark result.
+finalized by the billing API at USD `0.23584524099715054`. No Pod or network volume remained
+afterward. This proves compatibility only; it is not a route-quality or benchmark result.
 
 Operational findings:
 

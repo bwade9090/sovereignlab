@@ -44,8 +44,8 @@
 - `experiments/qlora/` contains the pinned Ministral 3 BF16/NF4 one-step compatibility harness. Its
   zero-cost public-Hub preflight and paid RunPod A40/CUDA 13 step pass: one optimizer step, loss
   `5.192200660705566`, 4,210,338,304 peak CUDA bytes, and adapter-only output. All disposable Pods
-  and remote artifacts were deleted. Total external spend is USD `0.2307140223`; this is a training-
-  path compatibility result, not a model-quality claim.
+  and remote artifacts were deleted. Finalized external spend is USD `0.23584524099715054`; this is
+  a training-path compatibility result, not a model-quality claim.
 - macOS validation at handoff (2026-07-18, Python 3.12.13 via Homebrew): 337 tests passed with
   100% statement/branch coverage; ruff check/format clean;
   `python scripts/export_json_schemas.py` deterministic (six contracts).
@@ -88,7 +88,7 @@ git diff --exit-code
   owner authorization; the next weekly schedule can exercise the secrets normally.
 - RunPod CLI 2.7.2 and its dedicated SSH key are configured on this Mac. The successful smoke and
   every discarded provisioning Pod were deleted; the account reports zero current hourly spend and
-  a remaining balance of USD `19.7692859777`. Do not start another paid Pod without a new explicit
+  a remaining balance of USD `19.7641547592`. Do not start another paid Pod without a new explicit
   authorization and cost estimate.
 - No model weights or adapter were copied from RunPod. The repository contains only the harness,
   synthetic fixture, and recorded compatibility evidence.
