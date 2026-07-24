@@ -1,5 +1,6 @@
 """Public schema API for SovereignLab evidence and evaluation data."""
 
+from sovereignlab.schemas.authoring import CoreAuthoringMatrix, CoreAuthoringPair
 from sovereignlab.schemas.availability import (
     AvailabilityAssertion,
     AvailabilityEvidence,
@@ -67,6 +68,8 @@ __all__ = [
     "BenchmarkRecord",
     "BenchmarkSplit",
     "ContentClass",
+    "CoreAuthoringMatrix",
+    "CoreAuthoringPair",
     "DocumentEvidence",
     "EditionAbstentionReason",
     "EditionAvailabilityLedger",

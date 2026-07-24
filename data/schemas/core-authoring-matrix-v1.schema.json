@@ -1,0 +1,163 @@
+{
+  "$defs": {
+    "BenchmarkSplit": {
+      "description": "Evidence-disjoint dataset partitions.",
+      "enum": [
+        "train",
+        "dev",
+        "test"
+      ],
+      "title": "BenchmarkSplit",
+      "type": "string"
+    },
+    "CoreAuthoringPair": {
+      "additionalProperties": false,
+      "description": "One Korean/English pair reserved for a single evidence unit and split.",
+      "properties": {
+        "data_unit_ids": {
+          "default": [],
+          "items": {
+            "maxLength": 128,
+            "minLength": 3,
+            "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+            "type": "string"
+          },
+          "title": "Data Unit Ids",
+          "type": "array"
+        },
+        "document_unit_ids": {
+          "default": [],
+          "items": {
+            "maxLength": 128,
+            "minLength": 3,
+            "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+            "type": "string"
+          },
+          "title": "Document Unit Ids",
+          "type": "array"
+        },
+        "en_record_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+          "title": "En Record Id",
+          "type": "string"
+        },
+        "evidence_group_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+          "title": "Evidence Group Id",
+          "type": "string"
+        },
+        "expected_route": {
+          "$ref": "#/$defs/EvidenceRoute"
+        },
+        "initial_batch_id": {
+          "anyOf": [
+            {
+              "maxLength": 128,
+              "minLength": 3,
+              "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Initial Batch Id"
+        },
+        "ko_record_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+          "title": "Ko Record Id",
+          "type": "string"
+        },
+        "pair_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+          "title": "Pair Id",
+          "type": "string"
+        },
+        "question_intent": {
+          "maxLength": 10000,
+          "minLength": 1,
+          "title": "Question Intent",
+          "type": "string"
+        },
+        "split": {
+          "$ref": "#/$defs/BenchmarkSplit"
+        }
+      },
+      "required": [
+        "pair_id",
+        "split",
+        "expected_route",
+        "evidence_group_id",
+        "ko_record_id",
+        "en_record_id",
+        "question_intent"
+      ],
+      "title": "CoreAuthoringPair",
+      "type": "object"
+    },
+    "EvidenceRoute": {
+      "description": "The mutually exclusive evidence plans evaluated by the router.",
+      "enum": [
+        "documents",
+        "data",
+        "documents_and_data",
+        "abstain"
+      ],
+      "title": "EvidenceRoute",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "The immutable 20-pair allocation that expands to the 40-record core.",
+  "properties": {
+    "frozen_on": {
+      "format": "date",
+      "title": "Frozen On",
+      "type": "string"
+    },
+    "matrix_id": {
+      "maxLength": 128,
+      "minLength": 3,
+      "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+      "title": "Matrix Id",
+      "type": "string"
+    },
+    "pairs": {
+      "items": {
+        "$ref": "#/$defs/CoreAuthoringPair"
+      },
+      "maxItems": 20,
+      "minItems": 20,
+      "title": "Pairs",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": "1.0.0",
+      "default": "1.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "target_record_count": {
+      "const": 40,
+      "default": 40,
+      "title": "Target Record Count",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "matrix_id",
+    "frozen_on",
+    "pairs"
+  ],
+  "title": "CoreAuthoringMatrix",
+  "type": "object"
+}

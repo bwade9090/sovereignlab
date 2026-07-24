@@ -1,0 +1,270 @@
+{
+  "frozen_on": "2026-07-24",
+  "matrix_id": "k-vintage-core-authoring-matrix-v1",
+  "pairs": [
+    {
+      "data_unit_ids": [],
+      "document_unit_ids": [
+        "bok-outlook-release-2026-05"
+      ],
+      "en_record_id": "kv-core-doc-01-en",
+      "evidence_group_id": "eg-doc-bok-outlook-2026-05",
+      "expected_route": "documents",
+      "ko_record_id": "kv-core-doc-01-ko",
+      "pair_id": "kv-core-doc-01",
+      "question_intent": "Explain one stated driver of the May 2026 Bank of Korea outlook using only that release family.",
+      "split": "train"
+    },
+    {
+      "data_unit_ids": [],
+      "document_unit_ids": [
+        "bok-outlook-release-2025-11"
+      ],
+      "en_record_id": "kv-core-doc-02-en",
+      "evidence_group_id": "eg-doc-bok-outlook-2025-11",
+      "expected_route": "documents",
+      "ko_record_id": "kv-core-doc-02-ko",
+      "pair_id": "kv-core-doc-02",
+      "question_intent": "Recover one inflation-outlook rationale from the November 2025 Bank of Korea outlook release.",
+      "split": "train"
+    },
+    {
+      "data_unit_ids": [],
+      "document_unit_ids": [
+        "bok-outlook-release-2025-05"
+      ],
+      "en_record_id": "kv-core-doc-03-en",
+      "evidence_group_id": "eg-doc-bok-outlook-2025-05",
+      "expected_route": "documents",
+      "ko_record_id": "kv-core-doc-03-ko",
+      "pair_id": "kv-core-doc-03",
+      "question_intent": "Summarize the domestic-demand assessment in the May 2025 Bank of Korea outlook release.",
+      "split": "train"
+    },
+    {
+      "data_unit_ids": [],
+      "document_unit_ids": [
+        "bok-outlook-release-2024-11"
+      ],
+      "en_record_id": "kv-core-doc-04-en",
+      "evidence_group_id": "eg-doc-bok-outlook-2024-11",
+      "expected_route": "documents",
+      "ko_record_id": "kv-core-doc-04-ko",
+      "pair_id": "kv-core-doc-04",
+      "question_intent": "Explain one export-outlook judgment from the November 2024 Bank of Korea outlook release.",
+      "split": "dev"
+    },
+    {
+      "data_unit_ids": [],
+      "document_unit_ids": [
+        "bok-outlook-release-2024-05"
+      ],
+      "en_record_id": "kv-core-doc-05-en",
+      "evidence_group_id": "eg-doc-bok-outlook-2024-05",
+      "expected_route": "documents",
+      "ko_record_id": "kv-core-doc-05-ko",
+      "pair_id": "kv-core-doc-05",
+      "question_intent": "Identify the stated balance of risks in the May 2024 Bank of Korea outlook release.",
+      "split": "test"
+    },
+    {
+      "data_unit_ids": [
+        "oecd-stes-edition-202607"
+      ],
+      "document_unit_ids": [],
+      "en_record_id": "kv-core-data-01-en",
+      "evidence_group_id": "eg-data-oecd-cli-202607-2026-05",
+      "expected_route": "data",
+      "initial_batch_id": "core-batch-001",
+      "ko_record_id": "kv-core-data-01-ko",
+      "pair_id": "kv-core-data-01",
+      "question_intent": "Resolve Korea's May 2026 amplitude-adjusted CLI from the edition demonstrably available by 2026-07-09.",
+      "split": "train"
+    },
+    {
+      "data_unit_ids": [
+        "ecos-200y108-snapshot-20260717"
+      ],
+      "document_unit_ids": [],
+      "en_record_id": "kv-core-data-02-en",
+      "evidence_group_id": "eg-data-ecos-gdp-20260717",
+      "expected_route": "data",
+      "ko_record_id": "kv-core-data-02-ko",
+      "pair_id": "kv-core-data-02",
+      "question_intent": "Read one quarterly real-GDP value from the approved July 2026 ECOS forward snapshot.",
+      "split": "train"
+    },
+    {
+      "data_unit_ids": [
+        "ecos-301y017-snapshot-20260717"
+      ],
+      "document_unit_ids": [],
+      "en_record_id": "kv-core-data-03-en",
+      "evidence_group_id": "eg-data-ecos-current-account-20260717",
+      "expected_route": "data",
+      "ko_record_id": "kv-core-data-03-ko",
+      "pair_id": "kv-core-data-03",
+      "question_intent": "Read one monthly seasonally adjusted current-account value from the approved July 2026 ECOS forward snapshot.",
+      "split": "train"
+    },
+    {
+      "data_unit_ids": [
+        "kosis-cpi-snapshot-20260717"
+      ],
+      "document_unit_ids": [],
+      "en_record_id": "kv-core-data-04-en",
+      "evidence_group_id": "eg-data-kosis-cpi-20260717",
+      "expected_route": "data",
+      "ko_record_id": "kv-core-data-04-ko",
+      "pair_id": "kv-core-data-04",
+      "question_intent": "Read one national total-CPI value from the approved July 2026 KOSIS forward snapshot without treating archive coverage as revision evidence.",
+      "split": "dev"
+    },
+    {
+      "data_unit_ids": [
+        "reserved-future-data-release-test-01"
+      ],
+      "document_unit_ids": [],
+      "en_record_id": "kv-core-data-05-en",
+      "evidence_group_id": "eg-data-reserved-test-release-01",
+      "expected_route": "data",
+      "ko_record_id": "kv-core-data-05-ko",
+      "pair_id": "kv-core-data-05",
+      "question_intent": "Reserve the held-out data pair for a later independently captured approved release; do not author it before its manifest and availability evidence exist.",
+      "split": "test"
+    },
+    {
+      "data_unit_ids": [
+        "oecd-stes-edition-202607"
+      ],
+      "document_unit_ids": [
+        "bok-outlook-release-2026-05"
+      ],
+      "en_record_id": "kv-core-both-01-en",
+      "evidence_group_id": "eg-both-outlook-2026-05-cli-202607",
+      "expected_route": "documents_and_data",
+      "ko_record_id": "kv-core-both-01-ko",
+      "pair_id": "kv-core-both-01",
+      "question_intent": "Compare one May 2026 outlook narrative with the demonstrably available July 2026 Korea CLI vintage.",
+      "split": "train"
+    },
+    {
+      "data_unit_ids": [
+        "ecos-200y108-snapshot-20260717"
+      ],
+      "document_unit_ids": [
+        "bok-outlook-release-2025-11"
+      ],
+      "en_record_id": "kv-core-both-02-en",
+      "evidence_group_id": "eg-both-outlook-2025-11-ecos-gdp-20260717",
+      "expected_route": "documents_and_data",
+      "ko_record_id": "kv-core-both-02-ko",
+      "pair_id": "kv-core-both-02",
+      "question_intent": "Combine one November 2025 outlook claim with a separately cited approved ECOS GDP snapshot.",
+      "split": "train"
+    },
+    {
+      "data_unit_ids": [
+        "ecos-301y017-snapshot-20260717"
+      ],
+      "document_unit_ids": [
+        "bok-outlook-release-2025-05"
+      ],
+      "en_record_id": "kv-core-both-03-en",
+      "evidence_group_id": "eg-both-outlook-2025-05-ecos-ca-20260717",
+      "expected_route": "documents_and_data",
+      "ko_record_id": "kv-core-both-03-ko",
+      "pair_id": "kv-core-both-03",
+      "question_intent": "Combine one May 2025 external-sector narrative with a separately cited approved ECOS current-account snapshot.",
+      "split": "train"
+    },
+    {
+      "data_unit_ids": [
+        "kosis-cpi-snapshot-20260717"
+      ],
+      "document_unit_ids": [
+        "bok-outlook-release-2024-11"
+      ],
+      "en_record_id": "kv-core-both-04-en",
+      "evidence_group_id": "eg-both-outlook-2024-11-kosis-cpi-20260717",
+      "expected_route": "documents_and_data",
+      "ko_record_id": "kv-core-both-04-ko",
+      "pair_id": "kv-core-both-04",
+      "question_intent": "Combine one November 2024 inflation narrative with a separately cited approved KOSIS CPI snapshot.",
+      "split": "dev"
+    },
+    {
+      "data_unit_ids": [
+        "reserved-future-data-release-test-01"
+      ],
+      "document_unit_ids": [
+        "bok-outlook-release-2024-05"
+      ],
+      "en_record_id": "kv-core-both-05-en",
+      "evidence_group_id": "eg-both-outlook-2024-05-reserved-test-release-01",
+      "expected_route": "documents_and_data",
+      "ko_record_id": "kv-core-both-05-ko",
+      "pair_id": "kv-core-both-05",
+      "question_intent": "Reserve the held-out combined pair for the May 2024 document unit and a later independent approved data release.",
+      "split": "test"
+    },
+    {
+      "data_unit_ids": [],
+      "document_unit_ids": [],
+      "en_record_id": "kv-core-abstain-01-en",
+      "evidence_group_id": "eg-abstain-unresolved-pre-202607-frontier",
+      "expected_route": "abstain",
+      "initial_batch_id": "core-batch-001",
+      "ko_record_id": "kv-core-abstain-01-ko",
+      "pair_id": "kv-core-abstain-01",
+      "question_intent": "Require abstention for a pre-July-2026 cutoff because the committed ledger has no definitely available edition at that cutoff.",
+      "split": "train"
+    },
+    {
+      "data_unit_ids": [],
+      "document_unit_ids": [],
+      "en_record_id": "kv-core-abstain-02-en",
+      "evidence_group_id": "eg-abstain-unapproved-neighboring-oecd-scope",
+      "expected_route": "abstain",
+      "ko_record_id": "kv-core-abstain-02-ko",
+      "pair_id": "kv-core-abstain-02",
+      "question_intent": "Require abstention when the request depends on a neighboring OECD observation scope that has no owner-approved raw-data decision.",
+      "split": "train"
+    },
+    {
+      "data_unit_ids": [],
+      "document_unit_ids": [],
+      "en_record_id": "kv-core-abstain-03-en",
+      "evidence_group_id": "eg-abstain-korean-cpi-revision-false-premise",
+      "expected_route": "abstain",
+      "ko_record_id": "kv-core-abstain-03-ko",
+      "pair_id": "kv-core-abstain-03",
+      "question_intent": "Reject a false premise that treats archive edition count as proof that Korean CPI was revised.",
+      "split": "train"
+    },
+    {
+      "data_unit_ids": [],
+      "document_unit_ids": [],
+      "en_record_id": "kv-core-abstain-04-en",
+      "evidence_group_id": "eg-abstain-missing-as-of",
+      "expected_route": "abstain",
+      "ko_record_id": "kv-core-abstain-04-ko",
+      "pair_id": "kv-core-abstain-04",
+      "question_intent": "Require abstention or clarification when a historical-vintage request omits its as-of date.",
+      "split": "dev"
+    },
+    {
+      "data_unit_ids": [],
+      "document_unit_ids": [],
+      "en_record_id": "kv-core-abstain-05-en",
+      "evidence_group_id": "eg-abstain-cutoff-after-complete-through",
+      "expected_route": "abstain",
+      "ko_record_id": "kv-core-abstain-05-ko",
+      "pair_id": "kv-core-abstain-05",
+      "question_intent": "Require abstention when the requested cutoff is later than the ledger's complete-through instant.",
+      "split": "test"
+    }
+  ],
+  "schema_version": "1.0.0",
+  "target_record_count": 40
+}

@@ -1,6 +1,6 @@
 # Continuation handoff
 
-- Prepared: 2026-07-16; refreshed 2026-07-18 for the M2 new-session handoff
+- Prepared: 2026-07-16; refreshed 2026-07-24 after the first M2 authoring batch
 - Authority: charter v2.3; accepted ADRs 0001–0007
 - Branch to continue: `main` from `origin`
 - Current milestone: M2
@@ -46,9 +46,13 @@
   `5.192200660705566`, 4,210,338,304 peak CUDA bytes, and adapter-only output. All disposable Pods
   and remote artifacts were deleted. Finalized external spend is USD `0.23584524099715054`; this is
   a training-path compatibility result, not a model-quality claim.
-- macOS validation at handoff (2026-07-18, Python 3.12.13 via Homebrew): 337 tests passed with
+- The 40-record human-reviewed-core allocation is frozen as 20 bilingual pairs in
+  `data/benchmark/core-authoring-matrix-v1.json`. The first four AI-authored records are isolated
+  under `data/benchmark/drafts/` and remain `draft`; real committed evidence reproduces the
+  `202607` CLI answer and the pre-July abstention.
+- macOS validation at handoff (2026-07-24, Python 3.12.13 via Homebrew): 353 tests passed with
   100% statement/branch coverage; ruff check/format clean;
-  `python scripts/export_json_schemas.py` deterministic (six contracts).
+  `python scripts/export_json_schemas.py` deterministic (seven contracts).
 
 ## 2. Set up the machine
 
@@ -75,9 +79,11 @@ git diff --exit-code
 4. ADRs 0004, 0005, 0006, and 0007.
 5. `docs/project/05_evidence_contract_2_0_migration.md` — the implemented contract surface the
    next work units build on.
-6. `docs/discovery/03_week1_verification_log.md` — the verified example values the resolver must
+6. `docs/project/07_core_authoring_matrix.md` — the frozen 40-record allocation, first draft batch,
+   and human-review boundary.
+7. `docs/discovery/03_week1_verification_log.md` — the verified example values the resolver must
    reproduce.
-7. `src/sovereignlab/vintage/resolver.py`, `src/sovereignlab/harvest/weekly.py`, and their tests —
+8. `src/sovereignlab/vintage/resolver.py`, `src/sovereignlab/harvest/weekly.py`, and their tests —
    the implemented resolver and append-only capture boundaries.
 
 ## 4. External state for the new session
@@ -97,8 +103,8 @@ git diff --exit-code
 
 ## 5. Exact continuation order
 
-1. Freeze the evidence-disjoint 40-question core authoring matrix and commit one small reviewable
-   batch, keeping the reviewed core separate from machine-generated probes.
+1. Human-review and correct `data/benchmark/drafts/core-batch-001.jsonl`; add named reviewer
+   metadata before promotion. Never count the four drafts as reviewed core.
 2. Implement offline-first bilingual temporal document retrieval, then join it with the router and
    deterministic as-of tool into the minimal evidence-packet path.
 3. Manually dispatch one append-only secret-backed workflow smoke only after separate owner

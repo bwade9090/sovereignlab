@@ -3,6 +3,7 @@
 import json
 from pathlib import Path
 
+from sovereignlab.schemas.authoring import CoreAuthoringMatrix
 from sovereignlab.schemas.availability import EditionAvailabilityLedger
 from sovereignlab.schemas.benchmark import BenchmarkRecord
 from sovereignlab.schemas.rights import RightsCatalog, RightsInstrument, SeriesRightsDecision
@@ -10,6 +11,7 @@ from sovereignlab.schemas.source import SourceManifest
 
 SCHEMA_MODELS = {
     "benchmark-record-v2.schema.json": BenchmarkRecord,
+    "core-authoring-matrix-v1.schema.json": CoreAuthoringMatrix,
     "edition-availability-ledger-v1.schema.json": EditionAvailabilityLedger,
     "rights-catalog-v1.schema.json": RightsCatalog,
     "rights-instrument-v1.schema.json": RightsInstrument,

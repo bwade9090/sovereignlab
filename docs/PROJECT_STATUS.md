@@ -1,6 +1,6 @@
 # SovereignLab project status
 
-- Last updated: 2026-07-18
+- Last updated: 2026-07-24
 - Owner: Hyungbae Cho (`bwade9090`)
 - Delivery window: four weeks, approximately 80 hours
 - Current milestone: M2 — week-2 benchmark and baselines (charter v2.3 §7, Week 2)
@@ -15,7 +15,9 @@
   active. Repository `ECOS_API_KEY` and `KOSIS_API_KEY` Actions secrets are configured; the first
   manually dispatched secret-backed run remains an optional separately authorized operational
   check. Number-normalization 1.0.0, the zero-cost QLoRA preflight, and the paid A40/CUDA 13
-  one-step compatibility run are complete. The M1b week-1 gate passed on 2026-07-18
+  one-step compatibility run are complete. The M1b week-1 gate passed on 2026-07-18. In M2, the
+  40-record core authoring allocation is frozen and the first four-record bilingual draft batch is
+  ready for human review; no draft is counted as reviewed gold.
 
 ## Approved baseline
 
@@ -158,6 +160,15 @@
   `/workspace` removed severe metadata-I/O delay. All attempted Pods were deleted, the account
   returned to `$0` current hourly spend, and finalized RunPod billing was
   `$0.23584524099715054`.
+- **Core authoring matrix + first reviewable batch (2026-07-24):**
+  `CoreAuthoringMatrix` 1.0.0 freezes 20 bilingual pairs/40 records with exactly ten records per
+  route, 20 Korean/20 English, and train/dev/test counts of 24/8/8. The contract rejects a planned
+  source release or snapshot assigned across splits. The first four AI-authored records remain
+  `draft`: one Korean/English OECD CLI data pair resolves edition `202607`, May-2026 value `102.66`
+  as of 2026-07-09; one Korean/English pair abstains for 2026-06-30 because no edition is definitely
+  available. Real manifest/ledger/rights bundle validation, resolver replay, exact normalization,
+  and the earlier-cutoff abstention are covered offline. The held-out data slot remains reserved
+  until an independently captured approved release exists.
 
 ## Current validation evidence
 
@@ -264,6 +275,14 @@ hourly spend returned to `$0`. Locally on macOS/Python 3.12.13,
 `python -m ruff format --check .` passed; `python -m pytest --cov=sovereignlab --cov-branch
 --cov-report=term-missing` passed all 337 tests with 100% statement/branch coverage (1,598
 statements, 534 branches); and `git diff --check` was clean.
+
+Validated 2026-07-24 on macOS after freezing the core authoring matrix and adding the first draft
+batch: Python 3.12.13; `python scripts/export_json_schemas.py` regenerated seven contracts;
+`python -m ruff check .` and `python -m ruff format --check .` passed; `python -m pytest
+--cov=sovereignlab --cov-branch --cov-report=term-missing` passed all 353 tests with 100%
+statement/branch coverage (1,689 statements, 576 branches). The new evidence test constructs a real
+bundle from committed artifacts and reproduces CLI edition `202607`, value `102.66`, and the
+pre-July fail-closed abstention. No network, secret, model, or paid operation was used.
 
 ## M1b verification spike record (2026-07-15)
 
@@ -416,10 +435,9 @@ response bodies.
 
 ## Immediate next action (M2 — do these in order)
 
-1. Freeze the 40-question human-reviewed core authoring matrix: ten records per exclusive route,
-   balanced Korean/English coverage, evidence-disjoint split assignments, and co-location of any
-   parallel translations. Start with one small reviewable batch grounded only in currently
-   validated evidence and keep it separate from machine-generated probes.
+1. Human-review `data/benchmark/drafts/core-batch-001.jsonl`: correct any question/answer,
+   translation, route, unit, or abstention issue, then record the named reviewer and timestamp
+   before promoting any record. Draft records remain separate from reviewed core and tier-2 probes.
 2. Implement publication-date-filtered bilingual document retrieval against the same evidence
    contract, with offline fixtures before any source-document download or paid embedding call.
 3. Join the router, temporal retrieval, and deterministic as-of tool into the minimal
@@ -481,6 +499,7 @@ complete.
 | 2026-07-17 | Ministral 3 QLoRA metadata/fixture preflight | $0.00 | Public Hub metadata/config only; no weights or GPU |
 | 2026-07-17 | ECOS/KOSIS GitHub Actions secret registration | $0.00 | Encrypted repository secrets; names/timestamps verified, values not read back |
 | 2026-07-18 | RunPod A40/CUDA 13 Ministral 3 QLoRA compatibility | $0.23584524099715054 | Finalized billing for 1,832,105 ms across five A40 provisioning/success Pods; account balance `$20.0000000000` -> `$19.7641547592`; all Pods deleted, current spend `$0`/h |
+| 2026-07-24 | Core authoring matrix and first four-record draft batch | $0.00 | Offline committed evidence replay only; no network, model, or paid call |
 
 **Cumulative external spend: $0.23584524099715054 / $100.00**
 
@@ -495,11 +514,13 @@ Read in this order, in full, before changing anything:
 5. Accepted ADRs 0001–0007 in `docs/decisions/`.
 6. `docs/project/05_evidence_contract_2_0_migration.md` — the implemented contract the resolver
    and harvester build on.
-7. `docs/discovery/01_concept_upgrade_proposal.md` — background: why v2 exists, verified data facts, judged alternatives, risk register.
+7. `docs/project/07_core_authoring_matrix.md` — the frozen M2 allocation and draft-review boundary.
+8. `docs/discovery/01_concept_upgrade_proposal.md` — background: why v2 exists, verified data facts, judged alternatives, risk register.
 
-Then start with "Immediate next action" item 1. M1b is closed, so the benchmark-authoring and
-minimal retrieval work are now authorized. Do not start full LoRA tuning, UI, or release work before
-the M2 gate closes. The harvester must stay within approved rights scopes, and every later paid
-operation remains smoke-test-first. Do not weaken the qualification rules for "first" claims or the
+Then start with "Immediate next action" item 1. The structural matrix and initial draft batch exist,
+but human review is intentionally not self-certified. M1b is closed, so review and minimal
+retrieval work are now authorized. Do not start full LoRA tuning, UI, or release work before the M2
+gate closes. The harvester must stay within approved rights scopes, and every later paid operation
+remains smoke-test-first. Do not weaken the qualification rules for "first" claims or the
 rights/append-only rules in `AGENTS.md`.
 Update this file whenever a milestone state, blocker, cost, spike result, or next action changes.
