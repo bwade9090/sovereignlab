@@ -1,4 +1,4 @@
-"""Contract and evidence checks for the frozen core matrix and first draft batch."""
+"""Contract and evidence checks for the approved core matrix and first batch."""
 
 import json
 from collections import Counter
@@ -32,7 +32,7 @@ from sovereignlab.vintage import AsOfQuery, StesSeriesKey, resolve_stes_as_of
 
 ROOT = Path(__file__).resolve().parents[2]
 MATRIX_PATH = ROOT / "data" / "benchmark" / "core-authoring-matrix-v1.json"
-BATCH_PATH = ROOT / "data" / "benchmark" / "drafts" / "core-batch-001.jsonl"
+BATCH_PATH = ROOT / "data" / "benchmark" / "core" / "core-batch-001.jsonl"
 CLI_SOURCE_ID = "oecd-stes-cli-kor-li-aa-20260717t115302688498z"
 LEDGER_ID = "oecd-stes-ledger-20260717t115242998550z"
 AVAILABILITY_SOURCE_ID = "oecd-stes-availableconstraint-20260717t101906273935z"
@@ -72,7 +72,7 @@ def _fact_map(record: BenchmarkRecord) -> dict[str, str]:
     return facts
 
 
-def test_frozen_matrix_has_40_balanced_records_and_validates_initial_batch() -> None:
+def test_approved_matrix_has_40_balanced_records_and_validates_first_batch() -> None:
     matrix = _matrix()
     records = _records()
 
@@ -83,7 +83,9 @@ def test_frozen_matrix_has_40_balanced_records_and_validates_initial_batch() -> 
         {route: 5 for route in EvidenceRoute}
     )
     assert Counter(record.language.value for record in records) == {"ko": 2, "en": 2}
-    assert all(record.annotation.status is AnnotationStatus.DRAFT for record in records)
+    assert all(record.annotation.status is AnnotationStatus.APPROVED for record in records)
+    assert all(record.annotation.reviewed_by == "Hyungbae Cho" for record in records)
+    assert all(record.annotation.reviewed_at is not None for record in records)
 
 
 def test_first_batch_forms_a_real_bundle_and_reproduces_cli_gold() -> None:
@@ -254,10 +256,3 @@ def test_initial_batch_rejects_unknown_duplicate_or_mismatched_records() -> None
     wrong_split = records[0].model_copy(update={"split": BenchmarkSplit.DEVELOPMENT})
     with pytest.raises(ValueError, match="does not match"):
         matrix.validate_initial_batch("core-batch-001", (wrong_split, *records[1:]))
-
-    reviewed_annotation = records[0].annotation.model_copy(
-        update={"status": AnnotationStatus.APPROVED}
-    )
-    reviewed = records[0].model_copy(update={"annotation": reviewed_annotation})
-    with pytest.raises(ValueError, match="must remain draft"):
-        matrix.validate_initial_batch("core-batch-001", (reviewed, *records[1:]))

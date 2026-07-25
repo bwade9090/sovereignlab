@@ -1,7 +1,7 @@
 # K-VINTAGE human-reviewed core authoring matrix 1.0.0
 
-- Status: structural allocation frozen; human review in progress
-- Date: 2026-07-24
+- Status: structural allocation and first four records owner-approved
+- Date: 2026-07-25
 - Scope authority: charter v2.3 §5 and M2 continuation order
 - Canonical matrix: `data/benchmark/core-authoring-matrix-v1.json`
 - Public schema: `data/schemas/core-authoring-matrix-v1.schema.json`
@@ -29,9 +29,10 @@ The test-held data unit is deliberately reserved rather than fabricated. Its two
 the combined pair that depends on it must not be authored until an independently captured,
 owner-approved release has a committed manifest and, where required, availability evidence.
 
-## 2. First reviewable batch
+## 2. First approved batch
 
-`data/benchmark/drafts/core-batch-001.jsonl` contains four AI-authored draft records:
+`data/benchmark/core/core-batch-001.jsonl` contains four owner-approved records initially authored
+by AI:
 
 1. one Korean/English `data` pair asking for Korea's May 2026 amplitude-adjusted CLI as of
    2026-07-09; and
@@ -42,12 +43,24 @@ The data pair is grounded in the committed OECD Korea CLI archive, its typed rig
 the active edition-availability ledger. Offline validation reproduces edition `202607`, raw and
 normalized value `102.66`, canonical unit `oecd_amplitude_adjusted_index`, and two-decimal display.
 For the earlier cutoff, the ledger mechanically returns `no_edition_definitely_available`; the
-draft therefore never substitutes the later edition or invents an older publication date.
+record therefore never substitutes the later edition or invents an older publication date.
 
-All four annotations remain `draft`. They are not counted as human-reviewed core records and may
-not be promoted to `reviewed` or `approved` without a named human reviewer and timestamp.
+All four annotations record `status=approved`, reviewer `Hyungbae Cho`, and the aware review
+timestamp. They count as four human-reviewed core records. The remaining 36 planned records are not
+authored or approved.
 
-## 3. Human-review checklist
+## 3. Approval record
+
+On 2026-07-25, Hyungbae Cho explicitly approved both:
+
+1. the unchanged 40-record structural allocation in
+   `data/benchmark/core-authoring-matrix-v1.json`; and
+2. all four records in `core-batch-001.jsonl` without question, answer, route, or evidence changes.
+
+The filenames and existing matrix field names remain unchanged. The approved record file keeps its
+filename and moves from `drafts/` to `core/` so the directory reflects its review state.
+
+## 4. Human-review checklist
 
 For each bilingual pair, the reviewer must verify:
 
@@ -59,10 +72,11 @@ For each bilingual pair, the reviewer must verify:
 5. Abstention wording states the actual fail-closed reason and does not expose post-cutoff values.
 6. Tags, split, evidence group, and parallel group are correct.
 
-Corrections remain in the draft batch until review is complete. An approval records the reviewer
-and review timestamp in each `BenchmarkRecord`; it does not rewrite the frozen matrix allocation.
+Future corrections remain in their draft batch until review is complete. An approval records the
+reviewer and review timestamp in each `BenchmarkRecord`; it does not rewrite the frozen matrix
+allocation.
 
-## 4. Reproduction
+## 5. Reproduction
 
 ```bash
 python scripts/export_json_schemas.py

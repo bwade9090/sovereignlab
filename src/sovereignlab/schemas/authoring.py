@@ -7,7 +7,6 @@ from typing import Literal
 from pydantic import Field, model_validator
 
 from sovereignlab.schemas.benchmark import (
-    AnnotationStatus,
     BenchmarkRecord,
     BenchmarkSplit,
     EvidenceRoute,
@@ -145,8 +144,6 @@ class CoreAuthoringMatrix(StrictModel):
                 or record.language is not language
             ):
                 raise ValueError(f"batch record {record_id} does not match its frozen matrix pair")
-            if record.annotation.status is not AnnotationStatus.DRAFT:
-                raise ValueError(f"initial batch record {record_id} must remain draft")
 
 
 def _require_unique(values: list[str], field_name: str) -> None:
