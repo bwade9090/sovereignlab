@@ -1,8 +1,8 @@
 # K-VINTAGE human-reviewed core authoring matrix 1.0.0
 
-- Status: structural allocation and first four records owner-approved
-- Date: 2026-07-25
-- Scope authority: charter v2.3 §5 and M2 continuation order
+- Status: structural allocation and first four records owner-approved; first documentary pair draft
+- Date: 2026-07-28
+- Scope authority: charter v2.5 §5 and M2 continuation order
 - Canonical matrix: `data/benchmark/core-authoring-matrix-v1.json`
 - Public schema: `data/schemas/core-authoring-matrix-v1.schema.json`
 
@@ -46,10 +46,24 @@ For the earlier cutoff, the ledger mechanically returns `no_edition_definitely_a
 record therefore never substitutes the later edition or invents an older publication date.
 
 All four annotations record `status=approved`, reviewer `Hyungbae Cho`, and the aware review
-timestamp. They count as four human-reviewed core records. The remaining 36 planned records are not
-authored or approved.
+timestamp. They count as four human-reviewed core records.
 
-## 3. Approval record
+## 3. First documentary draft awaiting review
+
+`data/benchmark/drafts/core-draft-002.jsonl` contains the frozen `kv-core-doc-01` Korean/English
+pair. Both records use the `documents` route, `train` split,
+`eg-doc-bok-outlook-2026-05` evidence group, and `kv-core-doc-01` parallel group. The Korean record
+is bounded to the Korean report's 2026-05-28 publication date and cites PDF page 10; the English
+record is independently bounded to the full translation's 2026-06-30 publication date and cites
+PDF page 9.
+
+Both answers paraphrase one stated driver: stronger-than-expected IT exports contributed `+0.7%p`
+to the `0.6%p` upward revision of the 2026 GDP growth forecast. They attribute the Bank of Korea
+and disclose summarization/paraphrase. Their annotations remain `status=draft` without reviewer
+metadata. They do not increase the approved count: 4/40 records are approved, two are drafted and
+await explicit owner review, and the other 34 are not authored.
+
+## 4. Approval record
 
 On 2026-07-25, Hyungbae Cho explicitly approved both:
 
@@ -60,7 +74,7 @@ On 2026-07-25, Hyungbae Cho explicitly approved both:
 The filenames and existing matrix field names remain unchanged. The approved record file keeps its
 filename and moves from `drafts/` to `core/` so the directory reflects its review state.
 
-## 4. Human-review checklist
+## 5. Human-review checklist
 
 For each bilingual pair, the reviewer must verify:
 
@@ -76,11 +90,12 @@ Future corrections remain in their draft batch until review is complete. An appr
 reviewer and review timestamp in each `BenchmarkRecord`; it does not rewrite the frozen matrix
 allocation.
 
-## 5. Reproduction
+## 6. Reproduction
 
 ```bash
 python scripts/export_json_schemas.py
 python -m pytest tests/benchmark/test_core_batch.py
+python -m pytest tests/benchmark/test_bok_outlook_drafts.py
 python -m ruff check .
 python -m ruff format --check .
 ```
@@ -88,3 +103,7 @@ python -m ruff format --check .
 The batch test validates the matrix, constructs a real `BenchmarkBundle` from committed manifests,
 ledger, and rights catalog, reruns the fail-closed resolver over the committed CLI bytes, applies
 normalization 1.0.0, and checks the earlier-cutoff abstention.
+
+The documentary-draft test validates both records against their strict manifests and the frozen
+matrix, enforces language-specific publication cutoffs and split-group integrity, and confirms the
+approved count remains four.

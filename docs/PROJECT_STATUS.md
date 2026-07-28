@@ -17,8 +17,10 @@
   check. Number-normalization 1.0.0, the zero-cost QLoRA preflight, and the paid A40/CUDA 13
   one-step compatibility run are complete. The M1b week-1 gate passed on 2026-07-18. In M2, the
   40-record core authoring allocation and the first four-record bilingual batch are owner-approved.
-  The approved human-reviewed core count is now 4/40; the remaining 36 matrix slots are not yet
-  authored or approved. The offline bilingual temporal document retriever is now implemented with
+  The approved human-reviewed core count is still 4/40. The next two records,
+  `kv-core-doc-01-ko` and `kv-core-doc-01-en`, are authored separately at `status=draft` and await
+  explicit owner review; the other 34 matrix slots are not yet authored or approved. The offline
+  bilingual temporal document retriever is now implemented with
   manifest-bound chunks and publication-date filtering before scoring; only synthetic fixtures
   were used. The first real bilingual document-manifest unit is also complete: the Korean May 2026
   Bank of Korea outlook is independently dated 2026-05-28 and the later English full translation
@@ -28,7 +30,9 @@
   separate procedure under the Bank of Korea copyright policy's Public Data Act Article 19 branch.
   ADR 0009 and charter v2.5 correct both manifests to `allowed`, with Bank of Korea attribution,
   transformation disclosure, and separately marked third-party rights preserved. No report body,
-  extracted text, or real searchable chunk is committed in this unit by repository-scope choice.
+  extracted text, or real searchable chunk is committed by repository-scope choice. The first
+  documentary pair uses stable, language-matched locators to the same stated driver while preserving
+  the Korean report's 2026-05-28 cutoff and the English translation's later 2026-06-30 cutoff.
   On 2026-07-28 the owner also approved ADR 0008 and charter v2.4: the
   minimal question-to-evidence-packet path will be implemented as a typed function-calling
   artifact (model-emitted typed plan and tool calls, committed traces, recorded/replayable
@@ -228,6 +232,18 @@
   does not fabricate a KOGL type, does not authorize adjacent publication families or separately
   marked third-party content, and does not change the project's non-commercial profile.
 
+- **First bilingual documentary draft pair (2026-07-28):** `data/benchmark/drafts/core-draft-002.jsonl`
+  authors exactly the frozen `kv-core-doc-01` Korean/English pair at `status=draft`. The Korean
+  record cites PDF page 10 (`요약 4/10`) at `as_of=2026-05-28`; the English record cites PDF page 9
+  (printed page `v`) at `as_of=2026-06-30`. Both paraphrase the report's stated
+  stronger-than-expected IT export contribution of `+0.7%p` to the `0.6%p` upward revision,
+  identify the Bank of Korea as the source, and disclose summarization/paraphrase. The official
+  PDFs were re-fetched into a temporary directory, matched the committed sizes and SHA-256 values,
+  and the cited pages were rendered and visually checked. No PDF, extracted full text, or real
+  searchable chunk entered Git. Offline tests validate the pair against the strict manifests and
+  frozen matrix, enforce the independent publication cutoffs and language match, reject both
+  evidence-group and parallel-group split leakage, and prove the approved count remains 4/40.
+
 - **Execution-contract adjustment — ADR 0008 and charter v2.4 (2026-07-28):** the owner asked
   whether the plan could also build agent-orchestration (tool/function calling, multi-step)
   experience. A four-lens review (governance, technical, schedule, portfolio) with two
@@ -404,6 +420,17 @@ files); all 372 tests passed with 100% statement/branch coverage (1,794 statemen
 Bank of Korea copyright/public-data pages, the linked public-data portal view, and the current
 Public Data Act text. No source download, secret, model call, or paid operation occurred.
 
+Validated 2026-07-28 after authoring the first bilingual documentary draft pair:
+`python scripts/export_json_schemas.py` remained deterministic at seven contracts;
+`python -m ruff check --no-cache .` and `python -m ruff format --check .` passed (45 files);
+`python -m pytest --cov=sovereignlab --cov-branch --cov-report=term-missing -p no:cacheprovider`
+passed all 378 tests with 100% statement/branch coverage (1,794 statements, 608 branches);
+`git diff --check` passed, and `git diff --exit-code -- data/schemas` proved schema export
+deterministic. The official PDFs were re-fetched only into a temporary directory for hash
+verification, local text inspection, and rendered-page visual QA; those temporary files were
+deleted. No provider body, extracted text, secret, model call, or paid operation entered the
+repository.
+
 ## M1b verification spike record (2026-07-15)
 
 All network work below was read-only, key-free, and free of charge. Raw responses were written only
@@ -553,35 +580,29 @@ response bodies.
   charter v2.3 and the append-only 2026-07-17 catalog are synchronized. All current week-1 owner
   decisions are closed.
 
-## Session-close snapshot (2026-07-28, fourth close: document-rights correction)
+## Session-close snapshot (2026-07-28, fifth close: first documentary draft)
 
-- This round is closed with no implementation intentionally left in progress. ADR 0009 and charter
-  v2.5 record the owner's Economic Outlook public-data family ruling; the two strict manifests,
-  verification log, offline rights assertions, and synchronized policy/status/handoff text now
-  reflect `allowed`. The source PDFs remain outside Git.
-- M2 remains active. The frozen 40-record matrix and exactly four records are owner-approved; the
-  other 36 slots are not authored or approved. The matrix itself was not touched this round.
-- The bilingual temporal retriever and its synthetic leakage regression remain complete. Real
-  Korean and English document manifests now exist, but no provider body, extracted provider text,
-  or real searchable chunk has been added. That is a repository-scope choice for this correction
-  unit, not a source-rights blocker.
-- The exact next work unit is the separate `kv-core-doc-01` bilingual draft batch under
-  `data/benchmark/drafts/`, without changing the frozen matrix or approved count. The later join
-  work unit must follow the ADR 0008 typed function-calling contract.
-- No paid operation, secret-backed manual workflow, owner decision, or unresolved manifest fact is
-  pending inside this closed session.
+- Work unit B is complete. The exact frozen `kv-core-doc-01` bilingual pair now lives separately in
+  `data/benchmark/drafts/core-draft-002.jsonl`, validates against both strict manifests, and remains
+  `status=draft` with no reviewer metadata.
+- M2 remains active. The frozen matrix was not changed, exactly four records remain owner-approved,
+  two documentary records await explicit Hyungbae review, and the other 34 slots are not authored.
+- Korean and English evidence is language-matched and independently cutoff-safe. The later English
+  edition fails closed before 2026-06-30, while the Korean edition is usable on 2026-05-28.
+- No provider PDF, extracted provider text, or real searchable chunk was committed. The temporary
+  verified PDF copies and rendered QA pages were deleted after inspection.
+- The next action is owner review of this pair. Do not move it into `data/benchmark/core/`, add
+  reviewer metadata, or increase 4/40 without Hyungbae's explicit decision.
 
 ## Immediate next action (M2 — do these in order)
 
-1. Use the committed Korean/English manifests and the frozen matrix to author the
-   `kv-core-doc-01` bilingual draft pair as one separate batch under `data/benchmark/drafts/`.
-   Re-fetch the PDFs only into ignored `data/raw/` or a temporary directory if content inspection
-   is required and verify their committed hashes first. Keep full PDFs and extracted full text out
-   of this draft-only unit; cite and paraphrase the language-matched evidence with required
-   attribution and transformation disclosure. Preserve `train` / `documents`,
-   `eg-doc-bok-outlook-2026-05`, and the approved record IDs; keep annotation status `draft` and
-   the approved core count at 4/40 pending explicit Hyungbae review.
-2. Build the minimal question-to-evidence-packet path before generating the tier-2 probes,
+1. Hyungbae reviews `data/benchmark/drafts/core-draft-002.jsonl` against the two cited source
+   pages. Keep both records at `status=draft`, outside `data/benchmark/core/`, and the approved count
+   at 4/40 until that explicit review is recorded. If approved, move the unchanged records into the
+   core area with the actual reviewer name/timestamp and update the approved count in one separate
+   governance unit.
+2. After that review boundary, build the minimal question-to-evidence-packet path before generating
+   the tier-2 probes,
    under the ADR 0008 execution contract: the model emits the typed route plan and typed tool
    calls as native function calls against pydantic-derived schemas; the pipeline validates and
    executes them deterministically and commits a machine-readable trace. This unit includes the
@@ -657,6 +678,7 @@ complete.
 | 2026-07-28 | Execution-contract review, ADR 0008, and charter v2.4 | $0.00 | Multi-agent review under subscription; documentation and offline validation only; no project API/GPU call |
 | 2026-07-28 | First real BOK bilingual document manifests | $0.00 | Public official pages and direct PDF captures under `/tmp` for hashing only; provider bodies not committed |
 | 2026-07-28 | BOK Economic Outlook rights correction, ADR 0009, and charter v2.5 | $0.00 | Owner ruling plus free read-only checks of official BOK policy/public-data pages and the public-data portal; no model/API/GPU call |
+| 2026-07-28 | First bilingual BOK documentary draft pair | $0.00 | Free official PDF re-fetch into a temporary directory, local hash/text/page-render inspection, offline authoring/tests; temporary provider files deleted |
 
 **Cumulative external spend: $0.23584524099715054 / $100.00**
 
@@ -681,11 +703,12 @@ Read in this order, in full, before changing anything:
    judged alternatives, risk register.
 
 Then start with "Immediate next action" item 1. The structural matrix and first four records are
-owner-approved; the remaining 36 slots are neither authored nor approved. The synthetic retrieval
-baseline and first real bilingual document manifests are complete. ADR 0009 resolves those
-manifests to `allowed`, but full PDFs and extracted full text remain outside Git by current
-repository-scope choice. Keep the next draft batch separate and at `status=draft`. Do not start
-full LoRA tuning, UI, or release work before the M2 gate closes. The harvester must stay within
-approved rights scopes, and every later paid operation remains smoke-test-first. Do not weaken the
-qualification rules for "first" claims or the rights/append-only rules in `AGENTS.md`.
+owner-approved; the `kv-core-doc-01` pair is authored but remains a separate draft pending explicit
+review, and the other 34 slots are neither authored nor approved. The synthetic retrieval baseline
+and first real bilingual document manifests are complete. ADR 0009 resolves those manifests to
+`allowed`, but full PDFs and extracted full text remain outside Git by current repository-scope
+choice. Do not start full LoRA tuning, UI, or release work before the M2 gate closes. The harvester
+must stay within approved rights scopes, and every later paid operation remains smoke-test-first.
+Do not weaken the qualification rules for "first" claims or the rights/append-only rules in
+`AGENTS.md`.
 Update this file whenever a milestone state, blocker, cost, spike result, or next action changes.

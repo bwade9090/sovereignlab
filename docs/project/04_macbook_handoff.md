@@ -1,14 +1,14 @@
 # Continuation handoff
 
-- Prepared: 2026-07-16; refreshed 2026-07-28 for a clean new-agent session (fourth refresh the
-  same day: Bank of Korea Economic Outlook public-data rights correction)
+- Prepared: 2026-07-16; refreshed 2026-07-28 for a clean new-agent session (fifth refresh the
+  same day: first bilingual documentary draft)
 - Authority: charter v2.5; accepted ADRs 0001–0009
 - Branch to continue: `main` from `origin`
 - Current milestone: M2
 - Session state: closed; no implementation is intentionally left in progress
 - Last code baseline: `a92c44d` (`feat: add temporal document retrieval`); the current artifact
   baseline adds the first real bilingual document manifests, boundary tests, and the ADR 0009
-  owner-approved rights correction.
+  owner-approved rights correction plus the separate `kv-core-doc-01` draft pair.
 
 ## 0. Start here
 
@@ -20,8 +20,8 @@ the new session:
 2. Read the files in section 3 in order, in full.
 3. Run the baseline commands in section 2 before changing files.
 4. State back the current milestone, approved core count, exact next work unit, and hard stops.
-5. Start only section 5 work unit B. Do not redo the completed retrieval or manifest work units or
-   broaden scope.
+5. Start only with the section 5 owner-review boundary. Do not approve or move the draft without
+   Hyungbae's explicit review, and do not redo the completed retrieval, manifest, or draft units.
 
 If the worktree is dirty, preserve the existing changes and determine their owner before editing.
 If local `main` has diverged from `origin/main`, stop rather than rewriting history.
@@ -90,6 +90,15 @@ If local `main` has diverged from `origin/main`, stop rather than rewriting hist
   repository-scope choice. `docs/discovery/04_bok_outlook_2026_05_manifest_log.md` preserves the
   exact URLs, capture facts, initial negative finding, superseding conclusion, and reproduction
   boundary.
+- Work unit B is complete. `data/benchmark/drafts/core-draft-002.jsonl` contains exactly the frozen
+  `kv-core-doc-01` Korean and English records at `status=draft`, without reviewer metadata or a
+  matrix change. The Korean record uses its 2026-05-28 edition and PDF page 10 (`요약 4/10`); the
+  English record uses its independently published 2026-06-30 translation and PDF page 9 (printed
+  page `v`). Both summarize the `+0.7%p` IT-export upside contribution, attribute the Bank of
+  Korea, and disclose paraphrase/transformation. The official PDFs were re-fetched only into a
+  temporary directory, matched the committed byte sizes and hashes, and had both evidence pages
+  rendered and visually inspected before all temporary files were deleted. Bundle tests enforce
+  language matching, publication cutoffs, frozen allocation, split-group integrity, and 4/40.
 - **Execution-contract adjustment (2026-07-28, ADR 0008 / charter v2.4, documentation only):**
   after a four-lens review with adversarial verification, the owner approved implementing the
   minimal question-to-evidence-packet path as a typed function-calling artifact (model-emitted
@@ -99,7 +108,7 @@ If local `main` has diverged from `origin/main`, stop rather than rewriting hist
   deterministic latest-only snapshot-read tool. The bounded multi-step tool loop is deferred to
   post-window v1.1 as an execution-mode ablation; the LoRA target stays the single-shot router;
   contracts stay 2.0.0. No code changed in this round.
-- macOS validation at handoff (2026-07-28, Python 3.12.13 via Homebrew): 372 tests passed with
+- macOS validation at handoff (2026-07-28, Python 3.12.13 via Homebrew): 378 tests passed with
   100% statement/branch coverage; ruff check/format clean;
   `python scripts/export_json_schemas.py` deterministic (seven contracts).
 
@@ -156,7 +165,8 @@ git diff --exit-code
 - The application-ready detailed and brief English descriptions are in
   `docs/application/01_project_description.md`. They intentionally make no model-performance claim.
 - The approved core count is exactly 4/40. Only `data/benchmark/core/core-batch-001.jsonl` is
-  approved. The remaining 36 matrix slots are neither authored nor approved.
+  approved. The two records in `data/benchmark/drafts/core-draft-002.jsonl` are authored but not
+  approved; the remaining 34 matrix slots are neither authored nor approved.
 - The filenames and field names in the approved matrix and first core batch are intentionally
   unchanged. Do not rename them or alter the frozen allocation.
 - Two real BOK document manifests are committed, but no provider report body or extracted provider
@@ -174,7 +184,7 @@ conclusion under ADR 0009. The provider PDFs and extracted text are not committe
 repository-scope choice. Re-fetch a PDF only into ignored `data/raw/` or an OS temporary directory
 when the next unit needs local inspection, and verify the committed size/hash before use.
 
-### Work unit B — first bilingual documentary draft
+### Completed work unit B — do not redo
 
 Target only the same frozen documentary pair:
 
@@ -186,32 +196,23 @@ Target only the same frozen documentary pair:
 - split/route: `train` / `documents`;
 - intent: explain one stated driver from the May 2026 Bank of Korea outlook release family.
 
-Complete this sequence:
+Both draft records validate against the committed manifests and frozen matrix while the approved
+count remains 4/40. The source PDFs and extracted text remain outside Git, and the synthetic
+fixture remains the only searchable corpus.
 
-1. Load the committed Korean and English manifests. If the PDFs need inspection, re-fetch them only
-   into ignored `data/raw/` or a temporary directory and verify the committed byte size and SHA-256
-   before reading.
-2. Author exactly one Korean/English draft pair under `data/benchmark/drafts/` without changing the
-   frozen matrix, source IDs, route, split, evidence group, or parallel-group allocation.
-3. Use the language-matched source manifest and stable page/section locators for each documentary
-   claim. Paraphrase only facts supported by that language edition; identify the Bank of Korea as
-   the source and disclose processing/transformation. Keep full source bodies and extracted full
-   text outside this draft-only unit.
-4. Record the actual AI author and aware annotation timestamp with `status=draft`. Do not add a
-   reviewer or review timestamp, and do not count the pair toward the approved 4/40.
-5. Add offline bundle tests for the two records, publication cutoffs, language-matched evidence,
-   and evidence-group/parallel-group split rules. The existing synthetic retrieval fixture remains
-   the only searchable corpus.
-6. Update `docs/PROJECT_STATUS.md`, run the full offline checks, make one conventional commit, and
-   push it to `origin/main`.
+### Current hard stop — owner review
 
-Work unit B is complete when both draft records validate against the committed manifests and frozen
-matrix while the approved count remains 4/40. Stop for explicit Hyungbae review before moving the
-pair to `data/benchmark/core/` or changing its annotation status.
+Hyungbae must explicitly review `data/benchmark/drafts/core-draft-002.jsonl` against the cited
+Korean page 10 and English page 9 evidence. Until that decision:
+
+- do not change either annotation from `status=draft`;
+- do not add reviewer metadata or move the pair into `data/benchmark/core/`;
+- do not increase the approved count above 4/40;
+- do not start the later implementation unit as part of the draft change.
 
 ### Later work units — do not merge into B
 
-1. After the draft unit, build the minimal question-to-evidence-packet path under the
+1. After the owner-review boundary, build the minimal question-to-evidence-packet path under the
    ADR 0008 execution contract: the model emits the typed route plan and typed tool calls as
    native function calls against pydantic-derived schemas; the pipeline validates and executes
    them deterministically and commits a machine-readable trace of every call and result. This
