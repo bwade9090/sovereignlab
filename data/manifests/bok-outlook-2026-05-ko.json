@@ -1,0 +1,23 @@
+{
+  "byte_size": 10711393,
+  "canonical_url": "https://www.bok.or.kr/fileSrc/portal/411de844aef442e7ad07896b7bbe2eef/1/4e0f66601a6a4f95ac4164f9286de537.pdf",
+  "content_sha256": "71f78145d30190ea6bb7e2eb3bdb919c1ae4730973d1f63bed641ec12660fd97",
+  "document_family": "bok-economic-outlook",
+  "language": "ko",
+  "media_type": "application/pdf",
+  "publication_date_basis": "publisher_metadata",
+  "publication_date_notes": "The official Korean landing page https://www.bok.or.kr/portal/bbs/P0002359/view.do?menuNo=200066&nttId=10098209 displays registration date 2026-05-28 for this exact attachment.",
+  "published_on": "2026-05-28",
+  "publisher": "Bank of Korea",
+  "redistribution": {
+    "notes": "No publication-specific KOGL or open-license notice was present on the official landing page when checked on 2026-07-28. The Bank of Korea copyright policy at https://www.bok.or.kr/portal/main/contents.do?menuNo=200228 permits direct/deep linking for information outside its published public-data list but requires prior approval for other use. Only metadata, the official link, byte size, and checksum are committed; the PDF and extracted text remain uncommitted.",
+    "status": "metadata_only"
+  },
+  "release_label": "2026년 5월",
+  "retrieved_at": "2026-07-28T13:49:40Z",
+  "schema_version": "2.0.0",
+  "source_id": "bok-outlook-2026-05-ko",
+  "source_kind": "document",
+  "title": "경제전망보고서(2026년 5월)",
+  "vintage_semantics": "latest_only"
+}

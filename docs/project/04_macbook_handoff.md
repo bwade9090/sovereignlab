@@ -1,12 +1,13 @@
 # Continuation handoff
 
-- Prepared: 2026-07-16; refreshed 2026-07-28 for a clean new-agent session (second refresh the
-  same day: ADR 0008 / charter v2.4 execution-contract adjustment, documentation only)
+- Prepared: 2026-07-16; refreshed 2026-07-28 for a clean new-agent session (third refresh the
+  same day: first real bilingual document manifests)
 - Authority: charter v2.4; accepted ADRs 0001–0008
 - Branch to continue: `main` from `origin`
 - Current milestone: M2
 - Session state: closed; no implementation is intentionally left in progress
-- Last functional baseline: `a92c44d` (`feat: add temporal document retrieval`)
+- Last code baseline: `a92c44d` (`feat: add temporal document retrieval`); the current artifact
+  baseline adds the first real bilingual document manifests and boundary tests.
 
 ## 0. Start here
 
@@ -18,7 +19,8 @@ the new session:
 2. Read the files in section 3 in order, in full.
 3. Run the baseline commands in section 2 before changing files.
 4. State back the current milestone, approved core count, exact next work unit, and hard stops.
-5. Start only section 5 work unit A. Do not redo the completed retrieval baseline or broaden scope.
+5. Start only section 5 work unit B. Do not redo the completed retrieval or manifest work units or
+   broaden scope.
 
 If the worktree is dirty, preserve the existing changes and determine their owner before editing.
 If local `main` has diverged from `origin/main`, stop rather than rewriting history.
@@ -75,6 +77,13 @@ If local `main` has diverged from `origin/main`, stop rather than rewriting hist
   post-`as_of` and other-language documents before computing corpus statistics or scores, and
   returns manifest-bound locators. Synthetic Korean/English fixtures prove future passages cannot
   change eligible results or scores. No official document body or paid embedding was used.
+- The first real document-manifest unit is complete for `bok-outlook-release-2026-05`. The official
+  Korean report page independently records `2026-05-28`; the English full-translation page records
+  `2026-06-30`. Direct official PDF captures under `/tmp` supplied real sizes and SHA-256 values.
+  Neither page supplied a publication-specific KOGL/open-license grant, so both strict manifests
+  are `metadata_only`; the PDFs, extracted text, and real searchable chunks remain outside Git.
+  `docs/discovery/04_bok_outlook_2026_05_manifest_log.md` preserves the exact URLs, capture facts,
+  rights conclusion, and reproduction boundary.
 - **Execution-contract adjustment (2026-07-28, ADR 0008 / charter v2.4, documentation only):**
   after a four-lens review with adversarial verification, the owner approved implementing the
   minimal question-to-evidence-packet path as a typed function-calling artifact (model-emitted
@@ -84,7 +93,7 @@ If local `main` has diverged from `origin/main`, stop rather than rewriting hist
   deterministic latest-only snapshot-read tool. The bounded multi-step tool loop is deferred to
   post-window v1.1 as an execution-mode ablation; the LoRA target stays the single-shot router;
   contracts stay 2.0.0. No code changed in this round.
-- macOS validation at handoff (2026-07-28, Python 3.12.13 via Homebrew): 368 tests passed with
+- macOS validation at handoff (2026-07-28, Python 3.12.13 via Homebrew): 372 tests passed with
   100% statement/branch coverage; ruff check/format clean;
   `python scripts/export_json_schemas.py` deterministic (seven contracts).
 
@@ -144,14 +153,22 @@ git diff --exit-code
   approved. The remaining 36 matrix slots are neither authored nor approved.
 - The filenames and field names in the approved matrix and first core batch are intentionally
   unchanged. Do not rename them or alter the frozen allocation.
-- No real report body or extracted report text has been added for document retrieval. The committed
-  retrieval corpus is entirely synthetic.
+- Two real BOK document manifests are committed, but no provider report body or extracted provider
+  text has been added. The committed searchable retrieval corpus remains entirely synthetic.
 
 ## 5. Exact continuation order
 
-### Work unit A — first real document manifests
+### Completed work unit A — do not redo
 
-Target only the first frozen documentary pair:
+`kv-core-doc-01` now has strict Korean and English source manifests with independently supported
+dates, real hashes/sizes, exact official links, and a fail-closed `metadata_only` rights conclusion.
+The provider PDFs and extracted text are not committed. Re-fetch a PDF only into ignored
+`data/raw/` or an OS temporary directory when the next unit needs local inspection, and verify the
+committed size/hash before use.
+
+### Work unit B — first bilingual documentary draft
+
+Target only the same frozen documentary pair:
 
 - pair: `kv-core-doc-01`;
 - Korean record: `kv-core-doc-01-ko`;
@@ -163,35 +180,29 @@ Target only the first frozen documentary pair:
 
 Complete this sequence:
 
-1. Locate the official Korean and English publication landing pages and exact attachment URLs.
-2. Record each language edition's actual public date independently. Do not copy the Korean date to
-   a later English translation or infer a date from the release label.
-3. Verify the publication-specific reuse/redistribution notice and attribution basis from official
-   pages. Existing ECOS/KOSIS data-series rulings do not automatically apply to BOK publications.
-4. Only after that read-only rights check, capture each attachment locally under ignored
-   `data/raw/` or an OS temporary directory to compute its real byte size and SHA-256. Never invent
-   manifest hashes or sizes.
-5. Commit `SourceManifest` records under `data/manifests/`. Use `source_kind=document`, the actual
-   language/date/date basis, and a conservative `redistribution` value. Leave `rights_decision`
-   null: the typed series-rights link is for data/API sources and rejects document sources.
-6. Do not commit the report bodies or extracted text unless the exact publication notice clearly
-   authorizes that redistribution. If it is ambiguous, keep the manifests `metadata_only`, record
-   the uncertainty, and stop before creating real searchable chunks.
-7. Add manifest/retrieval-boundary tests, update `docs/PROJECT_STATUS.md`, run the full offline
-   checks, make one conventional commit, and push it to `origin/main`.
+1. Load the committed Korean and English manifests. If the PDFs need inspection, re-fetch them only
+   into ignored `data/raw/` or a temporary directory and verify the committed byte size and SHA-256
+   before reading.
+2. Author exactly one Korean/English draft pair under `data/benchmark/drafts/` without changing the
+   frozen matrix, source IDs, route, split, evidence group, or parallel-group allocation.
+3. Use the language-matched source manifest and stable page/section locators for each documentary
+   claim. Paraphrase only facts supported by that language edition; do not copy provider passages
+   into a committed retrieval corpus.
+4. Record the actual AI author and aware annotation timestamp with `status=draft`. Do not add a
+   reviewer or review timestamp, and do not count the pair toward the approved 4/40.
+5. Add offline bundle tests for the two records, publication cutoffs, language-matched evidence,
+   and evidence-group/parallel-group split rules. The existing synthetic retrieval fixture remains
+   the only searchable corpus.
+6. Update `docs/PROJECT_STATUS.md`, run the full offline checks, make one conventional commit, and
+   push it to `origin/main`.
 
-Work unit A is complete only when both language sources have official URLs, independently supported
-publication dates, real local-capture hashes/sizes, an auditable redistribution conclusion, strict
-manifest validation, and no unauthorized body in Git. If an official English edition does not
-exist, or its date/rights cannot be established, report that as a blocker instead of substituting
-the Korean source or machine translation.
+Work unit B is complete when both draft records validate against the committed manifests and frozen
+matrix while the approved count remains 4/40. Stop for explicit Hyungbae review before moving the
+pair to `data/benchmark/core/` or changing its annotation status.
 
-### Later work units — do not merge into A
+### Later work units — do not merge into B
 
-1. After work unit A passes, author the `kv-core-doc-01` Korean/English records as a small draft
-   batch under `data/benchmark/drafts/`. Do not change the frozen matrix and do not label the
-   records reviewed or approved without a new explicit Hyungbae review.
-2. After the next draft unit, build the minimal question-to-evidence-packet path under the
+1. After the draft unit, build the minimal question-to-evidence-packet path under the
    ADR 0008 execution contract: the model emits the typed route plan and typed tool calls as
    native function calls against pydantic-derived schemas; the pipeline validates and executes
    them deterministically and commits a machine-readable trace of every call and result. This
@@ -200,12 +211,14 @@ the Korean source or machine translation.
    latest-only snapshot-read tool (freeze its gold argument convention before authoring the
    matrix records that depend on it). Offline scripted-planner tests land before any paid live
    model call; a live call needs a smoke test and a spend-ledger entry first.
-3. Manually dispatch one append-only secret-backed workflow smoke only after separate owner
+2. Manually dispatch one append-only secret-backed workflow smoke only after separate owner
    authorization; otherwise let the weekly schedule exercise the configured secrets.
 
 ## 6. What not to redo
 
 - Do not rebuild or rename the 40-record matrix or the approved four-record batch.
+- Do not redo the first real BOK document manifests, weaken their `metadata_only` conclusion, or
+  commit the provider PDFs/extracted text without new source-specific permission evidence.
 - Do not replace the retrieval baseline with embeddings yet. Its filter-before-scoring invariant
   and synthetic future-document regression are already complete.
 - Do not rerun the paid QLoRA compatibility spike. It passed, all Pods were deleted, and it is not

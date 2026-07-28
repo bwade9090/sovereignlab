@@ -20,7 +20,12 @@
   The approved human-reviewed core count is now 4/40; the remaining 36 matrix slots are not yet
   authored or approved. The offline bilingual temporal document retriever is now implemented with
   manifest-bound chunks and publication-date filtering before scoring; only synthetic fixtures
-  were used. On 2026-07-28 the owner additionally approved ADR 0008 and charter v2.4: the
+  were used. The first real bilingual document-manifest unit is also complete: the Korean May 2026
+  Bank of Korea outlook is independently dated 2026-05-28 and the later English full translation
+  2026-06-30; both official PDFs were captured only under `/tmp` for real byte-size/SHA-256
+  measurement. Their landing pages supplied no publication-specific open-licence grant, so the
+  manifests fail closed to `metadata_only` and no report body, extracted text, or real searchable
+  chunk is committed. On 2026-07-28 the owner additionally approved ADR 0008 and charter v2.4: the
   minimal question-to-evidence-packet path will be implemented as a typed function-calling
   artifact (model-emitted typed plan and tool calls, committed traces, recorded/replayable
   model interface, and a three-tool surface including a new latest-only snapshot reader), and
@@ -191,6 +196,21 @@
   rejection are covered. No official document body, network request, paid embedding, OCR, or model
   call was used.
 
+- **First real bilingual document manifests (2026-07-28):** the official May 2026 Bank of Korea
+  outlook pages independently establish the Korean report at `2026-05-28` (`nttId=10098209`) and
+  the English full translation at `2026-06-30` (`nttId=11062493`). Direct official attachment
+  captures under `/tmp` measured the Korean PDF at 10,711,393 bytes / SHA-256
+  `71f78145d30190ea6bb7e2eb3bdb919c1ae4730973d1f63bed641ec12660fd97` and the English
+  PDF at 3,711,417 bytes / SHA-256
+  `c30dd8fae88ba62db18b38484985aad457f658a22a899de58918d7581465986d`. Neither page
+  carried a publication-specific KOGL/open-license notice; the Bank of Korea copyright policy
+  permits direct/deep links for information outside its public-data list but requires prior
+  approval for other use. Both strict manifests therefore record `metadata_only`; their PDFs and
+  extracted text are absent from Git. Offline tests bind the manifests to the retriever, prove the
+  later English date is enforced independently, and prove manifests alone create no searchable
+  content. Full metadata and the fail-closed conclusion are preserved in
+  `docs/discovery/04_bok_outlook_2026_05_manifest_log.md`.
+
 - **Execution-contract adjustment — ADR 0008 and charter v2.4 (2026-07-28):** the owner asked
   whether the plan could also build agent-orchestration (tool/function calling, multi-step)
   experience. A four-lens review (governance, technical, schedule, portfolio) with two
@@ -351,6 +371,15 @@ passed all 368 tests with 100% statement/branch coverage (1,794 statements, 608 
 `git diff --check` passed. Documentation-only change; no network, source download, secret, model,
 or paid operation.
 
+Validated 2026-07-28 after adding the first real bilingual document manifests:
+`python scripts/export_json_schemas.py` remained deterministic at seven contracts;
+`python -m ruff check --no-cache .` and `python -m ruff format --check .` passed (44 files);
+`python -m pytest --cov=sovereignlab --cov-branch --cov-report=term-missing -p no:cacheprovider`
+passed all 372 tests with 100% statement/branch coverage (1,794 statements, 608 branches);
+`git diff --check` passed. The only network work was free, read-only verification of public Bank of
+Korea pages and temporary PDF captures for size/hash measurement. No source body, extracted text,
+secret, model call, or paid operation entered the repository.
+
 ## M1b verification spike record (2026-07-15)
 
 All network work below was read-only, key-free, and free of charge. Raw responses were written only
@@ -500,35 +529,34 @@ response bodies.
   charter v2.3 and the append-only 2026-07-17 catalog are synchronized. All current week-1 owner
   decisions are closed.
 
-## Session-close snapshot (2026-07-28, second close: execution-contract adjustment)
+## Session-close snapshot (2026-07-28, third close: first real document manifests)
 
-- This round is closed with no implementation intentionally left in progress. It contains
-  documentation changes only (ADR 0008, charter v2.4, AGENTS.md, README, handoff, decisions
-  index, CV wording-bank guard rule, this file). Pull the latest `origin/main`; `a92c44d` remains
-  the last functional baseline.
+- This round is closed with no implementation intentionally left in progress. Work unit A
+  committed two strict document manifests, one verification log, offline manifest/retrieval
+  boundary tests, and synchronized status/handoff text. The source PDFs were used only under
+  `/tmp` for integrity measurement and are not repository artifacts.
 - M2 remains active. The frozen 40-record matrix and exactly four records are owner-approved; the
   other 36 slots are not authored or approved. The matrix itself was not touched this round.
-- The bilingual temporal retriever and its synthetic leakage regression are complete. No real
-  report body or extracted report text has been added.
-- The exact next work unit is unchanged: the official-source rights/date/hash manifest work for
-  `kv-core-doc-01` / `bok-outlook-release-2026-05`. The detailed, fail-closed checklist is in
-  `docs/project/04_macbook_handoff.md` section 5. The later join work unit must now follow the
-  ADR 0008 typed function-calling contract (handoff section 5, later item 2).
-- No paid operation, secret-backed manual workflow, source download, or owner decision is pending
-  inside this closed session.
+- The bilingual temporal retriever and its synthetic leakage regression remain complete. Real
+  Korean and English document manifests now exist, but no provider body, extracted provider text,
+  or real searchable chunk has been added because the source-specific rights check resolved to
+  `metadata_only`.
+- The exact next work unit is the separate `kv-core-doc-01` bilingual draft batch under
+  `data/benchmark/drafts/`, without changing the frozen matrix or approved count. The later join
+  work unit must follow the ADR 0008 typed function-calling contract.
+- No paid operation, secret-backed manual workflow, owner decision, or unresolved manifest fact is
+  pending inside this closed session.
 
 ## Immediate next action (M2 — do these in order)
 
-1. For frozen pair `kv-core-doc-01`, verify the official Korean and English May 2026 Bank of Korea
-   outlook landing pages, attachment URLs, independently supported publication dates, and
-   publication-specific redistribution/attribution notices. Only after that check, capture each
-   attachment in ignored `data/raw/` or a temporary directory to compute real hashes/sizes and
-   commit conservative document `SourceManifest` records. Do not commit bodies or extracted text
-   unless the exact notice authorizes redistribution.
-2. In a separate work unit, use those manifests and the retrieval fixtures to author the
-   `kv-core-doc-01` bilingual draft pair without changing the approved matrix; keep unreviewed
-   records under `data/benchmark/drafts/`.
-3. Build the minimal question-to-evidence-packet path before generating the tier-2 probes,
+1. Use the committed Korean/English manifests and the frozen matrix to author the
+   `kv-core-doc-01` bilingual draft pair as one separate batch under `data/benchmark/drafts/`.
+   Re-fetch the PDFs only into ignored `data/raw/` or a temporary directory if content inspection
+   is required, verify their committed hashes first, and do not commit provider bodies or extracted
+   text. Preserve `train` / `documents`, `eg-doc-bok-outlook-2026-05`, and the approved record IDs;
+   keep annotation status `draft` and the approved core count at 4/40 pending explicit Hyungbae
+   review.
+2. Build the minimal question-to-evidence-packet path before generating the tier-2 probes,
    under the ADR 0008 execution contract: the model emits the typed route plan and typed tool
    calls as native function calls against pydantic-derived schemas; the pipeline validates and
    executes them deterministically and commits a machine-readable trace. This unit includes the
@@ -600,6 +628,7 @@ complete.
 | 2026-07-28 | Offline bilingual temporal document retrieval | $0.00 | Synthetic fixtures and local tests only; no source download, network, model, or paid call |
 | 2026-07-28 | New-session handoff finalization | $0.00 | Documentation and offline validation only; no network, source download, model, or paid call |
 | 2026-07-28 | Execution-contract review, ADR 0008, and charter v2.4 | $0.00 | Multi-agent review under subscription; documentation and offline validation only; no project API/GPU call |
+| 2026-07-28 | First real BOK bilingual document manifests | $0.00 | Public official pages and direct PDF captures under `/tmp` for hashing only; metadata-only manifests, no provider body committed |
 
 **Cumulative external spend: $0.23584524099715054 / $100.00**
 
@@ -624,9 +653,9 @@ Read in this order, in full, before changing anything:
 
 Then start with "Immediate next action" item 1. The structural matrix and first four records are
 owner-approved; the remaining 36 slots are neither authored nor approved. The synthetic retrieval
-baseline is complete, but no real document body has been downloaded or approved for redistribution.
-M1b is closed, so the first document-rights/manifest work unit is authorized. Keep the later draft
-batch separate. Do not start full LoRA tuning, UI, or release work before the M2 gate closes. The
+baseline and first real bilingual document manifests are complete, but no real provider body or
+extracted text is approved for redistribution. Keep the next draft batch separate and at
+`status=draft`. Do not start full LoRA tuning, UI, or release work before the M2 gate closes. The
 harvester must stay within approved rights scopes, and every later paid operation remains
 smoke-test-first. Do not weaken the qualification rules for "first" claims or the
 rights/append-only rules in `AGENTS.md`.

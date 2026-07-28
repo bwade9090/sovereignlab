@@ -4,7 +4,9 @@
 
 **Status:** M1b verification and vintage-contract groundwork are complete; M2 benchmark and
 baseline development is in progress (frozen 40-record core matrix, 4/40 records owner-approved,
-temporal document-retrieval baseline complete). No model-performance claims have been made yet.
+temporal document-retrieval baseline and the first real bilingual document manifests complete;
+the provider PDFs remain metadata-only and uncommitted). No model-performance claims have been
+made yet.
 
 Korea's official statistics APIs (ECOS, KOSIS) expose latest values only — they offer no "as-of" query path — and no Korean equivalent of the St. Louis Fed's ALFRED archive exists. SovereignLab builds three things in four weeks:
 
