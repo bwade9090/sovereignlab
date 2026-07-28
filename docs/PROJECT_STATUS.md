@@ -1,6 +1,6 @@
 # SovereignLab project status
 
-- Last updated: 2026-07-25
+- Last updated: 2026-07-28
 - Owner: Hyungbae Cho (`bwade9090`)
 - Delivery window: four weeks, approximately 80 hours
 - Current milestone: M2 — week-2 benchmark and baselines (charter v2.3 §7, Week 2)
@@ -18,7 +18,9 @@
   one-step compatibility run are complete. The M1b week-1 gate passed on 2026-07-18. In M2, the
   40-record core authoring allocation and the first four-record bilingual batch are owner-approved.
   The approved human-reviewed core count is now 4/40; the remaining 36 matrix slots are not yet
-  authored or approved.
+  authored or approved. The offline bilingual temporal document retriever is now implemented with
+  manifest-bound chunks and publication-date filtering before scoring; only synthetic fixtures
+  were used.
 
 ## Approved baseline
 
@@ -172,6 +174,16 @@
   bundle validation, resolver replay, exact normalization, and the earlier-cutoff abstention are
   covered offline. The held-out data slot remains reserved until an independently captured
   approved release exists.
+- **Offline bilingual temporal document retrieval (2026-07-28):**
+  `sovereignlab.retrieval` adds strict corpus/query/result types and deterministic BM25-style
+  lexical retrieval for Korean and English. Chunks must match a document manifest's ID, language,
+  and SHA-256. The retriever removes other-language and post-`as_of` manifests before selecting
+  chunks, building document frequencies, computing average length, or scoring. Synthetic fixtures
+  place unusually strong matches after the cutoff; regression tests prove the full-corpus result,
+  including scores, equals the result after those future documents are physically removed.
+  Inclusive publication dates, stable limits, empty/no-overlap results, and every corpus-binding
+  rejection are covered. No official document body, network request, paid embedding, OCR, or model
+  call was used.
 
 ## Current validation evidence
 
@@ -292,6 +304,14 @@ Python 3.12.13; schema export remained deterministic; ruff check and format chec
 tests passed with 100% statement/branch coverage (1,687 statements, 574 branches). The approved
 records still form a real manifest/ledger/rights bundle and reproduce the same CLI value and
 fail-closed abstention. No network, secret, model, or paid operation was used.
+
+Validated 2026-07-28 on macOS after implementing offline bilingual temporal document retrieval:
+Python 3.12.13; `python scripts/export_json_schemas.py` remained deterministic at seven public
+contracts; `python -m ruff check --no-cache .` and `python -m ruff format --check .` passed;
+`python -m pytest --cov=sovereignlab --cov-branch --cov-report=term-missing -p no:cacheprovider`
+passed all 368 tests with 100% statement/branch coverage (1,794 statements, 608 branches);
+`git diff --check` passed. Only synthetic fixtures were used, with no network, source-document
+download, secret, model, or paid operation.
 
 ## M1b verification spike record (2026-07-15)
 
@@ -444,9 +464,10 @@ response bodies.
 
 ## Immediate next action (M2 — do these in order)
 
-1. Implement publication-date-filtered bilingual document retrieval against the same evidence
-   contract, with offline fixtures before any source-document download or paid embedding call.
-2. Use committed document manifests and retrieval fixtures to author the next small core batch
+1. Verify the exact publication notice and redistribution basis for the first planned real
+   Korean/English document release pair, then commit metadata-only `SourceManifest` records before
+   any document-body download.
+2. Use those committed manifests and the retrieval fixtures to author the next small core batch
    without changing the approved matrix; keep unreviewed records under `data/benchmark/drafts/`.
 3. Join the router, temporal retrieval, and deterministic as-of tool into the minimal
    question-to-evidence-packet path before generating the tier-2 probes.
@@ -509,6 +530,7 @@ complete.
 | 2026-07-18 | RunPod A40/CUDA 13 Ministral 3 QLoRA compatibility | $0.23584524099715054 | Finalized billing for 1,832,105 ms across five A40 provisioning/success Pods; account balance `$20.0000000000` -> `$19.7641547592`; all Pods deleted, current spend `$0`/h |
 | 2026-07-24 | Core authoring matrix and first four-record draft batch | $0.00 | Offline committed evidence replay only; no network, model, or paid call |
 | 2026-07-25 | Owner approval of the core matrix and first four records | $0.00 | Annotation and governance update only; no network, model, or paid call |
+| 2026-07-28 | Offline bilingual temporal document retrieval | $0.00 | Synthetic fixtures and local tests only; no source download, network, model, or paid call |
 
 **Cumulative external spend: $0.23584524099715054 / $100.00**
 
@@ -528,9 +550,11 @@ Read in this order, in full, before changing anything:
 8. `docs/discovery/01_concept_upgrade_proposal.md` — background: why v2 exists, verified data facts, judged alternatives, risk register.
 
 Then start with "Immediate next action" item 1. The structural matrix and first four records are
-owner-approved; the remaining 36 slots are neither authored nor approved. M1b is closed, so
-minimal retrieval work and the next small authoring batch are authorized. Do not start full LoRA
-tuning, UI, or release work before the M2 gate closes. The harvester must stay within approved
-rights scopes, and every later paid operation remains smoke-test-first. Do not weaken the
-qualification rules for "first" claims or the rights/append-only rules in `AGENTS.md`.
+owner-approved; the remaining 36 slots are neither authored nor approved. The synthetic retrieval
+baseline is complete, but no real document body has been downloaded or approved for redistribution.
+M1b is closed, so the first metadata-only document pair and next small authoring batch are
+authorized. Do not start full LoRA tuning, UI, or release work before the M2 gate closes. The
+harvester must stay within approved rights scopes, and every later paid operation remains
+smoke-test-first. Do not weaken the qualification rules for "first" claims or the
+rights/append-only rules in `AGENTS.md`.
 Update this file whenever a milestone state, blocker, cost, spike result, or next action changes.

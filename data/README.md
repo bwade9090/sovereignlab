@@ -37,7 +37,8 @@ Repository layout:
   same captured constraint bytes; historical ledgers are never rewritten.
 - `benchmark/` — the frozen 40-record core authoring matrix, AI-authored review drafts, and later
   human-reviewed task records; drafts are never reported as reviewed gold.
-- `fixtures/` — synthetic examples and, later, small redistributable recorded responses used by offline tests.
+- `fixtures/` — synthetic examples, including the bilingual temporal-retrieval corpus, and later
+  small redistributable recorded responses used by offline tests.
 - `manifests/` — source URL, publisher, publication date, retrieval time, checksum, language, and license notes.
 - `rights/` — append-only source-specific rights instruments and owner-approved series decisions;
   metadata only, never observation payloads.

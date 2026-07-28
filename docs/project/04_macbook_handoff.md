@@ -1,6 +1,6 @@
 # Continuation handoff
 
-- Prepared: 2026-07-16; refreshed 2026-07-25 after owner approval of the first M2 batch
+- Prepared: 2026-07-16; refreshed 2026-07-28 after the offline temporal retrieval baseline
 - Authority: charter v2.3; accepted ADRs 0001–0007
 - Branch to continue: `main` from `origin`
 - Current milestone: M2
@@ -51,7 +51,12 @@
   the first four initially AI-authored records on 2026-07-25. They live under
   `data/benchmark/core/` with named reviewer metadata; real committed evidence reproduces the
   `202607` CLI answer and the pre-July abstention. The approved core count is 4/40.
-- macOS validation at handoff (2026-07-24, Python 3.12.13 via Homebrew): 353 tests passed with
+- The offline bilingual temporal document retriever is implemented under
+  `src/sovereignlab/retrieval/`. It validates chunk-to-manifest language/hash linkage, removes
+  post-`as_of` and other-language documents before computing corpus statistics or scores, and
+  returns manifest-bound locators. Synthetic Korean/English fixtures prove future passages cannot
+  change eligible results or scores. No official document body or paid embedding was used.
+- macOS validation at handoff (2026-07-28, Python 3.12.13 via Homebrew): 368 tests passed with
   100% statement/branch coverage; ruff check/format clean;
   `python scripts/export_json_schemas.py` deterministic (seven contracts).
 
@@ -82,9 +87,12 @@ git diff --exit-code
    next work units build on.
 6. `docs/project/07_core_authoring_matrix.md` — the approved 40-record allocation, first approved
    batch, and human-review boundary.
-7. `docs/discovery/03_week1_verification_log.md` — the verified example values the resolver must
+7. `docs/project/08_temporal_document_retrieval.md` — the implemented document cutoff and
+   filter-before-scoring contract.
+8. `docs/discovery/03_week1_verification_log.md` — the verified example values the resolver must
    reproduce.
-8. `src/sovereignlab/vintage/resolver.py`, `src/sovereignlab/harvest/weekly.py`, and their tests —
+9. `src/sovereignlab/vintage/resolver.py`, `src/sovereignlab/retrieval/temporal.py`,
+   `src/sovereignlab/harvest/weekly.py`, and their tests —
    the implemented resolver and append-only capture boundaries.
 
 ## 4. External state for the new session
@@ -104,10 +112,12 @@ git diff --exit-code
 
 ## 5. Exact continuation order
 
-1. Implement offline-first bilingual temporal document retrieval.
-2. Use committed document manifests and fixtures to author the next small core batch without
-   changing the approved matrix, then join retrieval with the router and deterministic as-of tool.
-3. Manually dispatch one append-only secret-backed workflow smoke only after separate owner
+1. Verify the exact publication/redistribution basis for the first planned real Korean/English
+   document release pair, then commit metadata-only manifests before any document-body download.
+2. Use those manifests and the retrieval fixtures to author the next small core draft batch without
+   changing the approved matrix.
+3. Join retrieval with the router and deterministic as-of tool.
+4. Manually dispatch one append-only secret-backed workflow smoke only after separate owner
    authorization; otherwise let the next weekly schedule exercise the configured secrets.
 
 ## 6. Hard stops
