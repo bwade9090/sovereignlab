@@ -1,9 +1,26 @@
 # Continuation handoff
 
-- Prepared: 2026-07-16; refreshed 2026-07-28 after the offline temporal retrieval baseline
+- Prepared: 2026-07-16; refreshed 2026-07-28 for a clean new-agent session
 - Authority: charter v2.3; accepted ADRs 0001–0007
 - Branch to continue: `main` from `origin`
 - Current milestone: M2
+- Session state: closed; no implementation is intentionally left in progress
+- Last functional baseline: `a92c44d` (`feat: add temporal document retrieval`)
+
+## 0. Start here
+
+The repository is the source of truth; do not rely on a prior chat transcript. At the beginning of
+the new session:
+
+1. Fetch and fast-forward `main`, then confirm `git status --short --branch` is clean and aligned
+   with `origin/main`.
+2. Read the files in section 3 in order, in full.
+3. Run the baseline commands in section 2 before changing files.
+4. State back the current milestone, approved core count, exact next work unit, and hard stops.
+5. Start only section 5 work unit A. Do not redo the completed retrieval baseline or broaden scope.
+
+If the worktree is dirty, preserve the existing changes and determine their owner before editing.
+If local `main` has diverged from `origin/main`, stop rather than rewriting history.
 
 ## 1. What is complete
 
@@ -71,9 +88,9 @@ git switch main
 git pull --ff-only origin main
 source .venv/bin/activate  # or recreate: python3.12 -m venv .venv && pip install -r requirements.txt
 python scripts/export_json_schemas.py
-python -m ruff check .
+python -m ruff check --no-cache .
 python -m ruff format --check .
-python -m pytest --cov=sovereignlab --cov-report=term-missing
+python -m pytest --cov=sovereignlab --cov-branch --cov-report=term-missing -p no:cacheprovider
 git diff --exit-code
 ```
 
@@ -82,16 +99,18 @@ git diff --exit-code
 1. `AGENTS.md`.
 2. `docs/project/01_project_charter.md`.
 3. `docs/PROJECT_STATUS.md`.
-4. ADRs 0004, 0005, 0006, and 0007.
-5. `docs/project/05_evidence_contract_2_0_migration.md` — the implemented contract surface the
+4. Accepted ADRs 0001–0007 under `docs/decisions/`.
+5. `docs/discovery/01_concept_upgrade_proposal.md` — the verified background and risk register
+   behind the v2 direction.
+6. `docs/project/05_evidence_contract_2_0_migration.md` — the implemented contract surface the
    next work units build on.
-6. `docs/project/07_core_authoring_matrix.md` — the approved 40-record allocation, first approved
+7. `docs/project/07_core_authoring_matrix.md` — the approved 40-record allocation, first approved
    batch, and human-review boundary.
-7. `docs/project/08_temporal_document_retrieval.md` — the implemented document cutoff and
+8. `docs/project/08_temporal_document_retrieval.md` — the implemented document cutoff and
    filter-before-scoring contract.
-8. `docs/discovery/03_week1_verification_log.md` — the verified example values the resolver must
+9. `docs/discovery/03_week1_verification_log.md` — the verified example values the resolver must
    reproduce.
-9. `src/sovereignlab/vintage/resolver.py`, `src/sovereignlab/retrieval/temporal.py`,
+10. `src/sovereignlab/vintage/resolver.py`, `src/sovereignlab/retrieval/temporal.py`,
    `src/sovereignlab/harvest/weekly.py`, and their tests —
    the implemented resolver and append-only capture boundaries.
 
@@ -109,27 +128,86 @@ git diff --exit-code
   synthetic fixture, and recorded compatibility evidence.
 - The application-ready detailed and brief English descriptions are in
   `docs/application/01_project_description.md`. They intentionally make no model-performance claim.
+- The approved core count is exactly 4/40. Only `data/benchmark/core/core-batch-001.jsonl` is
+  approved. The remaining 36 matrix slots are neither authored nor approved.
+- The filenames and field names in the approved matrix and first core batch are intentionally
+  unchanged. Do not rename them or alter the frozen allocation.
+- No real report body or extracted report text has been added for document retrieval. The committed
+  retrieval corpus is entirely synthetic.
 
 ## 5. Exact continuation order
 
-1. Verify the exact publication/redistribution basis for the first planned real Korean/English
-   document release pair, then commit metadata-only manifests before any document-body download.
-2. Use those manifests and the retrieval fixtures to author the next small core draft batch without
-   changing the approved matrix.
-3. Join retrieval with the router and deterministic as-of tool.
-4. Manually dispatch one append-only secret-backed workflow smoke only after separate owner
-   authorization; otherwise let the next weekly schedule exercise the configured secrets.
+### Work unit A — first real document manifests
 
-## 6. Hard stops
+Target only the first frozen documentary pair:
+
+- pair: `kv-core-doc-01`;
+- Korean record: `kv-core-doc-01-ko`;
+- English record: `kv-core-doc-01-en`;
+- evidence group: `eg-doc-bok-outlook-2026-05`;
+- document unit: `bok-outlook-release-2026-05`;
+- split/route: `train` / `documents`;
+- intent: explain one stated driver from the May 2026 Bank of Korea outlook release family.
+
+Complete this sequence:
+
+1. Locate the official Korean and English publication landing pages and exact attachment URLs.
+2. Record each language edition's actual public date independently. Do not copy the Korean date to
+   a later English translation or infer a date from the release label.
+3. Verify the publication-specific reuse/redistribution notice and attribution basis from official
+   pages. Existing ECOS/KOSIS data-series rulings do not automatically apply to BOK publications.
+4. Only after that read-only rights check, capture each attachment locally under ignored
+   `data/raw/` or an OS temporary directory to compute its real byte size and SHA-256. Never invent
+   manifest hashes or sizes.
+5. Commit `SourceManifest` records under `data/manifests/`. Use `source_kind=document`, the actual
+   language/date/date basis, and a conservative `redistribution` value. Leave `rights_decision`
+   null: the typed series-rights link is for data/API sources and rejects document sources.
+6. Do not commit the report bodies or extracted text unless the exact publication notice clearly
+   authorizes that redistribution. If it is ambiguous, keep the manifests `metadata_only`, record
+   the uncertainty, and stop before creating real searchable chunks.
+7. Add manifest/retrieval-boundary tests, update `docs/PROJECT_STATUS.md`, run the full offline
+   checks, make one conventional commit, and push it to `origin/main`.
+
+Work unit A is complete only when both language sources have official URLs, independently supported
+publication dates, real local-capture hashes/sizes, an auditable redistribution conclusion, strict
+manifest validation, and no unauthorized body in Git. If an official English edition does not
+exist, or its date/rights cannot be established, report that as a blocker instead of substituting
+the Korean source or machine translation.
+
+### Later work units — do not merge into A
+
+1. After work unit A passes, author the `kv-core-doc-01` Korean/English records as a small draft
+   batch under `data/benchmark/drafts/`. Do not change the frozen matrix and do not label the
+   records reviewed or approved without a new explicit Hyungbae review.
+2. After the next draft unit, join the router, temporal retrieval, and deterministic as-of tool in
+   the minimal question-to-evidence-packet path.
+3. Manually dispatch one append-only secret-backed workflow smoke only after separate owner
+   authorization; otherwise let the weekly schedule exercise the configured secrets.
+
+## 6. What not to redo
+
+- Do not rebuild or rename the 40-record matrix or the approved four-record batch.
+- Do not replace the retrieval baseline with embeddings yet. Its filter-before-scoring invariant
+  and synthetic future-document regression are already complete.
+- Do not rerun the paid QLoRA compatibility spike. It passed, all Pods were deleted, and it is not
+  a model-quality result.
+- Do not manually dispatch the secret-backed harvester as part of onboarding.
+- Do not reopen accepted ADRs 0003–0007 without new evidence that requires a superseding decision.
+
+## 7. Hard stops
 
 - Do not reinterpret `EDITION=YYYYMM` as a publication date.
 - Do not implement a heuristic fallback across an unknown availability frontier; abstention is the
   correct answer.
+- Do not assume bilingual document editions share a publication date, URL, hash, or licence.
+- Do not fabricate `published_on`, `content_sha256`, `byte_size`, or an attribution basis to make a
+  manifest validate.
 - Do not commit raw ECOS/KOSIS observations unless the manifest's typed `rights_decision` link
   cross-validates against the committed owner-approved catalog under `BenchmarkBundle` 2.0.0
   rules.
 - Do not publish raw OECD archive observations beyond ADR 0007's exact CLI exception; all other
   OECD scopes remain metadata-only.
 - Do not run paid APIs, OCR, embeddings, or GPU work without a smoke test and spend-ledger entry.
+- Do not count a draft as part of the human-reviewed core before explicit owner review.
 - Do not weaken the qualification rules for "first" claims or the append-only rules in
   `AGENTS.md`.

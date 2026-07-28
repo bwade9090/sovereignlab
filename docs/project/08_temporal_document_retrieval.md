@@ -59,5 +59,8 @@ same filter-before-index/statistics/scoring rule and require a separate smoke te
 operation.
 
 Before a real document body or extracted text is committed, the exact publication's redistribution
-basis and attribution must be documented. The next work unit should verify that basis and commit
-the first real metadata-only document manifest pair before authoring additional core drafts.
+basis and attribution must be documented. Because a valid `SourceManifest` requires real byte size
+and SHA-256 values, the next work unit must first verify the official publication notice, then
+capture the body only in ignored `data/raw/` or an OS temporary directory for hashing. Commit the
+manifest, but keep the body and extracted text out of Git unless the exact notice clearly permits
+their redistribution.

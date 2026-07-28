@@ -313,6 +313,11 @@ passed all 368 tests with 100% statement/branch coverage (1,794 statements, 608 
 `git diff --check` passed. Only synthetic fixtures were used, with no network, source-document
 download, secret, model, or paid operation.
 
+Revalidated 2026-07-28 after the session-close handoff documentation update: schema export remained
+deterministic at seven contracts; ruff check and format check passed; all 368 tests again passed
+with 100% statement/branch coverage (1,794 statements, 608 branches); `git diff --check` passed.
+This was a documentation-only operation with no network, source download, secret, model, or cost.
+
 ## M1b verification spike record (2026-07-15)
 
 All network work below was read-only, key-free, and free of charge. Raw responses were written only
@@ -462,13 +467,32 @@ response bodies.
   charter v2.3 and the append-only 2026-07-17 catalog are synchronized. All current week-1 owner
   decisions are closed.
 
+## Session-close snapshot (2026-07-28)
+
+- This round is closed with no implementation intentionally left in progress. Pull the latest
+  `origin/main`; `a92c44d` is the last functional baseline before this handoff-only documentation
+  update.
+- M2 remains active. The frozen 40-record matrix and exactly four records are owner-approved; the
+  other 36 slots are not authored or approved.
+- The bilingual temporal retriever and its synthetic leakage regression are complete. No real
+  report body or extracted report text has been added.
+- The exact next work unit is the official-source rights/date/hash manifest work for
+  `kv-core-doc-01` / `bok-outlook-release-2026-05`. The detailed, fail-closed checklist is in
+  `docs/project/04_macbook_handoff.md` section 5.
+- No paid operation, secret-backed manual workflow, source download, or owner decision is pending
+  inside this closed session.
+
 ## Immediate next action (M2 — do these in order)
 
-1. Verify the exact publication notice and redistribution basis for the first planned real
-   Korean/English document release pair, then commit metadata-only `SourceManifest` records before
-   any document-body download.
-2. Use those committed manifests and the retrieval fixtures to author the next small core batch
-   without changing the approved matrix; keep unreviewed records under `data/benchmark/drafts/`.
+1. For frozen pair `kv-core-doc-01`, verify the official Korean and English May 2026 Bank of Korea
+   outlook landing pages, attachment URLs, independently supported publication dates, and
+   publication-specific redistribution/attribution notices. Only after that check, capture each
+   attachment in ignored `data/raw/` or a temporary directory to compute real hashes/sizes and
+   commit conservative document `SourceManifest` records. Do not commit bodies or extracted text
+   unless the exact notice authorizes redistribution.
+2. In a separate work unit, use those manifests and the retrieval fixtures to author the
+   `kv-core-doc-01` bilingual draft pair without changing the approved matrix; keep unreviewed
+   records under `data/benchmark/drafts/`.
 3. Join the router, temporal retrieval, and deterministic as-of tool into the minimal
    question-to-evidence-packet path before generating the tier-2 probes.
 
@@ -531,6 +555,7 @@ complete.
 | 2026-07-24 | Core authoring matrix and first four-record draft batch | $0.00 | Offline committed evidence replay only; no network, model, or paid call |
 | 2026-07-25 | Owner approval of the core matrix and first four records | $0.00 | Annotation and governance update only; no network, model, or paid call |
 | 2026-07-28 | Offline bilingual temporal document retrieval | $0.00 | Synthetic fixtures and local tests only; no source download, network, model, or paid call |
+| 2026-07-28 | New-session handoff finalization | $0.00 | Documentation and offline validation only; no network, source download, model, or paid call |
 
 **Cumulative external spend: $0.23584524099715054 / $100.00**
 
@@ -547,13 +572,16 @@ Read in this order, in full, before changing anything:
    and harvester build on.
 7. `docs/project/07_core_authoring_matrix.md` — the approved M2 allocation and human-review
    boundary.
-8. `docs/discovery/01_concept_upgrade_proposal.md` — background: why v2 exists, verified data facts, judged alternatives, risk register.
+8. `docs/project/08_temporal_document_retrieval.md` — the implemented filter-before-scoring
+   document retrieval boundary.
+9. `docs/discovery/01_concept_upgrade_proposal.md` — background: why v2 exists, verified data facts,
+   judged alternatives, risk register.
 
 Then start with "Immediate next action" item 1. The structural matrix and first four records are
 owner-approved; the remaining 36 slots are neither authored nor approved. The synthetic retrieval
 baseline is complete, but no real document body has been downloaded or approved for redistribution.
-M1b is closed, so the first metadata-only document pair and next small authoring batch are
-authorized. Do not start full LoRA tuning, UI, or release work before the M2 gate closes. The
+M1b is closed, so the first document-rights/manifest work unit is authorized. Keep the later draft
+batch separate. Do not start full LoRA tuning, UI, or release work before the M2 gate closes. The
 harvester must stay within approved rights scopes, and every later paid operation remains
 smoke-test-first. Do not weaken the qualification rules for "first" claims or the
 rights/append-only rules in `AGENTS.md`.
