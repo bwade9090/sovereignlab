@@ -8,14 +8,18 @@ Build **KOR-RTD**, a provenance-contracted point-in-time (vintage) data layer fo
 
 ## Read before changing anything
 
-1. `docs/project/01_project_charter.md` — approved product and evaluation contract (v2.3).
+1. `docs/project/01_project_charter.md` — approved product and evaluation contract (v2.4).
 2. `docs/PROJECT_STATUS.md` — current milestone, completed work, next action, blockers, and validation evidence.
 3. `docs/decisions/` — accepted architecture and process decisions (ADR 0003 records the v2
    reorientation; ADR 0004 records the v2.1 source-rights amendment; ADR 0005 records the v2.2
    fail-closed edition-availability contract; ADR 0006 records the owner's employer-risk review;
-   ADR 0007 records the v2.3 exact KOSIS CPI and OECD CLI rights amendment).
-4. `docs/discovery/01_concept_upgrade_proposal.md` — background rationale for v2: verified data facts, judged alternatives, risk register.
-5. The closest additional `AGENTS.md`, if a subdirectory adds one later.
+   ADR 0007 records the v2.3 exact KOSIS CPI and OECD CLI rights amendment; ADR 0008 records the
+   v2.4 typed function-calling execution contract and the v1.1 deferral of the bounded tool
+   loop).
+4. `docs/project/04_macbook_handoff.md` — machine setup and the exact continuation order for the
+   current milestone (skip files it lists that you already read this session).
+5. `docs/discovery/01_concept_upgrade_proposal.md` — background rationale for v2: verified data facts, judged alternatives, risk register.
+6. The closest additional `AGENTS.md`, if a subdirectory adds one later.
 
 The charter is the scope authority. Do not expand sources, agents, UI, or infrastructure before the current milestone gate passes.
 
@@ -56,6 +60,11 @@ The charter is the scope authority. Do not expand sources, agents, UI, or infras
 - When mentioning Korea's AI Basic Act, describe it precisely: it regulates "high-impact" (고영향) AI under a voluntary verification/certification regime — not "high-risk" AI with mandatory testing.
 - Frame the project as complementing public statistical infrastructure; never as exposing defects in official APIs.
 - Treat LLM judges as secondary diagnostics until calibrated against human review.
+- Describe the MVP briefing path as "typed function calling with committed traces" only, and only
+  after the minimal path ships. Do not use "agent", "agentic", "multi-step", "orchestration", or
+  "autonomous" in public-facing descriptions of in-window artifacts (README, CV, datasheets,
+  release notes, commit messages); the bounded tool loop is deferred to v1.1 (ADR 0008). Naming
+  the deferred loop in planning and decision documents is permitted.
 - Derive every CV number and README performance claim from committed artifacts and a reproducible command.
 - Preserve negative results and failure taxonomies.
 - Fine-tuning must target measurable behavior; changing facts belong in retrieval or deterministic tools.

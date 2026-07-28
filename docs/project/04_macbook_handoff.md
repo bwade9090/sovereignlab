@@ -1,7 +1,8 @@
 # Continuation handoff
 
-- Prepared: 2026-07-16; refreshed 2026-07-28 for a clean new-agent session
-- Authority: charter v2.3; accepted ADRs 0001–0007
+- Prepared: 2026-07-16; refreshed 2026-07-28 for a clean new-agent session (second refresh the
+  same day: ADR 0008 / charter v2.4 execution-contract adjustment, documentation only)
+- Authority: charter v2.4; accepted ADRs 0001–0008
 - Branch to continue: `main` from `origin`
 - Current milestone: M2
 - Session state: closed; no implementation is intentionally left in progress
@@ -24,8 +25,9 @@ If local `main` has diverged from `origin/main`, stop rather than rewriting hist
 
 ## 1. What is complete
 
-- Charter v2.3 and ADRs 0003–0007 record the K-VINTAGE/KOR-RTD direction, source-rights policy,
-  and fail-closed edition-availability contract.
+- The charter v2–v2.3 amendments and ADRs 0003–0007 recorded the K-VINTAGE/KOR-RTD direction,
+  source-rights policy, and fail-closed edition-availability contract (all carried forward into
+  the current charter v2.4).
 - ADR 0006 (2026-07-17) commits the owner-authored employer-risk review: proceed unchanged, a
   single English personal-capacity disclaimer in the README, no Git-history rewrite. All week-1
   owner decisions are closed.
@@ -73,6 +75,15 @@ If local `main` has diverged from `origin/main`, stop rather than rewriting hist
   post-`as_of` and other-language documents before computing corpus statistics or scores, and
   returns manifest-bound locators. Synthetic Korean/English fixtures prove future passages cannot
   change eligible results or scores. No official document body or paid embedding was used.
+- **Execution-contract adjustment (2026-07-28, ADR 0008 / charter v2.4, documentation only):**
+  after a four-lens review with adversarial verification, the owner approved implementing the
+  minimal question-to-evidence-packet path as a typed function-calling artifact (model-emitted
+  typed plan and tool calls against pydantic-derived schemas, deterministic execution, committed
+  traces, recorded/replayable model interface) with a three-tool surface — temporal retrieval,
+  the as-of resolver behind the frozen flat gold-argument convention via an adapter, and a new
+  deterministic latest-only snapshot-read tool. The bounded multi-step tool loop is deferred to
+  post-window v1.1 as an execution-mode ablation; the LoRA target stays the single-shot router;
+  contracts stay 2.0.0. No code changed in this round.
 - macOS validation at handoff (2026-07-28, Python 3.12.13 via Homebrew): 368 tests passed with
   100% statement/branch coverage; ruff check/format clean;
   `python scripts/export_json_schemas.py` deterministic (seven contracts).
@@ -99,7 +110,8 @@ git diff --exit-code
 1. `AGENTS.md`.
 2. `docs/project/01_project_charter.md`.
 3. `docs/PROJECT_STATUS.md`.
-4. Accepted ADRs 0001–0007 under `docs/decisions/`.
+4. Accepted ADRs 0001–0008 under `docs/decisions/` (ADR 0008 fixes how the join work unit must
+   be implemented).
 5. `docs/discovery/01_concept_upgrade_proposal.md` — the verified background and risk register
    behind the v2 direction.
 6. `docs/project/05_evidence_contract_2_0_migration.md` — the implemented contract surface the
@@ -179,8 +191,15 @@ the Korean source or machine translation.
 1. After work unit A passes, author the `kv-core-doc-01` Korean/English records as a small draft
    batch under `data/benchmark/drafts/`. Do not change the frozen matrix and do not label the
    records reviewed or approved without a new explicit Hyungbae review.
-2. After the next draft unit, join the router, temporal retrieval, and deterministic as-of tool in
-   the minimal question-to-evidence-packet path.
+2. After the next draft unit, build the minimal question-to-evidence-packet path under the
+   ADR 0008 execution contract: the model emits the typed route plan and typed tool calls as
+   native function calls against pydantic-derived schemas; the pipeline validates and executes
+   them deterministically and commits a machine-readable trace of every call and result. This
+   unit includes the recorded/replayable external model interface (charter §6), the resolver
+   adapter behind the frozen flat gold-argument convention, and the new deterministic
+   latest-only snapshot-read tool (freeze its gold argument convention before authoring the
+   matrix records that depend on it). Offline scripted-planner tests land before any paid live
+   model call; a live call needs a smoke test and a spend-ledger entry first.
 3. Manually dispatch one append-only secret-backed workflow smoke only after separate owner
    authorization; otherwise let the weekly schedule exercise the configured secrets.
 
@@ -192,7 +211,9 @@ the Korean source or machine translation.
 - Do not rerun the paid QLoRA compatibility spike. It passed, all Pods were deleted, and it is not
   a model-quality result.
 - Do not manually dispatch the secret-backed harvester as part of onboarding.
-- Do not reopen accepted ADRs 0003–0007 without new evidence that requires a superseding decision.
+- Do not reopen accepted ADRs 0003–0008 without new evidence that requires a superseding decision.
+- Do not implement the bounded multi-step tool loop in-window; ADR 0008 defers it to v1.1. Do
+  not re-litigate that deferral — the supporting matrix/schema arithmetic is recorded in the ADR.
 
 ## 7. Hard stops
 
@@ -209,5 +230,10 @@ the Korean source or machine translation.
   OECD scopes remain metadata-only.
 - Do not run paid APIs, OCR, embeddings, or GPU work without a smoke test and spend-ledger entry.
 - Do not count a draft as part of the human-reviewed core before explicit owner review.
+- Do not let any tool accept model-chosen file paths, manifests, ledgers, or raw bytes; the
+  harness injects committed artifacts (ADR 0008 decision 2).
+- Do not use "agent", "agentic", "multi-step", "orchestration", or "autonomous" in public-facing
+  descriptions of in-window artifacts (ADR 0008 decision 7); naming the deferred loop in planning
+  and decision documents is permitted.
 - Do not weaken the qualification rules for "first" claims or the append-only rules in
   `AGENTS.md`.

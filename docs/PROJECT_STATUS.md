@@ -3,7 +3,7 @@
 - Last updated: 2026-07-28
 - Owner: Hyungbae Cho (`bwade9090`)
 - Delivery window: four weeks, approximately 80 hours
-- Current milestone: M2 — week-2 benchmark and baselines (charter v2.3 §7, Week 2)
+- Current milestone: M2 — week-2 benchmark and baselines (charter v2.4 §7, Week 2)
 - Overall state: source-rights policy, two ECOS plus exact KOSIS CPI and OECD CLI rulings, strict
   append-only rights catalogs,
   the edition-availability decision, the owner-authored employer-risk review (ADR 0006), and the
@@ -20,13 +20,19 @@
   The approved human-reviewed core count is now 4/40; the remaining 36 matrix slots are not yet
   authored or approved. The offline bilingual temporal document retriever is now implemented with
   manifest-bound chunks and publication-date filtering before scoring; only synthetic fixtures
-  were used.
+  were used. On 2026-07-28 the owner additionally approved ADR 0008 and charter v2.4: the
+  minimal question-to-evidence-packet path will be implemented as a typed function-calling
+  artifact (model-emitted typed plan and tool calls, committed traces, recorded/replayable
+  model interface, and a three-tool surface including a new latest-only snapshot reader), and
+  the bounded multi-step tool loop is deferred to post-window v1.1. Documentation only; no code
+  changed.
 
 ## Approved baseline
 
-- Product direction: **K-VINTAGE on KOR-RTD** (charter v2.3; source-rights and
-  edition-availability amendments approved 2026-07-16–17; core rationale in
-  `docs/discovery/01_concept_upgrade_proposal.md`; decisions recorded as ADRs 0003–0007).
+- Product direction: **K-VINTAGE on KOR-RTD** (charter v2.4; source-rights and
+  edition-availability amendments approved 2026-07-16–17; execution-contract amendment approved
+  2026-07-28; core rationale in
+  `docs/discovery/01_concept_upgrade_proposal.md`; decisions recorded as ADRs 0003–0008).
   - KOR-RTD: point-in-time data layer — OECD edition-history consolidation + weekly append-only forward-capture harvester for the latest-only ECOS/KOSIS APIs.
   - K-VINTAGE: two-tier bilingual benchmark (40 human-reviewed core + 200–300 machine-generated
     data-route probes, always reported separately) with regenerable point-in-time gold answers and a
@@ -185,6 +191,25 @@
   rejection are covered. No official document body, network request, paid embedding, OCR, or model
   call was used.
 
+- **Execution-contract adjustment — ADR 0008 and charter v2.4 (2026-07-28):** the owner asked
+  whether the plan could also build agent-orchestration (tool/function calling, multi-step)
+  experience. A four-lens review (governance, technical, schedule, portfolio) with two
+  adversarial verification passes was run against the repository; key verified findings: only
+  `kv-core-data-01`/`kv-core-both-01` (both train) exercise the vintage resolver, so a loop
+  ablation has no dev/test slice; abstain records cannot carry tool expectations under contract
+  2.0.0; six of ten data-bearing matrix pairs need a not-yet-built latest-only snapshot-read
+  tool; no router/model-call/replay harness exists; trajectory-level leakage is structurally
+  zero over the fail-closed tools; and the week-2 gate stood at the cut-ladder boundary. The
+  owner accepted the recommendation in full: implement the minimal path as a typed
+  function-calling artifact (model-emitted typed plan and tool calls against pydantic-derived
+  schemas, deterministic execution, committed traces, recorded/replayable model interface,
+  three-tool surface), defer the bounded multi-step loop to post-window v1.1 as an
+  execution-mode ablation, keep the single-shot LoRA target and contract 2.0.0, and reserve
+  agent/orchestration wording for the evaluated v1.1 loop. Recorded as ADR 0008 with charter
+  v2.4 (§§3, 7, 12); AGENTS.md, the README milestone text, the handoff, the decisions index, and
+  the CV wording-bank guard rule were synchronized. Documentation only; no source or test file
+  changed.
+
 ## Current validation evidence
 
 Run from the repository root after activating `.venv` (any OS; see README quick start):
@@ -317,6 +342,14 @@ Revalidated 2026-07-28 after the session-close handoff documentation update: sch
 deterministic at seven contracts; ruff check and format check passed; all 368 tests again passed
 with 100% statement/branch coverage (1,794 statements, 608 branches); `git diff --check` passed.
 This was a documentation-only operation with no network, source download, secret, model, or cost.
+
+Revalidated 2026-07-28 after recording ADR 0008 and charter v2.4:
+`python scripts/export_json_schemas.py` remained deterministic at seven contracts;
+`python -m ruff check --no-cache .` and `python -m ruff format --check .` passed (43 files);
+`python -m pytest --cov=sovereignlab --cov-branch --cov-report=term-missing -p no:cacheprovider`
+passed all 368 tests with 100% statement/branch coverage (1,794 statements, 608 branches);
+`git diff --check` passed. Documentation-only change; no network, source download, secret, model,
+or paid operation.
 
 ## M1b verification spike record (2026-07-15)
 
@@ -467,18 +500,20 @@ response bodies.
   charter v2.3 and the append-only 2026-07-17 catalog are synchronized. All current week-1 owner
   decisions are closed.
 
-## Session-close snapshot (2026-07-28)
+## Session-close snapshot (2026-07-28, second close: execution-contract adjustment)
 
-- This round is closed with no implementation intentionally left in progress. Pull the latest
-  `origin/main`; `a92c44d` is the last functional baseline before this handoff-only documentation
-  update.
+- This round is closed with no implementation intentionally left in progress. It contains
+  documentation changes only (ADR 0008, charter v2.4, AGENTS.md, README, handoff, decisions
+  index, CV wording-bank guard rule, this file). Pull the latest `origin/main`; `a92c44d` remains
+  the last functional baseline.
 - M2 remains active. The frozen 40-record matrix and exactly four records are owner-approved; the
-  other 36 slots are not authored or approved.
+  other 36 slots are not authored or approved. The matrix itself was not touched this round.
 - The bilingual temporal retriever and its synthetic leakage regression are complete. No real
   report body or extracted report text has been added.
-- The exact next work unit is the official-source rights/date/hash manifest work for
+- The exact next work unit is unchanged: the official-source rights/date/hash manifest work for
   `kv-core-doc-01` / `bok-outlook-release-2026-05`. The detailed, fail-closed checklist is in
-  `docs/project/04_macbook_handoff.md` section 5.
+  `docs/project/04_macbook_handoff.md` section 5. The later join work unit must now follow the
+  ADR 0008 typed function-calling contract (handoff section 5, later item 2).
 - No paid operation, secret-backed manual workflow, source download, or owner decision is pending
   inside this closed session.
 
@@ -493,8 +528,15 @@ response bodies.
 2. In a separate work unit, use those manifests and the retrieval fixtures to author the
    `kv-core-doc-01` bilingual draft pair without changing the approved matrix; keep unreviewed
    records under `data/benchmark/drafts/`.
-3. Join the router, temporal retrieval, and deterministic as-of tool into the minimal
-   question-to-evidence-packet path before generating the tier-2 probes.
+3. Build the minimal question-to-evidence-packet path before generating the tier-2 probes,
+   under the ADR 0008 execution contract: the model emits the typed route plan and typed tool
+   calls as native function calls against pydantic-derived schemas; the pipeline validates and
+   executes them deterministically and commits a machine-readable trace. This unit includes the
+   recorded/replayable model interface, the resolver adapter behind the frozen flat
+   gold-argument convention, and the new deterministic latest-only snapshot-read tool (freeze
+   its gold argument convention before authoring the dependent matrix records). Offline
+   scripted-planner tests come first; a live model call needs a smoke test and spend-ledger
+   entry. The bounded multi-step loop is out of scope (v1.1, ADR 0008).
 
 Open operational check, not an M2 blocker: manually dispatch one secret-backed append-only
 harvester run only with separate owner authorization; otherwise the next weekly schedule will use
@@ -515,7 +557,8 @@ complete.
   spend estimate.
 - Development spans multiple machines. `.venv` is machine-local — recreate it per the README quick start on whichever machine picks this up. Nothing in the repo may depend on machine-specific paths.
 - Windows workstation note: the user-level Python launcher is unreliable there; use the workstation's documented bundled Python 3.12.13 runtime to create `.venv` (local path recorded outside the repository; an earlier revision of this file recorded the literal path — ADR 0006 closed that question with the owner's decision that no history remediation is needed).
-- Rights gate: ADRs 0004/0007, charter v2.3, the append-only catalog chain, two approved ECOS rows,
+- Rights gate: ADRs 0004/0007, the charter v2.3 rights amendments (carried unchanged into v2.4),
+  the append-only catalog chain, two approved ECOS rows,
   exact KOSIS CPI and OECD CLI rows, and typed manifest-rights bundle validation are complete. The
   local snapshots are captured and the two exact GitHub Actions secrets are configured. They remain
   distinct from the ignored local `.env`; their plaintext cannot be retrieved from GitHub.
@@ -556,6 +599,7 @@ complete.
 | 2026-07-25 | Owner approval of the core matrix and first four records | $0.00 | Annotation and governance update only; no network, model, or paid call |
 | 2026-07-28 | Offline bilingual temporal document retrieval | $0.00 | Synthetic fixtures and local tests only; no source download, network, model, or paid call |
 | 2026-07-28 | New-session handoff finalization | $0.00 | Documentation and offline validation only; no network, source download, model, or paid call |
+| 2026-07-28 | Execution-contract review, ADR 0008, and charter v2.4 | $0.00 | Multi-agent review under subscription; documentation and offline validation only; no project API/GPU call |
 
 **Cumulative external spend: $0.23584524099715054 / $100.00**
 
@@ -564,10 +608,11 @@ complete.
 Read in this order, in full, before changing anything:
 
 1. `AGENTS.md` — working protocol, evidence rules, setup, repository map.
-2. `docs/project/01_project_charter.md` — the v2.3 scope authority.
+2. `docs/project/01_project_charter.md` — the v2.4 scope authority.
 3. This file — current milestone, next action, gates, blockers.
 4. `docs/project/04_macbook_handoff.md` — machine setup and exact continuation order.
-5. Accepted ADRs 0001–0007 in `docs/decisions/`.
+5. Accepted ADRs 0001–0008 in `docs/decisions/` (ADR 0008 fixes the join unit's typed
+   function-calling execution contract and defers the bounded tool loop to v1.1).
 6. `docs/project/05_evidence_contract_2_0_migration.md` — the implemented contract the resolver
    and harvester build on.
 7. `docs/project/07_core_authoring_matrix.md` — the approved M2 allocation and human-review

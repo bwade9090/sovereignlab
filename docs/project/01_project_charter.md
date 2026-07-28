@@ -1,9 +1,10 @@
 # SovereignLab project charter
 
-- Status: approved v2.3
-- Date: 2026-07-17 (v2.3 exact-source rights amendment; supersedes v2.2 approved 2026-07-16;
-  substantive v2.3 changes are limited to §§4, 7, and the decision index in §12)
-- Decision basis: `docs/discovery/01_concept_upgrade_proposal.md` and ADRs 0003–0007
+- Status: approved v2.4
+- Date: 2026-07-28 (v2.4 execution-contract amendment; supersedes v2.3 approved 2026-07-17;
+  substantive v2.4 changes are limited to §§3, 7, and the decision index in §12. The v2.3
+  exact-source rights amendment limited its substantive changes to §§4, 7, and §12.)
+- Decision basis: `docs/discovery/01_concept_upgrade_proposal.md` and ADRs 0003–0008
 - Delivery target: four weeks, approximately 80 total hours
 - Initial budget ceiling: USD 100 for model APIs and rented compute
 - Repository: public at `https://github.com/bwade9090/sovereignlab`
@@ -70,6 +71,19 @@ The evidence router must emit a typed plan with one of four routes:
 - `abstain`
 
 This routing and tool behavior is the primary LoRA target. Changing economic facts remain in retrieval and official APIs rather than being memorized in model weights.
+
+**Execution contract (v2.4, ADR 0008).** The router's typed plan and its tool invocations are
+emitted by the model as native typed function calls, validated against JSON schemas derived from
+the frozen pydantic contracts, and executed deterministically by the pipeline; every call and
+result is recorded in a committed machine-readable trace. The MVP tool surface is exactly three
+deterministic offline tools: temporal document retrieval, the fail-closed as-of resolver (behind
+the frozen flat gold-argument convention), and a deterministic latest-only snapshot reader for
+approved ECOS/KOSIS snapshot units. Tools never accept model-chosen files, manifests, ledgers, or
+bytes; the harness injects committed artifacts. External model calls sit behind the §6
+recorded/replayable interface. A bounded multi-step tool loop is explicitly deferred to
+post-window v1.1 as an execution-mode ablation; in-window artifacts are described as "typed
+function calling with committed traces" only, never with "agent", "agentic", "multi-step",
+"orchestration", or "autonomous" wording.
 
 The flagship deterministic capability is the **as-of resolver**. It treats `EDITION` as an opaque
 ordering identity, first resolves which editions were demonstrably available from the immutable
@@ -240,7 +254,10 @@ The **hybrid mode is a committed demo**: a small local/quantized router plus a M
 - Author the 40 human-reviewed core questions (**budget 8–12 h honestly** — machine generation does not remove this bottleneck).
 - Generate the tier-2 probe set; human-audit a documented sample.
 - Temporal metadata filtering and hybrid Korean/English retrieval.
-- Minimal end-to-end path (question -> route -> evidence -> cited brief).
+- Minimal end-to-end path (question -> route -> evidence -> cited brief), implemented as the
+  ADR 0008 typed function-calling contract: model-emitted typed plan and tool calls, the
+  snapshot-read third tool, the recorded/replayable model interface, and committed traces. The
+  bounded multi-step loop is not in this unit (deferred to v1.1).
 - Stretch: a cited note on Korea's Q2-2026 advance GDP release (~2026-07-23/24) — promised as "a cited note within 48 h," not "same-day"; the automation level is reported honestly.
 - **Gate:** end-to-end minimal path works; no known temporal leakage; failures categorized before training begins.
 
@@ -352,3 +369,8 @@ Vintage data costs $0: all OECD SDMX endpoints used are verified key-free and fr
    `DSD_STES_REVISIONS@DF_STES_REVISIONS/KOR.M.LI_AA.IX._T`. The former joins the weekly
    forward-capture basket; the latter is a one-time/manual consolidated archive. All neighboring
    scopes remain blocked or `metadata_only` according to ADR 0004.
+9. **v2.4 execution-contract amendment approved (2026-07-28):** ADR 0008 fixes the minimal
+   path's execution as model-emitted typed function calling with committed traces, adds the
+   deterministic snapshot-read tool to the MVP tool surface, defers the bounded multi-step tool
+   loop to post-window v1.1 as an execution-mode ablation, and keeps the single-shot LoRA
+   target, the four-variant suite, and evidence/benchmark contract 2.0.0 unchanged.

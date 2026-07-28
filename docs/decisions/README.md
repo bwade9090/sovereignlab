@@ -28,3 +28,5 @@ Accepted records are not silently rewritten. Supersede them with a new ADR and c
   — **accepted 2026-07-17 (owner-authored answers)**
 - [0007 — Expand approved capture scopes to KOSIS CPI and OECD Korea CLI](0007-kosis-cpi-oecd-cli-rights.md)
   — **accepted 2026-07-17 (owner-approved exact scopes)**
+- [0008 — Typed function-calling execution contract and deferred bounded tool loop](0008-function-calling-execution-contract.md)
+  — **accepted 2026-07-28 (owner-approved; charter v2.4)**

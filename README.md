@@ -3,7 +3,8 @@
 > What did the data say *then*? Vintage-conditioned evaluation and auditable briefings for Korean/English economic research.
 
 **Status:** M1b verification and vintage-contract groundwork are complete; M2 benchmark and
-baseline development is next. No model-performance claims have been made yet.
+baseline development is in progress (frozen 40-record core matrix, 4/40 records owner-approved,
+temporal document-retrieval baseline complete). No model-performance claims have been made yet.
 
 Korea's official statistics APIs (ECOS, KOSIS) expose latest values only — they offer no "as-of" query path — and no Korean equivalent of the St. Louis Fed's ALFRED archive exists. SovereignLab builds three things in four weeks:
 
@@ -17,19 +18,22 @@ The project will compare four variants under one frozen benchmark:
 
 1. Closed-book Mistral generation.
 2. Temporal hybrid RAG.
-3. Temporal RAG plus the deterministic vintage-resolving as-of tool.
+3. Temporal RAG plus the deterministic offline data tools (the vintage-resolving as-of resolver
+   and the latest-only snapshot reader).
 4. The same system with a LoRA-tuned evidence router/tool planner.
 
 **Temporal-leakage rate is the headline per-variant metric** — a system that answers from revised values that did not exist at `as_of` is caught mechanically, with no LLM judge. Further measurements: routing macro-F1, tool-argument validity, Korean/English retrieval recall, citation correctness, numerical provenance, abstention, latency, and cost.
 
 ## Current milestone
 
-Charter v2.3 (the K-VINTAGE on KOR-RTD reorientation, source-rights amendments, and fail-closed
-edition-availability contract) is approved and documented; see
+Charter v2.4 (the K-VINTAGE on KOR-RTD reorientation, source-rights amendments, fail-closed
+edition-availability contract, and typed function-calling execution contract) is approved and
+documented; see
 [ADR 0003](docs/decisions/0003-kvintage-reorientation.md),
-[ADR 0004](docs/decisions/0004-source-specific-redistribution-evidence.md), and
-[ADR 0005](docs/decisions/0005-edition-availability-and-vintage-contract.md), and
-[ADR 0007](docs/decisions/0007-kosis-cpi-oecd-cli-rights.md), with background in
+[ADR 0004](docs/decisions/0004-source-specific-redistribution-evidence.md),
+[ADR 0005](docs/decisions/0005-edition-availability-and-vintage-contract.md),
+[ADR 0007](docs/decisions/0007-kosis-cpi-oecd-cli-rights.md), and
+[ADR 0008](docs/decisions/0008-function-calling-execution-contract.md), with background in
 [the proposal](docs/discovery/01_concept_upgrade_proposal.md). M1a froze strict source-manifest and
 benchmark-record models with synchronized JSON Schema, synthetic fixtures, and dataset-wide
 temporal/split leakage checks. M1b has now verified the primary OECD examples, fixed the claimable
@@ -54,7 +58,11 @@ ECOS/KOSIS Actions secrets are configured; the first manual secret-backed harves
 optional separately authorized operational check. The paid QLoRA compatibility step passed on a
 RunPod A40/CUDA 13 host, closing the M1b gate. The exact `Decimal` unit, variant, rounding, and
 grading rules are frozen in the
-[number-normalization specification](docs/project/06_number_normalization_spec.md); see
+[number-normalization specification](docs/project/06_number_normalization_spec.md). Charter v2.4
+([ADR 0008](docs/decisions/0008-function-calling-execution-contract.md), 2026-07-28) additionally
+fixes the minimal briefing path's execution as model-emitted typed function calling with
+committed traces over three deterministic offline tools, and defers a bounded multi-step tool
+loop to post-window v1.1 as an execution-mode ablation; see
 [project status](docs/PROJECT_STATUS.md) for the continuation order.
 
 The QLoRA spike's free checkpoint/fixture preflight and isolated paid-GPU one-step harness live in
@@ -97,7 +105,7 @@ a local `.env` on another machine.
 
 ## Documentation
 
-- [Approved project charter (v2.3)](docs/project/01_project_charter.md)
+- [Approved project charter (v2.4)](docs/project/01_project_charter.md)
 - [Concept upgrade proposal (v2 rationale)](docs/discovery/01_concept_upgrade_proposal.md)
 - [Evidence schema contract (1.0, superseded)](docs/project/02_evidence_schema_contract.md)
 - [Source-rights catalog contract](docs/project/03_rights_catalog_contract.md)

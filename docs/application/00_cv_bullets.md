@@ -1,7 +1,7 @@
 # SovereignLab CV bullets
 
 - Status: wording bank; use only the section matching the achieved milestone
-- Last updated: 2026-07-18 (M1b gate passed; M2 wording synchronized)
+- Last updated: 2026-07-28 (ADR 0008 wording-guard rule added)
 - Rule: never replace placeholders with targets or estimates; use measured, reproducible results only
 - Narrative versions: `docs/application/01_project_description.md`
 
@@ -51,6 +51,9 @@ the not-yet-authored benchmark and not-yet-evaluated model variants.
 - Do not cite benchmark size until each counted test item passes schema and human review; **always report the human-reviewed core and machine-generated probes as separate counts**.
 - Do not cite improvement, cost, latency, leakage, or error-rate figures until the aggregation command reproduces them from committed artifacts.
 - Do not describe CPU/API fallback as `on-prem production deployment`; use `portable local/API deployment path` until a documented fully local end-to-end run exists.
+- Do not use `agent`, `agentic`, `multi-step`, `orchestration`, or `autonomous` wording anywhere:
+  the bounded tool loop is deferred to v1.1 (ADR 0008). After the minimal path ships, the
+  permitted wording is `typed function calling with committed traces` — and only then.
 - Every "first" claim must read "to our knowledge, for official statistics" and the datasheet must cite prior art first (arXiv 2605.23497 statutory as-of QA; Dallas Fed real-time OECD dataset; OECD MEI revisions database). Never claim "first Korean macro benchmark" (KMMLU includes economics categories).
 - Do not claim OECD edition/backfill ranges beyond what a recorded verification spike confirmed.
 - Do not cite harvester snapshot counts older than the public commit history that proves them.
