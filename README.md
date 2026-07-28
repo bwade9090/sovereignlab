@@ -5,8 +5,9 @@
 **Status:** M1b verification and vintage-contract groundwork are complete; M2 benchmark and
 baseline development is in progress (frozen 40-record core matrix, 4/40 records owner-approved,
 temporal document-retrieval baseline and the first real bilingual document manifests complete;
-the provider PDFs remain metadata-only and uncommitted). No model-performance claims have been
-made yet.
+the manifests now record the owner-approved Bank of Korea public-data rights basis, while the
+provider PDFs remain uncommitted by repository-scope choice). No model-performance claims have
+been made yet.
 
 Korea's official statistics APIs (ECOS, KOSIS) expose latest values only — they offer no "as-of" query path — and no Korean equivalent of the St. Louis Fed's ALFRED archive exists. SovereignLab builds three things in four weeks:
 
@@ -28,14 +29,15 @@ The project will compare four variants under one frozen benchmark:
 
 ## Current milestone
 
-Charter v2.4 (the K-VINTAGE on KOR-RTD reorientation, source-rights amendments, fail-closed
+Charter v2.5 (the K-VINTAGE on KOR-RTD reorientation, source-rights amendments, fail-closed
 edition-availability contract, and typed function-calling execution contract) is approved and
 documented; see
 [ADR 0003](docs/decisions/0003-kvintage-reorientation.md),
 [ADR 0004](docs/decisions/0004-source-specific-redistribution-evidence.md),
 [ADR 0005](docs/decisions/0005-edition-availability-and-vintage-contract.md),
-[ADR 0007](docs/decisions/0007-kosis-cpi-oecd-cli-rights.md), and
-[ADR 0008](docs/decisions/0008-function-calling-execution-contract.md), with background in
+[ADR 0007](docs/decisions/0007-kosis-cpi-oecd-cli-rights.md),
+[ADR 0008](docs/decisions/0008-function-calling-execution-contract.md), and
+[ADR 0009](docs/decisions/0009-bok-economic-outlook-public-data-rights.md), with background in
 [the proposal](docs/discovery/01_concept_upgrade_proposal.md). M1a froze strict source-manifest and
 benchmark-record models with synchronized JSON Schema, synthetic fixtures, and dataset-wide
 temporal/split leakage checks. M1b has now verified the primary OECD examples, fixed the claimable
@@ -64,7 +66,11 @@ grading rules are frozen in the
 ([ADR 0008](docs/decisions/0008-function-calling-execution-contract.md), 2026-07-28) additionally
 fixes the minimal briefing path's execution as model-emitted typed function calling with
 committed traces over three deterministic offline tools, and defers a bounded multi-step tool
-loop to post-window v1.1 as an execution-mode ablation; see
+loop to post-window v1.1 as an execution-mode ablation. Charter v2.5 and
+[ADR 0009](docs/decisions/0009-bok-economic-outlook-public-data-rights.md) additionally record the
+owner-approved `allowed` public-data ruling for official Bank of Korea Economic Outlook
+publications, subject to attribution, transformation disclosure, and separately marked
+third-party rights; see
 [project status](docs/PROJECT_STATUS.md) for the continuation order.
 
 The QLoRA spike's free checkpoint/fixture preflight and isolated paid-GPU one-step harness live in
@@ -107,7 +113,7 @@ a local `.env` on another machine.
 
 ## Documentation
 
-- [Approved project charter (v2.4)](docs/project/01_project_charter.md)
+- [Approved project charter (v2.5)](docs/project/01_project_charter.md)
 - [Concept upgrade proposal (v2 rationale)](docs/discovery/01_concept_upgrade_proposal.md)
 - [Evidence schema contract (1.0, superseded)](docs/project/02_evidence_schema_contract.md)
 - [Source-rights catalog contract](docs/project/03_rights_catalog_contract.md)

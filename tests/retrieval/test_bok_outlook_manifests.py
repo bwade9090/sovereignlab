@@ -53,18 +53,30 @@ def test_bok_outlook_manifests_preserve_independent_publication_facts() -> None:
     assert korean.published_on < english.published_on
 
 
-def test_bok_outlook_manifests_fail_closed_on_redistribution() -> None:
+def test_bok_outlook_manifests_record_owner_approved_public_data_rights() -> None:
     manifests = (_load_manifest(KOREAN_MANIFEST_PATH), _load_manifest(ENGLISH_MANIFEST_PATH))
 
     assert all(
-        manifest.redistribution.status is RedistributionStatus.METADATA_ONLY
-        for manifest in manifests
+        manifest.redistribution.status is RedistributionStatus.ALLOWED for manifest in manifests
     )
     assert all(manifest.rights_decision is None for manifest in manifests)
-    assert all("prior approval" in manifest.redistribution.notes for manifest in manifests)
+    assert all(
+        manifest.redistribution.license_name
+        == "Bank of Korea Copyright Policy (Public Data Act Article 19 public-data branch)"
+        for manifest in manifests
+    )
+    assert all(
+        str(manifest.redistribution.license_url)
+        == "https://www.bok.or.kr/portal/main/contents.do?menuNo=200228"
+        for manifest in manifests
+    )
+    assert all(
+        "attribute the Bank of Korea" in manifest.redistribution.notes for manifest in manifests
+    )
+    assert all("ADR 0009" in manifest.redistribution.notes for manifest in manifests)
 
 
-def test_metadata_only_manifests_do_not_create_searchable_content() -> None:
+def test_manifests_without_committed_chunks_do_not_create_searchable_content() -> None:
     manifests = (_load_manifest(KOREAN_MANIFEST_PATH), _load_manifest(ENGLISH_MANIFEST_PATH))
     corpus = TemporalDocumentCorpus(sources=manifests, chunks=())
 

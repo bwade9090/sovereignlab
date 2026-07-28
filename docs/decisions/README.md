@@ -30,3 +30,5 @@ Accepted records are not silently rewritten. Supersede them with a new ADR and c
   — **accepted 2026-07-17 (owner-approved exact scopes)**
 - [0008 — Typed function-calling execution contract and deferred bounded tool loop](0008-function-calling-execution-contract.md)
   — **accepted 2026-07-28 (owner-approved; charter v2.4)**
+- [0009 — Bank of Korea Economic Outlook public-data rights](0009-bok-economic-outlook-public-data-rights.md)
+  — **accepted 2026-07-28 (owner-approved publication-family classification; charter v2.5)**

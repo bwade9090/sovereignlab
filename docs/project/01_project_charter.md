@@ -1,10 +1,10 @@
 # SovereignLab project charter
 
-- Status: approved v2.4
-- Date: 2026-07-28 (v2.4 execution-contract amendment; supersedes v2.3 approved 2026-07-17;
-  substantive v2.4 changes are limited to §§3, 7, and the decision index in §12. The v2.3
-  exact-source rights amendment limited its substantive changes to §§4, 7, and §12.)
-- Decision basis: `docs/discovery/01_concept_upgrade_proposal.md` and ADRs 0003–0008
+- Status: approved v2.5
+- Date: 2026-07-28 (v2.5 Bank of Korea Economic Outlook public-data rights amendment; supersedes
+  v2.4 approved 2026-07-28; substantive v2.5 changes are limited to §4 and the decision index in
+  §12. The v2.4 execution-contract amendment remains unchanged.)
+- Decision basis: `docs/discovery/01_concept_upgrade_proposal.md` and ADRs 0003–0009
 - Delivery target: four weeks, approximately 80 total hours
 - Initial budget ceiling: USD 100 for model APIs and rented compute
 - Repository: public at `https://github.com/bwade9090/sovereignlab`
@@ -150,9 +150,19 @@ unless a later owner-approved decision records exact source and rights evidence.
 
 ### Documents
 
-Public Bank of Korea economic-outlook publications: 58 Korean reports (2012.07–2026.05, stable nttId URLs) plus 13 English full translations (verified counts). OECD documents subject to the licensing review; the license status of OECD archive content published **before 2024-07-01** must be verified in week 1 (CC BY 4.0 is the default only for later publications).
+Public Bank of Korea economic-outlook publications: 58 Korean reports (2012.07–2026.05, stable
+nttId URLs) plus 13 English full translations (verified counts). Under the owner-approved
+publication-family classification in ADR 0009, official Bank of Korea-produced Economic Outlook
+reports and their official English full translations are `allowed` public data under the Bank of
+Korea copyright policy's Public Data Act Article 19 branch. Use requires Bank of Korea attribution
+and disclosure of modification, processing, or transformation; separately marked third-party
+material is outside that family ruling. This is not a KOGL classification. OECD documents remain
+subject to the licensing review; the license status of OECD archive content published before
+2024-07-01 must be verified independently (CC BY 4.0 is the default only for later publications).
 
-The repository will not automatically redistribute full source documents. Source-manifest rules from v1 are unchanged.
+The repository will not automatically redistribute full source documents. Permission and corpus
+ingestion remain separate decisions; document manifests must record the exact governing policy and
+attribution duties before any body or derived retrieval content is committed.
 
 ## 5. Evaluation contract before implementation
 
@@ -374,3 +384,10 @@ Vintage data costs $0: all OECD SDMX endpoints used are verified key-free and fr
    deterministic snapshot-read tool to the MVP tool surface, defers the bounded multi-step tool
    loop to post-window v1.1 as an execution-mode ablation, and keeps the single-shot LoRA
    target, the four-variant suite, and evidence/benchmark contract 2.0.0 unchanged.
+10. **v2.5 Bank of Korea publication-rights amendment approved (2026-07-28):** ADR 0009 records the
+    owner's source-family classification that official Bank of Korea Economic Outlook reports and
+    official English full translations are public data usable without a separate procedure under
+    the Bank of Korea copyright policy's Public Data Act Article 19 branch. The exact May 2026
+    document manifests are `allowed`, subject to Bank of Korea attribution, transformation
+    disclosure, and separately marked third-party rights. Full-document ingestion remains a
+    separate repository-scope decision.

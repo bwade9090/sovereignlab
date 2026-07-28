@@ -3,7 +3,7 @@
 - Last updated: 2026-07-28
 - Owner: Hyungbae Cho (`bwade9090`)
 - Delivery window: four weeks, approximately 80 hours
-- Current milestone: M2 — week-2 benchmark and baselines (charter v2.4 §7, Week 2)
+- Current milestone: M2 — week-2 benchmark and baselines (charter v2.5 §7, Week 2)
 - Overall state: source-rights policy, two ECOS plus exact KOSIS CPI and OECD CLI rulings, strict
   append-only rights catalogs,
   the edition-availability decision, the owner-authored employer-risk review (ADR 0006), and the
@@ -23,9 +23,13 @@
   were used. The first real bilingual document-manifest unit is also complete: the Korean May 2026
   Bank of Korea outlook is independently dated 2026-05-28 and the later English full translation
   2026-06-30; both official PDFs were captured only under `/tmp` for real byte-size/SHA-256
-  measurement. Their landing pages supplied no publication-specific open-licence grant, so the
-  manifests fail closed to `metadata_only` and no report body, extracted text, or real searchable
-  chunk is committed. On 2026-07-28 the owner additionally approved ADR 0008 and charter v2.4: the
+  measurement. Their landing pages supplied no publication-specific KOGL label, but the owner
+  confirmed that the official Economic Outlook family is public data freely usable without a
+  separate procedure under the Bank of Korea copyright policy's Public Data Act Article 19 branch.
+  ADR 0009 and charter v2.5 correct both manifests to `allowed`, with Bank of Korea attribution,
+  transformation disclosure, and separately marked third-party rights preserved. No report body,
+  extracted text, or real searchable chunk is committed in this unit by repository-scope choice.
+  On 2026-07-28 the owner also approved ADR 0008 and charter v2.4: the
   minimal question-to-evidence-packet path will be implemented as a typed function-calling
   artifact (model-emitted typed plan and tool calls, committed traces, recorded/replayable
   model interface, and a three-tool surface including a new latest-only snapshot reader), and
@@ -34,10 +38,10 @@
 
 ## Approved baseline
 
-- Product direction: **K-VINTAGE on KOR-RTD** (charter v2.4; source-rights and
+- Product direction: **K-VINTAGE on KOR-RTD** (charter v2.5; source-rights and
   edition-availability amendments approved 2026-07-16–17; execution-contract amendment approved
-  2026-07-28; core rationale in
-  `docs/discovery/01_concept_upgrade_proposal.md`; decisions recorded as ADRs 0003–0008).
+  2026-07-28; BOK Economic Outlook public-data rights amendment approved 2026-07-28; core rationale
+  in `docs/discovery/01_concept_upgrade_proposal.md`; decisions recorded as ADRs 0003–0009).
   - KOR-RTD: point-in-time data layer — OECD edition-history consolidation + weekly append-only forward-capture harvester for the latest-only ECOS/KOSIS APIs.
   - K-VINTAGE: two-tier bilingual benchmark (40 human-reviewed core + 200–300 machine-generated
     data-route probes, always reported separately) with regenerable point-in-time gold answers and a
@@ -203,13 +207,26 @@
   `71f78145d30190ea6bb7e2eb3bdb919c1ae4730973d1f63bed641ec12660fd97` and the English
   PDF at 3,711,417 bytes / SHA-256
   `c30dd8fae88ba62db18b38484985aad457f658a22a899de58918d7581465986d`. Neither page
-  carried a publication-specific KOGL/open-license notice; the Bank of Korea copyright policy
-  permits direct/deep links for information outside its public-data list but requires prior
-  approval for other use. Both strict manifests therefore record `metadata_only`; their PDFs and
-  extracted text are absent from Git. Offline tests bind the manifests to the retriever, prove the
-  later English date is enforced independently, and prove manifests alone create no searchable
-  content. Full metadata and the fail-closed conclusion are preserved in
+  carried a publication-specific KOGL label. The first commit provisionally treated that absence
+  as `metadata_only`; the owner then supplied the exact source-family classification that official
+  Bank of Korea Economic Outlook publications are Article 19 public data freely usable without a
+  separate procedure. ADR 0009 and charter v2.5 therefore correct both strict manifests to
+  `allowed`, subject to Bank of Korea attribution, modification/processing/transformation
+  disclosure, and separately marked third-party rights. Their PDFs and extracted text remain
+  absent from Git by repository-scope choice. Offline tests bind the manifests to the retriever,
+  prove the later English date is enforced independently, assert the approved rights basis, and
+  prove manifests alone create no searchable content. Full metadata, the initial negative finding,
+  and the superseding conclusion are preserved in
   `docs/discovery/04_bok_outlook_2026_05_manifest_log.md`.
+
+- **BOK Economic Outlook public-data rights correction — ADR 0009 / charter v2.5 (2026-07-28):**
+  the owner confirmed that the official Korean Economic Outlook publication family and official
+  English full translations are public data under the Bank of Korea copyright policy's Public Data
+  Act Article 19 branch and may be used without a separate procedure. The public-data portal web
+  view did not expose an individual report-family row during verification; that interface result
+  is retained as a limitation rather than promoted into a contrary rights conclusion. The ruling
+  does not fabricate a KOGL type, does not authorize adjacent publication families or separately
+  marked third-party content, and does not change the project's non-commercial profile.
 
 - **Execution-contract adjustment — ADR 0008 and charter v2.4 (2026-07-28):** the owner asked
   whether the plan could also build agent-orchestration (tool/function calling, multi-step)
@@ -380,6 +397,13 @@ passed all 372 tests with 100% statement/branch coverage (1,794 statements, 608 
 Korea pages and temporary PDF captures for size/hash measurement. No source body, extracted text,
 secret, model call, or paid operation entered the repository.
 
+Revalidated 2026-07-28 after the ADR 0009 / charter v2.5 document-rights correction:
+schema export remained deterministic at seven contracts; ruff check and format check passed (44
+files); all 372 tests passed with 100% statement/branch coverage (1,794 statements, 608 branches);
+`git diff --check` passed. The only network work was free, read-only verification of the official
+Bank of Korea copyright/public-data pages, the linked public-data portal view, and the current
+Public Data Act text. No source download, secret, model call, or paid operation occurred.
+
 ## M1b verification spike record (2026-07-15)
 
 All network work below was read-only, key-free, and free of charge. Raw responses were written only
@@ -529,18 +553,18 @@ response bodies.
   charter v2.3 and the append-only 2026-07-17 catalog are synchronized. All current week-1 owner
   decisions are closed.
 
-## Session-close snapshot (2026-07-28, third close: first real document manifests)
+## Session-close snapshot (2026-07-28, fourth close: document-rights correction)
 
-- This round is closed with no implementation intentionally left in progress. Work unit A
-  committed two strict document manifests, one verification log, offline manifest/retrieval
-  boundary tests, and synchronized status/handoff text. The source PDFs were used only under
-  `/tmp` for integrity measurement and are not repository artifacts.
+- This round is closed with no implementation intentionally left in progress. ADR 0009 and charter
+  v2.5 record the owner's Economic Outlook public-data family ruling; the two strict manifests,
+  verification log, offline rights assertions, and synchronized policy/status/handoff text now
+  reflect `allowed`. The source PDFs remain outside Git.
 - M2 remains active. The frozen 40-record matrix and exactly four records are owner-approved; the
   other 36 slots are not authored or approved. The matrix itself was not touched this round.
 - The bilingual temporal retriever and its synthetic leakage regression remain complete. Real
   Korean and English document manifests now exist, but no provider body, extracted provider text,
-  or real searchable chunk has been added because the source-specific rights check resolved to
-  `metadata_only`.
+  or real searchable chunk has been added. That is a repository-scope choice for this correction
+  unit, not a source-rights blocker.
 - The exact next work unit is the separate `kv-core-doc-01` bilingual draft batch under
   `data/benchmark/drafts/`, without changing the frozen matrix or approved count. The later join
   work unit must follow the ADR 0008 typed function-calling contract.
@@ -552,10 +576,11 @@ response bodies.
 1. Use the committed Korean/English manifests and the frozen matrix to author the
    `kv-core-doc-01` bilingual draft pair as one separate batch under `data/benchmark/drafts/`.
    Re-fetch the PDFs only into ignored `data/raw/` or a temporary directory if content inspection
-   is required, verify their committed hashes first, and do not commit provider bodies or extracted
-   text. Preserve `train` / `documents`, `eg-doc-bok-outlook-2026-05`, and the approved record IDs;
-   keep annotation status `draft` and the approved core count at 4/40 pending explicit Hyungbae
-   review.
+   is required and verify their committed hashes first. Keep full PDFs and extracted full text out
+   of this draft-only unit; cite and paraphrase the language-matched evidence with required
+   attribution and transformation disclosure. Preserve `train` / `documents`,
+   `eg-doc-bok-outlook-2026-05`, and the approved record IDs; keep annotation status `draft` and
+   the approved core count at 4/40 pending explicit Hyungbae review.
 2. Build the minimal question-to-evidence-packet path before generating the tier-2 probes,
    under the ADR 0008 execution contract: the model emits the typed route plan and typed tool
    calls as native function calls against pydantic-derived schemas; the pipeline validates and
@@ -585,11 +610,13 @@ complete.
   spend estimate.
 - Development spans multiple machines. `.venv` is machine-local — recreate it per the README quick start on whichever machine picks this up. Nothing in the repo may depend on machine-specific paths.
 - Windows workstation note: the user-level Python launcher is unreliable there; use the workstation's documented bundled Python 3.12.13 runtime to create `.venv` (local path recorded outside the repository; an earlier revision of this file recorded the literal path — ADR 0006 closed that question with the owner's decision that no history remediation is needed).
-- Rights gate: ADRs 0004/0007, the charter v2.3 rights amendments (carried unchanged into v2.4),
-  the append-only catalog chain, two approved ECOS rows,
+- Rights gate: ADRs 0004/0007/0009 and charter v2.5, the append-only catalog chain, two approved
+  ECOS rows,
   exact KOSIS CPI and OECD CLI rows, and typed manifest-rights bundle validation are complete. The
-  local snapshots are captured and the two exact GitHub Actions secrets are configured. They remain
-  distinct from the ignored local `.env`; their plaintext cannot be retrieved from GitHub.
+  exact BOK Economic Outlook document family is separately `allowed` under ADR 0009 without a
+  data-series rights link. The local snapshots are captured and the two exact GitHub Actions
+  secrets are configured. They remain distinct from the ignored local `.env`; their plaintext
+  cannot be retrieved from GitHub.
 - Vintage semantics: OECD monthly `EDITION` codes do not encode availability dates. The
   `EditionAvailabilityLedger`, fail-closed selection, and selected-row resolver are implemented;
   unknown editions abstain mechanically. The first real ledger resolves only `202607`; all 329
@@ -628,7 +655,8 @@ complete.
 | 2026-07-28 | Offline bilingual temporal document retrieval | $0.00 | Synthetic fixtures and local tests only; no source download, network, model, or paid call |
 | 2026-07-28 | New-session handoff finalization | $0.00 | Documentation and offline validation only; no network, source download, model, or paid call |
 | 2026-07-28 | Execution-contract review, ADR 0008, and charter v2.4 | $0.00 | Multi-agent review under subscription; documentation and offline validation only; no project API/GPU call |
-| 2026-07-28 | First real BOK bilingual document manifests | $0.00 | Public official pages and direct PDF captures under `/tmp` for hashing only; metadata-only manifests, no provider body committed |
+| 2026-07-28 | First real BOK bilingual document manifests | $0.00 | Public official pages and direct PDF captures under `/tmp` for hashing only; provider bodies not committed |
+| 2026-07-28 | BOK Economic Outlook rights correction, ADR 0009, and charter v2.5 | $0.00 | Owner ruling plus free read-only checks of official BOK policy/public-data pages and the public-data portal; no model/API/GPU call |
 
 **Cumulative external spend: $0.23584524099715054 / $100.00**
 
@@ -637,11 +665,12 @@ complete.
 Read in this order, in full, before changing anything:
 
 1. `AGENTS.md` — working protocol, evidence rules, setup, repository map.
-2. `docs/project/01_project_charter.md` — the v2.4 scope authority.
+2. `docs/project/01_project_charter.md` — the v2.5 scope authority.
 3. This file — current milestone, next action, gates, blockers.
 4. `docs/project/04_macbook_handoff.md` — machine setup and exact continuation order.
-5. Accepted ADRs 0001–0008 in `docs/decisions/` (ADR 0008 fixes the join unit's typed
-   function-calling execution contract and defers the bounded tool loop to v1.1).
+5. Accepted ADRs 0001–0009 in `docs/decisions/` (ADR 0008 fixes the join unit's typed
+   function-calling execution contract and defers the bounded tool loop to v1.1; ADR 0009 records
+   the BOK Economic Outlook public-data family ruling).
 6. `docs/project/05_evidence_contract_2_0_migration.md` — the implemented contract the resolver
    and harvester build on.
 7. `docs/project/07_core_authoring_matrix.md` — the approved M2 allocation and human-review
@@ -653,10 +682,10 @@ Read in this order, in full, before changing anything:
 
 Then start with "Immediate next action" item 1. The structural matrix and first four records are
 owner-approved; the remaining 36 slots are neither authored nor approved. The synthetic retrieval
-baseline and first real bilingual document manifests are complete, but no real provider body or
-extracted text is approved for redistribution. Keep the next draft batch separate and at
-`status=draft`. Do not start full LoRA tuning, UI, or release work before the M2 gate closes. The
-harvester must stay within approved rights scopes, and every later paid operation remains
-smoke-test-first. Do not weaken the qualification rules for "first" claims or the
-rights/append-only rules in `AGENTS.md`.
+baseline and first real bilingual document manifests are complete. ADR 0009 resolves those
+manifests to `allowed`, but full PDFs and extracted full text remain outside Git by current
+repository-scope choice. Keep the next draft batch separate and at `status=draft`. Do not start
+full LoRA tuning, UI, or release work before the M2 gate closes. The harvester must stay within
+approved rights scopes, and every later paid operation remains smoke-test-first. Do not weaken the
+qualification rules for "first" claims or the rights/append-only rules in `AGENTS.md`.
 Update this file whenever a milestone state, blocker, cost, spike result, or next action changes.

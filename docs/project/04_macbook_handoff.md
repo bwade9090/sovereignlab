@@ -1,13 +1,14 @@
 # Continuation handoff
 
-- Prepared: 2026-07-16; refreshed 2026-07-28 for a clean new-agent session (third refresh the
-  same day: first real bilingual document manifests)
-- Authority: charter v2.4; accepted ADRs 0001–0008
+- Prepared: 2026-07-16; refreshed 2026-07-28 for a clean new-agent session (fourth refresh the
+  same day: Bank of Korea Economic Outlook public-data rights correction)
+- Authority: charter v2.5; accepted ADRs 0001–0009
 - Branch to continue: `main` from `origin`
 - Current milestone: M2
 - Session state: closed; no implementation is intentionally left in progress
 - Last code baseline: `a92c44d` (`feat: add temporal document retrieval`); the current artifact
-  baseline adds the first real bilingual document manifests and boundary tests.
+  baseline adds the first real bilingual document manifests, boundary tests, and the ADR 0009
+  owner-approved rights correction.
 
 ## 0. Start here
 
@@ -29,7 +30,7 @@ If local `main` has diverged from `origin/main`, stop rather than rewriting hist
 
 - The charter v2–v2.3 amendments and ADRs 0003–0007 recorded the K-VINTAGE/KOR-RTD direction,
   source-rights policy, and fail-closed edition-availability contract (all carried forward into
-  the current charter v2.4).
+  the current charter v2.5).
 - ADR 0006 (2026-07-17) commits the owner-authored employer-risk review: proceed unchanged, a
   single English personal-capacity disclaimer in the README, no Git-history rewrite. All week-1
   owner decisions are closed.
@@ -80,10 +81,15 @@ If local `main` has diverged from `origin/main`, stop rather than rewriting hist
 - The first real document-manifest unit is complete for `bok-outlook-release-2026-05`. The official
   Korean report page independently records `2026-05-28`; the English full-translation page records
   `2026-06-30`. Direct official PDF captures under `/tmp` supplied real sizes and SHA-256 values.
-  Neither page supplied a publication-specific KOGL/open-license grant, so both strict manifests
-  are `metadata_only`; the PDFs, extracted text, and real searchable chunks remain outside Git.
-  `docs/discovery/04_bok_outlook_2026_05_manifest_log.md` preserves the exact URLs, capture facts,
-  rights conclusion, and reproduction boundary.
+  Neither page supplied a publication-specific KOGL label. The owner subsequently confirmed that
+  official Bank of Korea Economic Outlook reports and official English full translations are
+  public data freely usable without a separate procedure under the copyright policy's Public Data
+  Act Article 19 branch. ADR 0009 and charter v2.5 correct both strict manifests to `allowed`,
+  subject to Bank of Korea attribution, transformation disclosure, and separately marked
+  third-party rights. The PDFs, extracted text, and real searchable chunks remain outside Git by
+  repository-scope choice. `docs/discovery/04_bok_outlook_2026_05_manifest_log.md` preserves the
+  exact URLs, capture facts, initial negative finding, superseding conclusion, and reproduction
+  boundary.
 - **Execution-contract adjustment (2026-07-28, ADR 0008 / charter v2.4, documentation only):**
   after a four-lens review with adversarial verification, the owner approved implementing the
   minimal question-to-evidence-packet path as a typed function-calling artifact (model-emitted
@@ -119,8 +125,8 @@ git diff --exit-code
 1. `AGENTS.md`.
 2. `docs/project/01_project_charter.md`.
 3. `docs/PROJECT_STATUS.md`.
-4. Accepted ADRs 0001–0008 under `docs/decisions/` (ADR 0008 fixes how the join work unit must
-   be implemented).
+4. Accepted ADRs 0001–0009 under `docs/decisions/` (ADR 0008 fixes how the join work unit must
+   be implemented; ADR 0009 records the BOK Economic Outlook public-data family ruling).
 5. `docs/discovery/01_concept_upgrade_proposal.md` — the verified background and risk register
    behind the v2 direction.
 6. `docs/project/05_evidence_contract_2_0_migration.md` — the implemented contract surface the
@@ -154,17 +160,19 @@ git diff --exit-code
 - The filenames and field names in the approved matrix and first core batch are intentionally
   unchanged. Do not rename them or alter the frozen allocation.
 - Two real BOK document manifests are committed, but no provider report body or extracted provider
-  text has been added. The committed searchable retrieval corpus remains entirely synthetic.
+  text has been added. ADR 0009 classifies the manifests as `allowed`; their absence is a
+  repository-scope choice, and the committed searchable retrieval corpus remains entirely
+  synthetic.
 
 ## 5. Exact continuation order
 
 ### Completed work unit A — do not redo
 
 `kv-core-doc-01` now has strict Korean and English source manifests with independently supported
-dates, real hashes/sizes, exact official links, and a fail-closed `metadata_only` rights conclusion.
-The provider PDFs and extracted text are not committed. Re-fetch a PDF only into ignored
-`data/raw/` or an OS temporary directory when the next unit needs local inspection, and verify the
-committed size/hash before use.
+dates, real hashes/sizes, exact official links, and an owner-approved `allowed` public-data rights
+conclusion under ADR 0009. The provider PDFs and extracted text are not committed by
+repository-scope choice. Re-fetch a PDF only into ignored `data/raw/` or an OS temporary directory
+when the next unit needs local inspection, and verify the committed size/hash before use.
 
 ### Work unit B — first bilingual documentary draft
 
@@ -186,8 +194,9 @@ Complete this sequence:
 2. Author exactly one Korean/English draft pair under `data/benchmark/drafts/` without changing the
    frozen matrix, source IDs, route, split, evidence group, or parallel-group allocation.
 3. Use the language-matched source manifest and stable page/section locators for each documentary
-   claim. Paraphrase only facts supported by that language edition; do not copy provider passages
-   into a committed retrieval corpus.
+   claim. Paraphrase only facts supported by that language edition; identify the Bank of Korea as
+   the source and disclose processing/transformation. Keep full source bodies and extracted full
+   text outside this draft-only unit.
 4. Record the actual AI author and aware annotation timestamp with `status=draft`. Do not add a
    reviewer or review timestamp, and do not count the pair toward the approved 4/40.
 5. Add offline bundle tests for the two records, publication cutoffs, language-matched evidence,
@@ -217,14 +226,14 @@ pair to `data/benchmark/core/` or changing its annotation status.
 ## 6. What not to redo
 
 - Do not rebuild or rename the 40-record matrix or the approved four-record batch.
-- Do not redo the first real BOK document manifests, weaken their `metadata_only` conclusion, or
-  commit the provider PDFs/extracted text without new source-specific permission evidence.
+- Do not redo the first real BOK document manifests, revert their ADR 0009 `allowed` conclusion, or
+  merge full-document/corpus ingestion into the small draft-only work unit.
 - Do not replace the retrieval baseline with embeddings yet. Its filter-before-scoring invariant
   and synthetic future-document regression are already complete.
 - Do not rerun the paid QLoRA compatibility spike. It passed, all Pods were deleted, and it is not
   a model-quality result.
 - Do not manually dispatch the secret-backed harvester as part of onboarding.
-- Do not reopen accepted ADRs 0003–0008 without new evidence that requires a superseding decision.
+- Do not reopen accepted ADRs 0003–0009 without new evidence that requires a superseding decision.
 - Do not implement the bounded multi-step tool loop in-window; ADR 0008 defers it to v1.1. Do
   not re-litigate that deferral — the supporting matrix/schema arithmetic is recorded in the ADR.
 

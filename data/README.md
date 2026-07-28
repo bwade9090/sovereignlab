@@ -18,6 +18,11 @@ recorded in its source manifest and owner-approved series rights decision.
   redistributed commercially or non-commercially with attribution. Do not sell unchanged raw
   KOSIS information as a paid standalone product. KOSIS international and North Korea statistics
   may not be redistributed, and publications follow their individual KOGL notices.
+- Official Bank of Korea-produced Economic Outlook reports and official English full translations
+  are allowed under the owner-approved public-data family ruling in ADR 0009. Attribute the Bank
+  of Korea, disclose modification, processing, or transformation, and preserve separately marked
+  third-party rights. The governing instrument is the Bank of Korea copyright policy's Public Data
+  Act Article 19 branch, not a fabricated KOGL type.
 - Benchmark, model, and generated-data artifacts must state their own licences when published.
 
 The operational gate accepted in ADR 0004 remains fail closed: no raw observation may be committed

@@ -10,8 +10,10 @@
   "published_on": "2026-06-30",
   "publisher": "Bank of Korea",
   "redistribution": {
-    "notes": "No publication-specific KOGL or open-license notice was present on the official landing page when checked on 2026-07-28. The page footer states Bank of Korea copyright, and the Bank of Korea copyright policy at https://www.bok.or.kr/portal/main/contents.do?menuNo=200228 requires prior approval for use beyond direct/deep linking when information is outside its published public-data list. Only metadata, the official link, byte size, and checksum are committed; the PDF and extracted text remain uncommitted.",
-    "status": "metadata_only"
+    "license_name": "Bank of Korea Copyright Policy (Public Data Act Article 19 public-data branch)",
+    "license_url": "https://www.bok.or.kr/portal/main/contents.do?menuNo=200228",
+    "notes": "On 2026-07-28 the owner confirmed that the official Bank of Korea Economic Outlook publication family, including the official English full translation, is public data covered by the copyright policy's Article 19 branch and may be used without a separate procedure. Use must attribute the Bank of Korea and disclose modification, processing, or transformation; separately marked third-party material remains subject to its own rights. ADR 0009 records the exact family ruling and supersedes the provisional metadata-only conclusion in commit 6db81e8. The PDF and extracted text remain uncommitted as a repository-scope choice, not a rights restriction.",
+    "status": "allowed"
   },
   "release_label": "May 2026",
   "retrieved_at": "2026-07-28T13:49:41Z",

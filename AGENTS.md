@@ -8,14 +8,14 @@ Build **KOR-RTD**, a provenance-contracted point-in-time (vintage) data layer fo
 
 ## Read before changing anything
 
-1. `docs/project/01_project_charter.md` — approved product and evaluation contract (v2.4).
+1. `docs/project/01_project_charter.md` — approved product and evaluation contract (v2.5).
 2. `docs/PROJECT_STATUS.md` — current milestone, completed work, next action, blockers, and validation evidence.
 3. `docs/decisions/` — accepted architecture and process decisions (ADR 0003 records the v2
    reorientation; ADR 0004 records the v2.1 source-rights amendment; ADR 0005 records the v2.2
    fail-closed edition-availability contract; ADR 0006 records the owner's employer-risk review;
    ADR 0007 records the v2.3 exact KOSIS CPI and OECD CLI rights amendment; ADR 0008 records the
    v2.4 typed function-calling execution contract and the v1.1 deferral of the bounded tool
-   loop).
+   loop; ADR 0009 records the v2.5 Bank of Korea Economic Outlook public-data rights amendment).
 4. `docs/project/04_macbook_handoff.md` — machine setup and the exact continuation order for the
    current milestone (skip files it lists that you already read this session).
 5. `docs/discovery/01_concept_upgrade_proposal.md` — background rationale for v2: verified data facts, judged alternatives, risk register.
@@ -48,6 +48,12 @@ The charter is the scope authority. Do not expand sources, agents, UI, or infras
 - Raw OECD observations remain metadata-only except the exact owner-approved, OECD-produced Korea
   monthly amplitude-adjusted CLI revision scope in ADR 0007. That exception does not authorize any
   neighboring measure, geography, dataflow, or third-party component.
+- Official Bank of Korea-produced Economic Outlook reports and their official English full
+  translations are `allowed` public data under the owner-approved family ruling in ADR 0009 and
+  the Bank of Korea copyright policy's Public Data Act Article 19 branch. Attribute the Bank of
+  Korea, disclose modification/processing/transformation, and honor separately marked third-party
+  rights. Do not fabricate a KOGL type. Permission does not require automatic full-document
+  ingestion.
 - `SourceManifest` 2.0.0 requires a typed rights-decision link on every `allowed` data snapshot,
   and bundle validation cross-checks it against the committed rights catalog. No raw observation
   may be committed unless that link validates and the referenced decision is owner-approved
