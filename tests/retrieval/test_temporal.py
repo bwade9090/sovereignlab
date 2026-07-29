@@ -1,6 +1,7 @@
 """Regression tests for publication-date-safe bilingual document retrieval."""
 
 import json
+from collections import Counter
 from datetime import date
 from pathlib import Path
 from typing import Any
@@ -8,6 +9,7 @@ from typing import Any
 import pytest
 from pydantic import ValidationError
 
+import sovereignlab.retrieval.temporal as temporal_module
 from sovereignlab.retrieval import (
     DocumentChunk,
     TemporalDocumentCorpus,
@@ -212,3 +214,29 @@ def test_empty_validated_corpus_returns_no_matches() -> None:
     result = retrieve_temporal_documents(corpus=TemporalDocumentCorpus(), query=_query())
 
     assert result.matches == ()
+
+
+def test_score_sum_is_stable_for_opposite_feature_iteration_orders() -> None:
+    feature_names = tuple(f"feature{index}" for index in range(250))
+    features = Counter({feature: (index % 7) + 1 for index, feature in enumerate(feature_names)})
+    document_frequency = Counter(
+        {feature: (index % 113) + 1 for index, feature in enumerate(feature_names)}
+    )
+    arguments = {
+        "features": features,
+        "document_frequency": document_frequency,
+        "document_count": 200,
+        "average_document_length": 350.25,
+    }
+
+    forward = temporal_module._bm25_score(
+        query_features=feature_names,  # type: ignore[arg-type]
+        **arguments,
+    )
+    backward = temporal_module._bm25_score(
+        query_features=tuple(reversed(feature_names)),  # type: ignore[arg-type]
+        **arguments,
+    )
+
+    assert forward == backward
+    assert temporal_module._canonical_score(forward) == 506.500016179

@@ -14,6 +14,7 @@ from sovereignlab.schemas.source import LanguageCode, SourceKind, SourceManifest
 _TOKEN_PATTERN = re.compile(r"[0-9A-Za-z]+|[가-힣]+")
 _BM25_K1 = 1.5
 _BM25_B = 0.75
+_SCORE_SIGNIFICANT_DIGITS = 12
 
 
 class DocumentChunk(StrictModel):
@@ -121,12 +122,14 @@ def retrieve_temporal_documents(
 
     matches: list[RetrievedDocumentChunk] = []
     for chunk, features in zip(eligible_chunks, document_features, strict=True):
-        score = _bm25_score(
-            features=features,
-            query_features=query_features,
-            document_frequency=document_frequency,
-            document_count=len(document_features),
-            average_document_length=average_document_length,
+        score = _canonical_score(
+            _bm25_score(
+                features=features,
+                query_features=query_features,
+                document_frequency=document_frequency,
+                document_count=len(document_features),
+                average_document_length=average_document_length,
+            )
         )
         if score <= 0:
             continue
@@ -171,7 +174,7 @@ def _bm25_score(
     score = 0.0
     document_length = features.total()
     length_normalization = 1 - _BM25_B + _BM25_B * (document_length / average_document_length)
-    for feature in query_features:
+    for feature in sorted(query_features):
         frequency = features[feature]
         if frequency == 0:
             continue
@@ -186,3 +189,9 @@ def _bm25_score(
         )
         score += inverse_document_frequency * frequency_weight
     return score
+
+
+def _canonical_score(score: float) -> float:
+    """Bound platform-level libm noise before ranking and trace serialization."""
+
+    return float(f"{score:.{_SCORE_SIGNIFICANT_DIGITS}g}")
