@@ -1,0 +1,182 @@
+# Typed execution and trace contract
+
+Status: execution-contract slice 1.0.0 implemented offline on 2026-07-29.
+
+## Purpose and boundary
+
+This specification freezes the first reviewable slice of ADR 0008 work unit C: the strict
+question, route-plan, typed-call/result, evidence-packet, and trace surface, together with the
+flat gold arguments for the latest-only snapshot reader.
+
+This contract slice did not itself implement the runtime adapters, trusted registries, planner
+protocol, or end-to-end executor. The trusted snapshot registry and `read_snapshot_as_of` adapter
+have since shipped as the next independent slice under
+`docs/project/10_snapshot_reader_contract.md`; the other two adapters and later execution
+components remain pending. This contract does not change `BenchmarkRecord` or `BenchmarkBundle`
+2.0.0.
+
+The independent execution contract is version 1.0.0. Its Pydantic source is
+`src/sovereignlab/schemas/execution.py`.
+
+## Request and single-shot route plan
+
+`ExecutionRequest` records:
+
+- a stable request ID;
+- the Korean or English question and explicit language;
+- the optional cutoff supplied by the requester; and
+- an always-present `effective_as_of`.
+
+When the requester supplies `as_of`, it must equal `effective_as_of`. When it is omitted, the
+harness must choose and record `effective_as_of` before planning. No adapter may read an implicit
+current date during replay.
+
+`RoutePlan` preserves the four frozen routes:
+
+- `documents`: at least one document call and no data call;
+- `data`: at least one data call and no document call;
+- `documents_and_data`: at least one of each;
+- `abstain`: no calls and a required structured reason code/message.
+
+Call IDs must be unique. The entire plan is fixed before deterministic execution; the schema has
+no feedback, iteration, step-budget, or model-driven call-addition field.
+
+## Exact callable surface
+
+The callable registry contains exactly three names:
+
+| Tool name | Flat argument fields |
+| --- | --- |
+| `retrieve_temporal_documents` | `question`, `language`, `as_of`, `top_k` |
+| `resolve_stes_as_of` | `ref_area`, `freq`, `measure`, `unit_measure`, `activity`, `period`, `as_of`, `normalization_rule_id` |
+| `read_snapshot_as_of` | `source_system`, `table_id`, `item_id`, `period`, `as_of`, `normalization_rule_id` |
+
+The resolver arguments reproduce the committed `core-batch-001.jsonl` gold shape without
+translation. In particular, the SDMX missing-code value `_T` remains valid.
+
+The resolver contract cross-binds its dimensions, period frequency, and normalization rule for
+the two frozen Korea normalization units: monthly CLI
+`KOR.M.LI_AA.IX._T`/`YYYY-MM` and quarterly real GDP
+`KOR.Q.B1GQ_Q.XDC._T`/`YYYY-Qn`. This is a normalization and call-validity rule, not a
+redistribution authorization. The later trusted registry must return public raw evidence only for
+the owner-approved OECD CLI scope; the GDP scope remains unavailable as public raw evidence under
+the current rights catalog.
+
+All models reject extra fields. A model cannot supply a source or capture ID, filesystem path,
+URL, manifest, ledger, archive bytes, raw provider response, snapshot timestamp, KOSIS
+organization/geography selectors, or credentials. Those values belong to the trusted harness.
+
+## Latest-only snapshot gold convention
+
+`read_snapshot_as_of` is deliberately named for its cutoff, not for an unconstrained notion of
+"latest." Its six flat arguments are frozen to the currently approved latest-only units:
+
+| Source | `table_id` | `item_id` | Provider-native period | Required normalization rule |
+| --- | --- | --- | --- | --- |
+| ECOS | `200Y108` | `10601` | quarterly `YYYYQn` | `ecos-200y108-10601-billion-krw-v1` |
+| ECOS | `301Y017` | `SA000` | monthly `YYYYMM` | `ecos-301y017-sa000-million-usd-v1` |
+| KOSIS | `DT_1J22003` | `T/T10` | monthly `YYYYMM` | `kosis-101-dt-1j22003-t-t10-index-v1` |
+
+The KOSIS composite item is case-sensitive. The implemented adapter's trusted registry binds it
+to `ORG_ID=101`, raw item `T`, geography `T10`, monthly frequency, the approved manifest family,
+and the exact raw-unit mapping. None is model-selectable.
+
+An unknown scope, neighboring item, mismatched normalization rule, wrong series frequency, or
+extra artifact selector is an invalid call, not a scored abstention.
+
+The runtime reader selects only a committed, owner-approved `latest_only` snapshot available
+by the inclusive end of the call's `as_of` date in `Asia/Seoul`. Snapshot evidence already
+enforces both `source_published_on <= as_of` and
+`source_retrieved_at <= end-of-day(as_of, Asia/Seoul)`. The actual selection algorithm, content
+parsers, registry digest, and safe-abstention taxonomy are frozen in
+`docs/project/10_snapshot_reader_contract.md`.
+
+## Results, normalization, and evidence packets
+
+Each tool result is exactly one of:
+
+- `success` with that tool's typed payload;
+- `abstained` with a structured, sanitized reason; or
+- `error` with a structured failure bound to the same call ID.
+
+Document success is non-empty and records source ID/hash, language, publication date, locator,
+text or excerpt, and deterministic score. Data success records only the selected observation and
+its provenance. Latest-only snapshot evidence cannot carry an edition or availability ledger;
+historical STES evidence requires both.
+
+Normalization evidence preserves the raw string, rule ID, exact normalized string, canonical
+unit, recommended display places, and display value. Contract validation replays the five frozen
+normalization 1.0.0 multipliers and rejects an inconsistent normalized value, unit, precision, or
+ROUND_HALF_UP display string.
+
+`ExecutionEvidencePacket` separates `planned_route` from terminal packet status. A required tool
+may safely abstain even after a non-abstain plan. Such a packet exposes no partial evidence;
+ordered partial results remain available only in the trace. Packet abstention records whether it
+came from the plan or a tool. A trace requires a planned abstention to equal the plan's reason and
+a tool abstention to equal the terminal tool result's call ID, reason code, and message.
+
+## Trace integrity and replay
+
+`ExecutionTrace` stores the request, execution-environment provenance, planner provenance,
+validated plan, ordered typed results, terminal packet or sanitized failure, and a UTC recording
+instant.
+
+The environment provenance digest-links the executor, callable registry, trusted artifact
+registry, and complete retrieval corpus. The corpus digest covers eligible inputs that affect
+scores even when their chunks are not returned. IDs are opaque stable registry keys; SHA-256
+values are over the exact canonical bytes resolved by the harness. This avoids defining replay as
+"whatever files happen to be present now."
+
+Validation enforces:
+
+- every call cutoff equals `effective_as_of`;
+- a document call cannot rewrite the request question or language;
+- results are an exact ordered prefix of the planned calls, with matching IDs and tool names;
+- document results cannot exceed `top_k`, repeat a chunk ID, or violate the retriever's
+  score/source/chunk ordering;
+- complete traces contain every successful result and a byte-equivalent assembled evidence
+  payload at the model level;
+- tool abstention and tool failure terminate an otherwise successful prefix;
+- planner/plan-validation failures contain no execution data;
+- packet-assembly failure follows a complete successful result sequence; and
+- post-cutoff documentary or latest-only evidence is rejected.
+
+Planner provenance supports `scripted`, immutable `recorded`, and `replay` modes. A recording ID
+and output SHA-256 must appear together. Recorded and replay entries also require a model ID;
+scripted entries forbid one but may digest-link an invalid or valid candidate fixture. A
+`plan_validation` failure must carry this digest link so the rejected bytes can be independently
+replayed. The recording ID is resolved through a trusted recording registry, and `output_sha256`
+hashes its exact recorded candidate bytes. Provider-native response envelopes are not embedded in
+the canonical trace.
+
+`data/fixtures/execution_trace.example.json` is the committed round-trip example. Its document
+passage and document hash are explicitly synthetic; no Bank of Korea report body or extracted
+provider text is committed. Its data observation points to the already committed, owner-approved
+ECOS snapshot and preserves that snapshot's provenance. The environment IDs and repeated-letter
+hashes are deliberately illustrative synthetic values because the executor and registries are
+implemented in later slices; this file validates the contract and is not claimed as an
+end-to-end replay artifact.
+
+## Public JSON Schemas
+
+The deterministic exporter now produces thirteen schemas: the original seven plus:
+
+- `route-plan-v1.schema.json`;
+- `execution-evidence-packet-v1.schema.json`;
+- `execution-trace-v1.schema.json`;
+- `retrieve-temporal-documents-arguments-v1.schema.json`;
+- `resolve-stes-as-of-arguments-v1.schema.json`; and
+- `read-snapshot-as-of-arguments-v1.schema.json`.
+
+The callable schemas describe only canonical arguments. Provider request/response envelopes and
+tool-call ID formats remain behind the future planner boundary. JSON Schema validates the
+provider-facing structure, enums, required discriminators, and closed property sets. Cross-field
+rules such as route/call consistency and scope/rule pairing are Pydantic validators, so the
+harness must always perform Pydantic validation after JSON Schema validation and before executing
+any call.
+
+## Next independent slice
+
+The trusted snapshot registry and deterministic `read_snapshot_as_of` adapter are complete. Add
+the typed temporal-retrieval adapter next, then the flat STES resolver adapter, before implementing
+the scripted/recorded planner boundary and offline end-to-end executor.

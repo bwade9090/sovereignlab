@@ -32,12 +32,17 @@
   extracted text, or real searchable chunk is committed by repository-scope choice. The first
   documentary pair uses stable, language-matched locators to the same stated driver while preserving
   the Korean report's 2026-05-28 cutoff and the English translation's later 2026-06-30 cutoff.
-  On 2026-07-28 the owner also approved ADR 0008 and charter v2.4: the
-  minimal question-to-evidence-packet path will be implemented as a typed function-calling
-  artifact (model-emitted typed plan and tool calls, committed traces, recorded/replayable
-  model interface, and a three-tool surface including a new latest-only snapshot reader), and
-  the bounded multi-step tool loop is deferred to post-window v1.1. Documentation only; no code
-  changed.
+  On 2026-07-28 the owner also approved ADR 0008 and charter v2.4. Its first implementation slice
+  is now complete: execution contract 1.0.0 freezes the bilingual request, four-route plan,
+  exactly three typed calls/results, evidence packet, replay provenance, trace invariants, and
+  `read_snapshot_as_of` six-field gold arguments; six new schemas bring the public total to 13.
+  The second implementation slice is also complete: a trusted, digest-linked latest-only registry
+  and deterministic `read_snapshot_as_of` adapter now validate the three committed ECOS/KOSIS
+  scopes through cutoff, manifest, rights, hash, provider-row, and normalization gates. The
+  remaining two adapters, trusted retrieval-corpus registry, callable dispatcher, planner
+  interface, and offline end-to-end executor remain to be implemented, so the minimal
+  question-to-evidence-packet path is not yet shipped. The bounded multi-step tool loop remains
+  deferred to post-window v1.1.
 
 ## Approved baseline
 
@@ -265,6 +270,47 @@
   the CV wording-bank guard rule were synchronized. Documentation only; no source or test file
   changed.
 
+- **Typed execution/trace contract 1.0.0 — work unit C slice 1 (2026-07-29):**
+  `sovereignlab.schemas.execution` freezes an independent strict request/plan/call/result/packet/
+  trace boundary without changing `BenchmarkRecord` or `BenchmarkBundle` 2.0.0. The route plan
+  preserves all four routes and exposes exactly `retrieve_temporal_documents`,
+  `resolve_stes_as_of`, and `read_snapshot_as_of`; calls cannot select paths, manifests, ledgers,
+  bytes, source IDs, or credentials. The snapshot gold convention has exactly six flat fields
+  and cross-binds the three owner-approved ECOS/KOSIS units, provider-native frequency, and frozen
+  normalization rule. STES calls/results likewise bind the two frozen Korea normalization units.
+  Evidence validates exact decimal normalization and Asia/Seoul cutoff-safe capture time; traces
+  bind ordered results and abstentions to calls and digest-link the executor, tool registry,
+  artifact registry, retrieval corpus, and recorded planner output. Six new deterministic JSON
+  Schemas bring the public total from seven to 13. The committed round-trip trace fixture uses
+  synthetic documentary text and explicitly illustrative environment hashes; it is a contract
+  fixture, not an end-to-end executor result. An adversarial read-only review's confirmed findings
+  were closed before schema export. Full details and the two-stage JSON-Schema-then-Pydantic
+  validation boundary are in `docs/project/09_typed_execution_trace_contract.md`.
+
+- **Trusted latest-only snapshot registry/reader — work unit C slice 2 (2026-07-29):**
+  `sovereignlab.snapshots` explicitly registers only the three already committed owner-approved
+  ECOS/KOSIS captures and keeps paths, manifests, catalogs, raw bytes, capture IDs, and hidden
+  KOSIS selectors outside model arguments. Its canonical, order-independent descriptor binds the
+  exact scope definitions, manifest/archive hashes and sizes, and rights catalog hashes; the
+  current descriptor SHA-256 is
+  `67ebecf0aa15b5a2d53aff737cd28bd8779e3993abebca9e6c3d840f2006aa5b`.
+  The canonical loader verifies and freezes the exact manifest, catalog, and archive bytes behind
+  that digest. `read_snapshot_as_of` then applies `published_on` and inclusive Asia/Seoul retrieval
+  cutoffs before parsing only the selected immutable payload, rejects ambiguous latest frontiers,
+  validates active rights and manifest/content integrity, parses exact ECOS/KOSIS scopes and raw
+  units, and emits only the selected normalized observation. A corrupt or missing newest eligible
+  capture never falls back to an older one. Known evidence gaps return stable sanitized
+  abstentions; harness or unexpected implementation failures are sanitized at their respective
+  boundaries. The public schema count stays 13; full details are in
+  `docs/project/10_snapshot_reader_contract.md`.
+
+- **Windows baseline reproducibility repair (2026-07-29):** Windows now installs the IANA timezone
+  database through the platform-guarded `tzdata==2026.3` requirement, which makes the existing
+  `Asia/Seoul` tests and the new snapshot capture cutoff deterministic on a standard Python 3.12
+  build. The four large ECOS invalid-response cases have short explicit pytest IDs, preventing
+  `PYTEST_CURRENT_TEST` from exceeding Windows' 32,767-character environment-variable limit.
+  Neither change alters Linux/macOS dependency resolution or test semantics.
+
 ## Current validation evidence
 
 Run from the repository root after activating `.venv` (any OS; see README quick start):
@@ -452,6 +498,30 @@ deterministic. Documentation-only change; no implementation, source read, secret
 paid operation occurred. The incoming Windows agent must reproduce this baseline locally before
 editing.
 
+Validated 2026-07-29 on Windows after the baseline repair and typed execution/trace contract slice:
+Python 3.12.13; `python -m pip install -r requirements.txt` confirmed the platform-guarded
+`tzdata==2026.3`; `python scripts/export_json_schemas.py` generated 13 deterministic public
+contracts; `python -m ruff check --no-cache .` passed; `python -m ruff format --check .` passed
+(47 files); `python -m pytest --cov=sovereignlab --cov-branch --cov-report=term-missing -p
+no:cacheprovider` passed all 483 tests with 100% SovereignLab statement/branch coverage (2,291
+statements, 758 branches); and `git diff --check` passed. The execution module's 98 focused tests
+also independently reached 100% statement/branch coverage (495 statements, 150 branches). Schema
+export was rerun and the committed-schema equality plus two-pass byte-determinism tests passed.
+Work was offline after the free PyPI environment repair; no provider source read, secret, live
+model call, GPU operation, or paid operation occurred.
+
+Validated 2026-07-29 on Windows after the trusted snapshot registry/reader slice:
+Python 3.12.13; `python scripts/export_json_schemas.py` remained deterministic at 13 public
+contracts; `python -m ruff check --no-cache .` passed; `python -m ruff format --check .` passed
+(52 files); `python -m pytest --cov=sovereignlab --cov-branch --cov-report=term-missing -p
+no:cacheprovider` passed all 595 tests with 100% SovereignLab statement/branch coverage (2,674
+statements, 888 branches); and `git diff --check` passed. The 112 focused snapshot tests independently
+reached 100% snapshot statement/branch coverage (383 statements, 130 branches). The three existing
+committed archives were read offline and reproduced GDP `596692.8`, current account `38121.1`
+(plus negative-value regression `-633.9`), and CPI `119.99`; their tracked bytes and manifests
+were unchanged. No network, provider request, secret, live model call, GPU operation, or paid
+operation occurred.
+
 ## M1b verification spike record (2026-07-15)
 
 All network work below was read-only, key-free, and free of charge. Raw responses were written only
@@ -604,32 +674,38 @@ response bodies.
   Both records now carry the named reviewer and aware review timestamp in
   `data/benchmark/core/core-batch-002.jsonl`; the approved core count is 6/40.
 
-## Session-close snapshot (2026-07-29, seventh close: Windows continuation handoff)
+## Session-close snapshot (2026-07-29, ninth close: trusted snapshot registry/reader slice)
 
-- This round is closed with no implementation in progress. `AGENTS.md` is the Windows new-session
-  entry point, and `docs/project/04_macbook_handoff.md` is now the cross-machine continuation
-  handoff despite its retained legacy filename.
+- Work unit C remains active, but its first two independently reviewable slices are complete and
+  no partial edit is in progress. Execution contract 1.0.0, six new public schemas, the committed
+  contract fixture, the Windows baseline repair, and the trusted snapshot registry/reader all
+  validate.
 - M2 remains active. The frozen matrix was not changed, exactly six records are owner-approved, and
   the other 34 slots are not authored.
-- The owner-review boundary for `kv-core-doc-01` is closed. Both language-matched records remain in
-  `data/benchmark/core/core-batch-002.jsonl` with their independently enforced publication dates.
-- No implementation code, benchmark record, source artifact, provider text, secret, model call, or
-  paid operation changed in this documentation-only handoff round.
-- The Windows session starts with work unit C: the offline minimal typed function-calling
-  question-to-evidence-packet path under ADR 0008. Its ordered implementation and acceptance
-  criteria are frozen in handoff §5.
+- `read_snapshot_as_of` is implemented at the frozen six flat model-selected fields and three exact
+  approved snapshot units. The adapter validates the existing committed captures and emits
+  selected-row-only typed evidence, but dependent benchmark authoring remains outside this work
+  unit.
+- The contract fixture contains no real report text. No source artifact, provider body, secret,
+  live model call, GPU operation, or paid operation was added.
+- The minimal typed function-calling path is not yet complete: one of three tool adapters is
+  implemented; the remaining adapters, retrieval-corpus registry, callable dispatcher, planner,
+  packet assembler, offline executor, and committed end-to-end replay traces do not yet exist.
 
 ## Immediate next action (M2 — do these in order)
 
-1. On Windows, onboard through `AGENTS.md`, recreate or verify the machine-local Python 3.12
-   environment, and reproduce the clean 378-test baseline before editing.
-2. Start work unit C with its first reviewable slice: freeze and test the strict typed
-   execution/trace surface and the latest-only snapshot reader's flat gold-argument convention.
-   Then implement the three deterministic tool adapters, trusted-artifact injection,
-   scripted/recorded planner boundary, and offline end-to-end traces in the exact order and to the
-   completion criteria in handoff §5. Do not author dependent matrix records until the snapshot
-   convention is frozen.
-3. Keep live model calls, additional source ingestion, new benchmark authoring, and the bounded
+1. Implement the typed `retrieve_temporal_documents` adapter over the existing
+   filter-before-scoring retriever and committed synthetic corpus. Keep corpus/manifests injected,
+   preserve language and cutoff filtering before scoring, bind deterministic order and `top_k`,
+   and return the execution contract's selected match evidence only.
+2. Then implement the flat `resolve_stes_as_of` adapter over the existing fail-closed resolver,
+   with trusted archive/manifest/ledger/catalog injection and the exact `core-batch-001` argument
+   convention. Preserve the current owner-approved OECD CLI raw-evidence limit.
+3. Add the callable dispatcher, scripted/recorded planner boundary, offline packet assembler and
+   executor with real registry/corpus digests and committed replay traces. Satisfy every route,
+   bilingual, cutoff, invalid-call, replay, and round-trip criterion in handoff §5 before calling
+   work unit C complete.
+4. Keep live model calls, additional source ingestion, new benchmark authoring, and the bounded
    v1.1 loop outside this unit. Any later live call requires its own smoke test, authorization, and
    spend-ledger entry.
 
@@ -654,7 +730,10 @@ complete.
 - Windows workstation note: the user-level Python launcher was unreliable. The PowerShell
   discovery and interpreter-validation procedure is now committed in `AGENTS.md` and the
   cross-machine handoff. The exact executable path remains machine-local and must never be added
-  to the repository; ADR 0006 closed the historical path-remediation question.
+  to the repository; ADR 0006 closed the historical path-remediation question. Standard Windows
+  Python has no system IANA timezone database, so the pinned requirements now install `tzdata`
+  only on `win32`; large parametrized payload tests must use short explicit IDs to stay below the
+  Windows environment-variable limit.
 - Rights gate: ADRs 0004/0007/0009 and charter v2.5, the append-only catalog chain, two approved
   ECOS rows,
   exact KOSIS CPI and OECD CLI rows, and typed manifest-rights bundle validation are complete. The
@@ -706,6 +785,8 @@ complete.
 | 2026-07-28 | First bilingual BOK documentary draft pair | $0.00 | Free official PDF re-fetch into a temporary directory, local hash/text/page-render inspection, offline authoring/tests; temporary provider files deleted |
 | 2026-07-29 | Owner approval of the first bilingual documentary pair | $0.00 | Annotation, lifecycle, tests, and governance update only; no network, model, or paid call |
 | 2026-07-29 | Windows continuation onboarding refresh | $0.00 | Documentation and offline validation only; no source read, model, API, GPU, or paid call |
+| 2026-07-29 | Windows baseline repair + typed execution/trace contract slice | $0.00 | Free PyPI `tzdata` install, offline schemas/fixture/tests/specification, and subscription red-team review; no provider read, live model API, GPU, or paid call |
+| 2026-07-29 | Trusted latest-only snapshot registry/reader slice | $0.00 | Offline reuse of the three existing committed captures, tests/specification, and subscription review; no network, provider request, secret, live model API, GPU, or paid call |
 
 **Cumulative external spend: $0.23584524099715054 / $100.00**
 
@@ -729,6 +810,10 @@ Read in this order, in full, before changing anything:
    boundary.
 9. `docs/project/08_temporal_document_retrieval.md` — the implemented filter-before-scoring
    document retrieval boundary.
+10. `docs/project/09_typed_execution_trace_contract.md` — the frozen execution contract,
+    snapshot/STES flat arguments, replay provenance, and exact next adapter boundary.
+11. `docs/project/10_snapshot_reader_contract.md` — the implemented trusted snapshot registry,
+    deterministic reader, provider parsers, result taxonomy, and exact next adapter boundary.
 
 Then start with "Immediate next action" item 1. The structural matrix and first six records are
 owner-approved; the other 34 slots are neither authored nor approved. The synthetic retrieval

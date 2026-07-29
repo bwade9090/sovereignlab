@@ -1,16 +1,17 @@
 # Cross-machine continuation handoff
 
 - Legacy filename: retained so existing links and onboarding instructions do not break.
-- Prepared: 2026-07-16; refreshed 2026-07-29 for the Windows workstation handoff (seventh refresh:
-  round close after first bilingual documentary approval)
+- Prepared: 2026-07-16; refreshed 2026-07-29 after the Windows continuation (ninth refresh:
+  trusted snapshot registry/reader slice complete)
 - Target continuation machine: Windows workstation
 - Authority: charter v2.5; accepted ADRs 0001–0009
 - Branch to continue: `main` from `origin`
 - Current milestone: M2
-- Session state: closed; no implementation is intentionally left in progress
-- Last implementation/governance baseline before this documentation refresh: `542c755`
-  (`eval: approve first documentary core pair`). Always continue from the current `origin/main`;
-  do not reset to this historical checkpoint.
+- Session state: the first two work-unit-C slices are complete and reviewable; one of three
+  runtime adapters is complete and no later adapter is partially implemented
+- Last clean `origin/main` baseline before this slice: `6fe447b`
+  (`docs: prepare Windows continuation handoff`). Preserve the current reviewable worktree; do not
+  reset to the historical checkpoint.
 
 ## 0. Start here
 
@@ -114,9 +115,28 @@ If local `main` has diverged from `origin/main`, stop rather than rewriting hist
   deterministic latest-only snapshot-read tool. The bounded multi-step tool loop is deferred to
   post-window v1.1 as an execution-mode ablation; the LoRA target stays the single-shot router;
   contracts stay 2.0.0. No code changed in this round.
-- Source baseline revalidated on macOS (2026-07-29, Python 3.12.13 via Homebrew): 378 tests passed
-  with 100% statement/branch coverage; ruff check/format clean;
-  `python scripts/export_json_schemas.py` deterministic (seven contracts).
+- **Execution/trace contract slice 1.0.0 (2026-07-29):**
+  `src/sovereignlab/schemas/execution.py` and
+  `docs/project/09_typed_execution_trace_contract.md` freeze the strict bilingual request,
+  four-route plan, three typed calls/results, packet and trace semantics, digest-linked replay
+  provenance, and the six-field `read_snapshot_as_of` gold convention for the three exact approved
+  ECOS/KOSIS units. Six new schemas bring the public total to 13. A committed contract fixture
+  round-trips with synthetic documentary text; its illustrative registry hashes are not claimed
+  as an end-to-end execution. `BenchmarkRecord`/`BenchmarkBundle` remain 2.0.0.
+- **Trusted latest-only snapshot adapter (2026-07-29):**
+  `src/sovereignlab/snapshots/` implements an explicitly injected, digest-linked registry and
+  deterministic `read_snapshot_as_of` adapter for the three owner-approved ECOS/KOSIS scopes.
+  Registry construction eagerly freezes and verifies the explicitly admitted manifest, catalog,
+  and archive bytes. The adapter filters trusted metadata by the inclusive Asia/Seoul cutoff
+  before parsing only one unique latest payload, cross-validates active rights catalogs, parses
+  exact provider rows and hidden KOSIS selectors, applies frozen Decimal normalization, and
+  returns selected-row-only evidence or sanitized structured failures. It never falls back to an
+  older capture when the selected frontier is invalid. The detailed contract is
+  `docs/project/10_snapshot_reader_contract.md`.
+- Windows baseline validated 2026-07-29 on Python 3.12.13: 595 tests passed with 100% SovereignLab
+  statement/branch coverage (2,674 statements, 888 branches); ruff check/format clean (52 Python
+  files); `python scripts/export_json_schemas.py` deterministic (13 contracts). The win32-only
+  `tzdata==2026.3` pin and short ECOS pytest IDs repair two Windows-only baseline failures.
 
 ## 2. Set up and validate the Windows machine
 
@@ -143,13 +163,16 @@ $venvPython = (Resolve-Path .\.venv\Scripts\python.exe).Path
 git diff --exit-code
 ```
 
-Expected handoff baseline: Python 3.12, seven deterministic public schemas, 45 formatted Python
-files, 378 passing tests, 100% SovereignLab statement/branch coverage, and no Git diff. The Windows
+Expected handoff baseline: Python 3.12, 13 deterministic public schemas, 52 formatted Python
+files, 595 passing tests, 100% SovereignLab statement/branch coverage (2,674 statements, 888
+branches), and no unexpected Git diff.
+The Windows
 user-level launcher was unreliable in an earlier session. If `python` does not resolve to 3.12,
 discover the installed executable with `where.exe python` or the installed-app inventory, set
 `$python312` to that verified full path for the current shell only, and rerun the checks. Never
 commit a workstation path. If an existing `.venv` fails its interpreter check, stop and recreate it
-deliberately rather than silently reusing it.
+deliberately rather than silently reusing it. The requirements install `tzdata` only on `win32`;
+do not remove it merely because another operating system supplies an IANA timezone database.
 
 ## 3. Read before continuing
 
@@ -166,9 +189,13 @@ deliberately rather than silently reusing it.
    approved batches (6/40), and human-review boundary.
 8. `docs/project/08_temporal_document_retrieval.md` — the implemented document cutoff and
    filter-before-scoring contract.
-9. `docs/discovery/03_week1_verification_log.md` — the verified example values the resolver must
+9. `docs/project/09_typed_execution_trace_contract.md` — the frozen first slice and exact next
+   adapter boundary.
+10. `docs/project/10_snapshot_reader_contract.md` — the implemented trusted registry, cutoff-safe
+    reader, provider parsers, failure taxonomy, and exact next adapter boundary.
+11. `docs/discovery/03_week1_verification_log.md` — the verified example values the resolver must
    reproduce.
-10. `src/sovereignlab/vintage/resolver.py`, `src/sovereignlab/retrieval/temporal.py`,
+12. `src/sovereignlab/vintage/resolver.py`, `src/sovereignlab/retrieval/temporal.py`,
    `src/sovereignlab/harvest/weekly.py`, and their tests —
    the implemented resolver and append-only capture boundaries.
 
@@ -235,18 +262,20 @@ machine-readable trace under ADR 0008.
 
 Implement in this order:
 
-1. Read ADR 0008, charter §§3/6/7, the frozen benchmark models, and the existing resolver,
+1. **Complete.** Read ADR 0008, charter §§3/6/7, the frozen benchmark models, and the existing resolver,
    retriever, harvester snapshot formats, and tests. Confirm that no router/model-call/replay
    package or snapshot-read tool exists before adding one.
-2. Freeze strict typed contracts for the route plan, tool calls/results, evidence packet, and
+2. **Complete.** Freeze strict typed contracts for the route plan, tool calls/results, evidence packet, and
    trace, plus the latest-only snapshot reader's flat gold-argument convention. Derive callable
    JSON schemas from Pydantic. Do not change `BenchmarkRecord` or `BenchmarkBundle` 2.0.0. Record
    any consequential choice not already fixed by ADR 0008 as a focused ADR or specification.
 3. Expose exactly three registered deterministic offline tool adapters:
-   - temporal document retrieval through the existing filter-before-scoring implementation;
-   - `resolve_stes_as_of` through an adapter matching the exact flat arguments in
-     `core-batch-001.jsonl`;
-   - the new latest-only ECOS/KOSIS snapshot reader, limited to committed owner-approved scopes.
+   - **Complete.** `read_snapshot_as_of` is limited to committed owner-approved scopes and backed
+     by a trusted, digest-linked registry;
+   - **next slice:** temporal document retrieval through the existing filter-before-scoring
+     implementation;
+   - then `resolve_stes_as_of` through an adapter matching the exact flat arguments in
+     `core-batch-001.jsonl`.
 4. Inject trusted manifests, ledgers, archive bytes, snapshot locations, and registries from the
    harness. Reject model-supplied paths, raw bytes, manifests, ledgers, unknown tool names, extra
    fields, or invalid arguments.
@@ -258,9 +287,11 @@ Implement in this order:
    invalid-call failures, deterministic replay, and trace round-tripping. Update
    `docs/PROJECT_STATUS.md` with the exact commands and result.
 
-The first reviewable slice should freeze and test the typed execution/trace surface and the
-snapshot-reader argument convention before authoring any matrix records that depend on it. Keep
-each later slice independently reviewable.
+The first two reviewable slices are complete: the typed execution/trace surface is frozen in
+`docs/project/09_typed_execution_trace_contract.md`, and the trusted snapshot registry plus
+`read_snapshot_as_of` adapter are implemented under
+`docs/project/10_snapshot_reader_contract.md`. The next slice is only the typed temporal-retrieval
+adapter. Keep each later slice independently reviewable.
 
 Work unit C is complete only when the minimal path runs offline end to end, every call and result
 is present in a replayable committed trace, existing temporal leakage protections still pass, all
@@ -282,8 +313,8 @@ the configured secrets.
 - Do not rerun the paid QLoRA compatibility spike. It passed, all Pods were deleted, and it is not
   a model-quality result.
 - Do not manually dispatch the secret-backed harvester as part of onboarding.
-- Do not author snapshot-dependent matrix records before the snapshot reader's flat gold-argument
-  convention is frozen.
+- Do not revise the now-frozen snapshot gold convention or combine dependent benchmark authoring
+  with the runtime-adapter slice.
 - Do not reopen accepted ADRs 0003–0009 without new evidence that requires a superseding decision.
 - Do not implement the bounded multi-step tool loop in-window; ADR 0008 defers it to v1.1. Do
   not re-litigate that deferral — the supporting matrix/schema arithmetic is recorded in the ADR.
