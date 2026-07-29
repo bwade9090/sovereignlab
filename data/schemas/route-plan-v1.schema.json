@@ -1,0 +1,349 @@
+{
+  "$defs": {
+    "EvidenceRoute": {
+      "description": "The mutually exclusive evidence plans evaluated by the router.",
+      "enum": [
+        "documents",
+        "data",
+        "documents_and_data",
+        "abstain"
+      ],
+      "title": "EvidenceRoute",
+      "type": "string"
+    },
+    "PlanAbstention": {
+      "additionalProperties": false,
+      "description": "Structured reason for a route selected as abstain.",
+      "properties": {
+        "message": {
+          "maxLength": 10000,
+          "minLength": 1,
+          "title": "Message",
+          "type": "string"
+        },
+        "reason_code": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+          "title": "Reason Code",
+          "type": "string"
+        }
+      },
+      "required": [
+        "reason_code",
+        "message"
+      ],
+      "title": "PlanAbstention",
+      "type": "object"
+    },
+    "SnapshotAsOfArguments": {
+      "additionalProperties": false,
+      "description": "The frozen flat gold convention for latest-only ECOS/KOSIS snapshots.",
+      "properties": {
+        "as_of": {
+          "format": "date",
+          "title": "As Of",
+          "type": "string"
+        },
+        "item_id": {
+          "enum": [
+            "10601",
+            "SA000",
+            "T/T10"
+          ],
+          "title": "Item Id",
+          "type": "string"
+        },
+        "normalization_rule_id": {
+          "enum": [
+            "ecos-200y108-10601-billion-krw-v1",
+            "ecos-301y017-sa000-million-usd-v1",
+            "kosis-101-dt-1j22003-t-t10-index-v1"
+          ],
+          "title": "Normalization Rule Id",
+          "type": "string"
+        },
+        "period": {
+          "pattern": "^[0-9]{4}(?:Q[1-4]|(?:0[1-9]|1[0-2]))$",
+          "title": "Period",
+          "type": "string"
+        },
+        "source_system": {
+          "enum": [
+            "ecos",
+            "kosis"
+          ],
+          "title": "Source System",
+          "type": "string"
+        },
+        "table_id": {
+          "enum": [
+            "200Y108",
+            "301Y017",
+            "DT_1J22003"
+          ],
+          "title": "Table Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "source_system",
+        "table_id",
+        "item_id",
+        "period",
+        "as_of",
+        "normalization_rule_id"
+      ],
+      "title": "SnapshotAsOfArguments",
+      "type": "object"
+    },
+    "SnapshotAsOfCall": {
+      "additionalProperties": false,
+      "description": "One native call to the trusted-registry latest-only snapshot adapter.",
+      "properties": {
+        "arguments": {
+          "$ref": "#/$defs/SnapshotAsOfArguments"
+        },
+        "call_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+          "title": "Call Id",
+          "type": "string"
+        },
+        "tool_name": {
+          "const": "read_snapshot_as_of",
+          "title": "Tool Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "call_id",
+        "tool_name",
+        "arguments"
+      ],
+      "title": "SnapshotAsOfCall",
+      "type": "object"
+    },
+    "StesAsOfArguments": {
+      "additionalProperties": false,
+      "description": "The frozen flat gold convention for the historical STES resolver.",
+      "properties": {
+        "activity": {
+          "maxLength": 256,
+          "pattern": "^(?:[A-Za-z0-9_][A-Za-z0-9._@:/-]*)?$",
+          "title": "Activity",
+          "type": "string"
+        },
+        "as_of": {
+          "format": "date",
+          "title": "As Of",
+          "type": "string"
+        },
+        "freq": {
+          "maxLength": 256,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._@:/-]*$",
+          "title": "Freq",
+          "type": "string"
+        },
+        "measure": {
+          "maxLength": 256,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._@:/-]*$",
+          "title": "Measure",
+          "type": "string"
+        },
+        "normalization_rule_id": {
+          "enum": [
+            "oecd-stes-kor-li-aa-index-v1",
+            "oecd-stes-kor-b1gq-q-xdc-billion-krw-v1"
+          ],
+          "title": "Normalization Rule Id",
+          "type": "string"
+        },
+        "period": {
+          "maxLength": 64,
+          "minLength": 1,
+          "title": "Period",
+          "type": "string"
+        },
+        "ref_area": {
+          "maxLength": 256,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._@:/-]*$",
+          "title": "Ref Area",
+          "type": "string"
+        },
+        "unit_measure": {
+          "maxLength": 256,
+          "pattern": "^(?:[A-Za-z0-9_][A-Za-z0-9._@:/-]*)?$",
+          "title": "Unit Measure",
+          "type": "string"
+        }
+      },
+      "required": [
+        "ref_area",
+        "freq",
+        "measure",
+        "unit_measure",
+        "activity",
+        "period",
+        "as_of",
+        "normalization_rule_id"
+      ],
+      "title": "StesAsOfArguments",
+      "type": "object"
+    },
+    "StesAsOfCall": {
+      "additionalProperties": false,
+      "description": "One native call to the flat historical resolver adapter.",
+      "properties": {
+        "arguments": {
+          "$ref": "#/$defs/StesAsOfArguments"
+        },
+        "call_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+          "title": "Call Id",
+          "type": "string"
+        },
+        "tool_name": {
+          "const": "resolve_stes_as_of",
+          "title": "Tool Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "call_id",
+        "tool_name",
+        "arguments"
+      ],
+      "title": "StesAsOfCall",
+      "type": "object"
+    },
+    "TemporalDocumentArguments": {
+      "additionalProperties": false,
+      "description": "Callable arguments for publication-date-safe bilingual retrieval.",
+      "properties": {
+        "as_of": {
+          "format": "date",
+          "title": "As Of",
+          "type": "string"
+        },
+        "language": {
+          "enum": [
+            "ko",
+            "en"
+          ],
+          "title": "Language",
+          "type": "string"
+        },
+        "question": {
+          "maxLength": 2000,
+          "minLength": 5,
+          "title": "Question",
+          "type": "string"
+        },
+        "top_k": {
+          "default": 5,
+          "exclusiveMinimum": 0,
+          "maximum": 20,
+          "title": "Top K",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "question",
+        "language",
+        "as_of"
+      ],
+      "title": "TemporalDocumentArguments",
+      "type": "object"
+    },
+    "TemporalDocumentCall": {
+      "additionalProperties": false,
+      "description": "One native call to the temporal document retrieval adapter.",
+      "properties": {
+        "arguments": {
+          "$ref": "#/$defs/TemporalDocumentArguments"
+        },
+        "call_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+          "title": "Call Id",
+          "type": "string"
+        },
+        "tool_name": {
+          "const": "retrieve_temporal_documents",
+          "title": "Tool Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "call_id",
+        "tool_name",
+        "arguments"
+      ],
+      "title": "TemporalDocumentCall",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "One complete single-shot route and its model-emitted typed calls.",
+  "properties": {
+    "abstention": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/PlanAbstention"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "route": {
+      "$ref": "#/$defs/EvidenceRoute"
+    },
+    "schema_version": {
+      "const": "1.0.0",
+      "default": "1.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "tool_calls": {
+      "default": [],
+      "items": {
+        "discriminator": {
+          "mapping": {
+            "read_snapshot_as_of": "#/$defs/SnapshotAsOfCall",
+            "resolve_stes_as_of": "#/$defs/StesAsOfCall",
+            "retrieve_temporal_documents": "#/$defs/TemporalDocumentCall"
+          },
+          "propertyName": "tool_name"
+        },
+        "oneOf": [
+          {
+            "$ref": "#/$defs/TemporalDocumentCall"
+          },
+          {
+            "$ref": "#/$defs/StesAsOfCall"
+          },
+          {
+            "$ref": "#/$defs/SnapshotAsOfCall"
+          }
+        ]
+      },
+      "title": "Tool Calls",
+      "type": "array"
+    }
+  },
+  "required": [
+    "route"
+  ],
+  "title": "RoutePlan",
+  "type": "object"
+}

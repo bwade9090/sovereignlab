@@ -1,0 +1,39 @@
+{
+  "additionalProperties": false,
+  "description": "Callable arguments for publication-date-safe bilingual retrieval.",
+  "properties": {
+    "as_of": {
+      "format": "date",
+      "title": "As Of",
+      "type": "string"
+    },
+    "language": {
+      "enum": [
+        "ko",
+        "en"
+      ],
+      "title": "Language",
+      "type": "string"
+    },
+    "question": {
+      "maxLength": 2000,
+      "minLength": 5,
+      "title": "Question",
+      "type": "string"
+    },
+    "top_k": {
+      "default": 5,
+      "exclusiveMinimum": 0,
+      "maximum": 20,
+      "title": "Top K",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "question",
+    "language",
+    "as_of"
+  ],
+  "title": "TemporalDocumentArguments",
+  "type": "object"
+}

@@ -1,0 +1,61 @@
+{
+  "additionalProperties": false,
+  "description": "The frozen flat gold convention for latest-only ECOS/KOSIS snapshots.",
+  "properties": {
+    "as_of": {
+      "format": "date",
+      "title": "As Of",
+      "type": "string"
+    },
+    "item_id": {
+      "enum": [
+        "10601",
+        "SA000",
+        "T/T10"
+      ],
+      "title": "Item Id",
+      "type": "string"
+    },
+    "normalization_rule_id": {
+      "enum": [
+        "ecos-200y108-10601-billion-krw-v1",
+        "ecos-301y017-sa000-million-usd-v1",
+        "kosis-101-dt-1j22003-t-t10-index-v1"
+      ],
+      "title": "Normalization Rule Id",
+      "type": "string"
+    },
+    "period": {
+      "pattern": "^[0-9]{4}(?:Q[1-4]|(?:0[1-9]|1[0-2]))$",
+      "title": "Period",
+      "type": "string"
+    },
+    "source_system": {
+      "enum": [
+        "ecos",
+        "kosis"
+      ],
+      "title": "Source System",
+      "type": "string"
+    },
+    "table_id": {
+      "enum": [
+        "200Y108",
+        "301Y017",
+        "DT_1J22003"
+      ],
+      "title": "Table Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "source_system",
+    "table_id",
+    "item_id",
+    "period",
+    "as_of",
+    "normalization_rule_id"
+  ],
+  "title": "SnapshotAsOfArguments",
+  "type": "object"
+}

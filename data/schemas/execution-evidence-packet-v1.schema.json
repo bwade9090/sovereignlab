@@ -1,0 +1,625 @@
+{
+  "$defs": {
+    "AbstentionOrigin": {
+      "description": "The plan or terminal tool outcome that caused a packet abstention.",
+      "enum": [
+        "plan",
+        "tool"
+      ],
+      "title": "AbstentionOrigin",
+      "type": "string"
+    },
+    "DocumentMatchEvidence": {
+      "additionalProperties": false,
+      "description": "One retrieved passage bound to immutable document provenance.",
+      "properties": {
+        "chunk_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+          "title": "Chunk Id",
+          "type": "string"
+        },
+        "language": {
+          "enum": [
+            "ko",
+            "en"
+          ],
+          "title": "Language",
+          "type": "string"
+        },
+        "locator": {
+          "$ref": "#/$defs/EvidenceLocator"
+        },
+        "published_on": {
+          "format": "date",
+          "title": "Published On",
+          "type": "string"
+        },
+        "score": {
+          "exclusiveMinimum": 0,
+          "title": "Score",
+          "type": "number"
+        },
+        "source_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+          "title": "Source Id",
+          "type": "string"
+        },
+        "source_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Source Sha256",
+          "type": "string"
+        },
+        "text": {
+          "maxLength": 10000,
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "chunk_id",
+        "source_id",
+        "source_sha256",
+        "language",
+        "published_on",
+        "locator",
+        "text",
+        "score"
+      ],
+      "title": "DocumentMatchEvidence",
+      "type": "object"
+    },
+    "EvidenceLocator": {
+      "additionalProperties": false,
+      "description": "A stable locator within a documentary source.",
+      "properties": {
+        "fragment_id": {
+          "anyOf": [
+            {
+              "maxLength": 128,
+              "minLength": 3,
+              "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Fragment Id"
+        },
+        "page": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Page"
+        },
+        "section": {
+          "anyOf": [
+            {
+              "maxLength": 500,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Section"
+        }
+      },
+      "title": "EvidenceLocator",
+      "type": "object"
+    },
+    "EvidenceRoute": {
+      "description": "The mutually exclusive evidence plans evaluated by the router.",
+      "enum": [
+        "documents",
+        "data",
+        "documents_and_data",
+        "abstain"
+      ],
+      "title": "EvidenceRoute",
+      "type": "string"
+    },
+    "ExecutionRequest": {
+      "additionalProperties": false,
+      "description": "A bilingual question with an explicit replay cutoff.",
+      "properties": {
+        "effective_as_of": {
+          "format": "date",
+          "title": "Effective As Of",
+          "type": "string"
+        },
+        "language": {
+          "enum": [
+            "ko",
+            "en"
+          ],
+          "title": "Language",
+          "type": "string"
+        },
+        "question": {
+          "maxLength": 2000,
+          "minLength": 5,
+          "title": "Question",
+          "type": "string"
+        },
+        "request_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+          "title": "Request Id",
+          "type": "string"
+        },
+        "requested_as_of": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Requested As Of"
+        }
+      },
+      "required": [
+        "request_id",
+        "question",
+        "language",
+        "effective_as_of"
+      ],
+      "title": "ExecutionRequest",
+      "type": "object"
+    },
+    "NormalizedObservation": {
+      "additionalProperties": false,
+      "description": "Exact-decimal normalization facts preserved with a selected source value.",
+      "properties": {
+        "canonical_unit": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+          "title": "Canonical Unit",
+          "type": "string"
+        },
+        "display_places": {
+          "maximum": 12,
+          "minimum": 0,
+          "title": "Display Places",
+          "type": "integer"
+        },
+        "display_value": {
+          "maxLength": 128,
+          "pattern": "^[+-]?[0-9]+(?:\\.[0-9]+)?$",
+          "title": "Display Value",
+          "type": "string"
+        },
+        "normalization_rule_id": {
+          "enum": [
+            "ecos-200y108-10601-billion-krw-v1",
+            "ecos-301y017-sa000-million-usd-v1",
+            "kosis-101-dt-1j22003-t-t10-index-v1",
+            "oecd-stes-kor-li-aa-index-v1",
+            "oecd-stes-kor-b1gq-q-xdc-billion-krw-v1"
+          ],
+          "title": "Normalization Rule Id",
+          "type": "string"
+        },
+        "normalized_value": {
+          "maxLength": 128,
+          "pattern": "^[+-]?[0-9]+(?:\\.[0-9]+)?$",
+          "title": "Normalized Value",
+          "type": "string"
+        },
+        "raw_value": {
+          "maxLength": 128,
+          "pattern": "^[+-]?[0-9]+(?:\\.[0-9]+)?$",
+          "title": "Raw Value",
+          "type": "string"
+        }
+      },
+      "required": [
+        "raw_value",
+        "normalization_rule_id",
+        "normalized_value",
+        "canonical_unit",
+        "display_places",
+        "display_value"
+      ],
+      "title": "NormalizedObservation",
+      "type": "object"
+    },
+    "PacketAbstention": {
+      "additionalProperties": false,
+      "description": "Why a planned route produced no externally usable evidence packet.",
+      "properties": {
+        "message": {
+          "maxLength": 10000,
+          "minLength": 1,
+          "title": "Message",
+          "type": "string"
+        },
+        "origin": {
+          "$ref": "#/$defs/AbstentionOrigin"
+        },
+        "origin_call_id": {
+          "anyOf": [
+            {
+              "maxLength": 128,
+              "minLength": 3,
+              "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Origin Call Id"
+        },
+        "reason_code": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+          "title": "Reason Code",
+          "type": "string"
+        }
+      },
+      "required": [
+        "origin",
+        "reason_code",
+        "message"
+      ],
+      "title": "PacketAbstention",
+      "type": "object"
+    },
+    "PacketStatus": {
+      "description": "Whether an evidence packet is complete or safely abstained.",
+      "enum": [
+        "complete",
+        "abstained"
+      ],
+      "title": "PacketStatus",
+      "type": "string"
+    },
+    "SnapshotObservationEvidence": {
+      "additionalProperties": false,
+      "description": "One normalized row from the latest committed eligible snapshot.",
+      "properties": {
+        "as_of": {
+          "format": "date",
+          "title": "As Of",
+          "type": "string"
+        },
+        "evidence_kind": {
+          "const": "latest_snapshot",
+          "title": "Evidence Kind",
+          "type": "string"
+        },
+        "item_id": {
+          "enum": [
+            "10601",
+            "SA000",
+            "T/T10"
+          ],
+          "title": "Item Id",
+          "type": "string"
+        },
+        "observation": {
+          "$ref": "#/$defs/NormalizedObservation"
+        },
+        "period": {
+          "pattern": "^[0-9]{4}(?:Q[1-4]|(?:0[1-9]|1[0-2]))$",
+          "title": "Period",
+          "type": "string"
+        },
+        "rights_catalog_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+          "title": "Rights Catalog Id",
+          "type": "string"
+        },
+        "rights_decision_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+          "title": "Rights Decision Id",
+          "type": "string"
+        },
+        "source_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+          "title": "Source Id",
+          "type": "string"
+        },
+        "source_published_on": {
+          "format": "date",
+          "title": "Source Published On",
+          "type": "string"
+        },
+        "source_retrieved_at": {
+          "format": "date-time",
+          "title": "Source Retrieved At",
+          "type": "string"
+        },
+        "source_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Source Sha256",
+          "type": "string"
+        },
+        "source_system": {
+          "enum": [
+            "ecos",
+            "kosis"
+          ],
+          "title": "Source System",
+          "type": "string"
+        },
+        "table_id": {
+          "enum": [
+            "200Y108",
+            "301Y017",
+            "DT_1J22003"
+          ],
+          "title": "Table Id",
+          "type": "string"
+        },
+        "vintage_semantics": {
+          "const": "latest_only",
+          "default": "latest_only",
+          "title": "Vintage Semantics",
+          "type": "string"
+        }
+      },
+      "required": [
+        "evidence_kind",
+        "source_id",
+        "source_sha256",
+        "source_system",
+        "source_published_on",
+        "source_retrieved_at",
+        "rights_catalog_id",
+        "rights_decision_id",
+        "as_of",
+        "table_id",
+        "item_id",
+        "period",
+        "observation"
+      ],
+      "title": "SnapshotObservationEvidence",
+      "type": "object"
+    },
+    "VintageObservationEvidence": {
+      "additionalProperties": false,
+      "description": "One normalized row selected through the fail-closed vintage ledger.",
+      "properties": {
+        "activity": {
+          "maxLength": 256,
+          "pattern": "^(?:[A-Za-z0-9_][A-Za-z0-9._@:/-]*)?$",
+          "title": "Activity",
+          "type": "string"
+        },
+        "as_of": {
+          "format": "date",
+          "title": "As Of",
+          "type": "string"
+        },
+        "dataflow_id": {
+          "maxLength": 10000,
+          "minLength": 1,
+          "title": "Dataflow Id",
+          "type": "string"
+        },
+        "dataflow_version": {
+          "maxLength": 10000,
+          "minLength": 1,
+          "title": "Dataflow Version",
+          "type": "string"
+        },
+        "evidence_kind": {
+          "const": "vintage_observation",
+          "title": "Evidence Kind",
+          "type": "string"
+        },
+        "freq": {
+          "maxLength": 256,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._@:/-]*$",
+          "title": "Freq",
+          "type": "string"
+        },
+        "ledger_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+          "title": "Ledger Id",
+          "type": "string"
+        },
+        "measure": {
+          "maxLength": 256,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._@:/-]*$",
+          "title": "Measure",
+          "type": "string"
+        },
+        "observation": {
+          "$ref": "#/$defs/NormalizedObservation"
+        },
+        "period": {
+          "maxLength": 64,
+          "minLength": 1,
+          "title": "Period",
+          "type": "string"
+        },
+        "ref_area": {
+          "maxLength": 256,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._@:/-]*$",
+          "title": "Ref Area",
+          "type": "string"
+        },
+        "rights_catalog_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+          "title": "Rights Catalog Id",
+          "type": "string"
+        },
+        "rights_decision_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+          "title": "Rights Decision Id",
+          "type": "string"
+        },
+        "selected_edition": {
+          "pattern": "^[0-9]{4}(0[1-9]|1[0-2])$",
+          "title": "Selected Edition",
+          "type": "string"
+        },
+        "source_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+          "title": "Source Id",
+          "type": "string"
+        },
+        "source_published_on": {
+          "format": "date",
+          "title": "Source Published On",
+          "type": "string"
+        },
+        "source_retrieved_at": {
+          "format": "date-time",
+          "title": "Source Retrieved At",
+          "type": "string"
+        },
+        "source_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Source Sha256",
+          "type": "string"
+        },
+        "source_system": {
+          "const": "oecd",
+          "default": "oecd",
+          "title": "Source System",
+          "type": "string"
+        },
+        "unit_measure": {
+          "maxLength": 256,
+          "pattern": "^(?:[A-Za-z0-9_][A-Za-z0-9._@:/-]*)?$",
+          "title": "Unit Measure",
+          "type": "string"
+        }
+      },
+      "required": [
+        "evidence_kind",
+        "source_id",
+        "source_sha256",
+        "source_published_on",
+        "source_retrieved_at",
+        "rights_catalog_id",
+        "rights_decision_id",
+        "ledger_id",
+        "dataflow_id",
+        "dataflow_version",
+        "as_of",
+        "ref_area",
+        "freq",
+        "measure",
+        "unit_measure",
+        "activity",
+        "selected_edition",
+        "period",
+        "observation"
+      ],
+      "title": "VintageObservationEvidence",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Fail-closed evidence assembled from a single route plan.",
+  "properties": {
+    "abstention": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/PacketAbstention"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "documents": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/DocumentMatchEvidence"
+      },
+      "title": "Documents",
+      "type": "array"
+    },
+    "observations": {
+      "default": [],
+      "items": {
+        "discriminator": {
+          "mapping": {
+            "latest_snapshot": "#/$defs/SnapshotObservationEvidence",
+            "vintage_observation": "#/$defs/VintageObservationEvidence"
+          },
+          "propertyName": "evidence_kind"
+        },
+        "oneOf": [
+          {
+            "$ref": "#/$defs/VintageObservationEvidence"
+          },
+          {
+            "$ref": "#/$defs/SnapshotObservationEvidence"
+          }
+        ]
+      },
+      "title": "Observations",
+      "type": "array"
+    },
+    "planned_route": {
+      "$ref": "#/$defs/EvidenceRoute"
+    },
+    "request": {
+      "$ref": "#/$defs/ExecutionRequest"
+    },
+    "schema_version": {
+      "const": "1.0.0",
+      "default": "1.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "status": {
+      "$ref": "#/$defs/PacketStatus"
+    }
+  },
+  "required": [
+    "request",
+    "planned_route",
+    "status"
+  ],
+  "title": "ExecutionEvidencePacket",
+  "type": "object"
+}

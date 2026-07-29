@@ -10,6 +10,7 @@ from sovereignlab.schemas import (
     BenchmarkBundle,
     BenchmarkRecord,
     EditionAvailabilityLedger,
+    ExecutionTrace,
     RightsCatalog,
     RightsInstrument,
     SeriesRightsDecision,
@@ -49,6 +50,21 @@ def test_synthetic_availability_ledger_example_validates() -> None:
 
     assert ledger.ledger_id == "example-availability-ledger-001"
     assert [record.edition for record in ledger.editions] == ["202405", "202406"]
+
+
+def test_committed_execution_trace_example_validates() -> None:
+    trace = ExecutionTrace.model_validate_json(
+        (ROOT / "data" / "fixtures" / "execution_trace.example.json").read_text(encoding="utf-8")
+    )
+
+    assert trace.trace_id == "trace-contract-both-ko-001"
+    assert trace.plan is not None
+    assert [call.tool_name.value for call in trace.plan.tool_calls] == [
+        "retrieve_temporal_documents",
+        "read_snapshot_as_of",
+    ]
+    assert trace.evidence_packet is not None
+    assert trace.evidence_packet.documents[0].source_id == "synthetic-doc-ko"
 
 
 def test_synthetic_rights_examples_form_a_valid_catalog() -> None:

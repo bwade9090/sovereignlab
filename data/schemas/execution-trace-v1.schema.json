@@ -1,0 +1,1508 @@
+{
+  "$defs": {
+    "AbstentionOrigin": {
+      "description": "The plan or terminal tool outcome that caused a packet abstention.",
+      "enum": [
+        "plan",
+        "tool"
+      ],
+      "title": "AbstentionOrigin",
+      "type": "string"
+    },
+    "DocumentMatchEvidence": {
+      "additionalProperties": false,
+      "description": "One retrieved passage bound to immutable document provenance.",
+      "properties": {
+        "chunk_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+          "title": "Chunk Id",
+          "type": "string"
+        },
+        "language": {
+          "enum": [
+            "ko",
+            "en"
+          ],
+          "title": "Language",
+          "type": "string"
+        },
+        "locator": {
+          "$ref": "#/$defs/EvidenceLocator"
+        },
+        "published_on": {
+          "format": "date",
+          "title": "Published On",
+          "type": "string"
+        },
+        "score": {
+          "exclusiveMinimum": 0,
+          "title": "Score",
+          "type": "number"
+        },
+        "source_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+          "title": "Source Id",
+          "type": "string"
+        },
+        "source_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Source Sha256",
+          "type": "string"
+        },
+        "text": {
+          "maxLength": 10000,
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "chunk_id",
+        "source_id",
+        "source_sha256",
+        "language",
+        "published_on",
+        "locator",
+        "text",
+        "score"
+      ],
+      "title": "DocumentMatchEvidence",
+      "type": "object"
+    },
+    "DocumentRetrievalPayload": {
+      "additionalProperties": false,
+      "description": "Non-empty evidence returned by the temporal retrieval adapter.",
+      "properties": {
+        "matches": {
+          "items": {
+            "$ref": "#/$defs/DocumentMatchEvidence"
+          },
+          "minItems": 1,
+          "title": "Matches",
+          "type": "array"
+        }
+      },
+      "required": [
+        "matches"
+      ],
+      "title": "DocumentRetrievalPayload",
+      "type": "object"
+    },
+    "EvidenceLocator": {
+      "additionalProperties": false,
+      "description": "A stable locator within a documentary source.",
+      "properties": {
+        "fragment_id": {
+          "anyOf": [
+            {
+              "maxLength": 128,
+              "minLength": 3,
+              "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Fragment Id"
+        },
+        "page": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Page"
+        },
+        "section": {
+          "anyOf": [
+            {
+              "maxLength": 500,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Section"
+        }
+      },
+      "title": "EvidenceLocator",
+      "type": "object"
+    },
+    "EvidenceRoute": {
+      "description": "The mutually exclusive evidence plans evaluated by the router.",
+      "enum": [
+        "documents",
+        "data",
+        "documents_and_data",
+        "abstain"
+      ],
+      "title": "EvidenceRoute",
+      "type": "string"
+    },
+    "ExecutionEnvironmentProvenance": {
+      "additionalProperties": false,
+      "description": "Digests required to replay deterministic tools against the same trusted inputs.",
+      "properties": {
+        "artifact_registry_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+          "title": "Artifact Registry Id",
+          "type": "string"
+        },
+        "artifact_registry_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Artifact Registry Sha256",
+          "type": "string"
+        },
+        "executor_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+          "title": "Executor Id",
+          "type": "string"
+        },
+        "executor_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Executor Sha256",
+          "type": "string"
+        },
+        "retrieval_corpus_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+          "title": "Retrieval Corpus Id",
+          "type": "string"
+        },
+        "retrieval_corpus_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Retrieval Corpus Sha256",
+          "type": "string"
+        },
+        "tool_registry_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+          "title": "Tool Registry Id",
+          "type": "string"
+        },
+        "tool_registry_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Tool Registry Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "executor_id",
+        "executor_sha256",
+        "tool_registry_id",
+        "tool_registry_sha256",
+        "artifact_registry_id",
+        "artifact_registry_sha256",
+        "retrieval_corpus_id",
+        "retrieval_corpus_sha256"
+      ],
+      "title": "ExecutionEnvironmentProvenance",
+      "type": "object"
+    },
+    "ExecutionEvidencePacket": {
+      "additionalProperties": false,
+      "description": "Fail-closed evidence assembled from a single route plan.",
+      "properties": {
+        "abstention": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/PacketAbstention"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "documents": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/DocumentMatchEvidence"
+          },
+          "title": "Documents",
+          "type": "array"
+        },
+        "observations": {
+          "default": [],
+          "items": {
+            "discriminator": {
+              "mapping": {
+                "latest_snapshot": "#/$defs/SnapshotObservationEvidence",
+                "vintage_observation": "#/$defs/VintageObservationEvidence"
+              },
+              "propertyName": "evidence_kind"
+            },
+            "oneOf": [
+              {
+                "$ref": "#/$defs/VintageObservationEvidence"
+              },
+              {
+                "$ref": "#/$defs/SnapshotObservationEvidence"
+              }
+            ]
+          },
+          "title": "Observations",
+          "type": "array"
+        },
+        "planned_route": {
+          "$ref": "#/$defs/EvidenceRoute"
+        },
+        "request": {
+          "$ref": "#/$defs/ExecutionRequest"
+        },
+        "schema_version": {
+          "const": "1.0.0",
+          "default": "1.0.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/$defs/PacketStatus"
+        }
+      },
+      "required": [
+        "request",
+        "planned_route",
+        "status"
+      ],
+      "title": "ExecutionEvidencePacket",
+      "type": "object"
+    },
+    "ExecutionFailure": {
+      "additionalProperties": false,
+      "description": "Sanitized failure metadata that cannot carry raw provider or artifact bytes.",
+      "properties": {
+        "call_id": {
+          "anyOf": [
+            {
+              "maxLength": 128,
+              "minLength": 3,
+              "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Call Id"
+        },
+        "code": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+          "title": "Code",
+          "type": "string"
+        },
+        "message": {
+          "maxLength": 10000,
+          "minLength": 1,
+          "title": "Message",
+          "type": "string"
+        },
+        "phase": {
+          "$ref": "#/$defs/FailurePhase"
+        }
+      },
+      "required": [
+        "phase",
+        "code",
+        "message"
+      ],
+      "title": "ExecutionFailure",
+      "type": "object"
+    },
+    "ExecutionRequest": {
+      "additionalProperties": false,
+      "description": "A bilingual question with an explicit replay cutoff.",
+      "properties": {
+        "effective_as_of": {
+          "format": "date",
+          "title": "Effective As Of",
+          "type": "string"
+        },
+        "language": {
+          "enum": [
+            "ko",
+            "en"
+          ],
+          "title": "Language",
+          "type": "string"
+        },
+        "question": {
+          "maxLength": 2000,
+          "minLength": 5,
+          "title": "Question",
+          "type": "string"
+        },
+        "request_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+          "title": "Request Id",
+          "type": "string"
+        },
+        "requested_as_of": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Requested As Of"
+        }
+      },
+      "required": [
+        "request_id",
+        "question",
+        "language",
+        "effective_as_of"
+      ],
+      "title": "ExecutionRequest",
+      "type": "object"
+    },
+    "FailurePhase": {
+      "description": "The bounded execution phases in which a trace may fail.",
+      "enum": [
+        "planner",
+        "plan_validation",
+        "tool_execution",
+        "packet_assembly"
+      ],
+      "title": "FailurePhase",
+      "type": "string"
+    },
+    "NormalizedObservation": {
+      "additionalProperties": false,
+      "description": "Exact-decimal normalization facts preserved with a selected source value.",
+      "properties": {
+        "canonical_unit": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+          "title": "Canonical Unit",
+          "type": "string"
+        },
+        "display_places": {
+          "maximum": 12,
+          "minimum": 0,
+          "title": "Display Places",
+          "type": "integer"
+        },
+        "display_value": {
+          "maxLength": 128,
+          "pattern": "^[+-]?[0-9]+(?:\\.[0-9]+)?$",
+          "title": "Display Value",
+          "type": "string"
+        },
+        "normalization_rule_id": {
+          "enum": [
+            "ecos-200y108-10601-billion-krw-v1",
+            "ecos-301y017-sa000-million-usd-v1",
+            "kosis-101-dt-1j22003-t-t10-index-v1",
+            "oecd-stes-kor-li-aa-index-v1",
+            "oecd-stes-kor-b1gq-q-xdc-billion-krw-v1"
+          ],
+          "title": "Normalization Rule Id",
+          "type": "string"
+        },
+        "normalized_value": {
+          "maxLength": 128,
+          "pattern": "^[+-]?[0-9]+(?:\\.[0-9]+)?$",
+          "title": "Normalized Value",
+          "type": "string"
+        },
+        "raw_value": {
+          "maxLength": 128,
+          "pattern": "^[+-]?[0-9]+(?:\\.[0-9]+)?$",
+          "title": "Raw Value",
+          "type": "string"
+        }
+      },
+      "required": [
+        "raw_value",
+        "normalization_rule_id",
+        "normalized_value",
+        "canonical_unit",
+        "display_places",
+        "display_value"
+      ],
+      "title": "NormalizedObservation",
+      "type": "object"
+    },
+    "PacketAbstention": {
+      "additionalProperties": false,
+      "description": "Why a planned route produced no externally usable evidence packet.",
+      "properties": {
+        "message": {
+          "maxLength": 10000,
+          "minLength": 1,
+          "title": "Message",
+          "type": "string"
+        },
+        "origin": {
+          "$ref": "#/$defs/AbstentionOrigin"
+        },
+        "origin_call_id": {
+          "anyOf": [
+            {
+              "maxLength": 128,
+              "minLength": 3,
+              "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Origin Call Id"
+        },
+        "reason_code": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+          "title": "Reason Code",
+          "type": "string"
+        }
+      },
+      "required": [
+        "origin",
+        "reason_code",
+        "message"
+      ],
+      "title": "PacketAbstention",
+      "type": "object"
+    },
+    "PacketStatus": {
+      "description": "Whether an evidence packet is complete or safely abstained.",
+      "enum": [
+        "complete",
+        "abstained"
+      ],
+      "title": "PacketStatus",
+      "type": "string"
+    },
+    "PlanAbstention": {
+      "additionalProperties": false,
+      "description": "Structured reason for a route selected as abstain.",
+      "properties": {
+        "message": {
+          "maxLength": 10000,
+          "minLength": 1,
+          "title": "Message",
+          "type": "string"
+        },
+        "reason_code": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+          "title": "Reason Code",
+          "type": "string"
+        }
+      },
+      "required": [
+        "reason_code",
+        "message"
+      ],
+      "title": "PlanAbstention",
+      "type": "object"
+    },
+    "PlannerMode": {
+      "description": "Offline planner modes plus immutable recordings of external responses.",
+      "enum": [
+        "scripted",
+        "recorded",
+        "replay"
+      ],
+      "title": "PlannerMode",
+      "type": "string"
+    },
+    "PlannerProvenance": {
+      "additionalProperties": false,
+      "description": "The offline or immutable-recording source of one canonical route plan.",
+      "properties": {
+        "mode": {
+          "$ref": "#/$defs/PlannerMode"
+        },
+        "model_id": {
+          "anyOf": [
+            {
+              "maxLength": 10000,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Model Id"
+        },
+        "output_sha256": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Output Sha256"
+        },
+        "planner_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+          "title": "Planner Id",
+          "type": "string"
+        },
+        "recording_id": {
+          "anyOf": [
+            {
+              "maxLength": 128,
+              "minLength": 3,
+              "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Recording Id"
+        }
+      },
+      "required": [
+        "planner_id",
+        "mode"
+      ],
+      "title": "PlannerProvenance",
+      "type": "object"
+    },
+    "RoutePlan": {
+      "additionalProperties": false,
+      "description": "One complete single-shot route and its model-emitted typed calls.",
+      "properties": {
+        "abstention": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/PlanAbstention"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "route": {
+          "$ref": "#/$defs/EvidenceRoute"
+        },
+        "schema_version": {
+          "const": "1.0.0",
+          "default": "1.0.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "tool_calls": {
+          "default": [],
+          "items": {
+            "discriminator": {
+              "mapping": {
+                "read_snapshot_as_of": "#/$defs/SnapshotAsOfCall",
+                "resolve_stes_as_of": "#/$defs/StesAsOfCall",
+                "retrieve_temporal_documents": "#/$defs/TemporalDocumentCall"
+              },
+              "propertyName": "tool_name"
+            },
+            "oneOf": [
+              {
+                "$ref": "#/$defs/TemporalDocumentCall"
+              },
+              {
+                "$ref": "#/$defs/StesAsOfCall"
+              },
+              {
+                "$ref": "#/$defs/SnapshotAsOfCall"
+              }
+            ]
+          },
+          "title": "Tool Calls",
+          "type": "array"
+        }
+      },
+      "required": [
+        "route"
+      ],
+      "title": "RoutePlan",
+      "type": "object"
+    },
+    "SnapshotAsOfArguments": {
+      "additionalProperties": false,
+      "description": "The frozen flat gold convention for latest-only ECOS/KOSIS snapshots.",
+      "properties": {
+        "as_of": {
+          "format": "date",
+          "title": "As Of",
+          "type": "string"
+        },
+        "item_id": {
+          "enum": [
+            "10601",
+            "SA000",
+            "T/T10"
+          ],
+          "title": "Item Id",
+          "type": "string"
+        },
+        "normalization_rule_id": {
+          "enum": [
+            "ecos-200y108-10601-billion-krw-v1",
+            "ecos-301y017-sa000-million-usd-v1",
+            "kosis-101-dt-1j22003-t-t10-index-v1"
+          ],
+          "title": "Normalization Rule Id",
+          "type": "string"
+        },
+        "period": {
+          "pattern": "^[0-9]{4}(?:Q[1-4]|(?:0[1-9]|1[0-2]))$",
+          "title": "Period",
+          "type": "string"
+        },
+        "source_system": {
+          "enum": [
+            "ecos",
+            "kosis"
+          ],
+          "title": "Source System",
+          "type": "string"
+        },
+        "table_id": {
+          "enum": [
+            "200Y108",
+            "301Y017",
+            "DT_1J22003"
+          ],
+          "title": "Table Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "source_system",
+        "table_id",
+        "item_id",
+        "period",
+        "as_of",
+        "normalization_rule_id"
+      ],
+      "title": "SnapshotAsOfArguments",
+      "type": "object"
+    },
+    "SnapshotAsOfCall": {
+      "additionalProperties": false,
+      "description": "One native call to the trusted-registry latest-only snapshot adapter.",
+      "properties": {
+        "arguments": {
+          "$ref": "#/$defs/SnapshotAsOfArguments"
+        },
+        "call_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+          "title": "Call Id",
+          "type": "string"
+        },
+        "tool_name": {
+          "const": "read_snapshot_as_of",
+          "title": "Tool Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "call_id",
+        "tool_name",
+        "arguments"
+      ],
+      "title": "SnapshotAsOfCall",
+      "type": "object"
+    },
+    "SnapshotAsOfResult": {
+      "additionalProperties": false,
+      "description": "Typed result of one latest-only snapshot read call.",
+      "properties": {
+        "abstention": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ToolAbstention"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "call_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+          "title": "Call Id",
+          "type": "string"
+        },
+        "error": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ExecutionFailure"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "payload": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SnapshotObservationEvidence"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "status": {
+          "$ref": "#/$defs/ToolOutcomeStatus"
+        },
+        "tool_name": {
+          "const": "read_snapshot_as_of",
+          "title": "Tool Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "call_id",
+        "tool_name",
+        "status"
+      ],
+      "title": "SnapshotAsOfResult",
+      "type": "object"
+    },
+    "SnapshotObservationEvidence": {
+      "additionalProperties": false,
+      "description": "One normalized row from the latest committed eligible snapshot.",
+      "properties": {
+        "as_of": {
+          "format": "date",
+          "title": "As Of",
+          "type": "string"
+        },
+        "evidence_kind": {
+          "const": "latest_snapshot",
+          "title": "Evidence Kind",
+          "type": "string"
+        },
+        "item_id": {
+          "enum": [
+            "10601",
+            "SA000",
+            "T/T10"
+          ],
+          "title": "Item Id",
+          "type": "string"
+        },
+        "observation": {
+          "$ref": "#/$defs/NormalizedObservation"
+        },
+        "period": {
+          "pattern": "^[0-9]{4}(?:Q[1-4]|(?:0[1-9]|1[0-2]))$",
+          "title": "Period",
+          "type": "string"
+        },
+        "rights_catalog_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+          "title": "Rights Catalog Id",
+          "type": "string"
+        },
+        "rights_decision_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+          "title": "Rights Decision Id",
+          "type": "string"
+        },
+        "source_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+          "title": "Source Id",
+          "type": "string"
+        },
+        "source_published_on": {
+          "format": "date",
+          "title": "Source Published On",
+          "type": "string"
+        },
+        "source_retrieved_at": {
+          "format": "date-time",
+          "title": "Source Retrieved At",
+          "type": "string"
+        },
+        "source_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Source Sha256",
+          "type": "string"
+        },
+        "source_system": {
+          "enum": [
+            "ecos",
+            "kosis"
+          ],
+          "title": "Source System",
+          "type": "string"
+        },
+        "table_id": {
+          "enum": [
+            "200Y108",
+            "301Y017",
+            "DT_1J22003"
+          ],
+          "title": "Table Id",
+          "type": "string"
+        },
+        "vintage_semantics": {
+          "const": "latest_only",
+          "default": "latest_only",
+          "title": "Vintage Semantics",
+          "type": "string"
+        }
+      },
+      "required": [
+        "evidence_kind",
+        "source_id",
+        "source_sha256",
+        "source_system",
+        "source_published_on",
+        "source_retrieved_at",
+        "rights_catalog_id",
+        "rights_decision_id",
+        "as_of",
+        "table_id",
+        "item_id",
+        "period",
+        "observation"
+      ],
+      "title": "SnapshotObservationEvidence",
+      "type": "object"
+    },
+    "StesAsOfArguments": {
+      "additionalProperties": false,
+      "description": "The frozen flat gold convention for the historical STES resolver.",
+      "properties": {
+        "activity": {
+          "maxLength": 256,
+          "pattern": "^(?:[A-Za-z0-9_][A-Za-z0-9._@:/-]*)?$",
+          "title": "Activity",
+          "type": "string"
+        },
+        "as_of": {
+          "format": "date",
+          "title": "As Of",
+          "type": "string"
+        },
+        "freq": {
+          "maxLength": 256,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._@:/-]*$",
+          "title": "Freq",
+          "type": "string"
+        },
+        "measure": {
+          "maxLength": 256,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._@:/-]*$",
+          "title": "Measure",
+          "type": "string"
+        },
+        "normalization_rule_id": {
+          "enum": [
+            "oecd-stes-kor-li-aa-index-v1",
+            "oecd-stes-kor-b1gq-q-xdc-billion-krw-v1"
+          ],
+          "title": "Normalization Rule Id",
+          "type": "string"
+        },
+        "period": {
+          "maxLength": 64,
+          "minLength": 1,
+          "title": "Period",
+          "type": "string"
+        },
+        "ref_area": {
+          "maxLength": 256,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._@:/-]*$",
+          "title": "Ref Area",
+          "type": "string"
+        },
+        "unit_measure": {
+          "maxLength": 256,
+          "pattern": "^(?:[A-Za-z0-9_][A-Za-z0-9._@:/-]*)?$",
+          "title": "Unit Measure",
+          "type": "string"
+        }
+      },
+      "required": [
+        "ref_area",
+        "freq",
+        "measure",
+        "unit_measure",
+        "activity",
+        "period",
+        "as_of",
+        "normalization_rule_id"
+      ],
+      "title": "StesAsOfArguments",
+      "type": "object"
+    },
+    "StesAsOfCall": {
+      "additionalProperties": false,
+      "description": "One native call to the flat historical resolver adapter.",
+      "properties": {
+        "arguments": {
+          "$ref": "#/$defs/StesAsOfArguments"
+        },
+        "call_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+          "title": "Call Id",
+          "type": "string"
+        },
+        "tool_name": {
+          "const": "resolve_stes_as_of",
+          "title": "Tool Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "call_id",
+        "tool_name",
+        "arguments"
+      ],
+      "title": "StesAsOfCall",
+      "type": "object"
+    },
+    "StesAsOfResult": {
+      "additionalProperties": false,
+      "description": "Typed result of one historical STES resolver call.",
+      "properties": {
+        "abstention": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ToolAbstention"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "call_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+          "title": "Call Id",
+          "type": "string"
+        },
+        "error": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ExecutionFailure"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "payload": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/VintageObservationEvidence"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "status": {
+          "$ref": "#/$defs/ToolOutcomeStatus"
+        },
+        "tool_name": {
+          "const": "resolve_stes_as_of",
+          "title": "Tool Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "call_id",
+        "tool_name",
+        "status"
+      ],
+      "title": "StesAsOfResult",
+      "type": "object"
+    },
+    "TemporalDocumentArguments": {
+      "additionalProperties": false,
+      "description": "Callable arguments for publication-date-safe bilingual retrieval.",
+      "properties": {
+        "as_of": {
+          "format": "date",
+          "title": "As Of",
+          "type": "string"
+        },
+        "language": {
+          "enum": [
+            "ko",
+            "en"
+          ],
+          "title": "Language",
+          "type": "string"
+        },
+        "question": {
+          "maxLength": 2000,
+          "minLength": 5,
+          "title": "Question",
+          "type": "string"
+        },
+        "top_k": {
+          "default": 5,
+          "exclusiveMinimum": 0,
+          "maximum": 20,
+          "title": "Top K",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "question",
+        "language",
+        "as_of"
+      ],
+      "title": "TemporalDocumentArguments",
+      "type": "object"
+    },
+    "TemporalDocumentCall": {
+      "additionalProperties": false,
+      "description": "One native call to the temporal document retrieval adapter.",
+      "properties": {
+        "arguments": {
+          "$ref": "#/$defs/TemporalDocumentArguments"
+        },
+        "call_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+          "title": "Call Id",
+          "type": "string"
+        },
+        "tool_name": {
+          "const": "retrieve_temporal_documents",
+          "title": "Tool Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "call_id",
+        "tool_name",
+        "arguments"
+      ],
+      "title": "TemporalDocumentCall",
+      "type": "object"
+    },
+    "TemporalDocumentResult": {
+      "additionalProperties": false,
+      "description": "Typed result of one temporal document retrieval call.",
+      "properties": {
+        "abstention": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ToolAbstention"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "call_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+          "title": "Call Id",
+          "type": "string"
+        },
+        "error": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ExecutionFailure"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "payload": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/DocumentRetrievalPayload"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "status": {
+          "$ref": "#/$defs/ToolOutcomeStatus"
+        },
+        "tool_name": {
+          "const": "retrieve_temporal_documents",
+          "title": "Tool Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "call_id",
+        "tool_name",
+        "status"
+      ],
+      "title": "TemporalDocumentResult",
+      "type": "object"
+    },
+    "ToolAbstention": {
+      "additionalProperties": false,
+      "description": "Safe structured reason why one deterministic tool returned no evidence.",
+      "properties": {
+        "message": {
+          "maxLength": 10000,
+          "minLength": 1,
+          "title": "Message",
+          "type": "string"
+        },
+        "reason_code": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+          "title": "Reason Code",
+          "type": "string"
+        }
+      },
+      "required": [
+        "reason_code",
+        "message"
+      ],
+      "title": "ToolAbstention",
+      "type": "object"
+    },
+    "ToolOutcomeStatus": {
+      "description": "Normalized outcome states for one deterministic tool invocation.",
+      "enum": [
+        "success",
+        "abstained",
+        "error"
+      ],
+      "title": "ToolOutcomeStatus",
+      "type": "string"
+    },
+    "TraceStatus": {
+      "description": "Terminal state of one single-shot execution trace.",
+      "enum": [
+        "complete",
+        "abstained",
+        "failed"
+      ],
+      "title": "TraceStatus",
+      "type": "string"
+    },
+    "VintageObservationEvidence": {
+      "additionalProperties": false,
+      "description": "One normalized row selected through the fail-closed vintage ledger.",
+      "properties": {
+        "activity": {
+          "maxLength": 256,
+          "pattern": "^(?:[A-Za-z0-9_][A-Za-z0-9._@:/-]*)?$",
+          "title": "Activity",
+          "type": "string"
+        },
+        "as_of": {
+          "format": "date",
+          "title": "As Of",
+          "type": "string"
+        },
+        "dataflow_id": {
+          "maxLength": 10000,
+          "minLength": 1,
+          "title": "Dataflow Id",
+          "type": "string"
+        },
+        "dataflow_version": {
+          "maxLength": 10000,
+          "minLength": 1,
+          "title": "Dataflow Version",
+          "type": "string"
+        },
+        "evidence_kind": {
+          "const": "vintage_observation",
+          "title": "Evidence Kind",
+          "type": "string"
+        },
+        "freq": {
+          "maxLength": 256,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._@:/-]*$",
+          "title": "Freq",
+          "type": "string"
+        },
+        "ledger_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+          "title": "Ledger Id",
+          "type": "string"
+        },
+        "measure": {
+          "maxLength": 256,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._@:/-]*$",
+          "title": "Measure",
+          "type": "string"
+        },
+        "observation": {
+          "$ref": "#/$defs/NormalizedObservation"
+        },
+        "period": {
+          "maxLength": 64,
+          "minLength": 1,
+          "title": "Period",
+          "type": "string"
+        },
+        "ref_area": {
+          "maxLength": 256,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._@:/-]*$",
+          "title": "Ref Area",
+          "type": "string"
+        },
+        "rights_catalog_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+          "title": "Rights Catalog Id",
+          "type": "string"
+        },
+        "rights_decision_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+          "title": "Rights Decision Id",
+          "type": "string"
+        },
+        "selected_edition": {
+          "pattern": "^[0-9]{4}(0[1-9]|1[0-2])$",
+          "title": "Selected Edition",
+          "type": "string"
+        },
+        "source_id": {
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+          "title": "Source Id",
+          "type": "string"
+        },
+        "source_published_on": {
+          "format": "date",
+          "title": "Source Published On",
+          "type": "string"
+        },
+        "source_retrieved_at": {
+          "format": "date-time",
+          "title": "Source Retrieved At",
+          "type": "string"
+        },
+        "source_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Source Sha256",
+          "type": "string"
+        },
+        "source_system": {
+          "const": "oecd",
+          "default": "oecd",
+          "title": "Source System",
+          "type": "string"
+        },
+        "unit_measure": {
+          "maxLength": 256,
+          "pattern": "^(?:[A-Za-z0-9_][A-Za-z0-9._@:/-]*)?$",
+          "title": "Unit Measure",
+          "type": "string"
+        }
+      },
+      "required": [
+        "evidence_kind",
+        "source_id",
+        "source_sha256",
+        "source_published_on",
+        "source_retrieved_at",
+        "rights_catalog_id",
+        "rights_decision_id",
+        "ledger_id",
+        "dataflow_id",
+        "dataflow_version",
+        "as_of",
+        "ref_area",
+        "freq",
+        "measure",
+        "unit_measure",
+        "activity",
+        "selected_edition",
+        "period",
+        "observation"
+      ],
+      "title": "VintageObservationEvidence",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Replayable single-shot plan, ordered results, and final evidence outcome.",
+  "properties": {
+    "environment": {
+      "$ref": "#/$defs/ExecutionEnvironmentProvenance"
+    },
+    "evidence_packet": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ExecutionEvidencePacket"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "failure": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ExecutionFailure"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "plan": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/RoutePlan"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "planner": {
+      "$ref": "#/$defs/PlannerProvenance"
+    },
+    "recorded_at": {
+      "format": "date-time",
+      "title": "Recorded At",
+      "type": "string"
+    },
+    "request": {
+      "$ref": "#/$defs/ExecutionRequest"
+    },
+    "schema_version": {
+      "const": "1.0.0",
+      "default": "1.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "status": {
+      "$ref": "#/$defs/TraceStatus"
+    },
+    "tool_results": {
+      "default": [],
+      "items": {
+        "discriminator": {
+          "mapping": {
+            "read_snapshot_as_of": "#/$defs/SnapshotAsOfResult",
+            "resolve_stes_as_of": "#/$defs/StesAsOfResult",
+            "retrieve_temporal_documents": "#/$defs/TemporalDocumentResult"
+          },
+          "propertyName": "tool_name"
+        },
+        "oneOf": [
+          {
+            "$ref": "#/$defs/TemporalDocumentResult"
+          },
+          {
+            "$ref": "#/$defs/StesAsOfResult"
+          },
+          {
+            "$ref": "#/$defs/SnapshotAsOfResult"
+          }
+        ]
+      },
+      "title": "Tool Results",
+      "type": "array"
+    },
+    "trace_id": {
+      "maxLength": 128,
+      "minLength": 3,
+      "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$",
+      "title": "Trace Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "trace_id",
+    "recorded_at",
+    "request",
+    "environment",
+    "planner",
+    "status"
+  ],
+  "title": "ExecutionTrace",
+  "type": "object"
+}

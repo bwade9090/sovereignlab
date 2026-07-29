@@ -1,0 +1,70 @@
+{
+  "additionalProperties": false,
+  "description": "The frozen flat gold convention for the historical STES resolver.",
+  "properties": {
+    "activity": {
+      "maxLength": 256,
+      "pattern": "^(?:[A-Za-z0-9_][A-Za-z0-9._@:/-]*)?$",
+      "title": "Activity",
+      "type": "string"
+    },
+    "as_of": {
+      "format": "date",
+      "title": "As Of",
+      "type": "string"
+    },
+    "freq": {
+      "maxLength": 256,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._@:/-]*$",
+      "title": "Freq",
+      "type": "string"
+    },
+    "measure": {
+      "maxLength": 256,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._@:/-]*$",
+      "title": "Measure",
+      "type": "string"
+    },
+    "normalization_rule_id": {
+      "enum": [
+        "oecd-stes-kor-li-aa-index-v1",
+        "oecd-stes-kor-b1gq-q-xdc-billion-krw-v1"
+      ],
+      "title": "Normalization Rule Id",
+      "type": "string"
+    },
+    "period": {
+      "maxLength": 64,
+      "minLength": 1,
+      "title": "Period",
+      "type": "string"
+    },
+    "ref_area": {
+      "maxLength": 256,
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._@:/-]*$",
+      "title": "Ref Area",
+      "type": "string"
+    },
+    "unit_measure": {
+      "maxLength": 256,
+      "pattern": "^(?:[A-Za-z0-9_][A-Za-z0-9._@:/-]*)?$",
+      "title": "Unit Measure",
+      "type": "string"
+    }
+  },
+  "required": [
+    "ref_area",
+    "freq",
+    "measure",
+    "unit_measure",
+    "activity",
+    "period",
+    "as_of",
+    "normalization_rule_id"
+  ],
+  "title": "StesAsOfArguments",
+  "type": "object"
+}

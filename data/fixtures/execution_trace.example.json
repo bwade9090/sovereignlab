@@ -1,0 +1,171 @@
+{
+  "schema_version": "1.0.0",
+  "trace_id": "trace-contract-both-ko-001",
+  "recorded_at": "2026-07-29T03:00:00Z",
+  "request": {
+    "request_id": "request-001",
+    "question": "2026년 7월 17일 현재 한국의 실질 GDP는 얼마인가?",
+    "language": "ko",
+    "requested_as_of": "2026-07-17",
+    "effective_as_of": "2026-07-17"
+  },
+  "environment": {
+    "executor_id": "sovereignlab-executor-v1",
+    "executor_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+    "tool_registry_id": "tool-registry-v1",
+    "tool_registry_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+    "artifact_registry_id": "artifact-registry-v1",
+    "artifact_registry_sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "retrieval_corpus_id": "retrieval-corpus-v1",
+    "retrieval_corpus_sha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+  },
+  "planner": {
+    "planner_id": "scripted-planner-v1",
+    "mode": "scripted",
+    "recording_id": null,
+    "output_sha256": null,
+    "model_id": null
+  },
+  "status": "complete",
+  "plan": {
+    "schema_version": "1.0.0",
+    "route": "documents_and_data",
+    "tool_calls": [
+      {
+        "call_id": "call-doc-001",
+        "tool_name": "retrieve_temporal_documents",
+        "arguments": {
+          "question": "2026년 7월 17일 현재 한국의 실질 GDP는 얼마인가?",
+          "language": "ko",
+          "as_of": "2026-07-17",
+          "top_k": 5
+        }
+      },
+      {
+        "call_id": "call-snapshot-001",
+        "tool_name": "read_snapshot_as_of",
+        "arguments": {
+          "source_system": "ecos",
+          "table_id": "200Y108",
+          "item_id": "10601",
+          "period": "2026Q1",
+          "as_of": "2026-07-17",
+          "normalization_rule_id": "ecos-200y108-10601-billion-krw-v1"
+        }
+      }
+    ],
+    "abstention": null
+  },
+  "tool_results": [
+    {
+      "call_id": "call-doc-001",
+      "tool_name": "retrieve_temporal_documents",
+      "status": "success",
+      "payload": {
+        "matches": [
+          {
+            "chunk_id": "chunk-ko-001",
+            "source_id": "synthetic-doc-ko",
+            "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "language": "ko",
+            "published_on": "2026-05-28",
+            "locator": {
+              "page": 7,
+              "section": "합성 전망",
+              "fragment_id": null
+            },
+            "text": "합성 문서 근거입니다.",
+            "score": 2.5
+          }
+        ]
+      },
+      "abstention": null,
+      "error": null
+    },
+    {
+      "call_id": "call-snapshot-001",
+      "tool_name": "read_snapshot_as_of",
+      "status": "success",
+      "payload": {
+        "evidence_kind": "latest_snapshot",
+        "source_id": "ecos-200y108-10601-20260717t115242998550z",
+        "source_sha256": "75c96ce62270a8a6c2a3c6bebaef981945b41f37f62cab6911698ce64d8dd9ea",
+        "source_system": "ecos",
+        "source_published_on": "2026-07-17",
+        "source_retrieved_at": "2026-07-17T11:52:43.237532Z",
+        "rights_catalog_id": "kor-rtd-rights-2026-07-17",
+        "rights_decision_id": "ecos-200y108-10601-rights-v1",
+        "vintage_semantics": "latest_only",
+        "as_of": "2026-07-17",
+        "table_id": "200Y108",
+        "item_id": "10601",
+        "period": "2026Q1",
+        "observation": {
+          "raw_value": "596692.8",
+          "normalization_rule_id": "ecos-200y108-10601-billion-krw-v1",
+          "normalized_value": "596692.8",
+          "canonical_unit": "billion_krw",
+          "display_places": 1,
+          "display_value": "596692.8"
+        }
+      },
+      "abstention": null,
+      "error": null
+    }
+  ],
+  "evidence_packet": {
+    "schema_version": "1.0.0",
+    "request": {
+      "request_id": "request-001",
+      "question": "2026년 7월 17일 현재 한국의 실질 GDP는 얼마인가?",
+      "language": "ko",
+      "requested_as_of": "2026-07-17",
+      "effective_as_of": "2026-07-17"
+    },
+    "planned_route": "documents_and_data",
+    "status": "complete",
+    "documents": [
+      {
+        "chunk_id": "chunk-ko-001",
+        "source_id": "synthetic-doc-ko",
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "language": "ko",
+        "published_on": "2026-05-28",
+        "locator": {
+          "page": 7,
+          "section": "합성 전망",
+          "fragment_id": null
+        },
+        "text": "합성 문서 근거입니다.",
+        "score": 2.5
+      }
+    ],
+    "observations": [
+      {
+        "evidence_kind": "latest_snapshot",
+        "source_id": "ecos-200y108-10601-20260717t115242998550z",
+        "source_sha256": "75c96ce62270a8a6c2a3c6bebaef981945b41f37f62cab6911698ce64d8dd9ea",
+        "source_system": "ecos",
+        "source_published_on": "2026-07-17",
+        "source_retrieved_at": "2026-07-17T11:52:43.237532Z",
+        "rights_catalog_id": "kor-rtd-rights-2026-07-17",
+        "rights_decision_id": "ecos-200y108-10601-rights-v1",
+        "vintage_semantics": "latest_only",
+        "as_of": "2026-07-17",
+        "table_id": "200Y108",
+        "item_id": "10601",
+        "period": "2026Q1",
+        "observation": {
+          "raw_value": "596692.8",
+          "normalization_rule_id": "ecos-200y108-10601-billion-krw-v1",
+          "normalized_value": "596692.8",
+          "canonical_unit": "billion_krw",
+          "display_places": 1,
+          "display_value": "596692.8"
+        }
+      }
+    ],
+    "abstention": null
+  },
+  "failure": null
+}
