@@ -11,3 +11,9 @@ observations, or confidential material.
 The post-cutoff passages deliberately contain unusually strong query matches. Offline regression
 tests verify that filtering happens before corpus statistics and scoring, so adding those future
 passages cannot change either the eligible matches or their scores.
+
+The typed execution baseline freezes these files as
+`synthetic-temporal-retrieval-corpus-v1`, descriptor SHA-256
+`823117ee29a191bc306843e44ccd9d37e063db79cc87e15dcb7f2a11f5b5bf7e`.
+The descriptor binds both exact file hashes, byte sizes, record counts, and every source/chunk ID.
+Do not edit the v1 inputs in place; create a new corpus ID and descriptor for a changed fixture.

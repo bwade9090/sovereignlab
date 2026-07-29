@@ -1,15 +1,15 @@
 # Cross-machine continuation handoff
 
 - Legacy filename: retained so existing links and onboarding instructions do not break.
-- Prepared: 2026-07-16; refreshed 2026-07-29 after the Windows continuation (ninth refresh:
-  trusted snapshot registry/reader slice complete)
+- Prepared: 2026-07-16; refreshed 2026-07-29 after the Windows continuation (tenth refresh:
+  trusted temporal-document registry/adapter slice complete)
 - Target continuation machine: Windows workstation
 - Authority: charter v2.5; accepted ADRs 0001–0009
 - Branch to continue: `main` from `origin`
 - Current milestone: M2
-- Session state: the first two work-unit-C slices are complete and reviewable; one of three
-  runtime adapters is complete and no later adapter is partially implemented
-- Last clean `origin/main` baseline before this slice: `6fe447b`
+- Session state: the first three work-unit-C slices are complete and reviewable; two of three
+  runtime adapters are complete and no later adapter is partially implemented
+- Historical clean `origin/main` baseline before the Windows work-unit-C slices: `6fe447b`
   (`docs: prepare Windows continuation handoff`). Preserve the current reviewable worktree; do not
   reset to the historical checkpoint.
 
@@ -133,8 +133,18 @@ If local `main` has diverged from `origin/main`, stop rather than rewriting hist
   returns selected-row-only evidence or sanitized structured failures. It never falls back to an
   older capture when the selected frontier is invalid. The detailed contract is
   `docs/project/10_snapshot_reader_contract.md`.
-- Windows baseline validated 2026-07-29 on Python 3.12.13: 595 tests passed with 100% SovereignLab
-  statement/branch coverage (2,674 statements, 888 branches); ruff check/format clean (52 Python
+- **Trusted temporal-document adapter (2026-07-29):**
+  `src/sovereignlab/retrieval/registry.py` freezes the exact synthetic four-manifest/six-chunk
+  corpus behind ID `synthetic-temporal-retrieval-corpus-v1` and descriptor SHA-256
+  `823117ee29a191bc306843e44ccd9d37e063db79cc87e15dcb7f2a11f5b5bf7e`.
+  The loader confines two explicit JSONL inputs, freezes exact built-in bytes, and rejects path,
+  size, count, JSON, and corpus-binding drift. Every typed call reparses those bytes, preserves
+  language/cutoff filtering before scoring, verifies each selected field and exact deterministic
+  result, and returns only typed selected evidence or a sanitized abstention/error. No real
+  document body or searchable provider text was added. The detailed contract is
+  `docs/project/11_temporal_retrieval_adapter_contract.md`.
+- Windows baseline validated 2026-07-29 on Python 3.12.13: 646 tests passed with 100% SovereignLab
+  statement/branch coverage (2,881 statements, 948 branches); ruff check/format clean (55 Python
   files); `python scripts/export_json_schemas.py` deterministic (13 contracts). The win32-only
   `tzdata==2026.3` pin and short ECOS pytest IDs repair two Windows-only baseline failures.
 
@@ -163,8 +173,8 @@ $venvPython = (Resolve-Path .\.venv\Scripts\python.exe).Path
 git diff --exit-code
 ```
 
-Expected handoff baseline: Python 3.12, 13 deterministic public schemas, 52 formatted Python
-files, 595 passing tests, 100% SovereignLab statement/branch coverage (2,674 statements, 888
+Expected handoff baseline: Python 3.12, 13 deterministic public schemas, 55 formatted Python
+files, 646 passing tests, 100% SovereignLab statement/branch coverage (2,881 statements, 948
 branches), and no unexpected Git diff.
 The Windows
 user-level launcher was unreliable in an earlier session. If `python` does not resolve to 3.12,
@@ -193,11 +203,14 @@ do not remove it merely because another operating system supplies an IANA timezo
    adapter boundary.
 10. `docs/project/10_snapshot_reader_contract.md` — the implemented trusted registry, cutoff-safe
     reader, provider parsers, failure taxonomy, and exact next adapter boundary.
-11. `docs/discovery/03_week1_verification_log.md` — the verified example values the resolver must
+11. `docs/project/11_temporal_retrieval_adapter_contract.md` — the implemented trusted synthetic
+    corpus registry, typed adapter, digest/replay boundary, and exact next adapter boundary.
+12. `docs/discovery/03_week1_verification_log.md` — the verified example values the resolver must
    reproduce.
-12. `src/sovereignlab/vintage/resolver.py`, `src/sovereignlab/retrieval/temporal.py`,
+13. `src/sovereignlab/vintage/resolver.py`, `src/sovereignlab/retrieval/temporal.py`,
+   `src/sovereignlab/retrieval/registry.py`, `src/sovereignlab/retrieval/adapter.py`,
    `src/sovereignlab/harvest/weekly.py`, and their tests —
-   the implemented resolver and append-only capture boundaries.
+   the implemented resolver, retrieval, adapter, and append-only capture boundaries.
 
 ## 4. External state for the new session
 
@@ -272,9 +285,9 @@ Implement in this order:
 3. Expose exactly three registered deterministic offline tool adapters:
    - **Complete.** `read_snapshot_as_of` is limited to committed owner-approved scopes and backed
      by a trusted, digest-linked registry;
-   - **next slice:** temporal document retrieval through the existing filter-before-scoring
-     implementation;
-   - then `resolve_stes_as_of` through an adapter matching the exact flat arguments in
+   - **Complete.** `retrieve_temporal_documents` uses the existing filter-before-scoring
+     implementation and trusted, digest-linked synthetic corpus;
+   - **next slice:** `resolve_stes_as_of` through an adapter matching the exact flat arguments in
      `core-batch-001.jsonl`.
 4. Inject trusted manifests, ledgers, archive bytes, snapshot locations, and registries from the
    harness. Reject model-supplied paths, raw bytes, manifests, ledgers, unknown tool names, extra
@@ -287,11 +300,27 @@ Implement in this order:
    invalid-call failures, deterministic replay, and trace round-tripping. Update
    `docs/PROJECT_STATUS.md` with the exact commands and result.
 
-The first two reviewable slices are complete: the typed execution/trace surface is frozen in
-`docs/project/09_typed_execution_trace_contract.md`, and the trusted snapshot registry plus
+The first three reviewable slices are complete: the typed execution/trace surface is frozen in
+`docs/project/09_typed_execution_trace_contract.md`; the trusted snapshot registry plus
 `read_snapshot_as_of` adapter are implemented under
-`docs/project/10_snapshot_reader_contract.md`. The next slice is only the typed temporal-retrieval
-adapter. Keep each later slice independently reviewable.
+`docs/project/10_snapshot_reader_contract.md`; and the trusted synthetic retrieval registry plus
+typed `retrieve_temporal_documents` adapter are implemented under
+`docs/project/11_temporal_retrieval_adapter_contract.md`. The next slice is only the flat
+`resolve_stes_as_of` adapter. Keep each later slice independently reviewable.
+
+The STES adapter slice is reviewable when it:
+
+- copies the eight frozen flat arguments without accepting a path, manifest, ledger, catalog,
+  archive, edition, URL, source ID, or credential from the call;
+- resolves explicitly injected immutable archive/manifest/availability-ledger/rights-catalog
+  inputs through a digest-linked trusted registry;
+- preserves ledger-first fail-closed edition selection and selected-row-only normalization;
+- permits public raw evidence only for the owner-approved Korea monthly amplitude-adjusted CLI
+  scope, while the frozen GDP call shape remains unavailable as public raw evidence under the
+  current rights catalog;
+- emits only the typed STES observation evidence, sanitized abstention, or call-bound error; and
+- passes focused 100% statement/branch coverage plus the full offline baseline without adding a
+  source capture, benchmark record, live model call, or paid operation.
 
 Work unit C is complete only when the minimal path runs offline end to end, every call and result
 is present in a replayable committed trace, existing temporal leakage protections still pass, all

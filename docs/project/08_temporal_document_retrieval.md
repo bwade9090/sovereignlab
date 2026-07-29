@@ -1,6 +1,6 @@
 # Temporal document retrieval baseline
 
-Status: implemented offline on 2026-07-28.
+Status: retriever implemented offline on 2026-07-28; trusted typed adapter added 2026-07-29.
 
 ## Purpose
 
@@ -8,9 +8,11 @@ This baseline retrieves Korean or English document passages that were public by 
 `as_of` date. It is the documentary counterpart to the fail-closed data-vintage resolver: a later
 report must not affect the evidence packet for an earlier question.
 
-The implementation lives in `src/sovereignlab/retrieval/temporal.py`. It reuses
-`SourceManifest` 2.0.0 for document provenance and `EvidenceLocator` for page, section, or fragment
-references. These are internal retrieval types, not an additional public JSON Schema contract.
+The retrieval kernel lives in `src/sovereignlab/retrieval/temporal.py`. The exact synthetic-corpus
+registry and execution adapter live in `src/sovereignlab/retrieval/registry.py` and
+`src/sovereignlab/retrieval/adapter.py`. They reuse `SourceManifest` 2.0.0 for document provenance
+and `EvidenceLocator` for page, section, or fragment references. These are internal retrieval
+types, not an additional public JSON Schema contract.
 
 ## Safety order
 
@@ -50,6 +52,17 @@ every corpus-binding rejection.
 No official report, extracted provider text, network request, paid embedding, OCR, or model call was
 used for this work unit.
 
+## Typed adapter and replay boundary
+
+The frozen v1 registry binds the complete synthetic corpus by exact JSONL hashes, sizes, record
+counts, and IDs. Every call reparses the immutable bytes, verifies the complete in-memory model,
+and checks selected evidence against both the registered chunks and a fresh deterministic
+retrieval. Empty matches become a sanitized typed abstention; registry or execution failures
+cannot expose local paths, future text, or internal exception details.
+
+The full registry, digest, adapter, result-mapping, and validation contract is in
+`docs/project/11_temporal_retrieval_adapter_contract.md`.
+
 ## Deliberate limitations
 
 This is a reproducible lexical baseline, not the final hybrid retriever. Korean contiguous
@@ -58,9 +71,9 @@ analysis, semantic embedding, reranker, OCR, or query expansion. Those additions
 same filter-before-index/statistics/scoring rule and require a separate smoke test before any paid
 operation.
 
-Before a real document body or extracted text is committed, the exact publication's redistribution
-basis and attribution must be documented. Because a valid `SourceManifest` requires real byte size
-and SHA-256 values, the next work unit must first verify the official publication notice, then
-capture the body only in ignored `data/raw/` or an OS temporary directory for hashing. Commit the
-manifest, but keep the body and extracted text out of Git unless the exact notice clearly permits
-their redistribution.
+The first real Korean/English Bank of Korea Outlook manifests and their rights decision are
+complete, but no official body or extracted text is searchable or committed. Before any real
+document chunk is added, its exact publication/rights scope, attribution, transformation
+disclosure, and repository redistribution choice must be recorded. Capture source bodies only in
+ignored `data/raw/` or an OS temporary directory unless the approved scope explicitly authorizes
+committing them.

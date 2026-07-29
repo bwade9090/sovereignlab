@@ -10,8 +10,9 @@ flat gold arguments for the latest-only snapshot reader.
 
 This contract slice did not itself implement the runtime adapters, trusted registries, planner
 protocol, or end-to-end executor. The trusted snapshot registry and `read_snapshot_as_of` adapter
-have since shipped as the next independent slice under
-`docs/project/10_snapshot_reader_contract.md`; the other two adapters and later execution
+have since shipped under `docs/project/10_snapshot_reader_contract.md`, followed by the trusted
+synthetic retrieval registry and typed `retrieve_temporal_documents` adapter under
+`docs/project/11_temporal_retrieval_adapter_contract.md`. The STES adapter and later execution
 components remain pending. This contract does not change `BenchmarkRecord` or `BenchmarkBundle`
 2.0.0.
 
@@ -177,6 +178,6 @@ any call.
 
 ## Next independent slice
 
-The trusted snapshot registry and deterministic `read_snapshot_as_of` adapter are complete. Add
-the typed temporal-retrieval adapter next, then the flat STES resolver adapter, before implementing
-the scripted/recorded planner boundary and offline end-to-end executor.
+The trusted snapshot and temporal-retrieval registries/adapters are complete. Add only the flat
+`resolve_stes_as_of` adapter next, before implementing the callable dispatcher,
+scripted/recorded planner boundary, packet assembler, and offline end-to-end executor.

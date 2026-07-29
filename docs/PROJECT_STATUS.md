@@ -38,11 +38,13 @@
   `read_snapshot_as_of` six-field gold arguments; six new schemas bring the public total to 13.
   The second implementation slice is also complete: a trusted, digest-linked latest-only registry
   and deterministic `read_snapshot_as_of` adapter now validate the three committed ECOS/KOSIS
-  scopes through cutoff, manifest, rights, hash, provider-row, and normalization gates. The
-  remaining two adapters, trusted retrieval-corpus registry, callable dispatcher, planner
-  interface, and offline end-to-end executor remain to be implemented, so the minimal
-  question-to-evidence-packet path is not yet shipped. The bounded multi-step tool loop remains
-  deferred to post-window v1.1.
+  scopes through cutoff, manifest, rights, hash, provider-row, and normalization gates. The third
+  implementation slice is now complete as well: the trusted exact-byte synthetic retrieval
+  registry and typed `retrieve_temporal_documents` adapter preserve filtering before scoring,
+  deterministic replay, and selected-evidence-only results. The remaining STES adapter, callable
+  dispatcher, planner interface, packet assembler, offline end-to-end executor, and committed
+  replay traces remain to be implemented, so the minimal question-to-evidence-packet path is not
+  yet shipped. The bounded multi-step tool loop remains deferred to post-window v1.1.
 
 ## Approved baseline
 
@@ -304,6 +306,22 @@
   boundaries. The public schema count stays 13; full details are in
   `docs/project/10_snapshot_reader_contract.md`.
 
+- **Trusted temporal-document registry/adapter — work unit C slice 3 (2026-07-29):**
+  `sovereignlab.retrieval.registry` freezes the exact four-manifest/six-chunk synthetic corpus
+  behind ID `synthetic-temporal-retrieval-corpus-v1` and descriptor SHA-256
+  `823117ee29a191bc306843e44ccd9d37e063db79cc87e15dcb7f2a11f5b5bf7e`.
+  The loader admits only two explicit repository-confined JSONL inputs and rejects path, size,
+  count, UTF-8/JSON, duplicate-key, non-finite, and corpus-binding drift. Registry construction,
+  descriptor calculation, and every adapter call reparse exact built-in immutable bytes and
+  compare the complete corpus model. `execute_temporal_document_call` copies the four flat typed
+  arguments unchanged, preserves language/cutoff filtering before scoring, validates every
+  selected field against the registry, and requires exact equality with a fresh deterministic
+  retrieval before emitting selected-match evidence. Empty matches abstain; corruption,
+  fabricated evidence, and unexpected failures return stable sanitized errors. Query-feature
+  ordering and 12-significant-digit score canonicalization make trace scores replay-stable. No
+  official document body or real searchable chunk was added. Full details are in
+  `docs/project/11_temporal_retrieval_adapter_contract.md`.
+
 - **Windows baseline reproducibility repair (2026-07-29):** Windows now installs the IANA timezone
   database through the platform-guarded `tzdata==2026.3` requirement, which makes the existing
   `Asia/Seoul` tests and the new snapshot capture cutoff deterministic on a standard Python 3.12
@@ -522,6 +540,18 @@ committed archives were read offline and reproduced GDP `596692.8`, current acco
 were unchanged. No network, provider request, secret, live model call, GPU operation, or paid
 operation occurred.
 
+Validated 2026-07-29 on Windows after the trusted temporal-document registry/adapter slice:
+Python 3.12.13; `python scripts/export_json_schemas.py` remained deterministic at 13 public
+contracts; `python -m ruff check --no-cache .` passed; `python -m ruff format --check .` passed
+(55 files); `python -m pytest --cov=sovereignlab --cov-branch --cov-report=term-missing -p
+no:cacheprovider` passed all 646 tests with 100% SovereignLab statement/branch coverage (2,881
+statements, 948 branches); and `git diff --check` passed for the implementation commit. The 70
+focused retrieval tests independently reached 100% retrieval statement/branch coverage (314
+statements, 94 branches). Both read-only final audits found no remaining actionable P0/P1/P2
+after exact-byte/model mutation, byte-subclass, size-bound, fabricated-evidence, and score-drift
+findings were closed. No network, provider read, secret, live model call, GPU operation, or paid
+operation occurred.
+
 ## M1b verification spike record (2026-07-15)
 
 All network work below was read-only, key-free, and free of charge. Raw responses were written only
@@ -674,38 +704,34 @@ response bodies.
   Both records now carry the named reviewer and aware review timestamp in
   `data/benchmark/core/core-batch-002.jsonl`; the approved core count is 6/40.
 
-## Session-close snapshot (2026-07-29, ninth close: trusted snapshot registry/reader slice)
+## Session-close snapshot (2026-07-29, tenth close: trusted temporal-document adapter slice)
 
-- Work unit C remains active, but its first two independently reviewable slices are complete and
-  no partial edit is in progress. Execution contract 1.0.0, six new public schemas, the committed
-  contract fixture, the Windows baseline repair, and the trusted snapshot registry/reader all
-  validate.
+- Work unit C remains active, but its first three independently reviewable slices are complete and
+  no partial implementation edit is in progress. Execution contract 1.0.0, six new public schemas,
+  the committed contract fixture, the Windows baseline repair, the trusted snapshot
+  registry/reader, and the trusted temporal retrieval registry/adapter all validate.
 - M2 remains active. The frozen matrix was not changed, exactly six records are owner-approved, and
   the other 34 slots are not authored.
-- `read_snapshot_as_of` is implemented at the frozen six flat model-selected fields and three exact
-  approved snapshot units. The adapter validates the existing committed captures and emits
-  selected-row-only typed evidence, but dependent benchmark authoring remains outside this work
-  unit.
+- Two of three deterministic tool adapters are implemented. `read_snapshot_as_of` covers the three
+  exact approved snapshot units; `retrieve_temporal_documents` covers the frozen synthetic
+  Korean/English corpus and emits only selected typed evidence. Dependent benchmark authoring
+  remains outside this work unit.
 - The contract fixture contains no real report text. No source artifact, provider body, secret,
   live model call, GPU operation, or paid operation was added.
-- The minimal typed function-calling path is not yet complete: one of three tool adapters is
-  implemented; the remaining adapters, retrieval-corpus registry, callable dispatcher, planner,
-  packet assembler, offline executor, and committed end-to-end replay traces do not yet exist.
+- The minimal typed function-calling path is not yet complete: the STES adapter, callable
+  dispatcher, planner, packet assembler, offline executor, and committed end-to-end replay traces
+  do not yet exist.
 
 ## Immediate next action (M2 — do these in order)
 
-1. Implement the typed `retrieve_temporal_documents` adapter over the existing
-   filter-before-scoring retriever and committed synthetic corpus. Keep corpus/manifests injected,
-   preserve language and cutoff filtering before scoring, bind deterministic order and `top_k`,
-   and return the execution contract's selected match evidence only.
-2. Then implement the flat `resolve_stes_as_of` adapter over the existing fail-closed resolver,
+1. Implement the flat `resolve_stes_as_of` adapter over the existing fail-closed resolver,
    with trusted archive/manifest/ledger/catalog injection and the exact `core-batch-001` argument
    convention. Preserve the current owner-approved OECD CLI raw-evidence limit.
-3. Add the callable dispatcher, scripted/recorded planner boundary, offline packet assembler and
+2. Add the callable dispatcher, scripted/recorded planner boundary, offline packet assembler and
    executor with real registry/corpus digests and committed replay traces. Satisfy every route,
    bilingual, cutoff, invalid-call, replay, and round-trip criterion in handoff §5 before calling
    work unit C complete.
-4. Keep live model calls, additional source ingestion, new benchmark authoring, and the bounded
+3. Keep live model calls, additional source ingestion, new benchmark authoring, and the bounded
    v1.1 loop outside this unit. Any later live call requires its own smoke test, authorization, and
    spend-ledger entry.
 
@@ -787,6 +813,7 @@ complete.
 | 2026-07-29 | Windows continuation onboarding refresh | $0.00 | Documentation and offline validation only; no source read, model, API, GPU, or paid call |
 | 2026-07-29 | Windows baseline repair + typed execution/trace contract slice | $0.00 | Free PyPI `tzdata` install, offline schemas/fixture/tests/specification, and subscription red-team review; no provider read, live model API, GPU, or paid call |
 | 2026-07-29 | Trusted latest-only snapshot registry/reader slice | $0.00 | Offline reuse of the three existing committed captures, tests/specification, and subscription review; no network, provider request, secret, live model API, GPU, or paid call |
+| 2026-07-29 | Trusted temporal-document registry/adapter slice | $0.00 | Offline synthetic corpus, typed adapter, tests/specification, and subscription review; no network, provider read, secret, live model API, GPU, or paid call |
 
 **Cumulative external spend: $0.23584524099715054 / $100.00**
 
@@ -814,6 +841,9 @@ Read in this order, in full, before changing anything:
     snapshot/STES flat arguments, replay provenance, and exact next adapter boundary.
 11. `docs/project/10_snapshot_reader_contract.md` — the implemented trusted snapshot registry,
     deterministic reader, provider parsers, result taxonomy, and exact next adapter boundary.
+12. `docs/project/11_temporal_retrieval_adapter_contract.md` — the implemented trusted synthetic
+    corpus registry, typed adapter, replay digest, result validation, and exact next adapter
+    boundary.
 
 Then start with "Immediate next action" item 1. The structural matrix and first six records are
 owner-approved; the other 34 slots are neither authored nor approved. The synthetic retrieval
