@@ -1,7 +1,7 @@
 # K-VINTAGE human-reviewed core authoring matrix 1.0.0
 
-- Status: structural allocation and first four records owner-approved; first documentary pair draft
-- Date: 2026-07-28
+- Status: structural allocation and first six records owner-approved
+- Date: 2026-07-29
 - Scope authority: charter v2.5 §5 and M2 continuation order
 - Canonical matrix: `data/benchmark/core-authoring-matrix-v1.json`
 - Public schema: `data/schemas/core-authoring-matrix-v1.schema.json`
@@ -48,9 +48,9 @@ record therefore never substitutes the later edition or invents an older publica
 All four annotations record `status=approved`, reviewer `Hyungbae Cho`, and the aware review
 timestamp. They count as four human-reviewed core records.
 
-## 3. First documentary draft awaiting review
+## 3. First approved documentary pair
 
-`data/benchmark/drafts/core-draft-002.jsonl` contains the frozen `kv-core-doc-01` Korean/English
+`data/benchmark/core/core-batch-002.jsonl` contains the frozen `kv-core-doc-01` Korean/English
 pair. Both records use the `documents` route, `train` split,
 `eg-doc-bok-outlook-2026-05` evidence group, and `kv-core-doc-01` parallel group. The Korean record
 is bounded to the Korean report's 2026-05-28 publication date and cites PDF page 10; the English
@@ -59,13 +59,16 @@ PDF page 9.
 
 Both answers paraphrase one stated driver: stronger-than-expected IT exports contributed `+0.7%p`
 to the `0.6%p` upward revision of the 2026 GDP growth forecast. They attribute the Bank of Korea
-and disclose summarization/paraphrase. Their annotations remain `status=draft` without reviewer
-metadata. They do not increase the approved count: 4/40 records are approved, two are drafted and
-await explicit owner review, and the other 34 are not authored.
+and disclose summarization/paraphrase. On 2026-07-29, Hyungbae Cho approved both records without a
+question, answer, route, evidence, `as_of`, or frozen-allocation change. Their annotations preserve
+the AI author and record the named human reviewer and aware review timestamp. The lifecycle tag
+changed from `draft-002` to `batch-002` when the file moved into `core/`.
 
-## 4. Approval record
+The approved human-reviewed core is now 6/40 records; the other 34 are not authored.
 
-On 2026-07-25, Hyungbae Cho explicitly approved both:
+## 4. Approval records
+
+On 2026-07-25, Hyungbae Cho explicitly approved:
 
 1. the unchanged 40-record structural allocation in
    `data/benchmark/core-authoring-matrix-v1.json`; and
@@ -73,6 +76,11 @@ On 2026-07-25, Hyungbae Cho explicitly approved both:
 
 The filenames and existing matrix field names remain unchanged. The approved record file keeps its
 filename and moves from `drafts/` to `core/` so the directory reflects its review state.
+
+On 2026-07-29, Hyungbae Cho explicitly approved both records in the `kv-core-doc-01` documentary
+pair. The substantive record fields and frozen matrix remain unchanged; the second batch moved
+from `drafts/core-draft-002.jsonl` to `core/core-batch-002.jsonl` with approval metadata and the
+corresponding lifecycle tag.
 
 ## 5. Human-review checklist
 
@@ -95,7 +103,7 @@ allocation.
 ```bash
 python scripts/export_json_schemas.py
 python -m pytest tests/benchmark/test_core_batch.py
-python -m pytest tests/benchmark/test_bok_outlook_drafts.py
+python -m pytest tests/benchmark/test_bok_outlook_core.py
 python -m ruff check .
 python -m ruff format --check .
 ```
@@ -104,6 +112,6 @@ The batch test validates the matrix, constructs a real `BenchmarkBundle` from co
 ledger, and rights catalog, reruns the fail-closed resolver over the committed CLI bytes, applies
 normalization 1.0.0, and checks the earlier-cutoff abstention.
 
-The documentary-draft test validates both records against their strict manifests and the frozen
-matrix, enforces language-specific publication cutoffs and split-group integrity, and confirms the
-approved count remains four.
+The documentary-core test validates both records against their strict manifests and the frozen
+matrix, enforces language-specific publication cutoffs and split-group integrity, verifies the
+named reviewer metadata, and confirms the approved count is six.

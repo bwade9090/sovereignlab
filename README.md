@@ -3,12 +3,11 @@
 > What did the data say *then*? Vintage-conditioned evaluation and auditable briefings for Korean/English economic research.
 
 **Status:** M1b verification and vintage-contract groundwork are complete; M2 benchmark and
-baseline development is in progress (frozen 40-record core matrix, 4/40 records owner-approved,
+baseline development is in progress (frozen 40-record core matrix, 6/40 records owner-approved,
 temporal document-retrieval baseline and the first real bilingual document manifests complete;
 the manifests now record the owner-approved Bank of Korea public-data rights basis, while the
-first bilingual documentary pair is separately authored at `status=draft` for owner review and the
-provider PDFs remain uncommitted by repository-scope choice). No model-performance claims have been
-made yet.
+first bilingual documentary pair is owner-approved and the provider PDFs remain uncommitted by
+repository-scope choice). No model-performance claims have been made yet.
 
 Korea's official statistics APIs (ECOS, KOSIS) expose latest values only — they offer no "as-of" query path — and no Korean equivalent of the St. Louis Fed's ALFRED archive exists. SovereignLab builds three things in four weeks:
 

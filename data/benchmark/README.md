@@ -9,8 +9,9 @@ they must remain `annotation.status=draft` until a named human reviewer verifies
 draft counts with the human-reviewed core or with machine-generated tier-2 probes.
 
 Files under `core/` are human-reviewed records. `core/core-batch-001.jsonl` contains the first four
-owner-approved core records; their annotations preserve the AI author and name the human reviewer
-and review timestamp.
+owner-approved core records, and `core/core-batch-002.jsonl` contains the first two documentary
+core records. Their annotations preserve the AI author and name the human reviewer and review
+timestamp. Together they total 6/40 approved records.
 
 The matrix assigns every planned documentary or data source unit to one dataset split. Do not
 replace a reserved unit or move a pair between splits without a versioned matrix change, tests, and

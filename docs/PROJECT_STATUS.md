@@ -1,6 +1,6 @@
 # SovereignLab project status
 
-- Last updated: 2026-07-28
+- Last updated: 2026-07-29
 - Owner: Hyungbae Cho (`bwade9090`)
 - Delivery window: four weeks, approximately 80 hours
 - Current milestone: M2 — week-2 benchmark and baselines (charter v2.5 §7, Week 2)
@@ -17,10 +17,9 @@
   check. Number-normalization 1.0.0, the zero-cost QLoRA preflight, and the paid A40/CUDA 13
   one-step compatibility run are complete. The M1b week-1 gate passed on 2026-07-18. In M2, the
   40-record core authoring allocation and the first four-record bilingual batch are owner-approved.
-  The approved human-reviewed core count is still 4/40. The next two records,
-  `kv-core-doc-01-ko` and `kv-core-doc-01-en`, are authored separately at `status=draft` and await
-  explicit owner review; the other 34 matrix slots are not yet authored or approved. The offline
-  bilingual temporal document retriever is now implemented with
+  The approved human-reviewed core count is now 6/40: the first four data/abstention records and
+  the first Korean/English documentary pair. The other 34 matrix slots are not yet authored or
+  approved. The offline bilingual temporal document retriever is now implemented with
   manifest-bound chunks and publication-date filtering before scoring; only synthetic fixtures
   were used. The first real bilingual document-manifest unit is also complete: the Korean May 2026
   Bank of Korea outlook is independently dated 2026-05-28 and the later English full translation
@@ -232,8 +231,9 @@
   does not fabricate a KOGL type, does not authorize adjacent publication families or separately
   marked third-party content, and does not change the project's non-commercial profile.
 
-- **First bilingual documentary draft pair (2026-07-28):** `data/benchmark/drafts/core-draft-002.jsonl`
-  authors exactly the frozen `kv-core-doc-01` Korean/English pair at `status=draft`. The Korean
+- **First bilingual documentary pair (drafted 2026-07-28; approved 2026-07-29):**
+  `data/benchmark/core/core-batch-002.jsonl` contains exactly the frozen `kv-core-doc-01`
+  Korean/English pair at `status=approved`. The Korean
   record cites PDF page 10 (`요약 4/10`) at `as_of=2026-05-28`; the English record cites PDF page 9
   (printed page `v`) at `as_of=2026-06-30`. Both paraphrase the report's stated
   stronger-than-expected IT export contribution of `+0.7%p` to the `0.6%p` upward revision,
@@ -242,7 +242,9 @@
   and the cited pages were rendered and visually checked. No PDF, extracted full text, or real
   searchable chunk entered Git. Offline tests validate the pair against the strict manifests and
   frozen matrix, enforce the independent publication cutoffs and language match, reject both
-  evidence-group and parallel-group split leakage, and prove the approved count remains 4/40.
+  evidence-group and parallel-group split leakage. Hyungbae Cho approved both records without a
+  substantive record or matrix change; the annotations now record the named reviewer and aware
+  review timestamp, and the approved count is 6/40.
 
 - **Execution-contract adjustment — ADR 0008 and charter v2.4 (2026-07-28):** the owner asked
   whether the plan could also build agent-orchestration (tool/function calling, multi-step)
@@ -431,6 +433,15 @@ verification, local text inspection, and rendered-page visual QA; those temporar
 deleted. No provider body, extracted text, secret, model call, or paid operation entered the
 repository.
 
+Revalidated 2026-07-29 after recording owner approval of the first documentary pair:
+`python scripts/export_json_schemas.py` remained deterministic at seven contracts;
+`python -m ruff check --no-cache .` and `python -m ruff format --check .` passed (45 files);
+`python -m pytest --cov=sovereignlab --cov-branch --cov-report=term-missing -p no:cacheprovider`
+passed all 378 tests with 100% statement/branch coverage (1,794 statements, 608 branches);
+`git diff --check` passed, and `git diff --exit-code -- data/schemas` proved schema export
+deterministic. This was an annotation, lifecycle, test, and governance update only; there was no
+network source read, provider-body change, secret, model call, or paid operation.
+
 ## M1b verification spike record (2026-07-15)
 
 All network work below was read-only, key-free, and free of charge. Raw responses were written only
@@ -579,30 +590,27 @@ response bodies.
   translates those names to exact official scope IDs and records the narrow rights decisions;
   charter v2.3 and the append-only 2026-07-17 catalog are synchronized. All current week-1 owner
   decisions are closed.
+- On 2026-07-29 the owner approved the unchanged `kv-core-doc-01` Korean/English documentary pair.
+  Both records now carry the named reviewer and aware review timestamp in
+  `data/benchmark/core/core-batch-002.jsonl`; the approved core count is 6/40.
 
-## Session-close snapshot (2026-07-28, fifth close: first documentary draft)
+## Session-close snapshot (2026-07-29, sixth close: first documentary approval)
 
-- Work unit B is complete. The exact frozen `kv-core-doc-01` bilingual pair now lives separately in
-  `data/benchmark/drafts/core-draft-002.jsonl`, validates against both strict manifests, and remains
-  `status=draft` with no reviewer metadata.
-- M2 remains active. The frozen matrix was not changed, exactly four records remain owner-approved,
-  two documentary records await explicit Hyungbae review, and the other 34 slots are not authored.
+- The owner-review boundary is closed. The exact frozen `kv-core-doc-01` bilingual pair now lives
+  in `data/benchmark/core/core-batch-002.jsonl`, validates against both strict manifests, and
+  records `status=approved`, reviewer `Hyungbae Cho`, and the actual aware review timestamp.
+- M2 remains active. The frozen matrix was not changed, exactly six records are owner-approved, and
+  the other 34 slots are not authored.
 - Korean and English evidence is language-matched and independently cutoff-safe. The later English
   edition fails closed before 2026-06-30, while the Korean edition is usable on 2026-05-28.
 - No provider PDF, extracted provider text, or real searchable chunk was committed. The temporary
   verified PDF copies and rendered QA pages were deleted after inspection.
-- The next action is owner review of this pair. Do not move it into `data/benchmark/core/`, add
-  reviewer metadata, or increase 4/40 without Hyungbae's explicit decision.
+- The next implementation unit is the minimal question-to-evidence-packet path under ADR 0008.
+  Do not merge additional source authoring, a paid live call, or the deferred v1.1 loop into it.
 
 ## Immediate next action (M2 — do these in order)
 
-1. Hyungbae reviews `data/benchmark/drafts/core-draft-002.jsonl` against the two cited source
-   pages. Keep both records at `status=draft`, outside `data/benchmark/core/`, and the approved count
-   at 4/40 until that explicit review is recorded. If approved, move the unchanged records into the
-   core area with the actual reviewer name/timestamp and update the approved count in one separate
-   governance unit.
-2. After that review boundary, build the minimal question-to-evidence-packet path before generating
-   the tier-2 probes,
+1. Build the minimal question-to-evidence-packet path before generating the tier-2 probes,
    under the ADR 0008 execution contract: the model emits the typed route plan and typed tool
    calls as native function calls against pydantic-derived schemas; the pipeline validates and
    executes them deterministically and commits a machine-readable trace. This unit includes the
@@ -679,6 +687,7 @@ complete.
 | 2026-07-28 | First real BOK bilingual document manifests | $0.00 | Public official pages and direct PDF captures under `/tmp` for hashing only; provider bodies not committed |
 | 2026-07-28 | BOK Economic Outlook rights correction, ADR 0009, and charter v2.5 | $0.00 | Owner ruling plus free read-only checks of official BOK policy/public-data pages and the public-data portal; no model/API/GPU call |
 | 2026-07-28 | First bilingual BOK documentary draft pair | $0.00 | Free official PDF re-fetch into a temporary directory, local hash/text/page-render inspection, offline authoring/tests; temporary provider files deleted |
+| 2026-07-29 | Owner approval of the first bilingual documentary pair | $0.00 | Annotation, lifecycle, tests, and governance update only; no network, model, or paid call |
 
 **Cumulative external spend: $0.23584524099715054 / $100.00**
 
@@ -702,13 +711,12 @@ Read in this order, in full, before changing anything:
 9. `docs/discovery/01_concept_upgrade_proposal.md` — background: why v2 exists, verified data facts,
    judged alternatives, risk register.
 
-Then start with "Immediate next action" item 1. The structural matrix and first four records are
-owner-approved; the `kv-core-doc-01` pair is authored but remains a separate draft pending explicit
-review, and the other 34 slots are neither authored nor approved. The synthetic retrieval baseline
-and first real bilingual document manifests are complete. ADR 0009 resolves those manifests to
-`allowed`, but full PDFs and extracted full text remain outside Git by current repository-scope
-choice. Do not start full LoRA tuning, UI, or release work before the M2 gate closes. The harvester
-must stay within approved rights scopes, and every later paid operation remains smoke-test-first.
-Do not weaken the qualification rules for "first" claims or the rights/append-only rules in
-`AGENTS.md`.
+Then start with "Immediate next action" item 1. The structural matrix and first six records are
+owner-approved; the other 34 slots are neither authored nor approved. The synthetic retrieval
+baseline and first real bilingual document manifests are complete. ADR 0009 resolves those
+manifests to `allowed`, but full PDFs and extracted full text remain outside Git by current
+repository-scope choice. Do not start full LoRA tuning, UI, or release work before the M2 gate
+closes. The harvester must stay within approved rights scopes, and every later paid operation
+remains smoke-test-first. Do not weaken the qualification rules for "first" claims or the
+rights/append-only rules in `AGENTS.md`.
 Update this file whenever a milestone state, blocker, cost, spike result, or next action changes.

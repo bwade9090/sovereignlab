@@ -1,4 +1,4 @@
-"""Contract checks for the first bilingual documentary draft pair."""
+"""Contract checks for the first approved bilingual documentary pair."""
 
 from datetime import date
 from pathlib import Path
@@ -19,8 +19,8 @@ from sovereignlab.schemas import (
 
 ROOT = Path(__file__).resolve().parents[2]
 MATRIX_PATH = ROOT / "data" / "benchmark" / "core-authoring-matrix-v1.json"
-DRAFT_PATH = ROOT / "data" / "benchmark" / "drafts" / "core-draft-002.jsonl"
-CORE_PATH = ROOT / "data" / "benchmark" / "core" / "core-batch-001.jsonl"
+CORE_DIRECTORY = ROOT / "data" / "benchmark" / "core"
+BATCH_PATH = CORE_DIRECTORY / "core-batch-002.jsonl"
 SOURCE_IDS = ("bok-outlook-2026-05-ko", "bok-outlook-2026-05-en")
 
 
@@ -41,34 +41,39 @@ def _manifests() -> tuple[SourceManifest, ...]:
     )
 
 
-def test_document_draft_pair_matches_frozen_matrix_and_stays_unapproved() -> None:
+def test_document_core_pair_matches_frozen_matrix_and_is_approved() -> None:
     matrix = CoreAuthoringMatrix.model_validate_json(MATRIX_PATH.read_text(encoding="utf-8"))
     pair = next(item for item in matrix.pairs if item.pair_id == "kv-core-doc-01")
-    drafts = _records(DRAFT_PATH)
-    approved = _records(CORE_PATH)
+    records = _records(BATCH_PATH)
+    approved = tuple(
+        record for path in sorted(CORE_DIRECTORY.glob("*.jsonl")) for record in _records(path)
+    )
 
-    assert {record.record_id for record in drafts} == {
+    assert {record.record_id for record in records} == {
         pair.ko_record_id,
         pair.en_record_id,
     }
     assert pair.document_unit_ids == ("bok-outlook-release-2026-05",)
     assert pair.data_unit_ids == ()
-    assert all(record.split is pair.split is BenchmarkSplit.TRAIN for record in drafts)
+    assert all(record.split is pair.split is BenchmarkSplit.TRAIN for record in records)
     assert all(
-        record.expected_route is pair.expected_route is EvidenceRoute.DOCUMENTS for record in drafts
+        record.expected_route is pair.expected_route is EvidenceRoute.DOCUMENTS
+        for record in records
     )
-    assert all(record.evidence_group_id == pair.evidence_group_id for record in drafts)
-    assert all(record.parallel_group_id == pair.pair_id for record in drafts)
-    assert all(record.annotation.status is AnnotationStatus.DRAFT for record in drafts)
-    assert all(record.annotation.reviewed_by is None for record in drafts)
-    assert all(record.annotation.reviewed_at is None for record in drafts)
+    assert all(record.evidence_group_id == pair.evidence_group_id for record in records)
+    assert all(record.parallel_group_id == pair.pair_id for record in records)
+    assert all(record.annotation.status is AnnotationStatus.APPROVED for record in records)
+    assert all(record.annotation.reviewed_by == "Hyungbae Cho" for record in records)
+    assert all(record.annotation.reviewed_at is not None for record in records)
+    assert all("batch-002" in record.tags for record in records)
+    assert all("draft-002" not in record.tags for record in records)
 
-    assert len(approved) == 4
+    assert len(approved) == 6
     assert all(record.annotation.status is AnnotationStatus.APPROVED for record in approved)
 
 
-def test_document_draft_pair_validates_at_language_specific_cutoffs() -> None:
-    records = _records(DRAFT_PATH)
+def test_document_core_pair_validates_at_language_specific_cutoffs() -> None:
+    records = _records(BATCH_PATH)
     manifests = _manifests()
 
     BenchmarkBundle(sources=manifests, records=records)
@@ -86,7 +91,7 @@ def test_document_draft_pair_validates_at_language_specific_cutoffs() -> None:
 
 
 def test_english_translation_fails_closed_before_its_release_date() -> None:
-    korean, english = _records(DRAFT_PATH)
+    korean, english = _records(BATCH_PATH)
     manifests = _manifests()
 
     BenchmarkBundle(sources=manifests, records=(korean,))
@@ -103,11 +108,11 @@ def test_english_translation_fails_closed_before_its_release_date() -> None:
         ("eg-doc-bok-outlook-2026-05-en-only", "parallel group"),
     ],
 )
-def test_document_draft_pair_rejects_cross_split_groups(
+def test_document_core_pair_rejects_cross_split_groups(
     new_evidence_group: str,
     message: str,
 ) -> None:
-    korean, english = _records(DRAFT_PATH)
+    korean, english = _records(BATCH_PATH)
     moved_english = english.model_copy(
         update={
             "split": BenchmarkSplit.DEVELOPMENT,
@@ -120,7 +125,7 @@ def test_document_draft_pair_rejects_cross_split_groups(
 
 
 def test_document_claims_have_stable_locators_and_transformation_disclosure() -> None:
-    korean, english = _records(DRAFT_PATH)
+    korean, english = _records(BATCH_PATH)
 
     assert korean.document_evidence[0].locator.page == 10
     assert english.document_evidence[0].locator.page == 9
