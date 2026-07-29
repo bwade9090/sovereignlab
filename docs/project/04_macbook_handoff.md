@@ -1,24 +1,27 @@
-# Continuation handoff
+# Cross-machine continuation handoff
 
-- Prepared: 2026-07-16; refreshed 2026-07-29 for a clean new-agent session (sixth refresh:
-  first bilingual documentary approval)
+- Legacy filename: retained so existing links and onboarding instructions do not break.
+- Prepared: 2026-07-16; refreshed 2026-07-29 for the Windows workstation handoff (seventh refresh:
+  round close after first bilingual documentary approval)
+- Target continuation machine: Windows workstation
 - Authority: charter v2.5; accepted ADRs 0001–0009
 - Branch to continue: `main` from `origin`
 - Current milestone: M2
 - Session state: closed; no implementation is intentionally left in progress
-- Last code baseline: `a92c44d` (`feat: add temporal document retrieval`); the current artifact
-  baseline adds the first real bilingual document manifests, boundary tests, and the ADR 0009
-  owner-approved rights correction plus the approved `kv-core-doc-01` core pair.
+- Last implementation/governance baseline before this documentation refresh: `542c755`
+  (`eval: approve first documentary core pair`). Always continue from the current `origin/main`;
+  do not reset to this historical checkpoint.
 
 ## 0. Start here
 
-The repository is the source of truth; do not rely on a prior chat transcript. At the beginning of
-the new session:
+The repository is the source of truth; do not rely on a prior chat transcript or any uncommitted
+state from the Mac. At the beginning of the Windows session:
 
 1. Fetch and fast-forward `main`, then confirm `git status --short --branch` is clean and aligned
    with `origin/main`.
 2. Read the files in section 3 in order, in full.
-3. Run the baseline commands in section 2 before changing files.
+3. Create or verify the Windows-local `.venv` and run the PowerShell baseline in section 2 before
+   changing files.
 4. State back the current milestone, approved core count, exact next work unit, and hard stops.
 5. Start only with the section 5 typed function-calling work unit. Do not redo the completed
    retrieval, manifest, draft, or owner-approval units.
@@ -111,26 +114,42 @@ If local `main` has diverged from `origin/main`, stop rather than rewriting hist
   deterministic latest-only snapshot-read tool. The bounded multi-step tool loop is deferred to
   post-window v1.1 as an execution-mode ablation; the LoRA target stays the single-shot router;
   contracts stay 2.0.0. No code changed in this round.
-- macOS validation at handoff (2026-07-29, Python 3.12.13 via Homebrew): 378 tests passed with
-  100% statement/branch coverage; ruff check/format clean;
+- Source baseline revalidated on macOS (2026-07-29, Python 3.12.13 via Homebrew): 378 tests passed
+  with 100% statement/branch coverage; ruff check/format clean;
   `python scripts/export_json_schemas.py` deterministic (seven contracts).
 
-## 2. Set up the machine
+## 2. Set up and validate the Windows machine
 
-`.venv` is machine-local; never copy it between machines. On the macOS laptop it already exists
-(Homebrew `python@3.12`, created 2026-07-17) — activate and validate. On any other machine,
-recreate it per the README quick start. From an existing clone:
+`.venv` is machine-local; never copy it from the Mac or another clone. Run from the repository root
+in PowerShell. Calling the venv interpreter directly avoids activation-policy differences:
 
-```bash
+```powershell
 git switch main
 git pull --ff-only origin main
-source .venv/bin/activate  # or recreate: python3.12 -m venv .venv && pip install -r requirements.txt
-python scripts/export_json_schemas.py
-python -m ruff check --no-cache .
-python -m ruff format --check .
-python -m pytest --cov=sovereignlab --cov-branch --cov-report=term-missing -p no:cacheprovider
+git status --short --branch
+
+$python312 = (Get-Command python -CommandType Application -ErrorAction Stop).Source
+& $python312 -c "import sys; assert sys.version_info[:2] == (3, 12), sys.version"
+if (-not (Test-Path .\.venv\Scripts\python.exe)) {
+    & $python312 -m venv .venv
+}
+$venvPython = (Resolve-Path .\.venv\Scripts\python.exe).Path
+& $venvPython -c "import sys; assert sys.version_info[:2] == (3, 12), sys.version"
+& $venvPython -m pip install -r requirements.txt
+& $venvPython scripts/export_json_schemas.py
+& $venvPython -m ruff check --no-cache .
+& $venvPython -m ruff format --check .
+& $venvPython -m pytest --cov=sovereignlab --cov-branch --cov-report=term-missing -p no:cacheprovider
 git diff --exit-code
 ```
+
+Expected handoff baseline: Python 3.12, seven deterministic public schemas, 45 formatted Python
+files, 378 passing tests, 100% SovereignLab statement/branch coverage, and no Git diff. The Windows
+user-level launcher was unreliable in an earlier session. If `python` does not resolve to 3.12,
+discover the installed executable with `where.exe python` or the installed-app inventory, set
+`$python312` to that verified full path for the current shell only, and rerun the checks. Never
+commit a workstation path. If an existing `.venv` fails its interpreter check, stop and recreate it
+deliberately rather than silently reusing it.
 
 ## 3. Read before continuing
 
@@ -143,8 +162,8 @@ git diff --exit-code
    behind the v2 direction.
 6. `docs/project/05_evidence_contract_2_0_migration.md` — the implemented contract surface the
    next work units build on.
-7. `docs/project/07_core_authoring_matrix.md` — the approved 40-record allocation, first approved
-   batch, and human-review boundary.
+7. `docs/project/07_core_authoring_matrix.md` — the approved 40-record allocation, first two
+   approved batches (6/40), and human-review boundary.
 8. `docs/project/08_temporal_document_retrieval.md` — the implemented document cutoff and
    filter-before-scoring contract.
 9. `docs/discovery/03_week1_verification_log.md` — the verified example values the resolver must
@@ -163,6 +182,9 @@ git diff --exit-code
   every discarded provisioning Pod were deleted; the account reports zero current hourly spend and
   a remaining balance of USD `19.7641547592`. Do not start another paid Pod without a new explicit
   authorization and cost estimate.
+- Do not assume the Mac's RunPod CLI, SSH key, GitHub CLI login, local `.env`, or virtual
+  environment exists on Windows. They are machine-local and are not needed for the next offline
+  work unit.
 - No model weights or adapter were copied from RunPod. The repository contains only the harness,
   synthetic fixture, and recorded compatibility evidence.
 - The application-ready detailed and brief English descriptions are in
@@ -205,19 +227,49 @@ Both records validate against the committed manifests and frozen matrix. Hyungba
 PDFs and extracted text remain outside Git, and the synthetic fixture remains the only searchable
 corpus.
 
-### Current work unit — typed function-calling path
+### Current work unit C — minimal typed function-calling path
 
-1. Build the minimal question-to-evidence-packet path under the
-   ADR 0008 execution contract: the model emits the typed route plan and typed tool calls as
-   native function calls against pydantic-derived schemas; the pipeline validates and executes
-   them deterministically and commits a machine-readable trace of every call and result. This
-   unit includes the recorded/replayable external model interface (charter §6), the resolver
-   adapter behind the frozen flat gold-argument convention, and the new deterministic
-   latest-only snapshot-read tool (freeze its gold argument convention before authoring the
-   matrix records that depend on it). Offline scripted-planner tests land before any paid live
-   model call; a live call needs a smoke test and a spend-ledger entry first.
-2. Manually dispatch one append-only secret-backed workflow smoke only after separate owner
-   authorization; otherwise let the weekly schedule exercise the configured secrets.
+One outcome only: an offline, replayable path from a bilingual question and optional `as_of` to a
+validated single-shot route plan, deterministic tool execution, evidence packet, and committed
+machine-readable trace under ADR 0008.
+
+Implement in this order:
+
+1. Read ADR 0008, charter §§3/6/7, the frozen benchmark models, and the existing resolver,
+   retriever, harvester snapshot formats, and tests. Confirm that no router/model-call/replay
+   package or snapshot-read tool exists before adding one.
+2. Freeze strict typed contracts for the route plan, tool calls/results, evidence packet, and
+   trace, plus the latest-only snapshot reader's flat gold-argument convention. Derive callable
+   JSON schemas from Pydantic. Do not change `BenchmarkRecord` or `BenchmarkBundle` 2.0.0. Record
+   any consequential choice not already fixed by ADR 0008 as a focused ADR or specification.
+3. Expose exactly three registered deterministic offline tool adapters:
+   - temporal document retrieval through the existing filter-before-scoring implementation;
+   - `resolve_stes_as_of` through an adapter matching the exact flat arguments in
+     `core-batch-001.jsonl`;
+   - the new latest-only ECOS/KOSIS snapshot reader, limited to committed owner-approved scopes.
+4. Inject trusted manifests, ledgers, archive bytes, snapshot locations, and registries from the
+   harness. Reject model-supplied paths, raw bytes, manifests, ledgers, unknown tool names, extra
+   fields, or invalid arguments.
+5. Put the planner/model boundary behind a protocol with scripted and recorded/replay
+   implementations. All default tests are offline; do not make a live model call in this unit.
+6. Commit small deterministic trace fixtures that preserve enough plan, ordered call/result,
+   provenance, abstention/error, and output information to replay and audit the execution.
+7. Test all four routes, all three tool adapters, bilingual input, `as_of` cutoff enforcement,
+   invalid-call failures, deterministic replay, and trace round-tripping. Update
+   `docs/PROJECT_STATUS.md` with the exact commands and result.
+
+The first reviewable slice should freeze and test the typed execution/trace surface and the
+snapshot-reader argument convention before authoring any matrix records that depend on it. Keep
+each later slice independently reviewable.
+
+Work unit C is complete only when the minimal path runs offline end to end, every call and result
+is present in a replayable committed trace, existing temporal leakage protections still pass, all
+three tools are exercised, and the full offline suite is green. A live call, additional source
+ingestion, new benchmark records, and the v1.1 bounded loop are separate units.
+
+Open operational check, not an M2 blocker: manually dispatch one append-only secret-backed
+workflow smoke only after separate owner authorization; otherwise let the weekly schedule exercise
+the configured secrets.
 
 ## 6. What not to redo
 
@@ -230,6 +282,8 @@ corpus.
 - Do not rerun the paid QLoRA compatibility spike. It passed, all Pods were deleted, and it is not
   a model-quality result.
 - Do not manually dispatch the secret-backed harvester as part of onboarding.
+- Do not author snapshot-dependent matrix records before the snapshot reader's flat gold-argument
+  convention is frozen.
 - Do not reopen accepted ADRs 0003–0009 without new evidence that requires a superseding decision.
 - Do not implement the bounded multi-step tool loop in-window; ADR 0008 defers it to v1.1. Do
   not re-litigate that deferral — the supporting matrix/schema arithmetic is recorded in the ADR.

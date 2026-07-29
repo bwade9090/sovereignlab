@@ -6,6 +6,40 @@ This file applies to the entire repository. It is the onboarding contract for hu
 
 Build **KOR-RTD**, a provenance-contracted point-in-time (vintage) data layer for Korean macroeconomic statistics, and **K-VINTAGE**, a bilingual Korean/English benchmark whose gold answers depend on the data vintage available at each question's `as_of` date — with the SovereignLab briefing pipeline as the reference implementation and public baseline suite. Preserve evaluation-first rigor without overstating results: techniques (fine-tuning, RAG, deterministic tools) are means, not the mission, and temporal-leakage rate is the headline metric.
 
+## Current handoff checkpoint
+
+This repository is between work units and is ready to continue on the Windows workstation.
+
+- Current milestone: **M2 — benchmark and baselines**.
+- Approved human-reviewed core: **6/40** records. The frozen 40-record matrix must not be edited
+  merely to accelerate authoring.
+- Completed: fail-closed vintage resolver, weekly append-only harvester, approved ECOS/KOSIS/OECD
+  captures, number normalization, offline bilingual temporal retrieval, strict Korean/English Bank
+  of Korea May-2026 Outlook manifests, and the approved `kv-core-doc-01` documentary pair.
+- Exact next outcome: the minimal offline **typed function-calling question-to-evidence-packet
+  path** required by ADR 0008, with committed machine-readable traces.
+- Not implemented yet: the typed router/planner execution surface, resolver adapter, deterministic
+  latest-only snapshot reader, recorded/replayable model interface, or trace contract.
+- The bounded tool loop is not part of this milestone; ADR 0008 defers it to v1.1.
+
+The authoritative live checkpoint and acceptance criteria are in
+`docs/project/04_macbook_handoff.md`. The filename is retained for history, but the document is now
+the cross-machine Windows continuation handoff.
+
+## New-session onboarding procedure
+
+Before editing:
+
+1. From the repository root, fast-forward `main` from `origin` and confirm the worktree is clean.
+   If it is dirty or diverged, preserve the changes and investigate; do not reset or overwrite.
+2. Read the authority files below in order. Do not rely on a prior chat transcript.
+3. Create or verify the machine-local Python 3.12 environment and run the full offline baseline
+   under "Local setup and required checks."
+4. State back four facts before implementation: current milestone, approved core count, exact next
+   work unit, and hard stops.
+5. Start with one reviewable implementation slice inside the ADR 0008 unit. Do not combine source
+   expansion, new benchmark authoring, a live model call, or a paid operation with onboarding.
+
 ## Read before changing anything
 
 1. `docs/project/01_project_charter.md` — approved product and evaluation contract (v2.5).
@@ -16,8 +50,9 @@ Build **KOR-RTD**, a provenance-contracted point-in-time (vintage) data layer fo
    ADR 0007 records the v2.3 exact KOSIS CPI and OECD CLI rights amendment; ADR 0008 records the
    v2.4 typed function-calling execution contract and the v1.1 deferral of the bounded tool
    loop; ADR 0009 records the v2.5 Bank of Korea Economic Outlook public-data rights amendment).
-4. `docs/project/04_macbook_handoff.md` — machine setup and the exact continuation order for the
-   current milestone (skip files it lists that you already read this session).
+4. `docs/project/04_macbook_handoff.md` — cross-machine Windows setup, exact continuation order,
+   and next-unit acceptance criteria (legacy filename; skip files it lists that you already read
+   this session).
 5. `docs/discovery/01_concept_upgrade_proposal.md` — background rationale for v2: verified data facts, judged alternatives, risk register.
 6. The closest additional `AGENTS.md`, if a subdirectory adds one later.
 
@@ -93,26 +128,49 @@ Development happens on multiple machines; `.venv` is machine-local and must be r
 Windows PowerShell:
 
 ```powershell
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-python -m pip install -r requirements.txt
-python -m ruff check .
-python -m ruff format --check .
-python -m pytest
+git switch main
+git pull --ff-only origin main
+git status --short --branch
+
+$python312 = (Get-Command python -CommandType Application -ErrorAction Stop).Source
+& $python312 -c "import sys; assert sys.version_info[:2] == (3, 12), sys.version"
+if (-not (Test-Path .\.venv\Scripts\python.exe)) {
+    & $python312 -m venv .venv
+}
+$venvPython = (Resolve-Path .\.venv\Scripts\python.exe).Path
+& $venvPython -c "import sys; assert sys.version_info[:2] == (3, 12), sys.version"
+& $venvPython -m pip install -r requirements.txt
+& $venvPython scripts/export_json_schemas.py
+& $venvPython -m ruff check --no-cache .
+& $venvPython -m ruff format --check .
+& $venvPython -m pytest --cov=sovereignlab --cov-branch --cov-report=term-missing -p no:cacheprovider
+git diff --exit-code
 ```
 
 macOS or Linux:
 
 ```bash
+git switch main
+git pull --ff-only origin main
+git status --short --branch
 python3.12 -m venv .venv
 source .venv/bin/activate
 python -m pip install -r requirements.txt
-python -m ruff check .
+python scripts/export_json_schemas.py
+python -m ruff check --no-cache .
 python -m ruff format --check .
-python -m pytest
+python -m pytest --cov=sovereignlab --cov-branch --cov-report=term-missing -p no:cacheprovider
+git diff --exit-code
 ```
 
-If the user-level Python launcher is unavailable on the Windows workstation, use the documented Python 3.12 runtime in `docs/PROJECT_STATUS.md` to create `.venv`; commands after activation remain standard.
+The Windows user-level launcher has been unreliable. If `Get-Command python` does not resolve a
+working Python 3.12 runtime, use `where.exe python` or the workstation's installed-app inventory,
+then set `$python312` to the verified executable's full path for the current shell only. Never
+commit that machine-specific path. Do not reuse a `.venv` whose interpreter check fails.
+
+The handoff baseline is seven deterministic public schemas, 45 formatted Python files, 378 passing
+tests, and 100% SovereignLab statement/branch coverage. A different result is a diagnostic signal:
+stop before implementation and record the discrepancy in `docs/PROJECT_STATUS.md`.
 
 ## Repository map
 

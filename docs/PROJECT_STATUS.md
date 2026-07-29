@@ -442,6 +442,16 @@ passed all 378 tests with 100% statement/branch coverage (1,794 statements, 608 
 deterministic. This was an annotation, lifecycle, test, and governance update only; there was no
 network source read, provider-body change, secret, model call, or paid operation.
 
+Revalidated 2026-07-29 for the Windows continuation handoff:
+`python scripts/export_json_schemas.py` remained deterministic at seven contracts;
+`python -m ruff check --no-cache .` and `python -m ruff format --check .` passed (45 files);
+`python -m pytest --cov=sovereignlab --cov-branch --cov-report=term-missing -p no:cacheprovider`
+passed all 378 tests with 100% statement/branch coverage (1,794 statements, 608 branches);
+`git diff --check` passed, and `git diff --exit-code -- data/schemas` proved schema export
+deterministic. Documentation-only change; no implementation, source read, secret, model call, or
+paid operation occurred. The incoming Windows agent must reproduce this baseline locally before
+editing.
+
 ## M1b verification spike record (2026-07-15)
 
 All network work below was read-only, key-free, and free of charge. Raw responses were written only
@@ -594,31 +604,34 @@ response bodies.
   Both records now carry the named reviewer and aware review timestamp in
   `data/benchmark/core/core-batch-002.jsonl`; the approved core count is 6/40.
 
-## Session-close snapshot (2026-07-29, sixth close: first documentary approval)
+## Session-close snapshot (2026-07-29, seventh close: Windows continuation handoff)
 
-- The owner-review boundary is closed. The exact frozen `kv-core-doc-01` bilingual pair now lives
-  in `data/benchmark/core/core-batch-002.jsonl`, validates against both strict manifests, and
-  records `status=approved`, reviewer `Hyungbae Cho`, and the actual aware review timestamp.
+- This round is closed with no implementation in progress. `AGENTS.md` is the Windows new-session
+  entry point, and `docs/project/04_macbook_handoff.md` is now the cross-machine continuation
+  handoff despite its retained legacy filename.
 - M2 remains active. The frozen matrix was not changed, exactly six records are owner-approved, and
   the other 34 slots are not authored.
-- Korean and English evidence is language-matched and independently cutoff-safe. The later English
-  edition fails closed before 2026-06-30, while the Korean edition is usable on 2026-05-28.
-- No provider PDF, extracted provider text, or real searchable chunk was committed. The temporary
-  verified PDF copies and rendered QA pages were deleted after inspection.
-- The next implementation unit is the minimal question-to-evidence-packet path under ADR 0008.
-  Do not merge additional source authoring, a paid live call, or the deferred v1.1 loop into it.
+- The owner-review boundary for `kv-core-doc-01` is closed. Both language-matched records remain in
+  `data/benchmark/core/core-batch-002.jsonl` with their independently enforced publication dates.
+- No implementation code, benchmark record, source artifact, provider text, secret, model call, or
+  paid operation changed in this documentation-only handoff round.
+- The Windows session starts with work unit C: the offline minimal typed function-calling
+  question-to-evidence-packet path under ADR 0008. Its ordered implementation and acceptance
+  criteria are frozen in handoff §5.
 
 ## Immediate next action (M2 — do these in order)
 
-1. Build the minimal question-to-evidence-packet path before generating the tier-2 probes,
-   under the ADR 0008 execution contract: the model emits the typed route plan and typed tool
-   calls as native function calls against pydantic-derived schemas; the pipeline validates and
-   executes them deterministically and commits a machine-readable trace. This unit includes the
-   recorded/replayable model interface, the resolver adapter behind the frozen flat
-   gold-argument convention, and the new deterministic latest-only snapshot-read tool (freeze
-   its gold argument convention before authoring the dependent matrix records). Offline
-   scripted-planner tests come first; a live model call needs a smoke test and spend-ledger
-   entry. The bounded multi-step loop is out of scope (v1.1, ADR 0008).
+1. On Windows, onboard through `AGENTS.md`, recreate or verify the machine-local Python 3.12
+   environment, and reproduce the clean 378-test baseline before editing.
+2. Start work unit C with its first reviewable slice: freeze and test the strict typed
+   execution/trace surface and the latest-only snapshot reader's flat gold-argument convention.
+   Then implement the three deterministic tool adapters, trusted-artifact injection,
+   scripted/recorded planner boundary, and offline end-to-end traces in the exact order and to the
+   completion criteria in handoff §5. Do not author dependent matrix records until the snapshot
+   convention is frozen.
+3. Keep live model calls, additional source ingestion, new benchmark authoring, and the bounded
+   v1.1 loop outside this unit. Any later live call requires its own smoke test, authorization, and
+   spend-ledger entry.
 
 Open operational check, not an M2 blocker: manually dispatch one secret-backed append-only
 harvester run only with separate owner authorization; otherwise the next weekly schedule will use
@@ -638,7 +651,10 @@ complete.
   later multi-configuration training still requires a separate paid-operation authorization and
   spend estimate.
 - Development spans multiple machines. `.venv` is machine-local — recreate it per the README quick start on whichever machine picks this up. Nothing in the repo may depend on machine-specific paths.
-- Windows workstation note: the user-level Python launcher is unreliable there; use the workstation's documented bundled Python 3.12.13 runtime to create `.venv` (local path recorded outside the repository; an earlier revision of this file recorded the literal path — ADR 0006 closed that question with the owner's decision that no history remediation is needed).
+- Windows workstation note: the user-level Python launcher was unreliable. The PowerShell
+  discovery and interpreter-validation procedure is now committed in `AGENTS.md` and the
+  cross-machine handoff. The exact executable path remains machine-local and must never be added
+  to the repository; ADR 0006 closed the historical path-remediation question.
 - Rights gate: ADRs 0004/0007/0009 and charter v2.5, the append-only catalog chain, two approved
   ECOS rows,
   exact KOSIS CPI and OECD CLI rows, and typed manifest-rights bundle validation are complete. The
@@ -652,7 +668,8 @@ complete.
   older codes remain unknown until acceptable historical evidence exists.
 - macOS laptop note: `python@3.12` was installed via Homebrew on 2026-07-17 and is the interpreter
   for the machine-local `.venv` (project standard per ADR 0001).
-- GitHub CLI is authenticated as `bwade9090`; `main` tracks `origin/main`.
+- GitHub CLI is authenticated as `bwade9090` on the Mac only; the Windows workstation must use its
+  own Git/GitHub authentication. `main` tracks `origin/main`.
 - `main` tracks `origin/main`; the validated `codex/m1b-harvester` work was fast-forwarded to the
   default branch. The weekly workflow is active there; the remote feature branch is retained as
   non-authoritative review history and may be removed later by the owner.
@@ -688,6 +705,7 @@ complete.
 | 2026-07-28 | BOK Economic Outlook rights correction, ADR 0009, and charter v2.5 | $0.00 | Owner ruling plus free read-only checks of official BOK policy/public-data pages and the public-data portal; no model/API/GPU call |
 | 2026-07-28 | First bilingual BOK documentary draft pair | $0.00 | Free official PDF re-fetch into a temporary directory, local hash/text/page-render inspection, offline authoring/tests; temporary provider files deleted |
 | 2026-07-29 | Owner approval of the first bilingual documentary pair | $0.00 | Annotation, lifecycle, tests, and governance update only; no network, model, or paid call |
+| 2026-07-29 | Windows continuation onboarding refresh | $0.00 | Documentation and offline validation only; no source read, model, API, GPU, or paid call |
 
 **Cumulative external spend: $0.23584524099715054 / $100.00**
 
@@ -698,18 +716,19 @@ Read in this order, in full, before changing anything:
 1. `AGENTS.md` — working protocol, evidence rules, setup, repository map.
 2. `docs/project/01_project_charter.md` — the v2.5 scope authority.
 3. This file — current milestone, next action, gates, blockers.
-4. `docs/project/04_macbook_handoff.md` — machine setup and exact continuation order.
-5. Accepted ADRs 0001–0009 in `docs/decisions/` (ADR 0008 fixes the join unit's typed
+4. Accepted ADRs 0001–0009 in `docs/decisions/` (ADR 0008 fixes the join unit's typed
    function-calling execution contract and defers the bounded tool loop to v1.1; ADR 0009 records
    the BOK Economic Outlook public-data family ruling).
-6. `docs/project/05_evidence_contract_2_0_migration.md` — the implemented contract the resolver
-   and harvester build on.
-7. `docs/project/07_core_authoring_matrix.md` — the approved M2 allocation and human-review
-   boundary.
-8. `docs/project/08_temporal_document_retrieval.md` — the implemented filter-before-scoring
-   document retrieval boundary.
-9. `docs/discovery/01_concept_upgrade_proposal.md` — background: why v2 exists, verified data facts,
+5. `docs/project/04_macbook_handoff.md` — cross-machine Windows setup, exact continuation order,
+   and acceptance criteria (legacy filename retained for stable links).
+6. `docs/discovery/01_concept_upgrade_proposal.md` — background: why v2 exists, verified data facts,
    judged alternatives, risk register.
+7. `docs/project/05_evidence_contract_2_0_migration.md` — the implemented contract the resolver
+   and harvester build on.
+8. `docs/project/07_core_authoring_matrix.md` — the approved M2 allocation and human-review
+   boundary.
+9. `docs/project/08_temporal_document_retrieval.md` — the implemented filter-before-scoring
+   document retrieval boundary.
 
 Then start with "Immediate next action" item 1. The structural matrix and first six records are
 owner-approved; the other 34 slots are neither authored nor approved. The synthetic retrieval
