@@ -1,4 +1,4 @@
-# Exact environment resolved on Windows, Python 3.12.13, on 2026-07-14.
+# Exact environment resolved on Windows, Python 3.12.13; win32 TZDB pin added 2026-07-29.
 # Human-maintained direct constraints live in requirements.in.
 annotated-types==0.7.0
 anyio==4.14.2
@@ -37,6 +37,7 @@ requests==2.34.2
 ruff==0.15.21
 six==1.17.0
 tenacity==9.1.4
+tzdata==2026.3; sys_platform == "win32"
 typing-inspection==0.4.2
 typing_extensions==4.16.0
 urllib3==2.7.0

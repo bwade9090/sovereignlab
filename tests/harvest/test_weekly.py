@@ -386,6 +386,7 @@ def test_invalid_kosis_responses_fail_closed(
             "outside",
         ),
     ],
+    ids=("not-json", "empty", "exceeds-single-page", "outside-approved-scope"),
 )
 def test_invalid_ecos_responses_fail_closed(
     tmp_path: Path,
