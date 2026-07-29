@@ -448,6 +448,28 @@ def test_stes_contract_cross_binds_dimensions_rule_and_frequency() -> None:
 
 
 @pytest.mark.parametrize(
+    "period",
+    (
+        "xxxx-05",
+        "\u0662\u0660\u0662\u0666-05",
+        "2026-\u0660\u0665",
+        "2026-5",
+        "2026-00",
+        "2026-13",
+        "2026-Q0",
+        "2026-Q5",
+        "202605",
+    ),
+)
+def test_stes_contract_requires_ascii_calendar_periods(period: str) -> None:
+    payload = _stes_arguments().model_dump(mode="python")
+    payload["period"] = period
+
+    with pytest.raises(ValidationError):
+        StesAsOfArguments.model_validate(payload)
+
+
+@pytest.mark.parametrize(
     (
         "source_system",
         "table_id",

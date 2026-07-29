@@ -163,8 +163,7 @@
           "type": "string"
         },
         "period": {
-          "maxLength": 64,
-          "minLength": 1,
+          "pattern": "^[0-9]{4}-(?:Q[1-4]|(?:0[1-9]|1[0-2]))$",
           "title": "Period",
           "type": "string"
         },

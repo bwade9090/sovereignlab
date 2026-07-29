@@ -37,7 +37,10 @@ _OptionalSdmxCode = Annotated[
         pattern=r"^(?:[A-Za-z0-9_][A-Za-z0-9._@:/-]*)?$",
     ),
 ]
-_Period = Annotated[str, StringConstraints(min_length=1, max_length=64)]
+_Period = Annotated[
+    str,
+    StringConstraints(pattern=r"^[0-9]{4}-(?:Q[1-4]|(?:0[1-9]|1[0-2]))$"),
+]
 _SnapshotPeriod = Annotated[
     str,
     StringConstraints(pattern=r"^[0-9]{4}(?:Q[1-4]|(?:0[1-9]|1[0-2]))$"),
