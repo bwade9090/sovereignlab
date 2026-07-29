@@ -38,6 +38,9 @@ Repository layout:
   never observation rows under the current ruling.
 - `archive/ecos/` — append-only raw responses for only owner-approved exact ECOS series; files are
   created only when `ECOS_API_KEY` is configured and the linked rights decision validates.
+- `archive/kosis/` — append-only raw responses for only owner-approved exact KOSIS domestic
+  statistics scopes; files are created only when `KOSIS_API_KEY` is configured and the linked
+  rights decision validates.
 - `availability/` — immutable edition-availability ledgers whose inventories are derived from the
   same captured constraint bytes; historical ledgers are never rewritten.
 - `benchmark/` — the frozen 40-record core authoring matrix, AI-authored review drafts, and later
