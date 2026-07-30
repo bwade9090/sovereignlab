@@ -631,6 +631,21 @@ statements, 1,370 branches); and `git diff --check` passed. This close changed d
 no source, test, schema behavior, source/provider read, secret, live model call, GPU operation, or
 paid operation was added.
 
+Revalidated 2026-07-30 after refreshing the application documents (CV bullet bank and project
+description updated to the current 6/40 approved-core, 13-schema, 976-test state):
+`python scripts/export_json_schemas.py` reproduced all 13 public contracts;
+`python -m ruff check --no-cache .` and `python -m ruff format --check .` passed (63 files);
+`python -m pytest --cov=sovereignlab --cov-branch --cov-report=term-missing -p no:cacheprovider`
+passed all 976 tests with 100% SovereignLab statement/branch coverage (4,065 statements, 1,370
+branches); and `git diff --exit-code` passed after schema export. The first pytest attempt on this
+workstation reported 872 passed plus 104 tmp-path setup errors because the repository-root
+`.pytest_tmp` directory (the configured pytest `--basetemp`) existed with an ACL that denies
+listing, ownership transfer, and deletion to the current unelevated user; the suite was rerun
+fully green with a CLI `--basetemp` override to a fresh temporary directory, so the discrepancy is
+environmental, not a source or test regression. Removing the stale `.pytest_tmp` from an elevated
+shell restores the canonical command. Documentation-only change; no network, provider read,
+secret, live model call, GPU operation, or paid operation occurred.
+
 ## M1b verification spike record (2026-07-15)
 
 All network work below was read-only, key-free, and free of charge. Raw responses were written only
@@ -849,6 +864,12 @@ complete.
   Python has no system IANA timezone database, so the pinned requirements now install `tzdata`
   only on `win32`; large parametrized payload tests must use short explicit IDs to stay below the
   Windows environment-variable limit.
+- Windows workstation note (2026-07-30): a stale repository-root `.pytest_tmp` directory (the
+  configured pytest `--basetemp`) can be left behind with an access-denying ACL that the current
+  unelevated user cannot list, take ownership of, or delete; while present, every pytest run fails
+  its tmp-path setup with `WinError 5`. Delete it from an elevated shell (`takeown /f .pytest_tmp
+  /r`, `icacls .pytest_tmp /reset /t`, then remove), or pass an explicit `--basetemp` override
+  until it is removed. The directory is git-ignored and contains no project data.
 - Rights gate: ADRs 0004/0007/0009 and charter v2.5, the append-only catalog chain, two approved
   ECOS rows,
   exact KOSIS CPI and OECD CLI rows, and typed manifest-rights bundle validation are complete. The

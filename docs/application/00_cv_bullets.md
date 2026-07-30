@@ -1,7 +1,8 @@
 # SovereignLab CV bullets
 
 - Status: wording bank; use only the section matching the achieved milestone
-- Last updated: 2026-07-28 (ADR 0008 wording-guard rule added)
+- Last updated: 2026-07-30 (M2 mid-window refresh: 6/40 approved core, execution-surface slices 1–5
+  complete, 976-test baseline)
 - Rule: never replace placeholders with targets or estimates; use measured, reproducible results only
 - Narrative versions: `docs/application/01_project_description.md`
 
@@ -9,21 +10,47 @@
 
 **SovereignLab — K-VINTAGE on KOR-RTD: vintage-conditioned evaluation for high-stakes economic research (Open Source, in progress)**
 
+### Long form
+
 - Built the initial **KOR-RTD** point-in-time layer for Korean macroeconomics: strict provenance and
   source-rights contracts, append-only checksummed ECOS/KOSIS captures, a 75,060-row OECD Korea CLI
   archive across 239 editions, and a fail-closed resolver that abstains when edition availability
   at the requested cutoff cannot be proven.
-- Designing **K-VINTAGE**, a bilingual Korean/English benchmark whose gold answers depend on the
-  official-statistics vintage available at each question's `as_of` date, with a planned 40-question
-  human-reviewed core and separately reported deterministic revision probes across document, data,
-  cross-evidence, and abstention routes.
+- Building **K-VINTAGE**, a bilingual Korean/English benchmark whose gold answers depend on the
+  official-statistics vintage available at each question's `as_of` date: the 40-question
+  human-reviewed core allocation is frozen and 6/40 records are reviewed and approved so far —
+  four data/abstention records over the OECD Korea CLI revision archive plus a Korean/English
+  documentary pair grounded in the Bank of Korea's May 2026 Economic Outlook and its independently
+  dated official English translation — with machine-generated revision probes to be reported
+  separately.
+- Implemented the deterministic offline evidence surface for the planned reference briefing
+  pipeline: bilingual temporal document retrieval that filters by publication date before scoring
+  (currently over a committed synthetic corpus; the real report bodies remain manifest-bound
+  only), a frozen typed execution-and-trace contract (six new schemas, bringing the project's
+  public surface to 13 deterministic JSON Schemas), three digest-linked deterministic evidence
+  tools (temporal document retrieval, fail-closed vintage resolution, latest-only snapshot
+  reads), and an explicit dispatcher that independently replays and revalidates every call; the
+  offline end-to-end path is not yet assembled and no end-to-end result is claimed.
 - Verified the pinned Ministral 3 3B NF4/QLoRA compatibility path on a disposable A40/CUDA 13 GPU
-  and maintain 337 tests at 100% statement/branch coverage; now building temporal RAG, deterministic
-  vintage-tool integration, and the four-variant baseline suite with temporal leakage as the
-  headline metric. No model-quality result is claimed yet.
+  and maintain 976 tests at 100% statement/branch coverage; temporal leakage remains the planned
+  headline metric, and no model-quality result is claimed yet.
 
-This version distinguishes the implemented data/tooling foundation and compatibility result from
-the not-yet-authored benchmark and not-yet-evaluated model variants.
+### Short form (single bullet)
+
+- Building **SovereignLab / K-VINTAGE** (in progress): to our knowledge the first benchmark for
+  official statistics whose gold answers depend on the data vintage available at each question's
+  `as_of` date, built on **KOR-RTD** — a provenance-contracted point-in-time archive of Korean
+  macro data with append-only checksummed captures and a fail-closed vintage resolver. Current
+  state: 6/40 reviewed-and-approved bilingual core records, cutoff-filtered bilingual temporal
+  retrieval over a committed synthetic corpus, a frozen typed execution-and-trace contract (part
+  of the project's 13 public JSON Schemas) with three deterministic evidence tools behind a
+  replay-checked dispatcher, a verified Ministral 3 3B NF4/QLoRA compatibility path, and 976
+  tests at 100% statement/branch coverage; temporal leakage is the planned headline metric and no
+  model-quality result is claimed yet.
+
+This version distinguishes the implemented data/tooling/evidence-surface foundation and the
+compatibility result from the not-yet-assembled offline execution path, the 34 unauthored core
+slots, and the not-yet-evaluated model variants.
 
 ## Version B — use after the Week 2 baseline is reproducible
 
@@ -40,20 +67,27 @@ the not-yet-authored benchmark and not-yet-evaluated model variants.
 - Published **K-VINTAGE** (**[N_CORE]** human-reviewed core questions + **[N_PROBES]** machine-generated probes, reported separately) and a four-variant baseline suite (closed-book, temporal RAG, RAG + vintage tool, LoRA router), achieving **[LEAKAGE]%** temporal leakage and **[CITATION]%** citation correctness, every number reproducible from committed manifests, traces, and one evaluation command.
 - Fine-tuned **[MODEL]** with QLoRA for evidence routing and structured vintage-aware tool use on **[N_TRAIN]** evidence-disjoint examples, changing held-out route macro-F1 from **[BASE]** to **[LORA]** (**[DELTA]** points) under a pre-frozen promotion rule; negative results and failure taxonomy published.
 
-## Compact one-bullet version
-
-- Building **SovereignLab / K-VINTAGE**: to our knowledge the first benchmark for official statistics whose gold answers depend on the data vintage available at each question's as-of date, built on KOR-RTD — a provenance-contracted point-in-time archive of Korean macro data — with a bilingual briefing pipeline, four-variant ablation, and QLoRA-tuned evidence routing evaluated on temporal leakage as the headline metric.
-
 ## Accuracy and disclosure rules
 
 - Keep `(in progress)` until the public repository contains a runnable vertical slice.
 - Do not say `fine-tuned` until an adapter has been trained, loaded, and evaluated.
-- Do not cite benchmark size until each counted test item passes schema and human review; **always report the human-reviewed core and machine-generated probes as separate counts**.
+- Do not cite benchmark size until each counted test item passes schema and human review; **always report the human-reviewed core and machine-generated probes as separate counts**. The current approved core count is 6/40; the 34 remaining slots are neither authored nor approved.
+- Core records are initially AI-authored and then human-reviewed; do not claim personal manual
+  authorship of individual records. "Reviewed and approved" is the accurate personal-CV verb.
 - Do not cite improvement, cost, latency, leakage, or error-rate figures until the aggregation command reproduces them from committed artifacts.
+- Do not imply real-document retrieval: the committed searchable corpus is synthetic-only, and the
+  real Bank of Korea report bodies are manifest-bound without committed searchable chunks.
+  Disclose the synthetic corpus whenever retrieval is described near the real documentary pair.
+- Attribute the 13 public JSON Schemas to the combined evidence, benchmark, matrix,
+  availability-ledger, rights, and execution contracts; the execution/trace contract itself
+  contributed six of them.
 - Do not describe CPU/API fallback as `on-prem production deployment`; use `portable local/API deployment path` until a documented fully local end-to-end run exists.
 - Do not use `agent`, `agentic`, `multi-step`, `orchestration`, or `autonomous` wording anywhere:
   the bounded tool loop is deferred to v1.1 (ADR 0008). After the minimal path ships, the
-  permitted wording is `typed function calling with committed traces` — and only then.
+  permitted wording is `typed function calling with committed traces` — and only then. Until that
+  point, describe only the implemented components (typed execution-and-trace contract,
+  deterministic evidence tools, replay-checked dispatcher) and state that the end-to-end path is
+  not yet assembled.
 - Every "first" claim must read "to our knowledge, for official statistics" and the datasheet must cite prior art first (arXiv 2605.23497 statutory as-of QA; Dallas Fed real-time OECD dataset; OECD MEI revisions database). Never claim "first Korean macro benchmark" (KMMLU includes economics categories).
 - Do not claim OECD edition/backfill ranges beyond what a recorded verification spike confirmed.
 - Do not cite harvester snapshot counts older than the public commit history that proves them.
