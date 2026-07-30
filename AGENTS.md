@@ -18,14 +18,15 @@ This repository is between work units and is ready to continue on the Windows wo
   of Korea May-2026 Outlook manifests, the approved `kv-core-doc-01` documentary pair, and strict
   execution/trace contract 1.0.0 with 13 deterministic public schemas. The trusted latest-only
   snapshot registry, deterministic `read_snapshot_as_of` adapter, trusted synthetic retrieval
-  registry, and typed `retrieve_temporal_documents` adapter are also complete.
+  registry, typed `retrieve_temporal_documents` adapter, trusted historical STES registry, and
+  flat `resolve_stes_as_of` adapter are also complete.
 - Exact next outcome: the minimal offline **typed function-calling question-to-evidence-packet
   path** required by ADR 0008, with committed machine-readable traces.
-- Exact next reviewable slice: the flat `resolve_stes_as_of` adapter over the existing fail-closed
-  resolver and exact `core-batch-001.jsonl` argument convention.
-- Not implemented yet: the remaining STES runtime adapter, callable dispatcher, scripted/recorded
-  planner implementations, packet assembler, offline end-to-end executor, or committed
-  end-to-end replay traces. The contract fixture is not an end-to-end replay result.
+- Exact next reviewable slice: the callable dispatcher and frozen three-tool registry over the
+  three implemented deterministic adapters.
+- Not implemented yet: the callable dispatcher, scripted/recorded planner implementations, packet
+  assembler, offline end-to-end executor, or committed end-to-end replay traces. The contract
+  fixture is not an end-to-end replay result.
 - The bounded tool loop is not part of this milestone; ADR 0008 defers it to v1.1.
 
 The authoritative live checkpoint and acceptance criteria are in
@@ -61,12 +62,14 @@ Before editing:
    this session).
 5. `docs/discovery/01_concept_upgrade_proposal.md` — background rationale for v2: verified data facts, judged alternatives, risk register.
 6. `docs/project/09_typed_execution_trace_contract.md` — frozen execution surface, flat tool
-   arguments, replay provenance, and next adapter boundary.
+   arguments, replay provenance, and next dispatcher boundary.
 7. `docs/project/10_snapshot_reader_contract.md` — trusted latest-only registry, cutoff selection,
-   provider parsers, failure taxonomy, and the next adapter boundary.
+   provider parsers, and failure taxonomy.
 8. `docs/project/11_temporal_retrieval_adapter_contract.md` — trusted synthetic corpus, typed
-   adapter, replay digest, failure taxonomy, and the next adapter boundary.
-9. The closest additional `AGENTS.md`, if a subdirectory adds one later.
+   adapter, replay digest, and failure taxonomy.
+9. `docs/project/12_stes_adapter_contract.md` — trusted historical registry, ledger/rights/archive
+   joins, flat typed adapter, and next dispatcher boundary.
+10. The closest additional `AGENTS.md`, if a subdirectory adds one later.
 
 The charter is the scope authority. Do not expand sources, agents, UI, or infrastructure before the current milestone gate passes.
 
@@ -182,8 +185,8 @@ commit that machine-specific path. Do not reuse a `.venv` whose interpreter chec
 The Windows requirements include a `win32`-only `tzdata` pin because a standard Windows Python
 installation has no system IANA timezone database.
 
-The handoff baseline is 13 deterministic public schemas, 55 formatted Python files, 646 passing
-tests, and 100% SovereignLab statement/branch coverage (2,881 statements, 948 branches). A
+The handoff baseline is 13 deterministic public schemas, 59 formatted Python files, 892 passing
+tests, and 100% SovereignLab statement/branch coverage (3,680 statements, 1,240 branches). A
 different result is a diagnostic signal: stop before implementation and record the discrepancy
 in `docs/PROJECT_STATUS.md`.
 

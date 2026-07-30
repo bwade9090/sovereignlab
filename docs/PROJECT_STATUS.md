@@ -1,6 +1,6 @@
 # SovereignLab project status
 
-- Last updated: 2026-07-29
+- Last updated: 2026-07-30
 - Owner: Hyungbae Cho (`bwade9090`)
 - Delivery window: four weeks, approximately 80 hours
 - Current milestone: M2 — week-2 benchmark and baselines (charter v2.5 §7, Week 2)
@@ -41,10 +41,13 @@
   scopes through cutoff, manifest, rights, hash, provider-row, and normalization gates. The third
   implementation slice is now complete as well: the trusted exact-byte synthetic retrieval
   registry and typed `retrieve_temporal_documents` adapter preserve filtering before scoring,
-  deterministic replay, and selected-evidence-only results. The remaining STES adapter, callable
-  dispatcher, planner interface, packet assembler, offline end-to-end executor, and committed
-  replay traces remain to be implemented, so the minimal question-to-evidence-packet path is not
-  yet shipped. The bounded multi-step tool loop remains deferred to post-window v1.1.
+  deterministic replay, and selected-evidence-only results. The fourth implementation slice is
+  now complete too: the digest-linked historical STES registry and typed flat adapter preserve
+  ledger-first selection, the exact approved CLI rights boundary, selected-row-only
+  normalization, and sanitized GDP raw-evidence abstention. The callable dispatcher, planner
+  interface, packet assembler, offline end-to-end executor, and committed replay traces remain to
+  be implemented, so the minimal question-to-evidence-packet path is not yet shipped. The bounded
+  multi-step tool loop remains deferred to post-window v1.1.
 
 ## Approved baseline
 
@@ -322,6 +325,21 @@
   official document body or real searchable chunk was added. Full details are in
   `docs/project/11_temporal_retrieval_adapter_contract.md`.
 
+- **Trusted historical STES registry/adapter — work unit C slice 4 (2026-07-30):**
+  `sovereignlab.vintage.registry` freezes the exact approved CLI archive, four constraint-support
+  captures, two-generation availability-ledger chain, and two-generation rights-catalog chain
+  behind ID `kor-rtd-stes-resolver-registry-v1` and descriptor SHA-256
+  `103eb3bea7beebadeb0a7e193ff76fc95b518a8a7bed6825d9eb1f25431fb420`.
+  Construction and each call reparse exact immutable bytes; semantic validation joins paired XML
+  inventories and `validFrom` evidence to the ledgers, enforces connected append-only
+  ledger/catalog chains, scans the full CSV for exact scope/keys/plain decimals, and
+  cross-validates the active owner-approved CLI rights decision. `execute_stes_as_of_call` copies
+  the eight flat arguments, requires exact equality with a fresh reference resolution, applies
+  frozen Decimal normalization, and emits only selected typed evidence. The approved
+  `as_of=2026-07-09`, `period=2026-05` regression returns edition `202607` and value `102.66`;
+  the frozen GDP shape abstains before resolution because public raw evidence is unavailable.
+  Full details are in `docs/project/12_stes_adapter_contract.md`.
+
 - **Windows baseline reproducibility repair (2026-07-29):** Windows now installs the IANA timezone
   database through the platform-guarded `tzdata==2026.3` requirement, which makes the existing
   `Asia/Seoul` tests and the new snapshot capture cutoff deterministic on a standard Python 3.12
@@ -552,6 +570,19 @@ after exact-byte/model mutation, byte-subclass, size-bound, fabricated-evidence,
 findings were closed. No network, provider read, secret, live model call, GPU operation, or paid
 operation occurred.
 
+Validated 2026-07-30 on Windows after the trusted historical STES registry/adapter slice:
+Python 3.12.13; `python scripts/export_json_schemas.py` remained deterministic at 13 public
+contracts; `python -m ruff check --no-cache .` passed; `python -m ruff format --check .` passed
+(59 files); and `python -m pytest --cov=sovereignlab --cov-branch --cov-report=term-missing -p
+no:cacheprovider` passed all 892 tests with 100% SovereignLab statement/branch coverage (3,680
+statements, 1,240 branches). The 170 focused registry tests reached 100% registry coverage (682
+statements, 264 branches), and the 67 focused adapter tests reached 100% adapter coverage (115
+statements, 28 branches). `git diff --check` passed. Independent red-team reproduction closed XML
+trust, append-only chain, archive-ledger join, shared-query/ledger mutation, rights-laundering,
+invalid-model exception, deleted-field, and call-ID findings; the final audit found no remaining
+reproducible P0/P1. No network, provider read, secret, live model call, GPU operation, or paid
+operation occurred.
+
 ## M1b verification spike record (2026-07-15)
 
 All network work below was read-only, key-free, and free of charge. Raw responses were written only
@@ -704,30 +735,29 @@ response bodies.
   Both records now carry the named reviewer and aware review timestamp in
   `data/benchmark/core/core-batch-002.jsonl`; the approved core count is 6/40.
 
-## Session-close snapshot (2026-07-29, tenth close: trusted temporal-document adapter slice)
+## Session-close snapshot (2026-07-30, eleventh close: trusted historical STES adapter slice)
 
-- Work unit C remains active, but its first three independently reviewable slices are complete and
-  no partial implementation edit is in progress. Execution contract 1.0.0, six new public schemas,
-  the committed contract fixture, the Windows baseline repair, the trusted snapshot
-  registry/reader, and the trusted temporal retrieval registry/adapter all validate.
+- Work unit C remains active, but its first four independently reviewable slices are complete.
+  Execution contract 1.0.0, six new public schemas, the committed contract fixture, the Windows
+  baseline repair, and all three trusted deterministic tool registries/adapters validate.
 - M2 remains active. The frozen matrix was not changed, exactly six records are owner-approved, and
   the other 34 slots are not authored.
-- Two of three deterministic tool adapters are implemented. `read_snapshot_as_of` covers the three
+- All three deterministic tool adapters are implemented. `read_snapshot_as_of` covers the three
   exact approved snapshot units; `retrieve_temporal_documents` covers the frozen synthetic
-  Korean/English corpus and emits only selected typed evidence. Dependent benchmark authoring
-  remains outside this work unit.
+  Korean/English corpus; and `resolve_stes_as_of` covers only the owner-approved CLI raw archive
+  while the GDP shape abstains. Each emits only selected typed evidence. Dependent benchmark
+  authoring remains outside this work unit.
 - The contract fixture contains no real report text. No source artifact, provider body, secret,
   live model call, GPU operation, or paid operation was added.
-- The minimal typed function-calling path is not yet complete: the STES adapter, callable
-  dispatcher, planner, packet assembler, offline executor, and committed end-to-end replay traces
-  do not yet exist.
+- The minimal typed function-calling path is not yet complete: the callable dispatcher, planner,
+  packet assembler, offline executor, and committed end-to-end replay traces do not yet exist.
 
 ## Immediate next action (M2 — do these in order)
 
-1. Implement the flat `resolve_stes_as_of` adapter over the existing fail-closed resolver,
-   with trusted archive/manifest/ledger/catalog injection and the exact `core-batch-001` argument
-   convention. Preserve the current owner-approved OECD CLI raw-evidence limit.
-2. Add the callable dispatcher, scripted/recorded planner boundary, offline packet assembler and
+1. Add the callable dispatcher and frozen three-tool registry. Inject the committed
+   snapshot/corpus/STES registries from the harness, reject unknown or mismatched calls, and expose
+   the real registry digests needed by later trace provenance.
+2. Add the scripted/recorded planner boundary, offline packet assembler and
    executor with real registry/corpus digests and committed replay traces. Satisfy every route,
    bilingual, cutoff, invalid-call, replay, and round-trip criterion in handoff §5 before calling
    work unit C complete.
@@ -814,6 +844,7 @@ complete.
 | 2026-07-29 | Windows baseline repair + typed execution/trace contract slice | $0.00 | Free PyPI `tzdata` install, offline schemas/fixture/tests/specification, and subscription red-team review; no provider read, live model API, GPU, or paid call |
 | 2026-07-29 | Trusted latest-only snapshot registry/reader slice | $0.00 | Offline reuse of the three existing committed captures, tests/specification, and subscription review; no network, provider request, secret, live model API, GPU, or paid call |
 | 2026-07-29 | Trusted temporal-document registry/adapter slice | $0.00 | Offline synthetic corpus, typed adapter, tests/specification, and subscription review; no network, provider read, secret, live model API, GPU, or paid call |
+| 2026-07-30 | Trusted historical STES registry/adapter slice | $0.00 | Offline reuse of committed public artifacts, typed adapter, tests/specification, and subscription red-team review; no network, provider read, secret, live model API, GPU, or paid call |
 
 **Cumulative external spend: $0.23584524099715054 / $100.00**
 
@@ -838,12 +869,13 @@ Read in this order, in full, before changing anything:
 9. `docs/project/08_temporal_document_retrieval.md` — the implemented filter-before-scoring
    document retrieval boundary.
 10. `docs/project/09_typed_execution_trace_contract.md` — the frozen execution contract,
-    snapshot/STES flat arguments, replay provenance, and exact next adapter boundary.
+    snapshot/STES flat arguments, replay provenance, and exact next dispatcher boundary.
 11. `docs/project/10_snapshot_reader_contract.md` — the implemented trusted snapshot registry,
-    deterministic reader, provider parsers, result taxonomy, and exact next adapter boundary.
+    deterministic reader, provider parsers, result taxonomy, and execution boundary.
 12. `docs/project/11_temporal_retrieval_adapter_contract.md` — the implemented trusted synthetic
-    corpus registry, typed adapter, replay digest, result validation, and exact next adapter
-    boundary.
+    corpus registry, typed adapter, replay digest, and result validation.
+13. `docs/project/12_stes_adapter_contract.md` — the implemented trusted historical registry,
+    XML/ledger/catalog/archive joins, flat typed adapter, and exact next dispatcher boundary.
 
 Then start with "Immediate next action" item 1. The structural matrix and first six records are
 owner-approved; the other 34 slots are neither authored nor approved. The synthetic retrieval

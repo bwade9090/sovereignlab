@@ -101,8 +101,7 @@ No network, provider read, secret, live model call, GPU operation, or paid opera
 
 ## Next independent slice
 
-Implement only the flat `resolve_stes_as_of` adapter over the existing fail-closed resolver. Keep
-trusted archives, manifests, edition-availability ledgers, rights catalogs, and registry
-provenance outside model-selected arguments. Preserve the current owner-approved OECD Korea
-monthly CLI raw-evidence boundary. The dispatcher, planner implementations, packet assembly,
-offline executor, and committed end-to-end traces remain later reviewable slices.
+The trusted historical registry and flat `resolve_stes_as_of` adapter are now complete under
+`docs/project/12_stes_adapter_contract.md`. Add only the callable dispatcher and frozen
+three-tool registry next. The planner implementations, packet assembly, offline executor, and
+committed end-to-end traces remain later reviewable slices.

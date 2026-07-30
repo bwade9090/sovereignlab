@@ -159,8 +159,8 @@ No network, provider read, secret, live model call, GPU operation, or paid opera
 
 ## Next independent slice
 
-The typed `retrieve_temporal_documents` adapter and trusted synthetic-corpus registry are now
-complete under `docs/project/11_temporal_retrieval_adapter_contract.md`. Add only the flat
-`resolve_stes_as_of` adapter over the existing fail-closed resolver next. Keep the dispatcher,
-planner boundary, offline executor, real environment digests, and committed end-to-end replay
-traces in later reviewable slices.
+The typed temporal-document and STES adapters are now complete under
+`docs/project/11_temporal_retrieval_adapter_contract.md` and
+`docs/project/12_stes_adapter_contract.md`. Add only the callable dispatcher and frozen
+three-tool registry next. Keep the planner boundary, offline executor, real environment digests,
+and committed end-to-end replay traces in later reviewable slices.

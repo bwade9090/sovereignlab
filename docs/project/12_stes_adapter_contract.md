@@ -1,0 +1,169 @@
+# Trusted historical STES adapter
+
+Status: work-unit-C STES adapter slice implemented offline on 2026-07-30.
+
+## Purpose and boundary
+
+This specification records the fourth independently reviewable ADR 0008 implementation slice:
+the digest-linked STES artifact registry and typed `resolve_stes_as_of` execution adapter. It
+connects the existing fail-closed vintage resolver to the eight-field callable convention frozen
+in `docs/project/09_typed_execution_trace_contract.md`.
+
+The slice does not change `BenchmarkRecord`, `BenchmarkBundle`, or the 13 public JSON Schemas. It
+adds no source capture, benchmark record, provider request, live model call, paid operation,
+dispatcher, planner implementation, packet assembler, offline end-to-end executor, or committed
+end-to-end trace.
+
+## Frozen callable scopes
+
+The execution contract admits exactly two validated call shapes:
+
+| Scope | Normalization rule | Public raw evidence |
+| --- | --- | --- |
+| `KOR.M.LI_AA.IX._T` | `oecd-stes-kor-li-aa-index-v1` | `allowed` under ADR 0007 |
+| `KOR.Q.B1GQ_Q.XDC._T` | `oecd-stes-kor-b1gq-q-xdc-billion-krw-v1` | unavailable under the current catalog |
+
+The GDP shape remains frozen for exact-match evaluation, but a normalization rule is not a
+redistribution authorization. A valid GDP call therefore returns the stable
+`public_raw_evidence_unavailable` abstention before the resolver can run. It never falls back to
+the CLI archive, an ECOS snapshot, another OECD series, or a superseded rights ruling.
+
+The model-visible arguments remain only `ref_area`, `freq`, `measure`, `unit_measure`, `activity`,
+`period`, `as_of`, and `normalization_rule_id`. Paths, manifests, ledgers, catalogs, archive bytes,
+edition IDs, URLs, source IDs, and credentials are not callable arguments.
+
+## Frozen reference registry
+
+The committed registry ID is `kor-rtd-stes-resolver-registry-v1`. Its canonical descriptor
+SHA-256 is
+`103eb3bea7beebadeb0a7e193ff76fc95b518a8a7bed6825d9eb1f25431fb420`.
+The descriptor binds both callable policies and every admitted artifact by exact byte size and
+SHA-256 without serializing a local path, provider URL, raw XML/CSV body, or observation value.
+
+The executable CLI source is:
+
+| Artifact | Bytes | SHA-256 |
+| --- | ---: | --- |
+| CLI manifest | 1,554 | `e62576e829b01025ee3af716b65839ededa0f4ee34d0f2c27c0fe92fde6ef3f0` |
+| CLI consolidated CSV | 21,734,727 | `ac7d0f9a2517870173885f1d45e2edea90f54cd485e2f539c73afddde566f058` |
+
+The CSV contains 75,060 rows, 28 columns, and 239 editions from `200604` through `202607`, all
+within the exact `KOR.M.LI_AA.IX._T` scope.
+
+The registry also binds both availability-ledger generations, both append-only rights-catalog
+generations, and the four manifest/XML constraint captures that make ledger evidence verifiable
+offline:
+
+| Role | Exact byte SHA-256 |
+| --- | --- |
+| predecessor ledger | `57ffd3d908191988f6d81f84dd06730ce2d80f7156dbea3d3ea816fde52c7630` |
+| active ledger | `a03774a475f4b5a495c260cc26c30b1eafce7a1b54d75d497e0e9297eb20579d` |
+| predecessor rights catalog | `7c1637a9db0827e4cbd3e4d0059737961cc9492def0f1678b98b9de5a4d586ce` |
+| active rights catalog | `fefbbc629fb0e2de89e30b8ae4b56af1abc48460c1f3932ef69d36abd72253ca` |
+| availability XML, both captures | `e7a3fab8730a2d9e4644ccb78844d721c263a2b235d4575fa850d1f0c71be06f` |
+| content XML, both captures | `40b9f6e25f0187992f679fd5e8ae8215182076d8e280b71ca74b737d204334e6` |
+
+Adding or replacing an admitted artifact requires a new registry ID and descriptor. The v1
+registry must remain reproducible.
+
+## Trusted registry boundary
+
+`sovereignlab.vintage.registry` reads only explicitly enumerated, repository-relative inputs under
+the exact `data/manifests/`, `data/archive/oecd-stes/`, `data/availability/`, and `data/rights/`
+roots. It rejects absolute or escaping paths, role reuse, filename/ID drift, missing files,
+invalid suffixes, files outside the bounded byte/row/column/edition limits, invalid UTF-8/JSON,
+duplicate JSON keys, non-finite JSON constants, and mutable or decode-overriding byte subclasses.
+
+Construction and every adapter call rebuild every Pydantic model from exact immutable bytes. The
+registry also performs semantic joins rather than treating hashes as sufficient:
+
+- every availability/content XML pair is parsed as bounded SDMX structure XML;
+- exact constraint roles, dataflow/version, constraint identity, `validFrom`, and edition
+  inventories must agree;
+- every ledger evidence assertion must join to the exact manifest/XML capture and instant;
+- the active ledger is explicitly selected, uses inclusive end-of-day `Asia/Seoul`, and belongs
+  to one connected append-only supersession chain;
+- rights catalogs form one connected append-only chain, and `BenchmarkBundle` cross-validates the
+  CLI manifest's typed link to the active owner-approved `allowed` decision;
+- the entire CLI CSV must contain only the approved five-dimensional scope, unique
+  edition/period keys, plain finite decimals, and editions admitted by the active ledger; and
+- the GDP binding must remain unavailable unless a later, separately approved registry version
+  records an exact public-raw-evidence decision.
+
+No corrupt active ledger, catalog, manifest, XML, or CSV falls back to its predecessor or a
+neighboring artifact.
+
+## Typed execution behavior
+
+`execute_stes_as_of_call` copies the eight flat arguments unchanged into `StesSeriesKey` and
+`AsOfQuery`, after matching the exact harness-owned binding and normalization rule. For an
+authorized scope it calls the existing resolver with only the newly revalidated local manifest,
+active ledger, and immutable archive bytes.
+
+The availability ledger remains the temporal authority. The consolidated archive was captured on
+2026-07-17, but that capture date is not used to discard historical rows. For
+`as_of=2026-07-09`, the ledger proves that edition `202607` was already available by the inclusive
+Asia/Seoul cutoff, so period `2026-05` resolves to raw value `102.66`. For `as_of=2026-06-30`, the
+same call abstains with `no_edition_definitely_available`; it does not expose a later edition or
+value.
+
+Before mapping a result, the adapter requires exact equality with a fresh call through a separately
+captured reference resolver. It verifies query dimensions, cutoff, source hash, active ledger,
+dataflow/version, selected edition, period, and selected row. A fabricated subset, provenance
+field, edition, or value therefore fails closed.
+
+Successful evidence contains only the selected `VintageObservationEvidence`. Decimal
+normalization runs at precision 256 using the frozen rule and existing `ROUND_HALF_UP` display
+formatter. The committed regression is:
+
+| Field | Value |
+| --- | --- |
+| selected edition | `202607` |
+| raw / normalized value | `102.66` / `102.66` |
+| canonical unit | `oecd_amplitude_adjusted_index` |
+| display places / value | `2` / `102.66` |
+
+The result does not contain a local path, URL, full manifest, archive inventory, unselected row,
+future edition, or future observation value.
+
+## Abstentions and failures
+
+Existing resolver abstention codes pass through unchanged, including completeness-frontier,
+missing-row, duplicate-row, blank-row, content, media, dataflow, and CSV failures. The adapter adds
+only:
+
+- `public_raw_evidence_unavailable`; and
+- `invalid_source_value`.
+
+Registry/policy corruption returns `stes_registry_misconfigured`; unexpected resolver or
+normalization failures return `stes_resolver_failed` or `stes_normalization_failed`. Every failure
+uses the `tool_execution` phase, is bound to the original call ID, and omits exception text, paths,
+provider rows, archive inventory, and later-edition facts.
+
+## Validation evidence
+
+Validated on Windows with Python 3.12.13:
+
+- 170 focused registry tests pass with 100% registry statement/branch coverage
+  (682 statements, 264 branches);
+- 67 focused adapter tests pass with 100% adapter statement/branch coverage
+  (115 statements, 28 branches);
+- all 892 repository tests pass with 100% SovereignLab statement/branch coverage
+  (3,680 statements, 1,240 branches);
+- Ruff check and format check pass across 59 Python files; and
+- all 13 public schemas regenerate deterministically.
+
+Regression coverage includes the real CLI result and GDP rights abstention, exact-byte and
+semantic registry tampering, XML/ledger/catalog/archive joins, argument copying, resolver-result
+forgery, shared-input mutation, rights laundering, call-ID mutation, normalization, deterministic
+replay, typed-result round trips, error sanitization, and explicit registry completeness.
+
+No network, provider read, secret, live model call, GPU operation, or paid operation occurred.
+
+## Next independent slice
+
+Add the callable dispatcher and its frozen three-tool registry next. It must inject the committed
+snapshot, temporal-corpus, and STES registries from the harness, dispatch only the three typed call
+variants, reject unknown or mismatched calls, and expose real registry digests for later trace
+provenance. Keep planner implementations, packet assembly, the offline end-to-end executor, and
+committed replay traces in subsequent reviewable slices.
