@@ -47,6 +47,13 @@ verified immutable bytes. The adapter then applies the cutoff before parsing and
 selected artifact's already verified bytes. This avoids both a verify-then-reopen gap and any
 value-level influence from a post-cutoff capture.
 
+Call-time hardening completed with dispatcher integration now requires exact built-in `bytes`,
+rebuilds every manifest and rights-catalog model from those bytes, revalidates the frozen binding
+and immutable-container structure, and executes against that fresh validated state. Descriptor
+calculation uses the same path. Mutated timestamps, catalogs, bindings, registry structure,
+decode-overriding byte subclasses, and caller-owned call IDs therefore fail closed rather than
+changing selection or evidence.
+
 The explicit-location completeness test fails if a new approved latest-only manifest or committed
 rights catalog appears without a registry decision. The v1 registry ID is also pinned to one
 descriptor digest. A later admitted capture or superseding catalog must create a new registry ID
@@ -159,8 +166,10 @@ No network, provider read, secret, live model call, GPU operation, or paid opera
 
 ## Next independent slice
 
-The typed temporal-document and STES adapters are now complete under
+The typed temporal-document and STES adapters are complete under
 `docs/project/11_temporal_retrieval_adapter_contract.md` and
-`docs/project/12_stes_adapter_contract.md`. Add only the callable dispatcher and frozen
-three-tool registry next. Keep the planner boundary, offline executor, real environment digests,
-and committed end-to-end replay traces in later reviewable slices.
+`docs/project/12_stes_adapter_contract.md`; the frozen three-tool registry and explicit dispatcher
+are complete under `docs/project/13_callable_dispatcher_contract.md`. Add only the planner
+protocol with scripted and immutable recorded/replay implementations next. Keep packet assembly,
+the offline executor, committed end-to-end traces, and live model integration in later reviewable
+slices.

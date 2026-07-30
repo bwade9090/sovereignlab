@@ -1,14 +1,15 @@
 # Cross-machine continuation handoff
 
 - Legacy filename: retained so existing links and onboarding instructions do not break.
-- Prepared: 2026-07-16; refreshed 2026-07-29 after the Windows continuation (tenth refresh:
-  trusted temporal-document registry/adapter slice complete)
+- Prepared: 2026-07-16; refreshed 2026-07-30 after the Windows continuation (twelfth refresh:
+  frozen three-tool callable registry/dispatcher slice complete)
 - Target continuation machine: Windows workstation
 - Authority: charter v2.5; accepted ADRs 0001–0009
 - Branch to continue: `main` from `origin`
 - Current milestone: M2
-- Session state: the first four work-unit-C slices are complete and reviewable; all three
-  deterministic runtime adapters are complete and no later execution slice is partially implemented
+- Session state: the first five work-unit-C slices are complete and reviewable; all three
+  deterministic runtime adapters and the explicit dispatcher are complete, while no planner or
+  later execution slice is partially implemented
 - Historical clean `origin/main` baseline before the Windows work-unit-C slices: `6fe447b`
   (`docs: prepare Windows continuation handoff`). Preserve the current reviewable worktree; do not
   reset to the historical checkpoint.
@@ -131,7 +132,9 @@ If local `main` has diverged from `origin/main`, stop rather than rewriting hist
   before parsing only one unique latest payload, cross-validates active rights catalogs, parses
   exact provider rows and hidden KOSIS selectors, applies frozen Decimal normalization, and
   returns selected-row-only evidence or sanitized structured failures. It never falls back to an
-  older capture when the selected frontier is invalid. The detailed contract is
+  older capture when the selected frontier is invalid. The call boundary now also requires exact
+  built-in bytes, rebuilds manifest and rights-catalog models from those bytes, and revalidates
+  binding and immutable-container structure before every read. The detailed contract is
   `docs/project/10_snapshot_reader_contract.md`.
 - **Trusted temporal-document adapter (2026-07-29):**
   `src/sovereignlab/retrieval/registry.py` freezes the exact synthetic four-manifest/six-chunk
@@ -152,8 +155,15 @@ If local `main` has diverged from `origin/main`, stop rather than rewriting hist
   row, and reproduces edition `202607` / value `102.66` for the approved core call. The frozen GDP
   shape abstains before resolution because its public raw evidence remains unavailable. The
   detailed contract is `docs/project/12_stes_adapter_contract.md`.
-- Windows baseline validated 2026-07-30 on Python 3.12.13: 892 tests passed with 100% SovereignLab
-  statement/branch coverage (3,680 statements, 1,240 branches); ruff check/format clean (59 Python
+- **Frozen callable registry and explicit dispatcher (2026-07-30):**
+  `src/sovereignlab/execution/dispatcher.py` freezes exactly the three typed adapter registrations,
+  explicitly maps each exact call model to its adapter and trusted dependency, and rejects unknown,
+  mismatched, subclassed, or mutated calls without name-based attribute lookup. Its provenance
+  exposes the frozen callable registry, composite snapshot/STES artifact registry, and separate
+  temporal-corpus ID/digest pairs required by the later execution trace. The detailed contract is
+  `docs/project/13_callable_dispatcher_contract.md`.
+- Windows baseline validated 2026-07-30 on Python 3.12.13: 976 tests passed with 100% SovereignLab
+  statement/branch coverage (4,065 statements, 1,370 branches); ruff check/format clean (63 Python
   files); `python scripts/export_json_schemas.py` deterministic (13 contracts). The win32-only
   `tzdata==2026.3` pin and short ECOS pytest IDs repair two Windows-only baseline failures.
 
@@ -182,8 +192,8 @@ $venvPython = (Resolve-Path .\.venv\Scripts\python.exe).Path
 git diff --exit-code
 ```
 
-Expected handoff baseline: Python 3.12, 13 deterministic public schemas, 59 formatted Python
-files, 892 passing tests, 100% SovereignLab statement/branch coverage (3,680 statements, 1,240
+Expected handoff baseline: Python 3.12, 13 deterministic public schemas, 63 formatted Python
+files, 976 passing tests, 100% SovereignLab statement/branch coverage (4,065 statements, 1,370
 branches), and no unexpected Git diff.
 The Windows
 user-level launcher was unreliable in an earlier session. If `python` does not resolve to 3.12,
@@ -208,20 +218,23 @@ do not remove it merely because another operating system supplies an IANA timezo
    approved batches (6/40), and human-review boundary.
 8. `docs/project/08_temporal_document_retrieval.md` — the implemented document cutoff and
    filter-before-scoring contract.
-9. `docs/project/09_typed_execution_trace_contract.md` — the frozen first slice and exact next
-   dispatcher boundary.
+9. `docs/project/09_typed_execution_trace_contract.md` — the frozen execution/trace contract.
 10. `docs/project/10_snapshot_reader_contract.md` — the implemented trusted registry, cutoff-safe
     reader, provider parsers, and failure taxonomy.
 11. `docs/project/11_temporal_retrieval_adapter_contract.md` — the implemented trusted synthetic
     corpus registry, typed adapter, and digest/replay boundary.
 12. `docs/project/12_stes_adapter_contract.md` — the implemented trusted historical registry,
-    rights/ledger/archive joins, typed adapter, and exact next dispatcher boundary.
-13. `docs/discovery/03_week1_verification_log.md` — the verified example values the resolver must
+    rights/ledger/archive joins, and typed adapter.
+13. `docs/project/13_callable_dispatcher_contract.md` — the frozen three-tool registry, explicit
+    dispatcher, composite replay provenance, snapshot call-time hardening, and exact next planner
+    boundary.
+14. `docs/discovery/03_week1_verification_log.md` — the verified example values the resolver must
     reproduce.
-14. `src/sovereignlab/vintage/resolver.py`, `src/sovereignlab/retrieval/temporal.py`,
+15. `src/sovereignlab/vintage/resolver.py`, `src/sovereignlab/retrieval/temporal.py`,
    `src/sovereignlab/retrieval/registry.py`, `src/sovereignlab/retrieval/adapter.py`,
-   `src/sovereignlab/harvest/weekly.py`, and their tests —
-   the implemented resolver, retrieval, adapter, and append-only capture boundaries.
+   `src/sovereignlab/execution/dispatcher.py`, `src/sovereignlab/harvest/weekly.py`, and their
+   tests — the implemented resolver, retrieval, adapter, dispatch, and append-only capture
+   boundaries.
 
 ## 4. External state for the new session
 
@@ -300,9 +313,10 @@ Implement in this order:
      implementation and trusted, digest-linked synthetic corpus;
    - **Complete.** `resolve_stes_as_of` through an adapter matching the exact flat arguments in
      `core-batch-001.jsonl`.
-4. Inject trusted manifests, ledgers, archive bytes, snapshot locations, and registries from the
-   harness. Reject model-supplied paths, raw bytes, manifests, ledgers, unknown tool names, extra
-   fields, or invalid arguments.
+4. **Complete.** Inject trusted manifests, ledgers, archive bytes, snapshot locations, and
+   registries from the harness through the frozen three-tool registry and explicit dispatcher.
+   Reject model-supplied paths, raw bytes, manifests, ledgers, unknown tool names, extra fields,
+   or invalid arguments.
 5. Put the planner/model boundary behind a protocol with scripted and recorded/replay
    implementations. All default tests are offline; do not make a live model call in this unit.
 6. Commit small deterministic trace fixtures that preserve enough plan, ordered call/result,
@@ -311,15 +325,18 @@ Implement in this order:
    invalid-call failures, deterministic replay, and trace round-tripping. Update
    `docs/PROJECT_STATUS.md` with the exact commands and result.
 
-The first four reviewable slices are complete: the typed execution/trace surface is frozen in
+The first five reviewable slices are complete: the typed execution/trace surface is frozen in
 `docs/project/09_typed_execution_trace_contract.md`; the trusted snapshot registry plus
 `read_snapshot_as_of` adapter are implemented under
 `docs/project/10_snapshot_reader_contract.md`; and the trusted synthetic retrieval registry plus
 typed `retrieve_temporal_documents` adapter are implemented under
 `docs/project/11_temporal_retrieval_adapter_contract.md`. The trusted historical registry plus
 flat `resolve_stes_as_of` adapter are implemented under
-`docs/project/12_stes_adapter_contract.md`. The next slice is only the callable dispatcher and
-frozen three-tool registry. Keep each later slice independently reviewable.
+`docs/project/12_stes_adapter_contract.md`; and the frozen three-tool callable registry plus
+explicit dispatcher are implemented under `docs/project/13_callable_dispatcher_contract.md`.
+The next slice is only the planner protocol with scripted and immutable recorded/replay
+implementations. Keep packet assembly, the offline executor, committed end-to-end traces, and live
+model integration in later independently reviewable slices.
 
 The completed STES adapter slice:
 

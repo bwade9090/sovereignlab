@@ -102,6 +102,8 @@ No network, provider read, secret, live model call, GPU operation, or paid opera
 ## Next independent slice
 
 The trusted historical registry and flat `resolve_stes_as_of` adapter are now complete under
-`docs/project/12_stes_adapter_contract.md`. Add only the callable dispatcher and frozen
-three-tool registry next. The planner implementations, packet assembly, offline executor, and
-committed end-to-end traces remain later reviewable slices.
+`docs/project/12_stes_adapter_contract.md`. The frozen three-tool registry and explicit dispatcher
+are complete under `docs/project/13_callable_dispatcher_contract.md`. Add only the planner
+protocol with scripted and immutable recorded/replay implementations next. Packet assembly, the
+offline executor, committed end-to-end traces, and live model integration remain later
+reviewable slices.

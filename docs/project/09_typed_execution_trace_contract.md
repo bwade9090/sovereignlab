@@ -14,7 +14,9 @@ have since shipped under `docs/project/10_snapshot_reader_contract.md`, followed
 synthetic retrieval registry and typed `retrieve_temporal_documents` adapter under
 `docs/project/11_temporal_retrieval_adapter_contract.md`. The trusted historical registry and flat
 `resolve_stes_as_of` adapter have now shipped under
-`docs/project/12_stes_adapter_contract.md`. Later execution components remain pending. This
+`docs/project/12_stes_adapter_contract.md`. The frozen three-tool callable registry and explicit
+dispatcher have also shipped under `docs/project/13_callable_dispatcher_contract.md`. The planner,
+packet assembler, offline executor, and committed end-to-end replay traces remain pending. This
 contract does not change `BenchmarkRecord` or `BenchmarkBundle` 2.0.0.
 
 The independent execution contract is version 1.0.0. Its Pydantic source is
@@ -155,8 +157,8 @@ the canonical trace.
 passage and document hash are explicitly synthetic; no Bank of Korea report body or extracted
 provider text is committed. Its data observation points to the already committed, owner-approved
 ECOS snapshot and preserves that snapshot's provenance. The environment IDs and repeated-letter
-hashes are deliberately illustrative synthetic values because the executor and registries are
-implemented in later slices; this file validates the contract and is not claimed as an
+hashes remain deliberately illustrative synthetic values rather than the real registry values
+that later slices have now frozen; this file validates the contract and is not claimed as an
 end-to-end replay artifact.
 
 ## Public JSON Schemas
@@ -179,6 +181,7 @@ any call.
 
 ## Next independent slice
 
-All three deterministic tool adapters and their trusted registries are complete. Add only the
-callable dispatcher and frozen three-tool registry next, before implementing the
-scripted/recorded planner boundary, packet assembler, and offline end-to-end executor.
+All three deterministic tool adapters, their trusted registries, and the frozen callable
+dispatcher are complete. Add only the planner protocol with scripted and immutable
+recorded/replay implementations next. Keep packet assembly, the offline executor, committed
+end-to-end traces, and live model integration in later reviewable slices.

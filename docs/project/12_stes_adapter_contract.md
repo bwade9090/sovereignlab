@@ -162,8 +162,7 @@ No network, provider read, secret, live model call, GPU operation, or paid opera
 
 ## Next independent slice
 
-Add the callable dispatcher and its frozen three-tool registry next. It must inject the committed
-snapshot, temporal-corpus, and STES registries from the harness, dispatch only the three typed call
-variants, reject unknown or mismatched calls, and expose real registry digests for later trace
-provenance. Keep planner implementations, packet assembly, the offline end-to-end executor, and
-committed replay traces in subsequent reviewable slices.
+The frozen three-tool callable registry and explicit dispatcher are complete under
+`docs/project/13_callable_dispatcher_contract.md`. Add only the planner protocol with scripted and
+immutable recorded/replay implementations next. Keep packet assembly, the offline executor,
+committed end-to-end traces, and live model integration in later reviewable slices.

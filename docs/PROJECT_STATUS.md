@@ -44,10 +44,14 @@
   deterministic replay, and selected-evidence-only results. The fourth implementation slice is
   now complete too: the digest-linked historical STES registry and typed flat adapter preserve
   ledger-first selection, the exact approved CLI rights boundary, selected-row-only
-  normalization, and sanitized GDP raw-evidence abstention. The callable dispatcher, planner
-  interface, packet assembler, offline end-to-end executor, and committed replay traces remain to
-  be implemented, so the minimal question-to-evidence-packet path is not yet shipped. The bounded
-  multi-step tool loop remains deferred to post-window v1.1.
+  normalization, and sanitized GDP raw-evidence abstention. The fifth implementation slice is now
+  complete: the frozen three-tool callable registry and explicit dispatcher bind the exact typed
+  schemas and committed dependency digests, independently replay every call through its frozen
+  reference adapter, compare the complete typed result, and revalidate the selected dependency
+  immediately before return. The planner interface, packet assembler, offline end-to-end executor,
+  and committed replay traces remain to be implemented, so the minimal
+  question-to-evidence-packet path is not yet shipped. The bounded multi-step tool loop remains
+  deferred to post-window v1.1.
 
 ## Approved baseline
 
@@ -340,6 +344,27 @@
   the frozen GDP shape abstains before resolution because public raw evidence is unavailable.
   Full details are in `docs/project/12_stes_adapter_contract.md`.
 
+- **Frozen callable registry/dispatcher — work unit C slice 5 (2026-07-30):**
+  `sovereignlab.execution` registers exactly `retrieve_temporal_documents`,
+  `resolve_stes_as_of`, and `read_snapshot_as_of` behind callable registry ID
+  `sovereignlab-deterministic-tool-registry-v1` and descriptor SHA-256
+  `cd00b5c543cffc53024f98b9fafa73ed3fecd519fde81a826d060c8af4d2ad91`.
+  Composite artifact registry `kor-rtd-execution-artifact-registry-v1` binds the committed
+  snapshot and STES registries behind descriptor SHA-256
+  `7b42027c1034789bd46a881fd186f66ba1ba1250d94639ff5eed6c89a3cc2293`;
+  the temporal corpus keeps its dedicated trace ID/digest pair. The dispatcher accepts only exact
+  validated call models, injects only harness-owned dependencies, rejects raw/unknown/mismatched
+  discriminators before execution, and never performs name-based callable lookup. Every call is
+  independently replayed against a fresh original-call copy through the frozen reference adapter;
+  the candidate receives a separate call copy, its call/result and selected dependency are
+  revalidated after execution, and the dependency is checked again immediately before return.
+  Temporary call or registry changes, result-comparison side effects, dependency
+  replacement/corruption, and non-success substitution fail closed with sanitized call-bound
+  errors. The prerequisite snapshot registry now also reparses exact built-in
+  manifest/catalog/archive bytes and models on every call, closing timestamp, byte-subclass,
+  binding, and call-ID mutation gaps. The public schema count remains 13. Full details are in
+  `docs/project/13_callable_dispatcher_contract.md`.
+
 - **Windows baseline reproducibility repair (2026-07-29):** Windows now installs the IANA timezone
   database through the platform-guarded `tzdata==2026.3` requirement, which makes the existing
   `Asia/Seoul` tests and the new snapshot capture cutoff deterministic on a standard Python 3.12
@@ -583,6 +608,20 @@ invalid-model exception, deleted-field, and call-ID findings; the final audit fo
 reproducible P0/P1. No network, provider read, secret, live model call, GPU operation, or paid
 operation occurred.
 
+Validated 2026-07-30 on Windows after snapshot call-time hardening and the frozen callable
+registry/dispatcher slice: Python 3.12.13; `python scripts/export_json_schemas.py` remained
+deterministic at 13 public contracts; `python -m ruff check --no-cache .` passed;
+`python -m ruff format --check .` passed (63 files); and
+`python -m pytest --cov=sovereignlab --cov-branch --cov-report=term-missing -p
+no:cacheprovider` passed all 976 tests with 100% SovereignLab statement/branch coverage (4,065
+statements, 1,370 branches). The 127 focused snapshot tests reached 100% snapshot
+registry/reader coverage (437 statements, 162 branches), and the 69 focused dispatcher tests
+reached 100% dispatcher coverage (326 statements, 98 branches). Independent review reproduced and
+closed exact-byte/model drift, call and selected-registry mutation/restore, result substitution,
+post-call dependency corruption/replacement, result-comparison side effects, and malformed
+discriminator findings; the final contract review found no remaining reproducible P1. No network,
+provider read, secret, live model call, GPU operation, or paid operation occurred.
+
 ## M1b verification spike record (2026-07-15)
 
 All network work below was read-only, key-free, and free of charge. Raw responses were written only
@@ -735,11 +774,12 @@ response bodies.
   Both records now carry the named reviewer and aware review timestamp in
   `data/benchmark/core/core-batch-002.jsonl`; the approved core count is 6/40.
 
-## Session-close snapshot (2026-07-30, eleventh close: trusted historical STES adapter slice)
+## Session-close snapshot (2026-07-30, twelfth close: frozen callable dispatcher slice)
 
-- Work unit C remains active, but its first four independently reviewable slices are complete.
+- Work unit C remains active, but its first five independently reviewable slices are complete.
   Execution contract 1.0.0, six new public schemas, the committed contract fixture, the Windows
-  baseline repair, and all three trusted deterministic tool registries/adapters validate.
+  baseline repair, all three trusted deterministic tool registries/adapters, and the frozen
+  callable dispatcher validate.
 - M2 remains active. The frozen matrix was not changed, exactly six records are owner-approved, and
   the other 34 slots are not authored.
 - All three deterministic tool adapters are implemented. `read_snapshot_as_of` covers the three
@@ -749,18 +789,19 @@ response bodies.
   authoring remains outside this work unit.
 - The contract fixture contains no real report text. No source artifact, provider body, secret,
   live model call, GPU operation, or paid operation was added.
-- The minimal typed function-calling path is not yet complete: the callable dispatcher, planner,
-  packet assembler, offline executor, and committed end-to-end replay traces do not yet exist.
+- The minimal typed function-calling path is not yet complete: the planner protocol,
+  scripted/immutable recorded-replay planner implementations, packet assembler, offline executor,
+  and committed end-to-end replay traces do not yet exist.
 
 ## Immediate next action (M2 — do these in order)
 
-1. Add the callable dispatcher and frozen three-tool registry. Inject the committed
-   snapshot/corpus/STES registries from the harness, reject unknown or mismatched calls, and expose
-   the real registry digests needed by later trace provenance.
-2. Add the scripted/recorded planner boundary, offline packet assembler and
-   executor with real registry/corpus digests and committed replay traces. Satisfy every route,
-   bilingual, cutoff, invalid-call, replay, and round-trip criterion in handoff §5 before calling
-   work unit C complete.
+1. Add only the planner protocol plus scripted and immutable recorded/replay implementations. The
+   planner must emit the already-frozen `RoutePlan` and typed call models without executing tools,
+   reading providers, or accepting model-supplied registries/artifacts.
+2. In later reviewable slices, add the offline packet assembler and executor with real
+   registry/corpus digests and committed replay traces. Satisfy every route, bilingual, cutoff,
+   invalid-call, replay, and round-trip criterion in handoff §5 before calling work unit C
+   complete.
 3. Keep live model calls, additional source ingestion, new benchmark authoring, and the bounded
    v1.1 loop outside this unit. Any later live call requires its own smoke test, authorization, and
    spend-ledger entry.
@@ -845,6 +886,7 @@ complete.
 | 2026-07-29 | Trusted latest-only snapshot registry/reader slice | $0.00 | Offline reuse of the three existing committed captures, tests/specification, and subscription review; no network, provider request, secret, live model API, GPU, or paid call |
 | 2026-07-29 | Trusted temporal-document registry/adapter slice | $0.00 | Offline synthetic corpus, typed adapter, tests/specification, and subscription review; no network, provider read, secret, live model API, GPU, or paid call |
 | 2026-07-30 | Trusted historical STES registry/adapter slice | $0.00 | Offline reuse of committed public artifacts, typed adapter, tests/specification, and subscription red-team review; no network, provider read, secret, live model API, GPU, or paid call |
+| 2026-07-30 | Frozen callable registry/dispatcher + snapshot call-time hardening | $0.00 | Offline committed artifacts, typed dispatch/replay tests, specification, and subscription review; no network, provider read, secret, live model API, GPU, or paid call |
 
 **Cumulative external spend: $0.23584524099715054 / $100.00**
 
@@ -869,13 +911,16 @@ Read in this order, in full, before changing anything:
 9. `docs/project/08_temporal_document_retrieval.md` — the implemented filter-before-scoring
    document retrieval boundary.
 10. `docs/project/09_typed_execution_trace_contract.md` — the frozen execution contract,
-    snapshot/STES flat arguments, replay provenance, and exact next dispatcher boundary.
+    snapshot/STES flat arguments, replay provenance, and trace invariants.
 11. `docs/project/10_snapshot_reader_contract.md` — the implemented trusted snapshot registry,
     deterministic reader, provider parsers, result taxonomy, and execution boundary.
 12. `docs/project/11_temporal_retrieval_adapter_contract.md` — the implemented trusted synthetic
     corpus registry, typed adapter, replay digest, and result validation.
 13. `docs/project/12_stes_adapter_contract.md` — the implemented trusted historical registry,
-    XML/ledger/catalog/archive joins, flat typed adapter, and exact next dispatcher boundary.
+    XML/ledger/catalog/archive joins, flat typed adapter, and dispatcher handoff.
+14. `docs/project/13_callable_dispatcher_contract.md` — the frozen three-tool callable registry,
+    composite replay provenance, explicit dispatcher, independent reference replay, and exact next
+    planner boundary.
 
 Then start with "Immediate next action" item 1. The structural matrix and first six records are
 owner-approved; the other 34 slots are neither authored nor approved. The synthetic retrieval
