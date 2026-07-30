@@ -29,18 +29,51 @@ This repository is between work units and is ready to continue on the Windows wo
 - Not implemented yet: the planner implementations, packet assembler, offline end-to-end
   executor, committed end-to-end replay traces, or live model integration. The contract fixture
   is not an end-to-end replay result.
+- No planner or recording package/path exists under `src/`, `tests/`, or `data/` yet. Do not infer
+  partial implementation from the already-frozen planner-related schema models.
 - The bounded tool loop is not part of this milestone; ADR 0008 defers it to v1.1.
 
 The authoritative live checkpoint and acceptance criteria are in
 `docs/project/04_macbook_handoff.md`. The filename is retained for history, but the document is now
 the cross-machine Windows continuation handoff.
 
+## Exact next slice — planner boundary only
+
+The next reviewable outcome is an entirely offline planner boundary. Keep it separate from tool
+execution and later assembly work.
+
+- The protocol consumes an already validated `ExecutionRequest` and produces the already frozen
+  `RoutePlan` 1.0.0 with exact typed calls. There is no existing `PlannerResult`,
+  `PlannerOutput`, provider-envelope, or recording-registry public model; do not invent one in the
+  onboarding contract.
+- Preserve the four route shapes and unique call IDs. Before any dispatch, every call's `as_of`
+  must equal `ExecutionRequest.effective_as_of`; a document call must also preserve the request's
+  exact question and language. `RoutePlan` alone does not currently enforce those cross-model
+  bindings.
+- Implement only the existing planner modes: `scripted`, `recorded`, and `replay`. Follow
+  `PlannerProvenance`: `recording_id` and `output_sha256` appear together; scripted mode cannot
+  claim a `model_id`; recorded/replay modes require complete recording metadata and `model_id`.
+- Recorded/replay behavior must resolve immutable harness-owned candidate bytes, verify their
+  exact SHA-256, and validate them as `RoutePlan`. Preserve digest-linked metadata even when the
+  candidate is invalid so a later plan-validation failure trace can be audited. The exact internal
+  method name, return wrapper, recording file format, and registry ID are not frozen yet; keep
+  them private or record a focused specification if the choice becomes consequential.
+- Focused acceptance covers all four routes, Korean/English requests, explicit/implicit cutoff
+  cases, deterministic replay, provenance rules, and fail-closed rejection of missing/tampered
+  recordings, malformed or extra fields, unknown/mismatched tools, duplicate call IDs,
+  inconsistent route shapes, and request-binding drift.
+- Stop after the planner slice and a green full baseline. Do not call the dispatcher or a
+  provider, assemble packets, create the offline executor or end-to-end traces, add a live model
+  call, change sources/benchmark records/public schemas, or start the deferred bounded loop.
+
 ## New-session onboarding procedure
 
 Before editing:
 
-1. From the repository root, fast-forward `main` from `origin` and confirm the worktree is clean.
-   If it is dirty or diverged, preserve the changes and investigate; do not reset or overwrite.
+1. From the repository root, run `git status --short --branch` **before** any switch or pull. If
+   the worktree is dirty, preserve the changes and investigate; do not switch, pull, reset, or
+   overwrite. Only from a clean worktree, switch to `main`, fast-forward from `origin`, and confirm
+   the worktree is still clean and aligned.
 2. Read the authority files below in order. Do not rely on a prior chat transcript.
 3. Create or verify the machine-local Python 3.12 environment and run the full offline baseline
    under "Local setup and required checks."
@@ -63,18 +96,29 @@ Before editing:
    and next-unit acceptance criteria (legacy filename; skip files it lists that you already read
    this session).
 5. `docs/discovery/01_concept_upgrade_proposal.md` — background rationale for v2: verified data facts, judged alternatives, risk register.
-6. `docs/project/09_typed_execution_trace_contract.md` — frozen execution surface, flat tool
+6. `docs/project/05_evidence_contract_2_0_migration.md` — implemented evidence/rights contract
+   that the execution path must not change.
+7. `docs/project/07_core_authoring_matrix.md` — approved 40-record allocation, 6/40 review state,
+   and frozen human-review boundary.
+8. `docs/project/08_temporal_document_retrieval.md` — implemented cutoff-before-scoring retrieval
+   contract.
+9. `docs/project/09_typed_execution_trace_contract.md` — frozen execution surface, flat tool
    arguments, replay provenance, and trace invariants.
-7. `docs/project/10_snapshot_reader_contract.md` — trusted latest-only registry, cutoff selection,
+10. `docs/project/10_snapshot_reader_contract.md` — trusted latest-only registry, cutoff selection,
    provider parsers, and failure taxonomy.
-8. `docs/project/11_temporal_retrieval_adapter_contract.md` — trusted synthetic corpus, typed
+11. `docs/project/11_temporal_retrieval_adapter_contract.md` — trusted synthetic corpus, typed
    adapter, replay digest, and failure taxonomy.
-9. `docs/project/12_stes_adapter_contract.md` — trusted historical registry, ledger/rights/archive
+12. `docs/project/12_stes_adapter_contract.md` — trusted historical registry, ledger/rights/archive
    joins and flat typed adapter.
-10. `docs/project/13_callable_dispatcher_contract.md` — frozen three-tool registry, explicit
+13. `docs/project/13_callable_dispatcher_contract.md` — frozen three-tool registry, explicit
     dispatcher, composite replay provenance, snapshot call-time hardening, and next planner
     boundary.
-11. The closest additional `AGENTS.md`, if a subdirectory adds one later.
+14. The closest additional `AGENTS.md`, if a subdirectory adds one later.
+
+For the exact planner slice, also read `src/sovereignlab/schemas/execution.py`,
+`tests/schemas/test_execution.py`, `src/sovereignlab/execution/dispatcher.py`, and
+`tests/execution/test_dispatcher.py`. The first pair contains the request/plan/provenance
+invariants to reuse; the second pair is the completed boundary that this slice must not invoke.
 
 The charter is the scope authority. Do not expand sources, agents, UI, or infrastructure before the current milestone gate passes.
 
@@ -86,6 +130,8 @@ The charter is the scope authority. Do not expand sources, agents, UI, or infras
 - Add or update tests in the same change as behavior.
 - Run the relevant offline checks before committing and record the commands in the status document.
 - Use conventional commit prefixes: `docs:`, `chore:`, `feat:`, `fix:`, `test:`, `refactor:`, `eval:`.
+- After green checks, commit in semantic units, push the current branch to `origin`, and confirm
+  the local/remote commit IDs match and the worktree is clean.
 - Do not rewrite or discard unrelated user changes.
 
 ## Evidence and evaluation rules
@@ -148,6 +194,7 @@ Development happens on multiple machines; `.venv` is machine-local and must be r
 Windows PowerShell:
 
 ```powershell
+git status --short --branch
 git switch main
 git pull --ff-only origin main
 git status --short --branch
@@ -170,6 +217,7 @@ git diff --exit-code
 macOS or Linux:
 
 ```bash
+git status --short --branch
 git switch main
 git pull --ff-only origin main
 git status --short --branch
@@ -202,7 +250,7 @@ in `docs/PROJECT_STATUS.md`.
 - `src/sovereignlab/retrieval/` — cutoff-safe lexical retrieval, trusted synthetic corpus, and
   typed document adapter.
 - `src/sovereignlab/execution/` — frozen three-tool callable registry and explicit deterministic
-  dispatcher.
+  dispatcher. No planner implementation or recording path exists yet.
 - `tests/` — offline tests; network calls must be mocked or replayed unless explicitly marked.
 - `data/` — public benchmark and metadata policy; ignored raw/interim material. The KOR-RTD archive layer (edition consolidations, harvester snapshots, manifests) lives here.
 - `artifacts/` — generated outputs policy; generated content is ignored by default.

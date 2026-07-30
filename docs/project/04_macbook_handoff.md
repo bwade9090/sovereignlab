@@ -1,8 +1,8 @@
 # Cross-machine continuation handoff
 
 - Legacy filename: retained so existing links and onboarding instructions do not break.
-- Prepared: 2026-07-16; refreshed 2026-07-30 after the Windows continuation (twelfth refresh:
-  frozen three-tool callable registry/dispatcher slice complete)
+- Prepared: 2026-07-16; refreshed 2026-07-30 after the Windows continuation (thirteenth refresh:
+  post-dispatcher round closed, planner-only slice ready)
 - Target continuation machine: Windows workstation
 - Authority: charter v2.5; accepted ADRs 0001–0009
 - Branch to continue: `main` from `origin`
@@ -10,6 +10,8 @@
 - Session state: the first five work-unit-C slices are complete and reviewable; all three
   deterministic runtime adapters and the explicit dispatcher are complete, while no planner or
   later execution slice is partially implemented
+- Completed functional checkpoint: `834065e` (`feat: add frozen callable dispatcher`).
+- Dispatcher documentation checkpoint: `dd6381a` (`docs: record callable dispatcher checkpoint`).
 - Historical clean `origin/main` baseline before the Windows work-unit-C slices: `6fe447b`
   (`docs: prepare Windows continuation handoff`). Preserve the current reviewable worktree; do not
   reset to the historical checkpoint.
@@ -19,8 +21,9 @@
 The repository is the source of truth; do not rely on a prior chat transcript or any uncommitted
 state from the Mac. At the beginning of the Windows session:
 
-1. Fetch and fast-forward `main`, then confirm `git status --short --branch` is clean and aligned
-   with `origin/main`.
+1. Run `git status --short --branch` before any switch or pull. If any path is dirty, stop and
+   preserve/investigate it. Only from a clean worktree, switch to `main`, fast-forward from
+   `origin`, and confirm the final status is clean and aligned.
 2. Read the files in section 3 in order, in full.
 3. Create or verify the Windows-local `.venv` and run the PowerShell baseline in section 2 before
    changing files.
@@ -173,6 +176,7 @@ If local `main` has diverged from `origin/main`, stop rather than rewriting hist
 in PowerShell. Calling the venv interpreter directly avoids activation-policy differences:
 
 ```powershell
+git status --short --branch
 git switch main
 git pull --ff-only origin main
 git status --short --branch
@@ -228,13 +232,15 @@ do not remove it merely because another operating system supplies an IANA timezo
 13. `docs/project/13_callable_dispatcher_contract.md` — the frozen three-tool registry, explicit
     dispatcher, composite replay provenance, snapshot call-time hardening, and exact next planner
     boundary.
-14. `docs/discovery/03_week1_verification_log.md` — the verified example values the resolver must
-    reproduce.
-15. `src/sovereignlab/vintage/resolver.py`, `src/sovereignlab/retrieval/temporal.py`,
-   `src/sovereignlab/retrieval/registry.py`, `src/sovereignlab/retrieval/adapter.py`,
-   `src/sovereignlab/execution/dispatcher.py`, `src/sovereignlab/harvest/weekly.py`, and their
-   tests — the implemented resolver, retrieval, adapter, dispatch, and append-only capture
-   boundaries.
+14. `src/sovereignlab/schemas/execution.py` and `tests/schemas/test_execution.py` — the exact
+    `ExecutionRequest`, `RoutePlan`, planner provenance, request-binding, and failure invariants
+    the next planner slice must reuse.
+15. `src/sovereignlab/execution/dispatcher.py` and `tests/execution/test_dispatcher.py` — the
+    completed execution boundary the planner slice must not invoke.
+
+Only when changing source/resolver/harvester behavior, also read
+`docs/discovery/03_week1_verification_log.md` and the relevant resolver, retrieval, registry,
+adapter, or harvester source/tests. They are not prerequisites for the planner-only slice.
 
 ## 4. External state for the new session
 
@@ -299,9 +305,11 @@ machine-readable trace under ADR 0008.
 
 Implement in this order:
 
-1. **Complete.** Read ADR 0008, charter §§3/6/7, the frozen benchmark models, and the existing resolver,
-   retriever, harvester snapshot formats, and tests. Confirm that no router/model-call/replay
-   package or snapshot-read tool exists before adding one.
+1. **Complete.** Read ADR 0008, charter §§3/6/7, the frozen benchmark models, and the existing
+   resolver, retriever, harvester snapshot formats, and tests. The original discovery recorded
+   that no router/model-call/replay package or snapshot-read tool existed at that time; the
+   snapshot reader, all three adapters, and dispatcher now exist, while no planner/recording path
+   exists.
 2. **Complete.** Freeze strict typed contracts for the route plan, tool calls/results, evidence packet, and
    trace, plus the latest-only snapshot reader's flat gold-argument convention. Derive callable
    JSON schemas from Pydantic. Do not change `BenchmarkRecord` or `BenchmarkBundle` 2.0.0. Record
@@ -317,13 +325,37 @@ Implement in this order:
    registries from the harness through the frozen three-tool registry and explicit dispatcher.
    Reject model-supplied paths, raw bytes, manifests, ledgers, unknown tool names, extra fields,
    or invalid arguments.
-5. Put the planner/model boundary behind a protocol with scripted and recorded/replay
-   implementations. All default tests are offline; do not make a live model call in this unit.
-6. Commit small deterministic trace fixtures that preserve enough plan, ordered call/result,
-   provenance, abstention/error, and output information to replay and audit the execution.
-7. Test all four routes, all three tool adapters, bilingual input, `as_of` cutoff enforcement,
+5. **Exact next slice.** Put the planner boundary behind a one-shot protocol with scripted and
+   immutable recorded/replay implementations:
+   - consume one already validated `ExecutionRequest`; the harness fixes `effective_as_of` before
+     invocation and owns callable schemas and recordings;
+   - yield a Pydantic-validated `RoutePlan` 1.0.0 containing only the three exact typed call
+     variants, and expose `PlannerProvenance`-compatible metadata without inventing a public
+     `PlannerResult`/`PlannerOutput`;
+   - bind every call cutoff to `effective_as_of` and copy document question/language exactly;
+   - keep scripted mode deterministic/offline with no `model_id`; resolve recorded/replay
+     candidates through an opaque harness-owned `recording_id`, verify the SHA-256 of the exact
+     candidate bytes, require complete recording metadata plus `model_id`, and never call a
+     provider;
+   - fail before dispatch on missing/tampered recordings, malformed or extra fields, unknown or
+     mismatched tools, duplicate IDs, inconsistent route shape, or request-binding drift, while
+     preserving digest-linked invalid-candidate metadata for a later plan-validation trace; and
+   - cover four routes, Korean/English, explicit/implicit cutoff, provenance, deterministic
+     model-equivalent replay from exact-byte-verified recordings, and mutation cases with focused
+     tests, then run the full baseline.
+   Reuse the existing `route-plan-v1` and three argument schemas. Do not add a public planner or
+   recording schema unless a newly recorded focused decision proves it necessary. Commit and stop
+   after this slice.
+6. In a later reviewable slice, add only the deterministic evidence-packet assembler over typed
+   plan/results.
+7. In a later reviewable slice, add the offline executor that coordinates the validated planner,
+   dispatcher, and packet assembler with real environment provenance.
+8. Only after steps 6–7, commit small end-to-end trace fixtures with real registry/corpus digests
+   and enough plan, ordered call/result, provenance, abstention/error, and output information for
+   replay and audit. The existing contract fixture is not such a trace.
+9. Test all four routes, all three tool adapters, bilingual input, `as_of` cutoff enforcement,
    invalid-call failures, deterministic replay, and trace round-tripping. Update
-   `docs/PROJECT_STATUS.md` with the exact commands and result.
+   `docs/PROJECT_STATUS.md` with the exact commands and result before calling work unit C complete.
 
 The first five reviewable slices are complete: the typed execution/trace surface is frozen in
 `docs/project/09_typed_execution_trace_contract.md`; the trusted snapshot registry plus

@@ -622,6 +622,15 @@ post-call dependency corruption/replacement, result-comparison side effects, and
 discriminator findings; the final contract review found no remaining reproducible P1. No network,
 provider read, secret, live model call, GPU operation, or paid operation occurred.
 
+Revalidated 2026-07-30 after the post-dispatcher onboarding finalization:
+`python scripts/export_json_schemas.py` reproduced all 13 public contracts;
+`python -m ruff check --no-cache .` and `python -m ruff format --check .` passed across 63 Python
+files; `python -m pytest --cov=sovereignlab --cov-branch --cov-report=term-missing -p
+no:cacheprovider` passed all 976 tests with 100% SovereignLab statement/branch coverage (4,065
+statements, 1,370 branches); and `git diff --check` passed. This close changed documentation only;
+no source, test, schema behavior, source/provider read, secret, live model call, GPU operation, or
+paid operation was added.
+
 ## M1b verification spike record (2026-07-15)
 
 All network work below was read-only, key-free, and free of charge. Raw responses were written only
@@ -774,7 +783,7 @@ response bodies.
   Both records now carry the named reviewer and aware review timestamp in
   `data/benchmark/core/core-batch-002.jsonl`; the approved core count is 6/40.
 
-## Session-close snapshot (2026-07-30, twelfth close: frozen callable dispatcher slice)
+## Session-close snapshot (2026-07-30, thirteenth close: post-dispatcher onboarding finalized)
 
 - Work unit C remains active, but its first five independently reviewable slices are complete.
   Execution contract 1.0.0, six new public schemas, the committed contract fixture, the Windows
@@ -792,17 +801,26 @@ response bodies.
 - The minimal typed function-calling path is not yet complete: the planner protocol,
   scripted/immutable recorded-replay planner implementations, packet assembler, offline executor,
   and committed end-to-end replay traces do not yet exist.
+- No planner or recording package/path exists under `src/`, `tests/`, or `data/`; the next session
+  starts from the frozen schema models and completed dispatcher rather than from partial planner
+  code.
 
 ## Immediate next action (M2 — do these in order)
 
 1. Add only the planner protocol plus scripted and immutable recorded/replay implementations. The
-   planner must emit the already-frozen `RoutePlan` and typed call models without executing tools,
-   reading providers, or accepting model-supplied registries/artifacts.
-2. In later reviewable slices, add the offline packet assembler and executor with real
-   registry/corpus digests and committed replay traces. Satisfy every route, bilingual, cutoff,
-   invalid-call, replay, and round-trip criterion in handoff §5 before calling work unit C
-   complete.
-3. Keep live model calls, additional source ingestion, new benchmark authoring, and the bounded
+   planner consumes a validated `ExecutionRequest`, yields a validated `RoutePlan` 1.0.0, exposes
+   `PlannerProvenance`-compatible metadata, binds typed calls back to the request, verifies the
+   exact bytes/digest of harness-owned recordings, and fails before dispatch on invalid or
+   tampered candidates. Reuse the existing public schemas; do not invent a public planner result
+   or recording schema. Stop after focused tests and the full baseline.
+2. In a later reviewable slice, add only the deterministic evidence-packet assembler over typed
+   plans/results.
+3. In a later reviewable slice, add the offline executor that coordinates the validated planner,
+   completed dispatcher, and packet assembler with real registry/corpus provenance.
+4. Only after items 2–3, commit real-digest end-to-end replay traces and satisfy every route,
+   bilingual, cutoff, invalid-call, replay, and round-trip criterion in handoff §5 before calling
+   work unit C complete. The existing contract fixture is not an end-to-end replay trace.
+5. Keep live model calls, additional source ingestion, new benchmark authoring, and the bounded
    v1.1 loop outside this unit. Any later live call requires its own smoke test, authorization, and
    spend-ledger entry.
 
@@ -887,6 +905,7 @@ complete.
 | 2026-07-29 | Trusted temporal-document registry/adapter slice | $0.00 | Offline synthetic corpus, typed adapter, tests/specification, and subscription review; no network, provider read, secret, live model API, GPU, or paid call |
 | 2026-07-30 | Trusted historical STES registry/adapter slice | $0.00 | Offline reuse of committed public artifacts, typed adapter, tests/specification, and subscription red-team review; no network, provider read, secret, live model API, GPU, or paid call |
 | 2026-07-30 | Frozen callable registry/dispatcher + snapshot call-time hardening | $0.00 | Offline committed artifacts, typed dispatch/replay tests, specification, and subscription review; no network, provider read, secret, live model API, GPU, or paid call |
+| 2026-07-30 | Post-dispatcher session-close onboarding finalization | $0.00 | Documentation and offline consistency review only; no source/provider read, secret, live model API, GPU, or paid call |
 
 **Cumulative external spend: $0.23584524099715054 / $100.00**
 
@@ -921,6 +940,10 @@ Read in this order, in full, before changing anything:
 14. `docs/project/13_callable_dispatcher_contract.md` — the frozen three-tool callable registry,
     composite replay provenance, explicit dispatcher, independent reference replay, and exact next
     planner boundary.
+15. `src/sovereignlab/schemas/execution.py` and `tests/schemas/test_execution.py` — frozen
+    request/plan/provenance and request-binding invariants for the next planner slice.
+16. `src/sovereignlab/execution/dispatcher.py` and `tests/execution/test_dispatcher.py` — the
+    completed execution boundary the planner slice must not invoke.
 
 Then start with "Immediate next action" item 1. The structural matrix and first six records are
 owner-approved; the other 34 slots are neither authored nor approved. The synthetic retrieval
