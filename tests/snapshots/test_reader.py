@@ -15,6 +15,7 @@ import sovereignlab.snapshots.reader as reader_module
 import sovereignlab.snapshots.registry as registry_module
 from sovereignlab.schemas import (
     RedistributionStatus,
+    RightsCatalog,
     SnapshotAsOfArguments,
     SnapshotAsOfCall,
     SourceKind,
@@ -189,6 +190,15 @@ def _assert_abstention(
     assert result.error is None
     assert result.abstention is not None
     assert result.abstention.reason_code == reason.value
+
+
+def _assert_registry_error(result: Any, call_id: str) -> None:
+    assert result.status is ToolOutcomeStatus.ERROR
+    assert result.payload is None
+    assert result.abstention is None
+    assert result.error is not None
+    assert result.error.code == "snapshot_registry_misconfigured"
+    assert result.error.call_id == call_id
 
 
 def test_committed_registry_loads_only_the_three_explicit_approved_scopes(
@@ -688,6 +698,212 @@ def test_nonbytes_registry_payload_is_a_sanitized_call_bound_error(
     assert result.error is not None
     assert result.error.call_id == call.call_id
     assert result.error.code == "snapshot_registry_misconfigured"
+
+
+def test_call_time_revalidation_rejects_manifest_model_timestamp_mutation(
+    committed_registry: SnapshotRegistry,
+) -> None:
+    base = _artifact_for(committed_registry, ECOS_GDP_BINDING)
+    manifest = SourceManifest.model_validate_json(base.manifest_bytes)
+    artifact = SnapshotArtifact(
+        manifest=manifest,
+        manifest_bytes=base.manifest_bytes,
+        archive_bytes=base.archive_bytes,
+    )
+    registry = _registry(committed_registry, ECOS_GDP_BINDING, (artifact,))
+    object.__setattr__(manifest, "published_on", date(2026, 7, 16))
+    object.__setattr__(manifest, "retrieved_at", datetime(2026, 7, 16, tzinfo=UTC))
+    call = _call(
+        ECOS_GDP_BINDING,
+        "2026Q1",
+        as_of=date(2026, 7, 16),
+        call_id="mutated-manifest-call",
+    )
+
+    result = read_snapshot_as_of(call=call, registry=registry)
+
+    _assert_registry_error(result, call.call_id)
+    assert "596692.8" not in result.model_dump_json()
+    with pytest.raises(ValueError, match="manifest model differs"):
+        _ = registry.descriptor_sha256
+
+
+def test_call_time_revalidation_rejects_catalog_chain_model_mutation(
+    committed_registry: SnapshotRegistry,
+) -> None:
+    catalogs = tuple(
+        SnapshotCatalogArtifact(
+            catalog=type(artifact.catalog).model_validate_json(artifact.catalog_bytes),
+            catalog_bytes=artifact.catalog_bytes,
+        )
+        for artifact in committed_registry.catalog_artifacts
+    )
+    registry = _registry(
+        committed_registry,
+        ECOS_GDP_BINDING,
+        (_artifact_for(committed_registry, ECOS_GDP_BINDING),),
+        catalogs=catalogs,
+    )
+    object.__setattr__(catalogs[-1].catalog, "supersedes_catalog_id", None)
+    call = _call(
+        ECOS_GDP_BINDING,
+        "2026Q1",
+        call_id="mutated-catalog-chain-call",
+    )
+
+    result = read_snapshot_as_of(call=call, registry=registry)
+
+    _assert_registry_error(result, call.call_id)
+    with pytest.raises(ValueError, match="catalog model differs"):
+        _ = registry.descriptor_sha256
+
+
+def test_call_time_revalidation_rejects_binding_mutation(
+    committed_registry: SnapshotRegistry,
+) -> None:
+    binding = replace(ECOS_GDP_BINDING)
+    registry = SnapshotRegistry(
+        registry_id="mutable-binding-registry",
+        entries=(
+            SnapshotRegistryEntry(
+                binding=binding,
+                artifacts=(_artifact_for(committed_registry, ECOS_GDP_BINDING),),
+            ),
+        ),
+        catalog_artifacts=committed_registry.catalog_artifacts,
+    )
+    object.__setattr__(binding, "raw_unit", "forged-unit")
+    call = _call(
+        ECOS_GDP_BINDING,
+        "2026Q1",
+        call_id="mutated-binding-call",
+    )
+
+    result = read_snapshot_as_of(call=call, registry=registry)
+
+    _assert_registry_error(result, call.call_id)
+
+
+@pytest.mark.parametrize(
+    "case",
+    (
+        "registry-id",
+        "entries-container",
+        "catalog-container",
+        "entry-type",
+        "binding-type",
+        "artifact-container",
+        "artifact-type",
+        "catalog-type",
+    ),
+)
+def test_call_time_revalidation_rejects_mutated_registry_structure(
+    committed_registry: SnapshotRegistry,
+    case: str,
+) -> None:
+    entry = SnapshotRegistryEntry(
+        binding=replace(ECOS_GDP_BINDING),
+        artifacts=(_artifact_for(committed_registry, ECOS_GDP_BINDING),),
+    )
+    registry = SnapshotRegistry(
+        registry_id="mutable-structure-registry",
+        entries=(entry,),
+        catalog_artifacts=committed_registry.catalog_artifacts,
+    )
+    if case == "registry-id":
+        object.__setattr__(registry, "registry_id", "")
+    elif case == "entries-container":
+        object.__setattr__(registry, "entries", [entry])
+    elif case == "catalog-container":
+        object.__setattr__(
+            registry,
+            "catalog_artifacts",
+            list(registry.catalog_artifacts),
+        )
+    elif case == "entry-type":
+        object.__setattr__(registry, "entries", (object(),))
+    elif case == "binding-type":
+        object.__setattr__(entry, "binding", object())
+    elif case == "artifact-container":
+        object.__setattr__(entry, "artifacts", list(entry.artifacts))
+    elif case == "artifact-type":
+        object.__setattr__(entry, "artifacts", (object(),))
+    else:
+        object.__setattr__(registry, "catalog_artifacts", (object(),))
+    call = _call(
+        ECOS_GDP_BINDING,
+        "2026Q1",
+        call_id=f"mutated-structure-{case}",
+    )
+
+    result = read_snapshot_as_of(call=call, registry=registry)
+
+    _assert_registry_error(result, call.call_id)
+
+
+def test_call_time_revalidation_rejects_decode_overriding_archive_bytes(
+    committed_registry: SnapshotRegistry,
+) -> None:
+    class DeceptiveBytes(bytes):
+        def decode(self, *args: Any, **kwargs: Any) -> str:
+            return (
+                super()
+                .decode(*args, **kwargs)
+                .replace(
+                    '"DATA_VALUE":"596692.8"',
+                    '"DATA_VALUE":"999999999.9"',
+                )
+            )
+
+    base = _artifact_for(committed_registry, ECOS_GDP_BINDING)
+    artifact = SnapshotArtifact(
+        manifest=SourceManifest.model_validate_json(base.manifest_bytes),
+        manifest_bytes=base.manifest_bytes,
+        archive_bytes=base.archive_bytes,
+    )
+    registry = _registry(committed_registry, ECOS_GDP_BINDING, (artifact,))
+    object.__setattr__(artifact, "archive_bytes", DeceptiveBytes(base.archive_bytes))
+    call = _call(
+        ECOS_GDP_BINDING,
+        "2026Q1",
+        call_id="deceptive-bytes-call",
+    )
+
+    result = read_snapshot_as_of(call=call, registry=registry)
+
+    _assert_registry_error(result, call.call_id)
+    assert "999999999.9" not in result.model_dump_json()
+    with pytest.raises(ValueError, match="archive bytes"):
+        _ = registry.descriptor_sha256
+
+
+def test_call_id_is_copied_before_downstream_execution(
+    committed_registry: SnapshotRegistry,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    call = _call(
+        ECOS_GDP_BINDING,
+        "2026Q1",
+        call_id="original-snapshot-call-id",
+    )
+    original_parser = reader_module._selected_raw_value
+
+    def mutate_call_then_parse(
+        payload: bytes,
+        binding: SnapshotSeriesBinding,
+        period: str,
+    ) -> str | SnapshotAbstentionReason:
+        object.__setattr__(call, "call_id", "mutated-snapshot-call-id")
+        return original_parser(payload, binding, period)
+
+    monkeypatch.setattr(reader_module, "_selected_raw_value", mutate_call_then_parse)
+
+    result = read_snapshot_as_of(call=call, registry=committed_registry)
+
+    assert call.call_id == "mutated-snapshot-call-id"
+    assert result.status is ToolOutcomeStatus.SUCCESS
+    assert result.call_id == "original-snapshot-call-id"
+    assert result.error is None
 
 
 def test_missing_scope_binding_is_a_sanitized_registry_error(
@@ -1238,6 +1454,102 @@ def test_registry_artifacts_reject_model_byte_mismatches(
             catalog=catalog.catalog,
             catalog_bytes=other_catalog.catalog_bytes,
         )
+
+
+def test_registry_artifacts_require_exact_model_and_builtin_byte_types(
+    committed_registry: SnapshotRegistry,
+) -> None:
+    class DerivedSourceManifest(SourceManifest):
+        pass
+
+    class DerivedRightsCatalog(RightsCatalog):
+        pass
+
+    class DerivedBytes(bytes):
+        pass
+
+    source = committed_registry.entries[0].artifacts[0]
+    catalog = committed_registry.catalog_artifacts[0]
+    with pytest.raises(ValueError, match="exact strict model"):
+        SnapshotArtifact(
+            manifest=DerivedSourceManifest.model_validate_json(source.manifest_bytes),
+            manifest_bytes=source.manifest_bytes,
+            archive_bytes=source.archive_bytes,
+        )
+    with pytest.raises(ValueError, match="exact strict model"):
+        SnapshotCatalogArtifact(
+            catalog=DerivedRightsCatalog.model_validate_json(catalog.catalog_bytes),
+            catalog_bytes=catalog.catalog_bytes,
+        )
+    with pytest.raises(ValueError, match="manifest bytes"):
+        SnapshotArtifact(
+            manifest=source.manifest,
+            manifest_bytes=DerivedBytes(source.manifest_bytes),
+            archive_bytes=source.archive_bytes,
+        )
+    with pytest.raises(ValueError, match="archive bytes"):
+        SnapshotArtifact(
+            manifest=source.manifest,
+            manifest_bytes=source.manifest_bytes,
+            archive_bytes=DerivedBytes(source.archive_bytes),
+        )
+    with pytest.raises(ValueError, match="catalog bytes"):
+        SnapshotCatalogArtifact(
+            catalog=catalog.catalog,
+            catalog_bytes=DerivedBytes(catalog.catalog_bytes),
+        )
+
+
+def test_runtime_artifact_validation_rechecks_every_exact_type(
+    committed_registry: SnapshotRegistry,
+) -> None:
+    class DerivedBytes(bytes):
+        pass
+
+    source = committed_registry.entries[0].artifacts[0]
+    catalog = committed_registry.catalog_artifacts[0]
+
+    wrong_manifest = SnapshotArtifact(
+        manifest=source.manifest,
+        manifest_bytes=source.manifest_bytes,
+        archive_bytes=source.archive_bytes,
+    )
+    object.__setattr__(wrong_manifest, "manifest", object())
+    with pytest.raises(ValueError, match="exact strict model"):
+        wrong_manifest.validated()
+
+    wrong_manifest_bytes = SnapshotArtifact(
+        manifest=source.manifest,
+        manifest_bytes=source.manifest_bytes,
+        archive_bytes=source.archive_bytes,
+    )
+    object.__setattr__(
+        wrong_manifest_bytes,
+        "manifest_bytes",
+        DerivedBytes(source.manifest_bytes),
+    )
+    with pytest.raises(ValueError, match="manifest bytes"):
+        wrong_manifest_bytes.validated()
+
+    wrong_catalog = SnapshotCatalogArtifact(
+        catalog=catalog.catalog,
+        catalog_bytes=catalog.catalog_bytes,
+    )
+    object.__setattr__(wrong_catalog, "catalog", object())
+    with pytest.raises(ValueError, match="exact strict model"):
+        wrong_catalog.validated()
+
+    wrong_catalog_bytes = SnapshotCatalogArtifact(
+        catalog=catalog.catalog,
+        catalog_bytes=catalog.catalog_bytes,
+    )
+    object.__setattr__(
+        wrong_catalog_bytes,
+        "catalog_bytes",
+        DerivedBytes(catalog.catalog_bytes),
+    )
+    with pytest.raises(ValueError, match="catalog bytes"):
+        wrong_catalog_bytes.validated()
 
 
 def test_generic_loader_matches_the_committed_convenience_loader(

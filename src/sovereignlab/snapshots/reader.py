@@ -123,98 +123,115 @@ def read_snapshot_as_of(
 ) -> SnapshotAsOfResult:
     """Read one exact observation without accepting model-selected artifacts."""
 
+    expected_call_id = call.call_id
     arguments = call.arguments
-    entry = registry.entry_for(
-        arguments.source_system,
-        arguments.table_id,
-        arguments.item_id,
+    source_system = arguments.source_system
+    table_id = arguments.table_id
+    item_id = arguments.item_id
+    period = arguments.period
+    as_of = arguments.as_of
+    normalization_rule_id = arguments.normalization_rule_id
+
+    if type(registry) is not SnapshotRegistry:
+        return _error(
+            expected_call_id,
+            code="snapshot_registry_misconfigured",
+            message="The trusted snapshot registry is misconfigured.",
+        )
+    try:
+        state = SnapshotRegistry.validated_state(registry)
+    except Exception:
+        return _error(
+            expected_call_id,
+            code="snapshot_registry_misconfigured",
+            message="The trusted snapshot registry is misconfigured.",
+        )
+
+    entry = state.entry_for(
+        source_system,
+        table_id,
+        item_id,
     )
     if entry is None:
         return _error(
-            call,
+            expected_call_id,
             code="snapshot_registry_misconfigured",
             message="The trusted snapshot registry has no binding for this validated scope.",
         )
-    if entry.binding.normalization_rule_id != arguments.normalization_rule_id:
-        return _error(
-            call,
-            code="snapshot_registry_misconfigured",
-            message="The trusted snapshot registry normalization binding is inconsistent.",
-        )
 
-    selection = _select_artifact(entry, arguments.as_of)
+    selection = _select_artifact(entry, as_of)
     if isinstance(selection, SnapshotAbstentionReason):
-        return _abstain(call, selection)
+        return _abstain(expected_call_id, selection)
     artifact = selection
 
     try:
         manifest_reason = _validate_manifest(
             artifact,
             entry.binding,
-            registry,
+            state,
         )
     except Exception:
         return _error(
-            call,
+            expected_call_id,
             code="snapshot_manifest_validation_failed",
             message="The deterministic snapshot manifest validator failed unexpectedly.",
         )
     if manifest_reason is not None:
-        return _abstain(call, manifest_reason)
+        return _abstain(expected_call_id, manifest_reason)
 
     payload = artifact.archive_bytes
-    if not isinstance(payload, bytes):
-        return _error(
-            call,
-            code="snapshot_registry_misconfigured",
-            message="The trusted snapshot artifact reader did not return bytes.",
-        )
 
     if artifact.manifest.byte_size > MAX_SNAPSHOT_BYTES:
-        return _abstain(call, SnapshotAbstentionReason.SOURCE_CONTENT_MISMATCH)
+        return _abstain(
+            expected_call_id,
+            SnapshotAbstentionReason.SOURCE_CONTENT_MISMATCH,
+        )
     if (
         len(payload) > MAX_SNAPSHOT_BYTES
         or len(payload) != artifact.manifest.byte_size
         or hashlib.sha256(payload).hexdigest() != artifact.manifest.content_sha256
     ):
-        return _abstain(call, SnapshotAbstentionReason.SOURCE_CONTENT_MISMATCH)
+        return _abstain(
+            expected_call_id,
+            SnapshotAbstentionReason.SOURCE_CONTENT_MISMATCH,
+        )
 
     try:
         raw_value = _selected_raw_value(
             payload,
             entry.binding,
-            arguments.period,
+            period,
         )
     except Exception:
         return _error(
-            call,
+            expected_call_id,
             code="snapshot_parser_failed",
             message="The deterministic snapshot parser failed unexpectedly.",
         )
     if isinstance(raw_value, SnapshotAbstentionReason):
-        return _abstain(call, raw_value)
+        return _abstain(expected_call_id, raw_value)
 
     try:
         rule = normalization_rule(
-            arguments.source_system,
-            arguments.table_id,
-            arguments.item_id,
+            source_system,
+            table_id,
+            item_id,
         )
     except ValueError:
         return _error(
-            call,
+            expected_call_id,
             code="snapshot_registry_misconfigured",
             message="The frozen normalization registry has no exact validated scope.",
         )
     except Exception:
         return _error(
-            call,
+            expected_call_id,
             code="snapshot_normalization_failed",
             message="The deterministic snapshot normalizer failed unexpectedly.",
         )
-    if rule.rule_id != arguments.normalization_rule_id:
+    if rule.rule_id != normalization_rule_id:
         return _error(
-            call,
+            expected_call_id,
             code="snapshot_registry_misconfigured",
             message="The frozen normalization registry differs from the validated call.",
         )
@@ -235,10 +252,13 @@ def read_snapshot_as_of(
             display_value=display_value,
         )
     except (ArithmeticError, DecimalException, ValidationError, ValueError):
-        return _abstain(call, SnapshotAbstentionReason.INVALID_SOURCE_VALUE)
+        return _abstain(
+            expected_call_id,
+            SnapshotAbstentionReason.INVALID_SOURCE_VALUE,
+        )
     except Exception:
         return _error(
-            call,
+            expected_call_id,
             code="snapshot_normalization_failed",
             message="The deterministic snapshot normalizer failed unexpectedly.",
         )
@@ -249,19 +269,19 @@ def read_snapshot_as_of(
         evidence_kind="latest_snapshot",
         source_id=artifact.manifest.source_id,
         source_sha256=artifact.manifest.content_sha256,
-        source_system=arguments.source_system,
+        source_system=source_system,
         source_published_on=artifact.manifest.published_on,
         source_retrieved_at=artifact.manifest.retrieved_at,
         rights_catalog_id=reference.catalog_id,
         rights_decision_id=reference.decision_id,
-        as_of=arguments.as_of,
-        table_id=arguments.table_id,
-        item_id=arguments.item_id,
-        period=arguments.period,
+        as_of=as_of,
+        table_id=table_id,
+        item_id=item_id,
+        period=period,
         observation=observation,
     )
     return SnapshotAsOfResult(
-        call_id=call.call_id,
+        call_id=expected_call_id,
         tool_name=ToolName.READ_SNAPSHOT_AS_OF,
         status=ToolOutcomeStatus.SUCCESS,
         payload=evidence,
@@ -477,11 +497,11 @@ def _reject_json_constant(value: str) -> object:
 
 
 def _abstain(
-    call: SnapshotAsOfCall,
+    call_id: str,
     reason: SnapshotAbstentionReason,
 ) -> SnapshotAsOfResult:
     return SnapshotAsOfResult(
-        call_id=call.call_id,
+        call_id=call_id,
         tool_name=ToolName.READ_SNAPSHOT_AS_OF,
         status=ToolOutcomeStatus.ABSTAINED,
         abstention=ToolAbstention(
@@ -492,19 +512,19 @@ def _abstain(
 
 
 def _error(
-    call: SnapshotAsOfCall,
+    call_id: str,
     *,
     code: str,
     message: str,
 ) -> SnapshotAsOfResult:
     return SnapshotAsOfResult(
-        call_id=call.call_id,
+        call_id=call_id,
         tool_name=ToolName.READ_SNAPSHOT_AS_OF,
         status=ToolOutcomeStatus.ERROR,
         error=ExecutionFailure(
             phase=FailurePhase.TOOL_EXECUTION,
             code=code,
             message=message,
-            call_id=call.call_id,
+            call_id=call_id,
         ),
     )

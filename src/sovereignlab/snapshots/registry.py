@@ -120,12 +120,32 @@ class SnapshotArtifact:
     archive_bytes: bytes = field(repr=False, compare=False)
 
     def __post_init__(self) -> None:
-        if not isinstance(self.manifest_bytes, bytes):
+        if type(self.manifest) is not SourceManifest:
+            raise ValueError("snapshot manifest must use the exact strict model")
+        if type(self.manifest_bytes) is not bytes:
             raise ValueError("snapshot manifest bytes must be immutable bytes")
-        if not isinstance(self.archive_bytes, bytes):
+        if type(self.archive_bytes) is not bytes:
             raise ValueError("snapshot archive bytes must be immutable bytes")
         if SourceManifest.model_validate_json(self.manifest_bytes) != self.manifest:
             raise ValueError("snapshot manifest model differs from its exact JSON bytes")
+
+    def validated(self) -> "SnapshotArtifact":
+        """Rebuild the manifest from exact built-in bytes for one runtime use."""
+
+        if type(self.manifest) is not SourceManifest:
+            raise ValueError("snapshot manifest must use the exact strict model")
+        if type(self.manifest_bytes) is not bytes:
+            raise ValueError("snapshot manifest bytes must be immutable bytes")
+        if type(self.archive_bytes) is not bytes:
+            raise ValueError("snapshot archive bytes must be immutable bytes")
+        manifest = SourceManifest.model_validate_json(self.manifest_bytes)
+        if manifest != self.manifest:
+            raise ValueError("snapshot manifest model differs from its exact JSON bytes")
+        return SnapshotArtifact(
+            manifest=manifest,
+            manifest_bytes=self.manifest_bytes,
+            archive_bytes=self.archive_bytes,
+        )
 
     @property
     def manifest_sha256(self) -> str:
@@ -154,10 +174,27 @@ class SnapshotCatalogArtifact:
     catalog_bytes: bytes = field(repr=False, compare=False)
 
     def __post_init__(self) -> None:
-        if not isinstance(self.catalog_bytes, bytes):
+        if type(self.catalog) is not RightsCatalog:
+            raise ValueError("rights catalog must use the exact strict model")
+        if type(self.catalog_bytes) is not bytes:
             raise ValueError("rights catalog bytes must be immutable bytes")
         if RightsCatalog.model_validate_json(self.catalog_bytes) != self.catalog:
             raise ValueError("rights catalog model differs from its exact JSON bytes")
+
+    def validated(self) -> "SnapshotCatalogArtifact":
+        """Rebuild the catalog from exact built-in bytes for one runtime use."""
+
+        if type(self.catalog) is not RightsCatalog:
+            raise ValueError("rights catalog must use the exact strict model")
+        if type(self.catalog_bytes) is not bytes:
+            raise ValueError("rights catalog bytes must be immutable bytes")
+        catalog = RightsCatalog.model_validate_json(self.catalog_bytes)
+        if catalog != self.catalog:
+            raise ValueError("rights catalog model differs from its exact JSON bytes")
+        return SnapshotCatalogArtifact(
+            catalog=catalog,
+            catalog_bytes=self.catalog_bytes,
+        )
 
     @property
     def content_sha256(self) -> str:
@@ -191,6 +228,32 @@ class SnapshotRegistry:
     catalog_artifacts: tuple[SnapshotCatalogArtifact, ...]
 
     def __post_init__(self) -> None:
+        self._validate_structure()
+
+    def _validate_structure(self) -> None:
+        if type(self.registry_id) is not str or not self.registry_id.strip():
+            raise ValueError("snapshot registry ID must be a non-empty string")
+        if type(self.entries) is not tuple:
+            raise ValueError("snapshot registry entries must be an immutable tuple")
+        if type(self.catalog_artifacts) is not tuple:
+            raise ValueError("snapshot registry catalogs must be an immutable tuple")
+        if any(type(entry) is not SnapshotRegistryEntry for entry in self.entries):
+            raise ValueError("snapshot registry entries must use the exact trusted type")
+        if any(type(entry.binding) is not SnapshotSeriesBinding for entry in self.entries):
+            raise ValueError("snapshot registry bindings must use the exact trusted type")
+        if any(type(entry.artifacts) is not tuple for entry in self.entries):
+            raise ValueError("snapshot registry artifacts must be immutable tuples")
+        if any(
+            type(artifact) is not SnapshotArtifact
+            for entry in self.entries
+            for artifact in entry.artifacts
+        ):
+            raise ValueError("snapshot registry artifacts must use the exact trusted type")
+        if any(
+            type(artifact) is not SnapshotCatalogArtifact for artifact in self.catalog_artifacts
+        ):
+            raise ValueError("snapshot registry catalogs must use the exact trusted type")
+
         scopes = tuple(entry.binding.scope for entry in self.entries)
         if len(scopes) != len(set(scopes)):
             raise ValueError("snapshot registry scope bindings must be unique")
@@ -209,6 +272,24 @@ class SnapshotRegistry:
         catalog_ids = tuple(artifact.catalog.catalog_id for artifact in self.catalog_artifacts)
         if len(catalog_ids) != len(set(catalog_ids)):
             raise ValueError("snapshot registry catalog IDs must be unique")
+
+    def validated_state(self) -> "SnapshotRegistry":
+        """Rebuild all metadata models from exact bytes for one adapter call."""
+
+        self._validate_structure()
+        entries = tuple(
+            SnapshotRegistryEntry(
+                binding=_APPROVED_BINDINGS_BY_SCOPE[entry.binding.scope],
+                artifacts=tuple(artifact.validated() for artifact in entry.artifacts),
+            )
+            for entry in self.entries
+        )
+        catalog_artifacts = tuple(artifact.validated() for artifact in self.catalog_artifacts)
+        return SnapshotRegistry(
+            registry_id=self.registry_id,
+            entries=entries,
+            catalog_artifacts=catalog_artifacts,
+        )
 
     @property
     def rights_catalogs(self) -> tuple[RightsCatalog, ...]:
@@ -233,9 +314,10 @@ class SnapshotRegistry:
     def canonical_descriptor_bytes(self) -> bytes:
         """Serialize order-independent registry provenance for trace hashing."""
 
+        state = self.validated_state()
         entries = []
         for entry in sorted(
-            self.entries,
+            state.entries,
             key=lambda item: (
                 item.binding.source_system.value,
                 item.binding.table_id,
@@ -253,11 +335,11 @@ class SnapshotRegistry:
             )
         descriptor = {
             "catalogs": sorted(
-                (artifact.descriptor() for artifact in self.catalog_artifacts),
+                (artifact.descriptor() for artifact in state.catalog_artifacts),
                 key=lambda item: item["catalog_id"],
             ),
             "entries": entries,
-            "registry_id": self.registry_id,
+            "registry_id": state.registry_id,
             "schema_version": "1.0.0",
         }
         return json.dumps(
