@@ -1,4 +1,4 @@
-"""Frozen callable registry and deterministic tool dispatcher."""
+"""Frozen callable dispatcher and offline one-shot planner boundary."""
 
 from sovereignlab.execution.dispatcher import (
     CALLABLE_TOOL_DEFINITIONS,
@@ -14,6 +14,13 @@ from sovereignlab.execution.dispatcher import (
     dispatch_tool_call,
     load_committed_callable_tool_registry,
 )
+from sovereignlab.execution.planner import (
+    Planner,
+    PlannerError,
+    RecordedPlanner,
+    ReplayPlanner,
+    ScriptedPlanner,
+)
 
 __all__ = [
     "CALLABLE_TOOL_DEFINITIONS",
@@ -24,6 +31,11 @@ __all__ = [
     "CallableRegistryLoadError",
     "CallableToolDefinition",
     "CallableToolRegistry",
+    "Planner",
+    "PlannerError",
+    "RecordedPlanner",
+    "ReplayPlanner",
+    "ScriptedPlanner",
     "ToolDispatchError",
     "ToolRegistryProvenance",
     "dispatch_tool_call",
