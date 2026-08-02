@@ -7,7 +7,9 @@ baseline development is in progress (frozen 40-record core matrix, 6/40 records 
 temporal document-retrieval baseline and the first real bilingual document manifests complete;
 the manifests now record the owner-approved Bank of Korea public-data rights basis, while the
 first bilingual documentary pair is owner-approved and the provider PDFs remain uncommitted by
-repository-scope choice). No model-performance claims have been made yet.
+repository-scope choice; the three deterministic evidence tools, replay-checked dispatcher, and
+offline scripted/recorded/replay planner boundary are complete, while packet assembly, the offline
+executor, and end-to-end traces remain pending). No model-performance claims have been made yet.
 
 Korea's official statistics APIs (ECOS, KOSIS) expose latest values only — they offer no "as-of" query path — and no Korean equivalent of the St. Louis Fed's ALFRED archive exists. SovereignLab builds three things in four weeks:
 

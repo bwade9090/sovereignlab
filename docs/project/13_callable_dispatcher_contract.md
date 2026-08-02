@@ -9,7 +9,7 @@ frozen three-tool callable registry, the composite data-artifact registry descri
 explicit deterministic dispatcher over the three previously implemented adapters.
 
 The slice does not change `BenchmarkRecord`, `BenchmarkBundle`, execution contract 1.0.0, or the 13
-public JSON Schemas. It adds no planner implementation, packet assembler, route executor,
+public JSON Schemas. It originally added no planner implementation, packet assembler, route executor,
 end-to-end trace, source capture, benchmark record, provider request, live model call, or paid
 operation.
 
@@ -152,6 +152,7 @@ No network, provider read, secret, live model call, GPU operation, or paid opera
 
 ## Next independent slice
 
-Add only the planner protocol with scripted and immutable recorded/replay implementations next.
-Keep packet assembly, route execution, committed end-to-end traces, and live model integration in
+The planner protocol with scripted and immutable recorded/replay implementations is now complete
+under `docs/project/14_offline_planner_contract.md`. Add only the deterministic evidence-packet
+assembler next. Keep route execution, committed end-to-end traces, and live model integration in
 later reviewable slices.

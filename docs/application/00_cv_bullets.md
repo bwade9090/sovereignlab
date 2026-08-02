@@ -1,8 +1,8 @@
 # SovereignLab CV bullets
 
 - Status: wording bank; use only the section matching the achieved milestone
-- Last updated: 2026-07-30 (M2 mid-window refresh: 6/40 approved core, execution-surface slices 1–5
-  complete, 976-test baseline)
+- Last updated: 2026-08-02 (M2 mid-window refresh: 6/40 approved core, execution-surface slices 1–6
+  complete, 1,007-test baseline)
 - Rule: never replace placeholders with targets or estimates; use measured, reproducible results only
 - Narrative versions: `docs/application/01_project_description.md`
 
@@ -29,10 +29,12 @@
   only), a frozen typed execution-and-trace contract (six new schemas, bringing the project's
   public surface to 13 deterministic JSON Schemas), three digest-linked deterministic evidence
   tools (temporal document retrieval, fail-closed vintage resolution, latest-only snapshot
-  reads), and an explicit dispatcher that independently replays and revalidates every call; the
-  offline end-to-end path is not yet assembled and no end-to-end result is claimed.
+  reads), an explicit dispatcher that independently replays and revalidates every call, and an
+  offline one-shot planner with scripted and immutable recorded/replay modes, exact candidate-byte
+  verification, and request binding; the offline end-to-end path is not yet assembled and no
+  end-to-end result is claimed.
 - Verified the pinned Ministral 3 3B NF4/QLoRA compatibility path on a disposable A40/CUDA 13 GPU
-  and maintain 976 tests at 100% statement/branch coverage; temporal leakage remains the planned
+  and maintain 1,007 tests at 100% statement/branch coverage; temporal leakage remains the planned
   headline metric, and no model-quality result is claimed yet.
 
 ### Short form (single bullet)
@@ -44,9 +46,9 @@
   state: 6/40 reviewed-and-approved bilingual core records, cutoff-filtered bilingual temporal
   retrieval over a committed synthetic corpus, a frozen typed execution-and-trace contract (part
   of the project's 13 public JSON Schemas) with three deterministic evidence tools behind a
-  replay-checked dispatcher, a verified Ministral 3 3B NF4/QLoRA compatibility path, and 976
-  tests at 100% statement/branch coverage; temporal leakage is the planned headline metric and no
-  model-quality result is claimed yet.
+  replay-checked dispatcher plus an offline exact-byte-verified planner boundary, a verified
+  Ministral 3 3B NF4/QLoRA compatibility path, and 1,007 tests at 100% statement/branch coverage;
+  temporal leakage is the planned headline metric and no model-quality result is claimed yet.
 
 This version distinguishes the implemented data/tooling/evidence-surface foundation and the
 compatibility result from the not-yet-assembled offline execution path, the 34 unauthored core

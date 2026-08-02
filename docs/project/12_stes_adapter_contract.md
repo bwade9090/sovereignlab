@@ -163,6 +163,7 @@ No network, provider read, secret, live model call, GPU operation, or paid opera
 ## Next independent slice
 
 The frozen three-tool callable registry and explicit dispatcher are complete under
-`docs/project/13_callable_dispatcher_contract.md`. Add only the planner protocol with scripted and
-immutable recorded/replay implementations next. Keep packet assembly, the offline executor,
-committed end-to-end traces, and live model integration in later reviewable slices.
+`docs/project/13_callable_dispatcher_contract.md`, and the offline planner is complete under
+`docs/project/14_offline_planner_contract.md`. Add only the deterministic evidence-packet
+assembler next. Keep the offline executor, committed end-to-end traces, and live model integration
+in later reviewable slices.

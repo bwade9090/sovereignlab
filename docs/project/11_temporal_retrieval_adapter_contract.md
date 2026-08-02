@@ -103,7 +103,7 @@ No network, provider read, secret, live model call, GPU operation, or paid opera
 
 The trusted historical registry and flat `resolve_stes_as_of` adapter are now complete under
 `docs/project/12_stes_adapter_contract.md`. The frozen three-tool registry and explicit dispatcher
-are complete under `docs/project/13_callable_dispatcher_contract.md`. Add only the planner
-protocol with scripted and immutable recorded/replay implementations next. Packet assembly, the
-offline executor, committed end-to-end traces, and live model integration remain later
-reviewable slices.
+are complete under `docs/project/13_callable_dispatcher_contract.md`, and the offline planner is
+complete under `docs/project/14_offline_planner_contract.md`. Add only the deterministic
+evidence-packet assembler next. The offline executor, committed end-to-end traces, and live model
+integration remain later reviewable slices.

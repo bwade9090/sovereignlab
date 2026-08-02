@@ -15,7 +15,8 @@ synthetic retrieval registry and typed `retrieve_temporal_documents` adapter und
 `docs/project/11_temporal_retrieval_adapter_contract.md`. The trusted historical registry and flat
 `resolve_stes_as_of` adapter have now shipped under
 `docs/project/12_stes_adapter_contract.md`. The frozen three-tool callable registry and explicit
-dispatcher have also shipped under `docs/project/13_callable_dispatcher_contract.md`. The planner,
+dispatcher have also shipped under `docs/project/13_callable_dispatcher_contract.md`, and the
+offline planner boundary has shipped under `docs/project/14_offline_planner_contract.md`. The
 packet assembler, offline executor, and committed end-to-end replay traces remain pending. This
 contract does not change `BenchmarkRecord` or `BenchmarkBundle` 2.0.0.
 
@@ -181,7 +182,7 @@ any call.
 
 ## Next independent slice
 
-All three deterministic tool adapters, their trusted registries, and the frozen callable
-dispatcher are complete. Add only the planner protocol with scripted and immutable
-recorded/replay implementations next. Keep packet assembly, the offline executor, committed
-end-to-end traces, and live model integration in later reviewable slices.
+All three deterministic tool adapters, their trusted registries, the frozen callable dispatcher,
+and the offline planner boundary are complete. Add only the deterministic evidence-packet
+assembler next. Keep dispatcher coordination, the offline executor, committed end-to-end traces,
+and live model integration in later reviewable slices.

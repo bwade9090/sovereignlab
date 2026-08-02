@@ -1,7 +1,7 @@
 # SovereignLab application project description
 
 - Status: application-ready wording for the current M2 midpoint
-- Last updated: 2026-07-30
+- Last updated: 2026-08-02
 - Disclosure level: verified implementation and compatibility results only; no model-quality claim
 
 ## Detailed version
@@ -33,9 +33,10 @@ large-number presentation, rounding, and grading tolerances are also frozen and 
 The project passed its first milestone gate and is midway through the benchmark-and-baselines
 milestone. Its evidence, benchmark, core-authoring-matrix, availability-ledger, rights, and
 execution contracts are published as 13 synchronized deterministic JSON Schemas; the offline
-resolver and GitHub Actions harvester are operational; and 976 tests pass with 100% statement and branch coverage (4,065
-statements, 1,370 branches). The 40-question human-reviewed bilingual core is frozen as an
-allocation, and 6 of 40 records — initially AI-authored, then approved under named human review —
+resolver and GitHub Actions harvester are operational; and 1,007 tests pass with 100% statement
+and branch coverage (4,238 statements, 1,414 branches). The 40-question human-reviewed bilingual
+core is frozen as an allocation, and 6 of 40 records — initially AI-authored, then approved under
+named human review —
 are complete: a Korean/English data pair resolving the OECD CLI vintage available on 2026-07-09, an
 abstention pair for an earlier cutoff where no edition is provably available, and a documentary
 pair grounded in the Bank of Korea's May 2026 Economic Outlook and its independently dated official
@@ -52,9 +53,12 @@ trusted, digest-linked registries — cutoff-filtered temporal document retrieva
 synthetic bilingual corpus, the fail-closed as-of vintage resolver over the approved OECD CLI
 revision archive, and latest-only snapshot reads over the owner-approved ECOS/KOSIS captures —
 and an explicit dispatcher independently replays and revalidates every call before returning a
-result. The approved execution contract (ADR 0008) fixes the minimal briefing path's execution
-mode; the path's planner, evidence-packet assembler, offline executor, and committed end-to-end
-replay traces are the current work unit, so no end-to-end execution result is claimed yet. A
+result. The offline one-shot planner boundary is also implemented with scripted and immutable
+recorded/replay modes, exact candidate-byte verification, digest-linked provenance, and request
+cutoff/question/language binding before dispatch. The approved execution contract (ADR 0008) fixes
+the minimal briefing path's execution mode; the evidence-packet assembler, offline executor, and
+committed end-to-end replay traces remain in the current work unit, so no end-to-end execution
+result is claimed yet. A
 pinned Ministral 3 3B QLoRA compatibility run also completed one optimizer step on a disposable
 RunPod A40/CUDA 13 instance, verifying NF4 loading,
 language-model-only LoRA boundaries, finite gradients, a changed adapter tensor, and adapter-only
@@ -81,13 +85,15 @@ harvester, OECD revision archive, strict provenance and source-rights contracts,
 resolver, and exact number-normalization rules, then froze a typed execution-and-trace contract —
 completing the project's 13 public JSON Schemas — and implemented cutoff-filtered bilingual
 temporal document retrieval (currently over a committed synthetic corpus) plus all three
-deterministic evidence tools behind a replay-checked dispatcher; the repository passes 976 tests
-with 100% statement and branch coverage. The frozen 40-record bilingual K-VINTAGE core has
+deterministic evidence tools behind a replay-checked dispatcher plus an offline
+scripted/immutable recorded-replay planner boundary; the repository passes 1,007 tests with 100%
+statement and branch coverage. The frozen 40-record bilingual K-VINTAGE core has
 its first 6 records reviewed and approved, including a Korean/English documentary pair over the
 Bank of Korea's May 2026 Economic Outlook and its later official English translation. I also
 verified the pinned Ministral 3 3B NF4/QLoRA training path on a disposable A40/CUDA 13 GPU without
-claiming model-quality gains. Next: the offline end-to-end execution path, the remaining core plus
-separately reported deterministic revision probes, and the four-variant baseline suite spanning
+claiming model-quality gains. Next: packet assembly and the offline end-to-end execution path, the
+remaining core plus separately reported deterministic revision probes, and the four-variant
+baseline suite spanning
 closed-book generation, temporal RAG, RAG with deterministic vintage tools, and a QLoRA-tuned
 evidence router, with temporal leakage as the headline metric.
 
