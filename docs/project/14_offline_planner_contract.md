@@ -73,6 +73,9 @@ slice's final validation.
 
 ## Next independent slice
 
-Add only the deterministic evidence-packet assembler over an already validated request, route plan,
-and ordered typed results. Keep dispatcher coordination, the offline executor, committed
-end-to-end traces, and live model integration in later reviewable slices.
+The deterministic evidence-packet assembler over an already validated request, route plan, and
+ordered typed results is complete under
+`docs/project/15_evidence_packet_assembler_contract.md`. Add only the offline end-to-end executor
+that consumes the existing planner, dispatcher, and assembler boundaries. Keep committed
+end-to-end replay traces and live model integration in later reviewable slices, and do not start
+the bounded tool loop deferred to v1.1.

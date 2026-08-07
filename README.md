@@ -5,16 +5,18 @@
 **Status:** M1b verification and vintage-contract groundwork are complete; M2 benchmark and
 baseline development is in progress (frozen 40-record core matrix, 6/40 records owner-approved,
 temporal document-retrieval baseline and the first real bilingual document manifests complete;
-the manifests now record the owner-approved Bank of Korea public-data rights basis, while the
-first bilingual documentary pair is owner-approved and the provider PDFs remain uncommitted by
-repository-scope choice; the three deterministic evidence tools, replay-checked dispatcher, and
-offline scripted/recorded/replay planner boundary are complete, while packet assembly, the offline
-executor, and end-to-end traces remain pending). No model-performance claims have been made yet.
+the manifests record the owner-approved Bank of Korea public-data rights basis, while the first
+bilingual documentary pair is owner-approved and the provider PDFs remain uncommitted by
+repository-scope choice; the three deterministic evidence tools, replay-checked dispatcher,
+offline scripted/recorded/replay planner boundary, and internal deterministic evidence-packet
+assembler are complete, while the offline executor and committed end-to-end replay traces remain
+pending). The offline baseline is 1,049 tests at 100% statement/branch coverage (4,353 statements,
+1,470 branches) across 67 formatted Python files. No model-performance claims have been made yet.
 
 Korea's official statistics APIs (ECOS, KOSIS) expose latest values only — they offer no "as-of" query path — and no Korean equivalent of the St. Louis Fed's ALFRED archive exists. SovereignLab builds three things in four weeks:
 
 1. **KOR-RTD** — a provenance-contracted point-in-time data layer for Korean macroeconomics: consolidated OECD edition histories plus a scheduled public harvester that forward-captures the latest-only official APIs (append-only, checksummed; commit history is the proof of capture dates).
-2. **K-VINTAGE** — a bilingual Korean/English benchmark whose gold answers are computed from the data vintage available at each question's `as_of` date. To our knowledge the first such benchmark for official statistics (prior art cited in the datasheet: arXiv 2605.23497 statutory as-of QA, the Dallas Fed real-time OECD dataset, the OECD MEI revisions database).
+2. **K-VINTAGE** — a bilingual Korean/English benchmark whose gold answers are computed from the data vintage available at each question's `as_of` date. To our knowledge, for official statistics, this is the first such benchmark (prior art cited in the datasheet: arXiv 2605.23497 statutory as-of QA, the Dallas Fed real-time OECD dataset, the OECD MEI revisions database).
 3. **A reference briefing system** — given a bilingual policy question and an optional `as_of` date, it routes to temporally filtered document retrieval, a deterministic vintage-resolving data tool, both, or a justified abstention, and returns a cited briefing with a machine-readable evidence and verification trace.
 
 ## What will be tested
@@ -66,9 +68,10 @@ RunPod A40/CUDA 13 host, closing the M1b gate. The exact `Decimal` unit, variant
 grading rules are frozen in the
 [number-normalization specification](docs/project/06_number_normalization_spec.md). Charter v2.4
 ([ADR 0008](docs/decisions/0008-function-calling-execution-contract.md), 2026-07-28) additionally
-fixes the minimal briefing path's execution as model-emitted typed function calling with
-committed traces over three deterministic offline tools, and defers a bounded multi-step tool
-loop to post-window v1.1 as an execution-mode ablation. Charter v2.5 and
+fixes the planned minimal briefing execution contract as a model-emitted single-shot typed route
+and exact tool calls over three deterministic offline tools. The offline executor and committed
+trace artifacts remain pending; ADR 0008 separately defers the bounded tool loop to post-window
+v1.1 as an execution-mode ablation. Charter v2.5 and
 [ADR 0009](docs/decisions/0009-bok-economic-outlook-public-data-rights.md) additionally record the
 owner-approved `allowed` public-data ruling for official Bank of Korea Economic Outlook
 publications, subject to attribution, transformation disclosure, and separately marked

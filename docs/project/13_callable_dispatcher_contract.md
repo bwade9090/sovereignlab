@@ -152,7 +152,9 @@ No network, provider read, secret, live model call, GPU operation, or paid opera
 
 ## Next independent slice
 
-The planner protocol with scripted and immutable recorded/replay implementations is now complete
-under `docs/project/14_offline_planner_contract.md`. Add only the deterministic evidence-packet
-assembler next. Keep route execution, committed end-to-end traces, and live model integration in
-later reviewable slices.
+The planner protocol with scripted and immutable recorded/replay implementations and the
+deterministic evidence-packet assembler are complete under
+`docs/project/14_offline_planner_contract.md` and
+`docs/project/15_evidence_packet_assembler_contract.md`. Add only the offline end-to-end executor
+next. Keep committed end-to-end replay traces and live model integration in later reviewable
+slices, and do not start the bounded tool loop deferred to v1.1.

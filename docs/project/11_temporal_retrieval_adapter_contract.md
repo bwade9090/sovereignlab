@@ -101,9 +101,10 @@ No network, provider read, secret, live model call, GPU operation, or paid opera
 
 ## Next independent slice
 
-The trusted historical registry and flat `resolve_stes_as_of` adapter are now complete under
-`docs/project/12_stes_adapter_contract.md`. The frozen three-tool registry and explicit dispatcher
-are complete under `docs/project/13_callable_dispatcher_contract.md`, and the offline planner is
-complete under `docs/project/14_offline_planner_contract.md`. Add only the deterministic
-evidence-packet assembler next. The offline executor, committed end-to-end traces, and live model
-integration remain later reviewable slices.
+The trusted historical registry and flat `resolve_stes_as_of` adapter, frozen three-tool registry
+and explicit dispatcher, and offline planner are complete under
+`docs/project/12_stes_adapter_contract.md`, `docs/project/13_callable_dispatcher_contract.md`, and
+`docs/project/14_offline_planner_contract.md`. The deterministic evidence-packet assembler is now
+complete under `docs/project/15_evidence_packet_assembler_contract.md`. Add only the offline
+end-to-end executor next. Keep committed end-to-end replay traces and live model integration in
+later reviewable slices, and do not start the bounded tool loop deferred to v1.1.

@@ -1,8 +1,9 @@
 # SovereignLab application project description
 
 - Status: application-ready wording for the current M2 midpoint
-- Last updated: 2026-08-02
-- Disclosure level: verified implementation and compatibility results only; no model-quality claim
+- Last updated: 2026-08-07
+- Disclosure level: verified implementation and compatibility results only; no model-quality or
+  end-to-end execution claim
 
 ## Detailed version
 
@@ -33,8 +34,9 @@ large-number presentation, rounding, and grading tolerances are also frozen and 
 The project passed its first milestone gate and is midway through the benchmark-and-baselines
 milestone. Its evidence, benchmark, core-authoring-matrix, availability-ledger, rights, and
 execution contracts are published as 13 synchronized deterministic JSON Schemas; the offline
-resolver and GitHub Actions harvester are operational; and 1,007 tests pass with 100% statement
-and branch coverage (4,238 statements, 1,414 branches). The 40-question human-reviewed bilingual
+resolver and GitHub Actions harvester are operational; and 1,049 tests pass with 100% statement
+and branch coverage (4,353 statements, 1,470 branches) across 67 formatted Python files. The
+40-question human-reviewed bilingual
 core is frozen as an allocation, and 6 of 40 records — initially AI-authored, then approved under
 named human review —
 are complete: a Korean/English data pair resolving the OECD CLI vintage available on 2026-07-09, an
@@ -53,27 +55,27 @@ trusted, digest-linked registries — cutoff-filtered temporal document retrieva
 synthetic bilingual corpus, the fail-closed as-of vintage resolver over the approved OECD CLI
 revision archive, and latest-only snapshot reads over the owner-approved ECOS/KOSIS captures —
 and an explicit dispatcher independently replays and revalidates every call before returning a
-result. The offline one-shot planner boundary is also implemented with scripted and immutable
+result. The offline one-shot planner boundary is implemented with scripted and immutable
 recorded/replay modes, exact candidate-byte verification, digest-linked provenance, and request
-cutoff/question/language binding before dispatch. The approved execution contract (ADR 0008) fixes
-the minimal briefing path's execution mode; the evidence-packet assembler, offline executor, and
-committed end-to-end replay traces remain in the current work unit, so no end-to-end execution
-result is claimed yet. A
+cutoff/question/language binding before dispatch. An internal deterministic evidence-packet
+assembler now preserves ordered typed payloads, exact planned/tool abstention reasons, repeated
+cross-call evidence, and no-partial-evidence behavior without adding a public schema or wrapper.
+The offline executor and committed end-to-end replay traces remain in the current work unit, so no
+end-to-end execution result is claimed yet. A
 pinned Ministral 3 3B QLoRA compatibility run also completed one optimizer step on a disposable
 RunPod A40/CUDA 13 instance, verifying NF4 loading,
 language-model-only LoRA boundaries, finite gradients, a changed adapter tensor, and adapter-only
 output. This is deliberately reported as a training-path compatibility result, not as evidence of
 improved model quality.
 
-The next phase completes the offline execution path, authors the remaining 34 core records plus a
-separately reported set of 200–300 deterministic revision probes, and runs the four-variant
-baseline suite comparing closed-book generation, temporal RAG, RAG plus deterministic tools, and a
-QLoRA-tuned evidence router. Temporal-leakage rate—whether a system uses information that did not
-exist at the question's `as_of` date—is the headline metric, alongside routing accuracy, retrieval
-recall, citation correctness, numerical provenance, abstention quality, latency, and cost. The
-final plan includes a reproducible grader, model and data cards, a compact API/trace interface, and
-public benchmark artifacts; all performance claims will be derived only from committed evaluation
-traces.
+The exact next implementation slice adds only the offline executor over the completed planner,
+dispatcher, and packet-assembler boundaries. Committed end-to-end replay traces follow in a
+separate reviewable slice. Later M2 work authors the remaining 34 core records plus a separately
+reported set of 200–300 deterministic revision probes and runs the four-variant baseline suite
+comparing closed-book generation, temporal RAG, RAG plus deterministic tools, and a QLoRA-tuned
+evidence router. Temporal-leakage rate—whether a system uses information that did not exist at the
+question's `as_of` date—is the headline metric; all performance claims will be derived only from
+committed evaluation artifacts.
 
 ## Brief version
 
@@ -84,18 +86,17 @@ statistics said at a historical `as_of` date. I implemented KOR-RTD's append-onl
 harvester, OECD revision archive, strict provenance and source-rights contracts, fail-closed vintage
 resolver, and exact number-normalization rules, then froze a typed execution-and-trace contract —
 completing the project's 13 public JSON Schemas — and implemented cutoff-filtered bilingual
-temporal document retrieval (currently over a committed synthetic corpus) plus all three
-deterministic evidence tools behind a replay-checked dispatcher plus an offline
-scripted/immutable recorded-replay planner boundary; the repository passes 1,007 tests with 100%
-statement and branch coverage. The frozen 40-record bilingual K-VINTAGE core has
-its first 6 records reviewed and approved, including a Korean/English documentary pair over the
-Bank of Korea's May 2026 Economic Outlook and its later official English translation. I also
-verified the pinned Ministral 3 3B NF4/QLoRA training path on a disposable A40/CUDA 13 GPU without
-claiming model-quality gains. Next: packet assembly and the offline end-to-end execution path, the
-remaining core plus separately reported deterministic revision probes, and the four-variant
-baseline suite spanning
-closed-book generation, temporal RAG, RAG with deterministic vintage tools, and a QLoRA-tuned
-evidence router, with temporal leakage as the headline metric.
+temporal document retrieval over a committed synthetic corpus, all three deterministic evidence
+tools behind a replay-checked dispatcher, an offline scripted/immutable recorded-replay planner
+boundary, and an internal deterministic evidence-packet assembler. The repository passes 1,049
+tests with 100% statement and branch coverage (4,353 statements, 1,470 branches). The frozen
+40-record bilingual K-VINTAGE core has its first 6 records reviewed and approved, including a
+Korean/English documentary pair over the Bank of Korea's May 2026 Economic Outlook and its later
+official English translation. I also verified the pinned Ministral 3 3B NF4/QLoRA training path on
+a disposable A40/CUDA 13 GPU without claiming model-quality gains. Next: the offline executor,
+followed in a separate slice by committed end-to-end replay traces, then the remaining core,
+separately reported deterministic revision probes, and the four-variant baseline suite, with
+temporal leakage as the headline metric.
 
 ## Usage guardrails
 

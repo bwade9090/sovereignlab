@@ -19,46 +19,47 @@ This repository is between work units and is ready to continue on the Windows wo
   execution/trace contract 1.0.0 with 13 deterministic public schemas. The trusted latest-only
   snapshot registry, deterministic `read_snapshot_as_of` adapter, trusted synthetic retrieval
   registry, typed `retrieve_temporal_documents` adapter, trusted historical STES registry, and
-  flat `resolve_stes_as_of` adapter are also complete. The snapshot boundary now revalidates exact
-  bytes and rebuilt models at call time, and the frozen three-tool callable registry plus explicit
-  dispatcher are complete. The offline one-shot planner protocol and its scripted and immutable
-  recorded/replay implementations are complete as well.
+  flat `resolve_stes_as_of` adapter are also complete. The snapshot boundary revalidates exact
+  bytes and rebuilt models at call time; the frozen three-tool callable registry, explicit
+  dispatcher, and offline one-shot scripted/recorded/replay planner are complete. The internal
+  deterministic evidence-packet assembler is now complete as the seventh ADR 0008 slice. It
+  revalidates request/plan/result bindings, preserves ordered and repeated typed evidence, and
+  fails closed without partial-evidence leakage while leaving the 13 public schemas unchanged.
 - Exact next outcome: the minimal offline **typed function-calling question-to-evidence-packet
   path** required by ADR 0008, with committed machine-readable traces.
-- Exact next reviewable slice: the deterministic evidence-packet assembler only.
-- Not implemented yet: the packet assembler, offline end-to-end executor, committed end-to-end
-  replay traces, or live model integration. The contract fixture is not an end-to-end replay
-  result.
-- The planner boundary now exists under `src/sovereignlab/execution/planner.py`; its recording
-  registry and entry format are intentionally private and no committed provider recording path
-  exists under `data/` yet.
+- Exact next reviewable slice: the offline executor only.
+- Not implemented yet: the offline executor, committed end-to-end replay traces, or live model
+  integration. The contract fixture is not an end-to-end replay result.
+- The planner boundary exists under `src/sovereignlab/execution/planner.py`; its recording registry
+  and entry format remain intentionally private. The assembler exists under
+  `src/sovereignlab/execution/assembler.py`; its function and error boundary remain internal and
+  are not package-level public exports. No committed provider recording path exists under `data/`.
 - The bounded tool loop is not part of this milestone; ADR 0008 defers it to v1.1.
 
 The authoritative live checkpoint and acceptance criteria are in
 `docs/project/04_macbook_handoff.md`. The filename is retained for history, but the document is now
 the cross-machine Windows continuation handoff.
 
-## Exact next slice — evidence-packet assembler only
+## Exact next slice — offline executor only
 
-The next reviewable outcome is an entirely offline deterministic assembler. Keep it separate from
-tool dispatch, route coordination, trace construction, and later execution work.
+The next reviewable outcome is an entirely offline executor over the completed planner, dispatcher,
+and private assembler boundaries. Keep committed end-to-end replay fixtures and live-model work in
+later independent slices.
 
-- Consume only an already validated `ExecutionRequest`, its validated `RoutePlan` 1.0.0, and the
-  ordered typed results produced elsewhere. Produce only the already frozen
-  `ExecutionEvidencePacket` 1.0.0; do not invent a new public assembler or execution wrapper.
-- Preserve the plan's four route meanings, result order, typed payloads, cutoff bindings, and
-  fail-closed behavior. Planned abstention must reproduce the plan reason. A tool abstention must
-  produce an empty packet bound to the terminal result's call ID and reason. Complete packets must
-  expose exactly the evidence from complete successful results, with no partial-evidence leakage.
-- Reject request/plan/result drift, a non-prefix or reordered result sequence, mismatched call IDs
-  or tools, post-cutoff evidence, incomplete success, tool errors presented as packet evidence,
-  and any assembled payload that does not round-trip through the existing strict model.
-- The exact internal function name and private error wrapper are not frozen. Keep them private or
-  record a focused specification if the choice becomes consequential; reuse the existing public
-  packet schema and invariants in `src/sovereignlab/schemas/execution.py`.
-- Stop after the assembler slice and a green full baseline. Do not call the planner or dispatcher,
-  coordinate route execution, create the offline executor or end-to-end traces, add a live model
-  call, change sources/benchmark records/public schemas, or start the deferred bounded loop.
+- Consume one validated `ExecutionRequest`, use the existing `Planner` boundary, execute only the
+  already validated plan's calls through the frozen explicit dispatcher in order, and pass the
+  ordered typed results to the private evidence-packet assembler.
+- Preserve planned abstention, terminal tool abstention, tool failure, and packet-assembly failure
+  semantics from the existing `ExecutionTrace` 1.0.0 contract. Do not expose partial evidence or
+  continue after a terminal result.
+- Bind the existing execution-environment and planner provenance to the real committed
+  registry/corpus IDs and digests resolved by the harness. Reuse the existing `ExecutionTrace`
+  model; do not invent a new public executor result, provider envelope, or JSON Schema.
+- Reject request, plan, result, provenance, ordering, cutoff, or packet drift and preserve the
+  existing failure phases and sanitized-error boundary.
+- Stop after the executor slice and a green full baseline. Do not commit end-to-end replay fixtures
+  in this slice, add a provider or live model call, change sources, benchmark records, or public
+  schemas, or start the deferred bounded loop.
 
 ## New-session onboarding procedure
 
@@ -107,13 +108,15 @@ Before editing:
 13. `docs/project/13_callable_dispatcher_contract.md` — frozen three-tool registry, explicit
     dispatcher, composite replay provenance, and snapshot call-time hardening.
 14. `docs/project/14_offline_planner_contract.md` — implemented planner protocol, private exact-byte
-    recording boundary, request binding, deterministic replay, and next assembler boundary.
-15. The closest additional `AGENTS.md`, if a subdirectory adds one later.
+    recording boundary, request binding, and deterministic replay.
+15. `docs/project/15_evidence_packet_assembler_contract.md` — implemented private assembler,
+    ordered-result binding, abstention semantics, and no-partial-evidence boundary.
+16. The closest additional `AGENTS.md`, if a subdirectory adds one later.
 
-For the exact assembler slice, also read `src/sovereignlab/schemas/execution.py`,
-`tests/schemas/test_execution.py`, `src/sovereignlab/execution/planner.py`, and
-`tests/execution/test_planner.py`. The first pair contains the packet/result/trace invariants to
-reuse; the second pair is the completed planner boundary that this slice must not invoke.
+For the exact offline-executor slice, also read `src/sovereignlab/schemas/execution.py` and
+`tests/schemas/test_execution.py`, plus the completed dispatcher, planner, and assembler source/test
+pairs under `src/sovereignlab/execution/` and `tests/execution/`. Coordinate those frozen boundaries;
+do not reopen or combine their behavior with the executor slice.
 
 The charter is the scope authority. Do not expand sources, agents, UI, or infrastructure before the current milestone gate passes.
 
@@ -233,8 +236,8 @@ commit that machine-specific path. Do not reuse a `.venv` whose interpreter chec
 The Windows requirements include a `win32`-only `tzdata` pin because a standard Windows Python
 installation has no system IANA timezone database.
 
-The handoff baseline is 13 deterministic public schemas, 65 formatted Python files, 1,007 passing
-tests, and 100% SovereignLab statement/branch coverage (4,238 statements, 1,414 branches). A
+The handoff baseline is 13 deterministic public schemas, 67 formatted Python files, 1,049 passing
+tests, and 100% SovereignLab statement/branch coverage (4,353 statements, 1,470 branches). A
 different result is a diagnostic signal: stop before implementation and record the discrepancy
 in `docs/PROJECT_STATUS.md`.
 
@@ -245,8 +248,8 @@ in `docs/PROJECT_STATUS.md`.
 - `src/sovereignlab/retrieval/` — cutoff-safe lexical retrieval, trusted synthetic corpus, and
   typed document adapter.
 - `src/sovereignlab/execution/` — frozen three-tool callable registry, explicit deterministic
-  dispatcher, and offline one-shot planner boundary. Packet assembly and route execution do not
-  exist yet.
+  dispatcher, offline one-shot planner boundary, and private deterministic evidence-packet
+  assembler. The offline executor and committed end-to-end replay traces do not exist yet.
 - `tests/` — offline tests; network calls must be mocked or replayed unless explicitly marked.
 - `data/` — public benchmark and metadata policy; ignored raw/interim material. The KOR-RTD archive layer (edition consolidations, harvester snapshots, manifests) lives here.
 - `artifacts/` — generated outputs policy; generated content is ignored by default.

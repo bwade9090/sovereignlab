@@ -15,10 +15,12 @@ synthetic retrieval registry and typed `retrieve_temporal_documents` adapter und
 `docs/project/11_temporal_retrieval_adapter_contract.md`. The trusted historical registry and flat
 `resolve_stes_as_of` adapter have now shipped under
 `docs/project/12_stes_adapter_contract.md`. The frozen three-tool callable registry and explicit
-dispatcher have also shipped under `docs/project/13_callable_dispatcher_contract.md`, and the
-offline planner boundary has shipped under `docs/project/14_offline_planner_contract.md`. The
-packet assembler, offline executor, and committed end-to-end replay traces remain pending. This
-contract does not change `BenchmarkRecord` or `BenchmarkBundle` 2.0.0.
+dispatcher have also shipped under `docs/project/13_callable_dispatcher_contract.md`, the
+offline planner boundary has shipped under `docs/project/14_offline_planner_contract.md`, and the
+deterministic evidence-packet assembler has shipped under
+`docs/project/15_evidence_packet_assembler_contract.md`. The offline executor and committed
+end-to-end replay traces remain pending. This contract does not change `BenchmarkRecord` or
+`BenchmarkBundle` 2.0.0.
 
 The independent execution contract is version 1.0.0. Its Pydantic source is
 `src/sovereignlab/schemas/execution.py`.
@@ -183,6 +185,7 @@ any call.
 ## Next independent slice
 
 All three deterministic tool adapters, their trusted registries, the frozen callable dispatcher,
-and the offline planner boundary are complete. Add only the deterministic evidence-packet
-assembler next. Keep dispatcher coordination, the offline executor, committed end-to-end traces,
-and live model integration in later reviewable slices.
+the offline planner boundary, and the deterministic evidence-packet assembler are complete, most
+recently under `docs/project/15_evidence_packet_assembler_contract.md`. Add only the offline
+end-to-end executor next. Keep committed end-to-end replay traces and live model integration in
+later reviewable slices, and do not start the bounded tool loop deferred to v1.1.

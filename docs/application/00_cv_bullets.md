@@ -1,8 +1,8 @@
 # SovereignLab CV bullets
 
 - Status: wording bank; use only the section matching the achieved milestone
-- Last updated: 2026-08-02 (M2 mid-window refresh: 6/40 approved core, execution-surface slices 1–6
-  complete, 1,007-test baseline)
+- Last updated: 2026-08-07 (M2 mid-window refresh: 6/40 approved core, execution-surface slices 1–7
+  complete, 67-file/1,049-test baseline)
 - Rule: never replace placeholders with targets or estimates; use measured, reproducible results only
 - Narrative versions: `docs/application/01_project_description.md`
 
@@ -28,31 +28,34 @@
   (currently over a committed synthetic corpus; the real report bodies remain manifest-bound
   only), a frozen typed execution-and-trace contract (six new schemas, bringing the project's
   public surface to 13 deterministic JSON Schemas), three digest-linked deterministic evidence
-  tools (temporal document retrieval, fail-closed vintage resolution, latest-only snapshot
-  reads), an explicit dispatcher that independently replays and revalidates every call, and an
-  offline one-shot planner with scripted and immutable recorded/replay modes, exact candidate-byte
-  verification, and request binding; the offline end-to-end path is not yet assembled and no
-  end-to-end result is claimed.
+  tools, an explicit dispatcher that independently replays and revalidates every call, an offline
+  one-shot planner with scripted and immutable recorded/replay modes, and an internal deterministic
+  evidence-packet assembler that preserves ordered typed evidence and fail-closed planned/tool
+  abstentions without partial-evidence leakage. The offline executor and committed end-to-end replay
+  traces do not yet exist, so no end-to-end result is claimed.
 - Verified the pinned Ministral 3 3B NF4/QLoRA compatibility path on a disposable A40/CUDA 13 GPU
-  and maintain 1,007 tests at 100% statement/branch coverage; temporal leakage remains the planned
-  headline metric, and no model-quality result is claimed yet.
+  and maintain 1,049 tests at 100% statement/branch coverage (4,353 statements, 1,470 branches)
+  across 67 formatted Python files; temporal leakage remains the planned headline metric, and no
+  model-quality result is claimed yet.
 
 ### Short form (single bullet)
 
-- Building **SovereignLab / K-VINTAGE** (in progress): to our knowledge the first benchmark for
-  official statistics whose gold answers depend on the data vintage available at each question's
-  `as_of` date, built on **KOR-RTD** — a provenance-contracted point-in-time archive of Korean
+- Building **SovereignLab / K-VINTAGE** (in progress): to our knowledge, for official statistics,
+  the first benchmark whose gold answers depend on the data vintage available at each question's
+  `as_of` date (prior art: arXiv 2605.23497, the Dallas Fed real-time OECD dataset, and the OECD MEI
+  revisions database), built on **KOR-RTD** — a provenance-contracted point-in-time archive of Korean
   macro data with append-only checksummed captures and a fail-closed vintage resolver. Current
   state: 6/40 reviewed-and-approved bilingual core records, cutoff-filtered bilingual temporal
-  retrieval over a committed synthetic corpus, a frozen typed execution-and-trace contract (part
-  of the project's 13 public JSON Schemas) with three deterministic evidence tools behind a
-  replay-checked dispatcher plus an offline exact-byte-verified planner boundary, a verified
-  Ministral 3 3B NF4/QLoRA compatibility path, and 1,007 tests at 100% statement/branch coverage;
-  temporal leakage is the planned headline metric and no model-quality result is claimed yet.
+  retrieval over a committed synthetic corpus, a frozen typed execution-and-trace contract within
+  the project's 13 public JSON Schemas, three deterministic evidence tools behind a replay-checked
+  dispatcher, an offline exact-byte-verified planner boundary, an internal deterministic
+  evidence-packet assembler, a verified Ministral 3 3B NF4/QLoRA compatibility path, and 1,049
+  tests at 100% statement/branch coverage; temporal leakage is the planned headline metric and no
+  model-quality or end-to-end execution result is claimed yet.
 
-This version distinguishes the implemented data/tooling/evidence-surface foundation and the
-compatibility result from the not-yet-assembled offline execution path, the 34 unauthored core
-slots, and the not-yet-evaluated model variants.
+This version distinguishes the implemented data, evidence-tool, planner, and packet-assembly
+boundaries from the not-yet-implemented offline executor and committed replay traces, the 34
+unauthored core slots, and the not-yet-evaluated model variants.
 
 ## Version B — use after the Week 2 baseline is reproducible
 
@@ -88,8 +91,9 @@ slots, and the not-yet-evaluated model variants.
   the bounded tool loop is deferred to v1.1 (ADR 0008). After the minimal path ships, the
   permitted wording is `typed function calling with committed traces` — and only then. Until that
   point, describe only the implemented components (typed execution-and-trace contract,
-  deterministic evidence tools, replay-checked dispatcher) and state that the end-to-end path is
-  not yet assembled.
+  deterministic evidence tools, replay-checked dispatcher, offline one-shot planner, and internal
+  deterministic evidence-packet assembler) and state that the offline executor and committed
+  end-to-end replay traces do not yet exist.
 - Every "first" claim must read "to our knowledge, for official statistics" and the datasheet must cite prior art first (arXiv 2605.23497 statutory as-of QA; Dallas Fed real-time OECD dataset; OECD MEI revisions database). Never claim "first Korean macro benchmark" (KMMLU includes economics categories).
 - Do not claim OECD edition/backfill ranges beyond what a recorded verification spike confirmed.
 - Do not cite harvester snapshot counts older than the public commit history that proves them.

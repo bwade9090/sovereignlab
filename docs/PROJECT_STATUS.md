@@ -1,6 +1,6 @@
 # SovereignLab project status
 
-- Last updated: 2026-08-02
+- Last updated: 2026-08-07
 - Owner: Hyungbae Cho (`bwade9090`)
 - Delivery window: four weeks, approximately 80 hours
 - Current milestone: M2 — week-2 benchmark and baselines (charter v2.5 §7, Week 2)
@@ -51,10 +51,13 @@
   immediately before return. The sixth implementation slice is now complete: the offline one-shot
   planner protocol and scripted/immutable recorded-replay implementations validate exact candidate
   bytes, preserve digest-linked provenance, and bind every typed call back to the request before
-  dispatch. The packet assembler, offline end-to-end executor, and committed replay traces remain
-  to be implemented, so the minimal
-  question-to-evidence-packet path is not yet shipped. The bounded multi-step tool loop remains
-  deferred to post-window v1.1.
+  dispatch. The seventh implementation slice is now complete: the internal deterministic
+  evidence-packet assembler strictly revalidates the request, plan, and ordered typed results;
+  preserves all four routes, exact cutoff/call/result bindings, ordered and repeated evidence, and
+  planned/tool abstention; and returns only the frozen `ExecutionEvidencePacket` without partial
+  evidence. The offline end-to-end executor and committed replay traces remain to be implemented,
+  so the minimal question-to-evidence-packet path is not yet shipped. The bounded multi-step tool
+  loop remains deferred to post-window v1.1.
 
 ## Approved baseline
 
@@ -383,6 +386,19 @@
   live model, or paid operation was added. Full details are in
   `docs/project/14_offline_planner_contract.md`.
 
+- **Deterministic evidence-packet assembler — work unit C slice 7 (2026-08-07):**
+  Functional commit `ff96710` adds the private `sovereignlab.execution.assembler` boundary over
+  one exact validated `ExecutionRequest`, its `RoutePlan` 1.0.0, and an immutable ordered tuple of
+  typed tool results. The assembler strictly round-trips every input, reuses the frozen
+  call/result validator, binds calls back to request cutoff/question/language, rejects non-prefix,
+  reordered, mismatched, incomplete, erroneous, or drifted results, and strictly round-trips the
+  final existing `ExecutionEvidencePacket` 1.0.0. Planned abstention reproduces the plan reason;
+  terminal tool abstention produces an empty call-bound packet and never leaks earlier successful
+  evidence; complete packets preserve exact result and payload order without global deduplication.
+  The function and error remain private, public schemas remain at 13, and no planner, dispatcher,
+  executor, trace fixture, provider, source, benchmark, live model, or paid operation was added.
+  Full details are in `docs/project/15_evidence_packet_assembler_contract.md`.
+
 - **Windows baseline reproducibility repair (2026-07-29):** Windows now installs the IANA timezone
   database through the platform-guarded `tzdata==2026.3` requirement, which makes the existing
   `Asia/Seoul` tests and the new snapshot capture cutoff deterministic on a standard Python 3.12
@@ -674,6 +690,18 @@ statement/branch coverage (4,238 statements, 1,414 branches). The 31 focused pla
 introduced no diff. The slice was entirely offline and added no dispatcher invocation, source or
 provider read, secret, live model call, GPU operation, or paid operation.
 
+Validated 2026-08-07 on Windows after the deterministic evidence-packet assembler slice: Python
+3.12.13; `python scripts/export_json_schemas.py` reproduced all 13 public contracts without a
+schema diff; `python -m ruff check --no-cache .` passed; and `python -m ruff format --check .`
+passed across 67 Python files. The 42 focused assembler tests reached 100% assembler
+statement/branch coverage (115 statements, 56 branches). The full suite, run with an explicit
+fresh OS `--basetemp` because the unchanged repository-root `.pytest_tmp` still has the documented
+access-denying ACL, passed all 1,049 tests with 100% SovereignLab statement/branch coverage (4,353
+statements, 1,470 branches). `git diff --check` passed, and functional commit `ff96710` matched
+`origin/main` with a clean worktree before this documentation checkpoint. The stale temp directory
+was not modified. The slice was entirely offline and added no source or provider read, secret,
+live model call, GPU operation, or paid operation.
+
 ## M1b verification spike record (2026-07-15)
 
 All network work below was read-only, key-free, and free of charge. Raw responses were written only
@@ -848,17 +876,34 @@ response bodies.
   registry are intentionally private, and no provider recording path exists under `data/`. The
   next session starts from the completed planner boundary rather than inventing a public wrapper.
 
+## Session-close snapshot (2026-08-07, fifteenth close: assembler boundary complete)
+
+- Work unit C remains active, but its first seven independently reviewable slices are complete.
+  Execution contract 1.0.0, all three trusted deterministic tool registries/adapters, the frozen
+  callable dispatcher, the offline one-shot planner, and the private deterministic evidence-packet
+  assembler validate independently.
+- M2 remains active. The frozen matrix was not changed, exactly six records are owner-approved,
+  and the other 34 slots are not authored.
+- The assembler exists under `src/sovereignlab/execution/assembler.py`, consumes only validated
+  request/plan/result models, and returns only the existing packet model. It does not invoke the
+  planner or dispatcher, coordinate calls, construct traces, or expose a package-level public API.
+- The minimal typed function-calling path is not yet complete: the offline executor and committed
+  end-to-end replay traces do not yet exist. The contract fixture remains a schema fixture rather
+  than an end-to-end replay result.
+- No source artifact, provider body, secret, live model call, GPU operation, or paid operation was
+  added. The next session starts from the completed assembler boundary and coordinates the frozen
+  components without reopening them.
+
 ## Immediate next action (M2 — do these in order)
 
-1. Add only the deterministic evidence-packet assembler over an already validated request, route
-   plan, and ordered typed results. Reuse `ExecutionEvidencePacket` 1.0.0, preserve planned/tool
-   abstention semantics, and fail closed without partial evidence. Do not invoke the planner or
-   dispatcher in this slice. Stop after focused tests and the full baseline.
-2. In a later reviewable slice, add the offline executor that coordinates the validated planner,
-   completed dispatcher, and packet assembler with real registry/corpus provenance.
-3. Only after items 1–2, commit real-digest end-to-end replay traces and satisfy every route,
-   bilingual, cutoff, invalid-call, replay, and round-trip criterion in handoff §5 before calling
-   work unit C complete. The existing contract fixture is not an end-to-end replay trace.
+1. Add only the offline executor that coordinates the existing validated planner, explicit
+   dispatcher, and private evidence-packet assembler in order with real registry/corpus and
+   execution-environment provenance. Reuse the frozen `ExecutionTrace` model and failure phases;
+   do not add a public executor wrapper or schema. Stop after focused tests and the full baseline.
+2. In a later independent slice, commit real-digest end-to-end replay traces over the completed
+   executor. The existing contract fixture is not an end-to-end replay trace.
+3. Only after items 1–2, satisfy every route, bilingual, cutoff, invalid-call, replay, and
+   round-trip criterion in handoff §5 before calling work unit C complete.
 4. Keep live model calls, additional source ingestion, new benchmark authoring, and the bounded
    v1.1 loop outside this unit. Any later live call requires its own smoke test, authorization, and
    spend-ledger entry.
@@ -891,9 +936,10 @@ complete.
 - Windows workstation note (2026-07-30): a stale repository-root `.pytest_tmp` directory (the
   configured pytest `--basetemp`) can be left behind with an access-denying ACL that the current
   unelevated user cannot list, take ownership of, or delete; while present, every pytest run fails
-  its tmp-path setup with `WinError 5`. Delete it from an elevated shell (`takeown /f .pytest_tmp
-  /r`, `icacls .pytest_tmp /reset /t`, then remove), or pass an explicit `--basetemp` override
-  until it is removed. The directory is git-ignored and contains no project data.
+  its tmp-path setup with `WinError 5`. Do not change its ACL or delete it during repository work;
+  pass an explicit `--basetemp` override to a new OS temporary path. Any cleanup is a separate
+  owner-managed workstation operation outside this workflow. The directory is git-ignored and
+  contains no project data.
 - Rights gate: ADRs 0004/0007/0009 and charter v2.5, the append-only catalog chain, two approved
   ECOS rows,
   exact KOSIS CPI and OECD CLI rows, and typed manifest-rights bundle validation are complete. The
@@ -952,6 +998,7 @@ complete.
 | 2026-07-30 | Frozen callable registry/dispatcher + snapshot call-time hardening | $0.00 | Offline committed artifacts, typed dispatch/replay tests, specification, and subscription review; no network, provider read, secret, live model API, GPU, or paid call |
 | 2026-07-30 | Post-dispatcher session-close onboarding finalization | $0.00 | Documentation and offline consistency review only; no source/provider read, secret, live model API, GPU, or paid call |
 | 2026-08-02 | Offline one-shot planner boundary | $0.00 | Offline implementation, exact-byte replay tests, specification, and full validation only; no provider, live model API, GPU, or paid call |
+| 2026-08-07 | Deterministic evidence-packet assembler | $0.00 | Offline private assembler, focused tests, specification, review, and full validation only; no provider, live model API, GPU, or paid call |
 
 **Cumulative external spend: $0.23584524099715054 / $100.00**
 
@@ -986,11 +1033,13 @@ Read in this order, in full, before changing anything:
 14. `docs/project/13_callable_dispatcher_contract.md` — the frozen three-tool callable registry,
     composite replay provenance, explicit dispatcher, and independent reference replay.
 15. `docs/project/14_offline_planner_contract.md` — the implemented planner, private exact-byte
-    recording boundary, request binding, and next assembler boundary.
-16. `src/sovereignlab/schemas/execution.py` and `tests/schemas/test_execution.py` — frozen
-    packet/result/trace invariants for the next assembler slice.
-17. `src/sovereignlab/execution/planner.py` and `tests/execution/test_planner.py` — the completed
-    planner boundary the assembler slice must not invoke.
+    recording boundary, request binding, and deterministic replay.
+16. `docs/project/15_evidence_packet_assembler_contract.md` — the implemented private assembler,
+    ordered-result binding, abstention semantics, and no-partial-evidence boundary.
+17. `src/sovereignlab/schemas/execution.py` and `tests/schemas/test_execution.py` — frozen
+    request/plan/result/packet/trace invariants for the executor to reuse.
+18. The dispatcher, planner, and assembler source/test pairs under `src/sovereignlab/execution/`
+    and `tests/execution/` — completed boundaries the executor must coordinate without reopening.
 
 Then start with "Immediate next action" item 1. The structural matrix and first six records are
 owner-approved; the other 34 slots are neither authored nor approved. The synthetic retrieval

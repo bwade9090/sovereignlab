@@ -1,15 +1,17 @@
 # Cross-machine continuation handoff
 
 - Legacy filename: retained so existing links and onboarding instructions do not break.
-- Prepared: 2026-07-16; refreshed 2026-08-02 after the planner continuation (fourteenth refresh:
-  offline planner round closed, assembler-only slice ready)
+- Prepared: 2026-07-16; refreshed 2026-08-07 after the assembler continuation (fifteenth refresh:
+  assembler round closed, offline-executor-only slice ready)
 - Target continuation machine: Windows workstation
 - Authority: charter v2.5; accepted ADRs 0001–0009
 - Branch to continue: `main` from `origin`
 - Current milestone: M2
-- Session state: the first six work-unit-C slices are complete and reviewable; all three
-  deterministic runtime adapters, the explicit dispatcher, and the offline planner boundary are
-  complete, while no assembler or later execution slice is partially implemented
+- Session state: the first seven work-unit-C slices are complete and reviewable; all three
+  deterministic runtime adapters, the explicit dispatcher, the offline planner boundary, and the
+  private deterministic evidence-packet assembler are complete, while the offline executor and
+  committed end-to-end replay traces do not exist
+- Completed assembler functional checkpoint: `ff96710` (`feat: add deterministic evidence packet assembler`).
 - Completed planner functional checkpoint: `272dd7f` (`feat: add offline planner boundary`).
 - Prior dispatcher functional checkpoint: `834065e` (`feat: add frozen callable dispatcher`).
 - Dispatcher documentation checkpoint: `dd6381a` (`docs: record callable dispatcher checkpoint`).
@@ -176,10 +178,27 @@ If local `main` has diverged from `origin/main`, stop rather than rewriting hist
   routes, and request cutoff/question/language drift before dispatch. It adds no public schema,
   provider call, packet assembly, or executor. The detailed contract is
   `docs/project/14_offline_planner_contract.md`.
+- **Deterministic evidence-packet assembler (2026-08-07):**
+  `src/sovereignlab/execution/assembler.py` implements one private, entirely offline boundary over
+  an exact validated request, route plan, and immutable ordered result tuple. It strictly
+  revalidates all inputs, request/call bindings, ordered prefixes, typed payloads, cutoffs, and the
+  final existing packet model. Planned and terminal-tool abstention reasons are copied exactly;
+  tool abstention produces an empty packet without leaking an earlier successful payload; complete
+  packets preserve result order and repeated cross-call evidence. The function/error boundary is
+  not a package-level export, the public schema count remains 13, and no planner/dispatcher call,
+  executor, trace fixture, provider call, source, benchmark, or paid operation was added. The
+  detailed contract is `docs/project/15_evidence_packet_assembler_contract.md`.
 - macOS baseline validated 2026-08-02 on Python 3.12.13: 1,007 tests passed with 100% SovereignLab
   statement/branch coverage (4,238 statements, 1,414 branches); ruff check/format clean (65 Python
   files); `python scripts/export_json_schemas.py` deterministic (13 contracts). The win32-only
   `tzdata==2026.3` pin and short ECOS pytest IDs repair two Windows-only baseline failures.
+- Windows baseline validated 2026-08-07 on Python 3.12.13: all 13 schemas regenerated without a
+  diff; ruff check passed; ruff format check passed across 67 Python files; all 1,049 tests passed
+  with 100% SovereignLab statement/branch coverage (4,353 statements, 1,470 branches); and the 42
+  focused assembler tests reached 100% assembler coverage (115 statements, 56 branches). The full
+  suite used an explicit fresh OS `--basetemp` because the unchanged ignored `.pytest_tmp` on this
+  workstation retains its documented access-denying ACL. No source/provider read, secret, live
+  model call, GPU operation, or paid operation occurred.
 
 ## 2. Set up and validate the Windows machine
 
@@ -207,9 +226,14 @@ $venvPython = (Resolve-Path .\.venv\Scripts\python.exe).Path
 git diff --exit-code
 ```
 
-Expected handoff baseline: Python 3.12, 13 deterministic public schemas, 65 formatted Python
-files, 1,007 passing tests, 100% SovereignLab statement/branch coverage (4,238 statements, 1,414
+Expected handoff baseline: Python 3.12, 13 deterministic public schemas, 67 formatted Python
+files, 1,049 passing tests, 100% SovereignLab statement/branch coverage (4,353 statements, 1,470
 branches), and no unexpected Git diff.
+On this workstation, the ignored repository-root `.pytest_tmp` can retain an access-denying ACL
+and make the canonical pytest command report only tmp-path setup errors. Do not treat that known
+ACL failure as a source regression or alter the directory during repository work. Rerun the exact
+suite with `--basetemp` set to a new OS temporary path, and record both the canonical attempt and
+the full fallback result.
 The Windows
 user-level launcher was unreliable in an earlier session. If `python` does not resolve to 3.12,
 discover the installed executable with `where.exe python` or the installed-app inventory, set
@@ -243,15 +267,18 @@ do not remove it merely because another operating system supplies an IANA timezo
 13. `docs/project/13_callable_dispatcher_contract.md` — the frozen three-tool registry, explicit
     dispatcher, composite replay provenance, and snapshot call-time hardening.
 14. `docs/project/14_offline_planner_contract.md` — the implemented planner, private exact-byte
-    recording boundary, request binding, and next assembler boundary.
-15. `src/sovereignlab/schemas/execution.py` and `tests/schemas/test_execution.py` — the exact
-    packet/result/trace invariants the next assembler slice must reuse.
-16. `src/sovereignlab/execution/planner.py` and `tests/execution/test_planner.py` — the completed
-    planner boundary the assembler slice must not invoke.
+    recording boundary, request binding, and deterministic replay.
+15. `docs/project/15_evidence_packet_assembler_contract.md` — the implemented private assembler,
+    ordered-result binding, abstention semantics, and no-partial-evidence boundary.
+16. `src/sovereignlab/schemas/execution.py` and `tests/schemas/test_execution.py` — the exact
+    request/plan/result/packet/trace invariants the executor must reuse.
+17. The dispatcher, planner, and assembler source/test pairs under `src/sovereignlab/execution/`
+    and `tests/execution/` — the completed boundaries the executor must coordinate without
+    reopening.
 
 Only when changing source/resolver/harvester behavior, also read
 `docs/discovery/03_week1_verification_log.md` and the relevant resolver, retrieval, registry,
-adapter, or harvester source/tests. They are not prerequisites for the assembler-only slice.
+adapter, or harvester source/tests. They are not prerequisites for the executor-only slice.
 
 ## 4. External state for the new session
 
@@ -319,8 +346,9 @@ Implement in this order:
 1. **Complete.** Read ADR 0008, charter §§3/6/7, the frozen benchmark models, and the existing
    resolver, retriever, harvester snapshot formats, and tests. The original discovery recorded
    that no router/model-call/replay package or snapshot-read tool existed at that time; the
-   snapshot reader, all three adapters, dispatcher, and offline planner now exist. The planner's
-   recording registry remains private and no provider recording path exists under `data/`.
+   snapshot reader, all three adapters, dispatcher, offline planner, and private assembler now
+   exist. The planner's recording registry remains private and no provider recording path exists
+   under `data/`.
 2. **Complete.** Freeze strict typed contracts for the route plan, tool calls/results, evidence packet, and
    trace, plus the latest-only snapshot reader's flat gold-argument convention. Derive callable
    JSON schemas from Pydantic. Do not change `BenchmarkRecord` or `BenchmarkBundle` 2.0.0. Record
@@ -357,21 +385,23 @@ Implement in this order:
    Reuse the existing `route-plan-v1` and three argument schemas. Do not add a public planner or
    recording schema unless a newly recorded focused decision proves it necessary. Commit and stop
    after this slice.
-6. **Exact next slice.** Add only the deterministic evidence-packet assembler over an already
-   validated request, route plan, and ordered typed results. Reuse `ExecutionEvidencePacket`
-   1.0.0, preserve planned/tool abstention semantics, expose no partial evidence, reject identity,
-   order, cutoff, or payload drift, and do not invoke the planner or dispatcher. Commit and stop
-   after focused tests and the full baseline.
-7. In a later reviewable slice, add the offline executor that coordinates the validated planner,
-   dispatcher, and packet assembler with real environment provenance.
-8. Only after steps 6–7, commit small end-to-end trace fixtures with real registry/corpus digests
+6. **Complete.** Add only the deterministic evidence-packet assembler over an already validated
+   request, route plan, and ordered typed results. Reuse `ExecutionEvidencePacket` 1.0.0, preserve
+   planned/tool abstention semantics, expose no partial evidence, reject identity, order, cutoff,
+   or payload drift, and do not invoke the planner or dispatcher. The implementation is private
+   under `docs/project/15_evidence_packet_assembler_contract.md` and passed focused/full validation.
+7. **Exact next slice.** Add only the offline executor that coordinates the validated planner,
+   dispatcher, and private packet assembler in order with real registry/corpus and execution-
+   environment provenance. Reuse the existing `ExecutionTrace` and failure phases; do not add a
+   public executor wrapper or schema. Commit and stop after focused tests and the full baseline.
+8. Only after step 7, commit small end-to-end trace fixtures with real registry/corpus digests
    and enough plan, ordered call/result, provenance, abstention/error, and output information for
    replay and audit. The existing contract fixture is not such a trace.
 9. Test all four routes, all three tool adapters, bilingual input, `as_of` cutoff enforcement,
    invalid-call failures, deterministic replay, and trace round-tripping. Update
    `docs/PROJECT_STATUS.md` with the exact commands and result before calling work unit C complete.
 
-The first six reviewable slices are complete: the typed execution/trace surface is frozen in
+The first seven reviewable slices are complete: the typed execution/trace surface is frozen in
 `docs/project/09_typed_execution_trace_contract.md`; the trusted snapshot registry plus
 `read_snapshot_as_of` adapter are implemented under
 `docs/project/10_snapshot_reader_contract.md`; and the trusted synthetic retrieval registry plus
@@ -381,9 +411,10 @@ flat `resolve_stes_as_of` adapter are implemented under
 `docs/project/12_stes_adapter_contract.md`; and the frozen three-tool callable registry plus
 explicit dispatcher are implemented under `docs/project/13_callable_dispatcher_contract.md`.
 The planner protocol with scripted and immutable recorded/replay implementations is complete under
-`docs/project/14_offline_planner_contract.md`. The next slice is only the deterministic
-evidence-packet assembler. Keep the offline executor, committed end-to-end traces, and live model
-integration in later independently reviewable slices.
+`docs/project/14_offline_planner_contract.md`, and the private deterministic evidence-packet
+assembler is complete under `docs/project/15_evidence_packet_assembler_contract.md`. The next slice
+is only the offline executor over these frozen components. Keep committed end-to-end traces and
+live model integration in later independently reviewable slices.
 
 The completed STES adapter slice:
 
@@ -421,8 +452,9 @@ the configured secrets.
 - Do not manually dispatch the secret-backed harvester as part of onboarding.
 - Do not revise the now-frozen snapshot gold convention or combine dependent benchmark authoring
   with the runtime-adapter slice.
-- Do not replace the planner protocol, expose its private recording registry as a public schema,
-  or merge planner/dispatcher coordination into the assembler-only slice.
+- Do not replace the planner, dispatcher, or assembler boundaries; expose the private recording or
+  assembly internals as public wrappers/schemas; or merge committed traces or live integration into
+  the executor-only slice.
 - Do not reopen accepted ADRs 0003–0009 without new evidence that requires a superseding decision.
 - Do not implement the bounded multi-step tool loop in-window; ADR 0008 defers it to v1.1. Do
   not re-litigate that deferral — the supporting matrix/schema arithmetic is recorded in the ADR.
