@@ -1,0 +1,135 @@
+{
+  "schema_version": "1.0.0",
+  "trace_id": "e2e-data-stes-complete-en-explicit-v1",
+  "recorded_at": "2026-08-11T06:01:00Z",
+  "request": {
+    "request_id": "replay-request-data-stes-en-explicit-v1",
+    "question": "What was Korea's May 2026 CLI at the cutoff?",
+    "language": "en",
+    "requested_as_of": "2026-07-09",
+    "effective_as_of": "2026-07-09"
+  },
+  "environment": {
+    "executor_id": "sovereignlab-offline-executor-v1",
+    "executor_sha256": "08f45dab6a36a49cb7d0b588a69236942cd61534540bd4de0772010402dada64",
+    "tool_registry_id": "sovereignlab-deterministic-tool-registry-v1",
+    "tool_registry_sha256": "cd00b5c543cffc53024f98b9fafa73ed3fecd519fde81a826d060c8af4d2ad91",
+    "artifact_registry_id": "kor-rtd-execution-artifact-registry-v1",
+    "artifact_registry_sha256": "7b42027c1034789bd46a881fd186f66ba1ba1250d94639ff5eed6c89a3cc2293",
+    "retrieval_corpus_id": "synthetic-temporal-retrieval-corpus-v1",
+    "retrieval_corpus_sha256": "823117ee29a191bc306843e44ccd9d37e063db79cc87e15dcb7f2a11f5b5bf7e"
+  },
+  "planner": {
+    "planner_id": "committed-replay-scripted-planner-v1",
+    "mode": "scripted",
+    "recording_id": "committed-replay-data-stes-complete-en-explicit-v1",
+    "output_sha256": "b18d5c3d07a2f779b668994f67eebbf0633cb686c1cf98160968e09cd743f320",
+    "model_id": null
+  },
+  "status": "complete",
+  "plan": {
+    "schema_version": "1.0.0",
+    "route": "data",
+    "tool_calls": [
+      {
+        "call_id": "replay-call-data-stes-en-explicit-v1",
+        "tool_name": "resolve_stes_as_of",
+        "arguments": {
+          "ref_area": "KOR",
+          "freq": "M",
+          "measure": "LI_AA",
+          "unit_measure": "IX",
+          "activity": "_T",
+          "period": "2026-05",
+          "as_of": "2026-07-09",
+          "normalization_rule_id": "oecd-stes-kor-li-aa-index-v1"
+        }
+      }
+    ],
+    "abstention": null
+  },
+  "tool_results": [
+    {
+      "call_id": "replay-call-data-stes-en-explicit-v1",
+      "tool_name": "resolve_stes_as_of",
+      "status": "success",
+      "payload": {
+        "evidence_kind": "vintage_observation",
+        "source_id": "oecd-stes-cli-kor-li-aa-20260717t115302688498z",
+        "source_sha256": "ac7d0f9a2517870173885f1d45e2edea90f54cd485e2f539c73afddde566f058",
+        "source_system": "oecd",
+        "source_published_on": "2026-07-17",
+        "source_retrieved_at": "2026-07-17T11:53:02.688498Z",
+        "rights_catalog_id": "kor-rtd-rights-2026-07-17",
+        "rights_decision_id": "oecd-stes-revisions-kor-m-li-aa-rights-v1",
+        "ledger_id": "oecd-stes-ledger-20260717t115242998550z",
+        "dataflow_id": "OECD.SDD.STES:DSD_STES_REVISIONS@DF_STES_REVISIONS",
+        "dataflow_version": "4.0",
+        "as_of": "2026-07-09",
+        "ref_area": "KOR",
+        "freq": "M",
+        "measure": "LI_AA",
+        "unit_measure": "IX",
+        "activity": "_T",
+        "selected_edition": "202607",
+        "period": "2026-05",
+        "observation": {
+          "raw_value": "102.66",
+          "normalization_rule_id": "oecd-stes-kor-li-aa-index-v1",
+          "normalized_value": "102.66",
+          "canonical_unit": "oecd_amplitude_adjusted_index",
+          "display_places": 2,
+          "display_value": "102.66"
+        }
+      },
+      "abstention": null,
+      "error": null
+    }
+  ],
+  "evidence_packet": {
+    "schema_version": "1.0.0",
+    "request": {
+      "request_id": "replay-request-data-stes-en-explicit-v1",
+      "question": "What was Korea's May 2026 CLI at the cutoff?",
+      "language": "en",
+      "requested_as_of": "2026-07-09",
+      "effective_as_of": "2026-07-09"
+    },
+    "planned_route": "data",
+    "status": "complete",
+    "documents": [],
+    "observations": [
+      {
+        "evidence_kind": "vintage_observation",
+        "source_id": "oecd-stes-cli-kor-li-aa-20260717t115302688498z",
+        "source_sha256": "ac7d0f9a2517870173885f1d45e2edea90f54cd485e2f539c73afddde566f058",
+        "source_system": "oecd",
+        "source_published_on": "2026-07-17",
+        "source_retrieved_at": "2026-07-17T11:53:02.688498Z",
+        "rights_catalog_id": "kor-rtd-rights-2026-07-17",
+        "rights_decision_id": "oecd-stes-revisions-kor-m-li-aa-rights-v1",
+        "ledger_id": "oecd-stes-ledger-20260717t115242998550z",
+        "dataflow_id": "OECD.SDD.STES:DSD_STES_REVISIONS@DF_STES_REVISIONS",
+        "dataflow_version": "4.0",
+        "as_of": "2026-07-09",
+        "ref_area": "KOR",
+        "freq": "M",
+        "measure": "LI_AA",
+        "unit_measure": "IX",
+        "activity": "_T",
+        "selected_edition": "202607",
+        "period": "2026-05",
+        "observation": {
+          "raw_value": "102.66",
+          "normalization_rule_id": "oecd-stes-kor-li-aa-index-v1",
+          "normalized_value": "102.66",
+          "canonical_unit": "oecd_amplitude_adjusted_index",
+          "display_places": 2,
+          "display_value": "102.66"
+        }
+      }
+    ],
+    "abstention": null
+  },
+  "failure": null
+}

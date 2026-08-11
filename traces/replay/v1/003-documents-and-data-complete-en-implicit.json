@@ -1,0 +1,227 @@
+{
+  "schema_version": "1.0.0",
+  "trace_id": "e2e-documents-and-data-complete-en-implicit-v1",
+  "recorded_at": "2026-08-11T06:02:00Z",
+  "request": {
+    "request_id": "replay-request-documents-data-en-implicit-v1",
+    "question": "Why was the growth outlook revised upward?",
+    "language": "en",
+    "requested_as_of": null,
+    "effective_as_of": "2026-07-17"
+  },
+  "environment": {
+    "executor_id": "sovereignlab-offline-executor-v1",
+    "executor_sha256": "08f45dab6a36a49cb7d0b588a69236942cd61534540bd4de0772010402dada64",
+    "tool_registry_id": "sovereignlab-deterministic-tool-registry-v1",
+    "tool_registry_sha256": "cd00b5c543cffc53024f98b9fafa73ed3fecd519fde81a826d060c8af4d2ad91",
+    "artifact_registry_id": "kor-rtd-execution-artifact-registry-v1",
+    "artifact_registry_sha256": "7b42027c1034789bd46a881fd186f66ba1ba1250d94639ff5eed6c89a3cc2293",
+    "retrieval_corpus_id": "synthetic-temporal-retrieval-corpus-v1",
+    "retrieval_corpus_sha256": "823117ee29a191bc306843e44ccd9d37e063db79cc87e15dcb7f2a11f5b5bf7e"
+  },
+  "planner": {
+    "planner_id": "committed-replay-scripted-planner-v1",
+    "mode": "scripted",
+    "recording_id": "committed-replay-documents-and-data-complete-en-implicit-v1",
+    "output_sha256": "65b01fea90d442b7a68d908066848f242f8fccbfd3d5bee4841bfd42eb18e14d",
+    "model_id": null
+  },
+  "status": "complete",
+  "plan": {
+    "schema_version": "1.0.0",
+    "route": "documents_and_data",
+    "tool_calls": [
+      {
+        "call_id": "replay-call-documents-data-doc-en-implicit-v1",
+        "tool_name": "retrieve_temporal_documents",
+        "arguments": {
+          "question": "Why was the growth outlook revised upward?",
+          "language": "en",
+          "as_of": "2026-07-17",
+          "top_k": 5
+        }
+      },
+      {
+        "call_id": "replay-call-documents-data-snapshot-en-implicit-v1",
+        "tool_name": "read_snapshot_as_of",
+        "arguments": {
+          "source_system": "ecos",
+          "table_id": "200Y108",
+          "item_id": "10601",
+          "period": "2026Q1",
+          "as_of": "2026-07-17",
+          "normalization_rule_id": "ecos-200y108-10601-billion-krw-v1"
+        }
+      }
+    ],
+    "abstention": null
+  },
+  "tool_results": [
+    {
+      "call_id": "replay-call-documents-data-doc-en-implicit-v1",
+      "tool_name": "retrieve_temporal_documents",
+      "status": "success",
+      "payload": {
+        "matches": [
+          {
+            "chunk_id": "synthetic-2024-08-en-growth",
+            "source_id": "synthetic-outlook-2024-08-en",
+            "source_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+            "language": "en",
+            "published_on": "2024-08-22",
+            "locator": {
+              "page": 6,
+              "section": "Growth outlook",
+              "fragment_id": null
+            },
+            "text": "The exact future answer says stronger exports and domestic demand recovery caused the upward growth outlook revision.",
+            "score": 1.9740395387
+          },
+          {
+            "chunk_id": "synthetic-2024-05-en-growth",
+            "source_id": "synthetic-outlook-2024-05-en",
+            "source_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "language": "en",
+            "published_on": "2024-05-23",
+            "locator": {
+              "page": 7,
+              "section": "Growth outlook",
+              "fragment_id": null
+            },
+            "text": "Stronger exports and a recovery in domestic demand led to an upward revision of the growth outlook.",
+            "score": 1.77359860093
+          },
+          {
+            "chunk_id": "synthetic-2024-05-en-prices",
+            "source_id": "synthetic-outlook-2024-05-en",
+            "source_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "language": "en",
+            "published_on": "2024-05-23",
+            "locator": {
+              "page": 11,
+              "section": "Inflation outlook",
+              "fragment_id": null
+            },
+            "text": "Consumer price inflation was expected to moderate as supply shocks eased.",
+            "score": 1.1145786966
+          }
+        ]
+      },
+      "abstention": null,
+      "error": null
+    },
+    {
+      "call_id": "replay-call-documents-data-snapshot-en-implicit-v1",
+      "tool_name": "read_snapshot_as_of",
+      "status": "success",
+      "payload": {
+        "evidence_kind": "latest_snapshot",
+        "source_id": "ecos-200y108-10601-20260717t115242998550z",
+        "source_sha256": "75c96ce62270a8a6c2a3c6bebaef981945b41f37f62cab6911698ce64d8dd9ea",
+        "source_system": "ecos",
+        "source_published_on": "2026-07-17",
+        "source_retrieved_at": "2026-07-17T11:52:43.237532Z",
+        "rights_catalog_id": "kor-rtd-rights-2026-07-17",
+        "rights_decision_id": "ecos-200y108-10601-rights-v1",
+        "vintage_semantics": "latest_only",
+        "as_of": "2026-07-17",
+        "table_id": "200Y108",
+        "item_id": "10601",
+        "period": "2026Q1",
+        "observation": {
+          "raw_value": "596692.8",
+          "normalization_rule_id": "ecos-200y108-10601-billion-krw-v1",
+          "normalized_value": "596692.8",
+          "canonical_unit": "billion_krw",
+          "display_places": 1,
+          "display_value": "596692.8"
+        }
+      },
+      "abstention": null,
+      "error": null
+    }
+  ],
+  "evidence_packet": {
+    "schema_version": "1.0.0",
+    "request": {
+      "request_id": "replay-request-documents-data-en-implicit-v1",
+      "question": "Why was the growth outlook revised upward?",
+      "language": "en",
+      "requested_as_of": null,
+      "effective_as_of": "2026-07-17"
+    },
+    "planned_route": "documents_and_data",
+    "status": "complete",
+    "documents": [
+      {
+        "chunk_id": "synthetic-2024-08-en-growth",
+        "source_id": "synthetic-outlook-2024-08-en",
+        "source_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+        "language": "en",
+        "published_on": "2024-08-22",
+        "locator": {
+          "page": 6,
+          "section": "Growth outlook",
+          "fragment_id": null
+        },
+        "text": "The exact future answer says stronger exports and domestic demand recovery caused the upward growth outlook revision.",
+        "score": 1.9740395387
+      },
+      {
+        "chunk_id": "synthetic-2024-05-en-growth",
+        "source_id": "synthetic-outlook-2024-05-en",
+        "source_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "language": "en",
+        "published_on": "2024-05-23",
+        "locator": {
+          "page": 7,
+          "section": "Growth outlook",
+          "fragment_id": null
+        },
+        "text": "Stronger exports and a recovery in domestic demand led to an upward revision of the growth outlook.",
+        "score": 1.77359860093
+      },
+      {
+        "chunk_id": "synthetic-2024-05-en-prices",
+        "source_id": "synthetic-outlook-2024-05-en",
+        "source_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "language": "en",
+        "published_on": "2024-05-23",
+        "locator": {
+          "page": 11,
+          "section": "Inflation outlook",
+          "fragment_id": null
+        },
+        "text": "Consumer price inflation was expected to moderate as supply shocks eased.",
+        "score": 1.1145786966
+      }
+    ],
+    "observations": [
+      {
+        "evidence_kind": "latest_snapshot",
+        "source_id": "ecos-200y108-10601-20260717t115242998550z",
+        "source_sha256": "75c96ce62270a8a6c2a3c6bebaef981945b41f37f62cab6911698ce64d8dd9ea",
+        "source_system": "ecos",
+        "source_published_on": "2026-07-17",
+        "source_retrieved_at": "2026-07-17T11:52:43.237532Z",
+        "rights_catalog_id": "kor-rtd-rights-2026-07-17",
+        "rights_decision_id": "ecos-200y108-10601-rights-v1",
+        "vintage_semantics": "latest_only",
+        "as_of": "2026-07-17",
+        "table_id": "200Y108",
+        "item_id": "10601",
+        "period": "2026Q1",
+        "observation": {
+          "raw_value": "596692.8",
+          "normalization_rule_id": "ecos-200y108-10601-billion-krw-v1",
+          "normalized_value": "596692.8",
+          "canonical_unit": "billion_krw",
+          "display_places": 1,
+          "display_value": "596692.8"
+        }
+      }
+    ],
+    "abstention": null
+  },
+  "failure": null
+}

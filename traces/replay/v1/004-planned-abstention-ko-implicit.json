@@ -1,0 +1,61 @@
+{
+  "schema_version": "1.0.0",
+  "trace_id": "e2e-planned-abstention-ko-implicit-v1",
+  "recorded_at": "2026-08-11T06:03:00Z",
+  "request": {
+    "request_id": "replay-request-planned-abstention-ko-implicit-v1",
+    "question": "검증 가능한 근거가 없는 요청에는 어떻게 답해야 하나요?",
+    "language": "ko",
+    "requested_as_of": null,
+    "effective_as_of": "2026-07-17"
+  },
+  "environment": {
+    "executor_id": "sovereignlab-offline-executor-v1",
+    "executor_sha256": "08f45dab6a36a49cb7d0b588a69236942cd61534540bd4de0772010402dada64",
+    "tool_registry_id": "sovereignlab-deterministic-tool-registry-v1",
+    "tool_registry_sha256": "cd00b5c543cffc53024f98b9fafa73ed3fecd519fde81a826d060c8af4d2ad91",
+    "artifact_registry_id": "kor-rtd-execution-artifact-registry-v1",
+    "artifact_registry_sha256": "7b42027c1034789bd46a881fd186f66ba1ba1250d94639ff5eed6c89a3cc2293",
+    "retrieval_corpus_id": "synthetic-temporal-retrieval-corpus-v1",
+    "retrieval_corpus_sha256": "823117ee29a191bc306843e44ccd9d37e063db79cc87e15dcb7f2a11f5b5bf7e"
+  },
+  "planner": {
+    "planner_id": "committed-replay-scripted-planner-v1",
+    "mode": "scripted",
+    "recording_id": "committed-replay-planned-abstention-ko-implicit-v1",
+    "output_sha256": "64b8aaffbb1f8eb1b8de97d20502986bf51f8ff0a919fbb804b51ab195860b4b",
+    "model_id": null
+  },
+  "status": "abstained",
+  "plan": {
+    "schema_version": "1.0.0",
+    "route": "abstain",
+    "tool_calls": [],
+    "abstention": {
+      "reason_code": "no-cutoff-safe-route",
+      "message": "No cutoff-safe evidence route is available for this request."
+    }
+  },
+  "tool_results": [],
+  "evidence_packet": {
+    "schema_version": "1.0.0",
+    "request": {
+      "request_id": "replay-request-planned-abstention-ko-implicit-v1",
+      "question": "검증 가능한 근거가 없는 요청에는 어떻게 답해야 하나요?",
+      "language": "ko",
+      "requested_as_of": null,
+      "effective_as_of": "2026-07-17"
+    },
+    "planned_route": "abstain",
+    "status": "abstained",
+    "documents": [],
+    "observations": [],
+    "abstention": {
+      "origin": "plan",
+      "origin_call_id": null,
+      "reason_code": "no-cutoff-safe-route",
+      "message": "No cutoff-safe evidence route is available for this request."
+    }
+  },
+  "failure": null
+}

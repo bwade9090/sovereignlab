@@ -1,0 +1,105 @@
+{
+  "schema_version": "1.0.0",
+  "trace_id": "e2e-documents-complete-ko-explicit-v1",
+  "recorded_at": "2026-08-11T06:00:00Z",
+  "request": {
+    "request_id": "replay-request-documents-ko-explicit-v1",
+    "question": "성장 전망 상향 배경은 수출 증가와 내수 회복 중 무엇인가요?",
+    "language": "ko",
+    "requested_as_of": "2024-05-31",
+    "effective_as_of": "2024-05-31"
+  },
+  "environment": {
+    "executor_id": "sovereignlab-offline-executor-v1",
+    "executor_sha256": "08f45dab6a36a49cb7d0b588a69236942cd61534540bd4de0772010402dada64",
+    "tool_registry_id": "sovereignlab-deterministic-tool-registry-v1",
+    "tool_registry_sha256": "cd00b5c543cffc53024f98b9fafa73ed3fecd519fde81a826d060c8af4d2ad91",
+    "artifact_registry_id": "kor-rtd-execution-artifact-registry-v1",
+    "artifact_registry_sha256": "7b42027c1034789bd46a881fd186f66ba1ba1250d94639ff5eed6c89a3cc2293",
+    "retrieval_corpus_id": "synthetic-temporal-retrieval-corpus-v1",
+    "retrieval_corpus_sha256": "823117ee29a191bc306843e44ccd9d37e063db79cc87e15dcb7f2a11f5b5bf7e"
+  },
+  "planner": {
+    "planner_id": "committed-replay-scripted-planner-v1",
+    "mode": "scripted",
+    "recording_id": "committed-replay-documents-complete-ko-explicit-v1",
+    "output_sha256": "c964f3f1d5b3f2b0c34a0c225f5c457fd7526bf7cbdb21fd99f649f25064417c",
+    "model_id": null
+  },
+  "status": "complete",
+  "plan": {
+    "schema_version": "1.0.0",
+    "route": "documents",
+    "tool_calls": [
+      {
+        "call_id": "replay-call-documents-ko-explicit-v1",
+        "tool_name": "retrieve_temporal_documents",
+        "arguments": {
+          "question": "성장 전망 상향 배경은 수출 증가와 내수 회복 중 무엇인가요?",
+          "language": "ko",
+          "as_of": "2024-05-31",
+          "top_k": 5
+        }
+      }
+    ],
+    "abstention": null
+  },
+  "tool_results": [
+    {
+      "call_id": "replay-call-documents-ko-explicit-v1",
+      "tool_name": "retrieve_temporal_documents",
+      "status": "success",
+      "payload": {
+        "matches": [
+          {
+            "chunk_id": "synthetic-2024-05-ko-growth",
+            "source_id": "synthetic-outlook-2024-05-ko",
+            "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "language": "ko",
+            "published_on": "2024-05-23",
+            "locator": {
+              "page": 7,
+              "section": "성장 전망",
+              "fragment_id": null
+            },
+            "text": "수출 증가와 내수 회복을 반영해 성장 전망을 상향했다.",
+            "score": 8.93644298904
+          }
+        ]
+      },
+      "abstention": null,
+      "error": null
+    }
+  ],
+  "evidence_packet": {
+    "schema_version": "1.0.0",
+    "request": {
+      "request_id": "replay-request-documents-ko-explicit-v1",
+      "question": "성장 전망 상향 배경은 수출 증가와 내수 회복 중 무엇인가요?",
+      "language": "ko",
+      "requested_as_of": "2024-05-31",
+      "effective_as_of": "2024-05-31"
+    },
+    "planned_route": "documents",
+    "status": "complete",
+    "documents": [
+      {
+        "chunk_id": "synthetic-2024-05-ko-growth",
+        "source_id": "synthetic-outlook-2024-05-ko",
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "language": "ko",
+        "published_on": "2024-05-23",
+        "locator": {
+          "page": 7,
+          "section": "성장 전망",
+          "fragment_id": null
+        },
+        "text": "수출 증가와 내수 회복을 반영해 성장 전망을 상향했다.",
+        "score": 8.93644298904
+      }
+    ],
+    "observations": [],
+    "abstention": null
+  },
+  "failure": null
+}
