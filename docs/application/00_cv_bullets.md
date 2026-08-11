@@ -1,8 +1,8 @@
 # SovereignLab CV bullets
 
 - Status: wording bank; use only the section matching the achieved milestone
-- Last updated: 2026-08-07 (M2 mid-window refresh: 6/40 approved core, execution-surface slices 1–7
-  complete, 67-file/1,049-test baseline)
+- Last updated: 2026-08-11 (M2 mid-window refresh: 6/40 approved core, execution-surface slices 1–8
+  complete, 69-file/1,115-test baseline)
 - Rule: never replace placeholders with targets or estimates; use measured, reproducible results only
 - Narrative versions: `docs/application/01_project_description.md`
 
@@ -31,11 +31,13 @@
   tools, an explicit dispatcher that independently replays and revalidates every call, an offline
   one-shot planner with scripted and immutable recorded/replay modes, and an internal deterministic
   evidence-packet assembler that preserves ordered typed evidence and fail-closed planned/tool
-  abstentions without partial-evidence leakage. The offline executor and committed end-to-end replay
-  traces do not yet exist, so no end-to-end result is claimed.
+  abstentions without partial-evidence leakage, and a private offline executor that binds the real
+  registry, corpus, planner, and source-tree provenance; plans once; dispatches in order; and stops
+  safely at the first terminal result. Committed end-to-end replay traces do not yet exist, so no
+  end-to-end result is claimed.
 - Verified the pinned Ministral 3 3B NF4/QLoRA compatibility path on a disposable A40/CUDA 13 GPU
-  and maintain 1,049 tests at 100% statement/branch coverage (4,353 statements, 1,470 branches)
-  across 67 formatted Python files; temporal leakage remains the planned headline metric, and no
+  and maintain 1,115 tests at 100% statement/branch coverage (4,679 statements, 1,568 branches)
+  across 69 formatted Python files; temporal leakage remains the planned headline metric, and no
   model-quality result is claimed yet.
 
 ### Short form (single bullet)
@@ -49,13 +51,13 @@
   retrieval over a committed synthetic corpus, a frozen typed execution-and-trace contract within
   the project's 13 public JSON Schemas, three deterministic evidence tools behind a replay-checked
   dispatcher, an offline exact-byte-verified planner boundary, an internal deterministic
-  evidence-packet assembler, a verified Ministral 3 3B NF4/QLoRA compatibility path, and 1,049
-  tests at 100% statement/branch coverage; temporal leakage is the planned headline metric and no
-  model-quality or end-to-end execution result is claimed yet.
+  evidence-packet assembler, a private provenance-bound offline executor, a verified Ministral 3 3B
+  NF4/QLoRA compatibility path, and 1,115 tests at 100% statement/branch coverage; temporal leakage
+  is the planned headline metric and no model-quality or end-to-end execution result is claimed yet.
 
-This version distinguishes the implemented data, evidence-tool, planner, and packet-assembly
-boundaries from the not-yet-implemented offline executor and committed replay traces, the 34
-unauthored core slots, and the not-yet-evaluated model variants.
+This version distinguishes the implemented data, evidence-tool, planner, packet-assembly, and
+offline-executor boundaries from the not-yet-committed replay traces, the 34 unauthored core slots,
+and the not-yet-evaluated model variants.
 
 ## Version B — use after the Week 2 baseline is reproducible
 
@@ -92,8 +94,8 @@ unauthored core slots, and the not-yet-evaluated model variants.
   permitted wording is `typed function calling with committed traces` — and only then. Until that
   point, describe only the implemented components (typed execution-and-trace contract,
   deterministic evidence tools, replay-checked dispatcher, offline one-shot planner, and internal
-  deterministic evidence-packet assembler) and state that the offline executor and committed
-  end-to-end replay traces do not yet exist.
+  deterministic evidence-packet assembler, and private provenance-bound offline executor) and state
+  that committed end-to-end replay traces do not yet exist.
 - Every "first" claim must read "to our knowledge, for official statistics" and the datasheet must cite prior art first (arXiv 2605.23497 statutory as-of QA; Dallas Fed real-time OECD dataset; OECD MEI revisions database). Never claim "first Korean macro benchmark" (KMMLU includes economics categories).
 - Do not claim OECD edition/backfill ranges beyond what a recorded verification spike confirmed.
 - Do not cite harvester snapshot counts older than the public commit history that proves them.

@@ -1,6 +1,6 @@
 # SovereignLab project status
 
-- Last updated: 2026-08-07
+- Last updated: 2026-08-11
 - Owner: Hyungbae Cho (`bwade9090`)
 - Delivery window: four weeks, approximately 80 hours
 - Current milestone: M2 — week-2 benchmark and baselines (charter v2.5 §7, Week 2)
@@ -55,9 +55,14 @@
   evidence-packet assembler strictly revalidates the request, plan, and ordered typed results;
   preserves all four routes, exact cutoff/call/result bindings, ordered and repeated evidence, and
   planned/tool abstention; and returns only the frozen `ExecutionEvidencePacket` without partial
-  evidence. The offline end-to-end executor and committed replay traces remain to be implemented,
-  so the minimal question-to-evidence-packet path is not yet shipped. The bounded multi-step tool
-  loop remains deferred to post-window v1.1.
+  evidence. The eighth implementation slice is now complete: the private offline executor invokes
+  the existing planner once, dispatches validated calls in order through the frozen registry, stops
+  on the first abstention or error, assembles only eligible packets, and returns the existing strict
+  `ExecutionTrace` with real executor/registry/corpus and planner provenance. The first eight ADR
+  0008 slices are complete, but committed machine-readable real-digest end-to-end replay traces
+  remain to be implemented, so the minimal question-to-evidence-packet path is not yet shipped.
+  Live integration remains later work, and the bounded multi-step tool loop remains deferred to
+  post-window v1.1.
 
 ## Approved baseline
 
@@ -399,6 +404,23 @@
   executor, trace fixture, provider, source, benchmark, live model, or paid operation was added.
   Full details are in `docs/project/15_evidence_packet_assembler_contract.md`.
 
+- **Private offline executor — work unit C slice 8 (2026-08-11):**
+  Functional commit `550b591` adds the private `sovereignlab.execution.executor` boundary over one
+  exact validated request, explicit harness-owned trace metadata, the existing `Planner`, and the
+  exact committed callable registry. It invokes the planner once, strictly revalidates the returned
+  plan, dispatches calls once each in order, stops at the first abstention or error, skips assembly
+  after tool error, and builds only the existing strict `ExecutionTrace` 1.0.0. Real executor,
+  callable-registry, composite artifact-registry, retrieval-corpus, and planner provenance are
+  rebuilt and rechecked before terminal return. Sanitized phase mapping preserves complete,
+  planned/tool abstention, tool failure, planner/plan-validation failure, and eligible packet-
+  assembly failure without partial packet evidence. The executor ID is
+  `sovereignlab-offline-executor-v1`; its canonical 32-source descriptor digest is
+  `08f45dab6a36a49cb7d0b588a69236942cd61534540bd4de0772010402dada64`. The function and error
+  boundary remain private, public schemas remain at 13, and no committed end-to-end replay trace,
+  provider/live-model call, source capture, benchmark record, GPU, network, or paid operation was
+  added. Full
+  details are in `docs/project/16_offline_executor_contract.md`.
+
 - **Windows baseline reproducibility repair (2026-07-29):** Windows now installs the IANA timezone
   database through the platform-guarded `tzdata==2026.3` requirement, which makes the existing
   `Asia/Seoul` tests and the new snapshot capture cutoff deterministic on a standard Python 3.12
@@ -702,6 +724,19 @@ statements, 1,470 branches). `git diff --check` passed, and functional commit `f
 was not modified. The slice was entirely offline and added no source or provider read, secret,
 live model call, GPU operation, or paid operation.
 
+Validated 2026-08-11 on Windows after the private offline-executor slice: Python 3.12.13;
+`python scripts/export_json_schemas.py` reproduced all 13 public contracts without a schema diff;
+`python -m ruff check --no-cache .` passed; and `python -m ruff format --check .` passed across 69
+Python files. The 66 focused executor tests reached 100% executor statement/branch coverage (326
+statements, 98 branches). The full suite, run with an explicit fresh OS `--basetemp`, passed all
+1,115 tests with 100% SovereignLab statement/branch coverage (4,679 statements, 1,568 branches).
+The executor descriptor contains 32 canonical source entries and SHA-256
+`08f45dab6a36a49cb7d0b588a69236942cd61534540bd4de0772010402dada64`. The ignored repository
+`.pytest_tmp` ACL was left untouched. Functional commit `550b591` matched `origin/main` with a clean
+worktree before this documentation checkpoint. The work was entirely offline and added no network
+or provider call, secret, live model integration, GPU operation, or paid operation; project cost
+was $0.00.
+
 ## M1b verification spike record (2026-07-15)
 
 All network work below was read-only, key-free, and free of charge. Raw responses were written only
@@ -894,19 +929,46 @@ response bodies.
   added. The next session starts from the completed assembler boundary and coordinates the frozen
   components without reopening them.
 
+## Session-close snapshot (2026-08-11, sixteenth close: offline executor complete)
+
+- Work unit C remains active, but its first eight independently reviewable ADR 0008 slices are
+  complete. Execution contract 1.0.0, all three trusted deterministic tool registries/adapters, the
+  frozen callable dispatcher, the offline one-shot planner, the private evidence-packet assembler,
+  and the private offline executor validate independently and together.
+- M2 remains active. The frozen matrix was not changed, exactly six records are owner-approved,
+  and the other 34 slots are not authored.
+- Functional commit `550b591` adds `src/sovereignlab/execution/executor.py`. The executor invokes
+  one validated planner once, dispatches through the real committed registry in plan order, stops
+  after a terminal abstention or error, invokes the assembler only for eligible terminal states,
+  and returns only the existing `ExecutionTrace` model. Its function and private error are not
+  package-level exports, and the public schema count remains 13.
+- The executor binds real registry/corpus IDs and digests, exact planner provenance, and the
+  32-source executor descriptor digest
+  `08f45dab6a36a49cb7d0b588a69236942cd61534540bd4de0772010402dada64`.
+- The minimal typed function-calling path is not yet complete or claimed as shipped: committed
+  machine-readable real-digest end-to-end replay traces do not yet exist. The existing contract
+  fixture remains a schema fixture rather than an end-to-end replay result, and live integration
+  remains later work.
+- No source artifact, provider body, secret, network or provider call, live model integration, GPU
+  operation, or paid operation was added. The unchanged `.pytest_tmp` ACL was not touched; focused
+  and full validation used fresh OS basetemp directories. The next session starts from the completed
+  executor and adds replay traces only.
+
 ## Immediate next action (M2 — do these in order)
 
-1. Add only the offline executor that coordinates the existing validated planner, explicit
-   dispatcher, and private evidence-packet assembler in order with real registry/corpus and
-   execution-environment provenance. Reuse the frozen `ExecutionTrace` model and failure phases;
-   do not add a public executor wrapper or schema. Stop after focused tests and the full baseline.
-2. In a later independent slice, commit real-digest end-to-end replay traces over the completed
-   executor. The existing contract fixture is not an end-to-end replay trace.
-3. Only after items 1–2, satisfy every route, bilingual, cutoff, invalid-call, replay, and
-   round-trip criterion in handoff §5 before calling work unit C complete.
-4. Keep live model calls, additional source ingestion, new benchmark authoring, and the bounded
-   v1.1 loop outside this unit. Any later live call requires its own smoke test, authorization, and
-   spend-ledger entry.
+1. Add only small committed machine-readable end-to-end replay traces over the completed private
+   executor, using the real executor, callable-registry, composite artifact-registry,
+   retrieval-corpus, and planner provenance IDs and digests. The existing contract fixture is not
+   an end-to-end replay result. Stop after trace-focused checks and the full offline baseline.
+2. Validate exact request/plan/ordered-result/packet equality, all four routes, Korean and English,
+   explicit and implicit cutoffs, every traceable terminal phase, and deterministic round-trip
+   replay from the committed trace artifacts. Do not change a public schema or reopen the frozen
+   planner, dispatcher, assembler, or executor boundaries merely to simplify fixtures.
+3. Only after the committed real-digest traces and a green reproducible baseline may the minimal
+   question-to-evidence-packet path be described as shipped.
+4. Keep provider/live-model integration, additional source ingestion, new benchmark authoring, and
+   the bounded v1.1 loop outside this slice. Any later live call requires its own smoke test,
+   authorization, and spend-ledger entry.
 
 Open operational check, not an M2 blocker: manually dispatch one secret-backed append-only
 harvester run only with separate owner authorization; otherwise the next weekly schedule will use
@@ -999,6 +1061,7 @@ complete.
 | 2026-07-30 | Post-dispatcher session-close onboarding finalization | $0.00 | Documentation and offline consistency review only; no source/provider read, secret, live model API, GPU, or paid call |
 | 2026-08-02 | Offline one-shot planner boundary | $0.00 | Offline implementation, exact-byte replay tests, specification, and full validation only; no provider, live model API, GPU, or paid call |
 | 2026-08-07 | Deterministic evidence-packet assembler | $0.00 | Offline private assembler, focused tests, specification, review, and full validation only; no provider, live model API, GPU, or paid call |
+| 2026-08-11 | Private offline executor | $0.00 | Offline executor, real committed registry/corpus replay, focused tests, specification, review, and full fresh-OS-basetemp validation only; no network, provider, live model integration, GPU, or paid call; repository `.pytest_tmp` ACL untouched |
 
 **Cumulative external spend: $0.23584524099715054 / $100.00**
 
@@ -1036,10 +1099,17 @@ Read in this order, in full, before changing anything:
     recording boundary, request binding, and deterministic replay.
 16. `docs/project/15_evidence_packet_assembler_contract.md` — the implemented private assembler,
     ordered-result binding, abstention semantics, and no-partial-evidence boundary.
-17. `src/sovereignlab/schemas/execution.py` and `tests/schemas/test_execution.py` — frozen
-    request/plan/result/packet/trace invariants for the executor to reuse.
-18. The dispatcher, planner, and assembler source/test pairs under `src/sovereignlab/execution/`
-    and `tests/execution/` — completed boundaries the executor must coordinate without reopening.
+17. `docs/project/16_offline_executor_contract.md` — the implemented private executor, one-shot
+    state machine, sanitized trace/failure mapping, real provenance construction, and explicit
+    boundary before committed replay traces.
+18. `src/sovereignlab/schemas/execution.py` and `tests/schemas/test_execution.py` — frozen
+    request/plan/result/packet/trace invariants reused by the executor and committed traces.
+19. `src/sovereignlab/execution/executor.py` and `tests/execution/test_executor.py` — the completed
+    private offline executor and its focused real-registry, state-machine, provenance, drift,
+    sanitization, and deterministic round-trip coverage.
+20. The dispatcher, planner, and assembler source/test pairs under `src/sovereignlab/execution/`
+    and `tests/execution/` — completed frozen boundaries coordinated by the executor and replay
+    traces without reopening them.
 
 Then start with "Immediate next action" item 1. The structural matrix and first six records are
 owner-approved; the other 34 slots are neither authored nor approved. The synthetic retrieval

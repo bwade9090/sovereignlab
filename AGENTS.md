@@ -21,45 +21,49 @@ This repository is between work units and is ready to continue on the Windows wo
   registry, typed `retrieve_temporal_documents` adapter, trusted historical STES registry, and
   flat `resolve_stes_as_of` adapter are also complete. The snapshot boundary revalidates exact
   bytes and rebuilt models at call time; the frozen three-tool callable registry, explicit
-  dispatcher, and offline one-shot scripted/recorded/replay planner are complete. The internal
-  deterministic evidence-packet assembler is now complete as the seventh ADR 0008 slice. It
-  revalidates request/plan/result bindings, preserves ordered and repeated typed evidence, and
-  fails closed without partial-evidence leakage while leaving the 13 public schemas unchanged.
-- Exact next outcome: the minimal offline **typed function-calling question-to-evidence-packet
-  path** required by ADR 0008, with committed machine-readable traces.
-- Exact next reviewable slice: the offline executor only.
-- Not implemented yet: the offline executor, committed end-to-end replay traces, or live model
-  integration. The contract fixture is not an end-to-end replay result.
+  dispatcher, offline one-shot scripted/recorded/replay planner, internal deterministic
+  evidence-packet assembler, and private offline executor are complete as the first eight ADR 0008
+  slices. The executor coordinates one planner call, ordered terminal dispatch, and private packet
+  assembly while revalidating bindings and real execution provenance without changing the 13
+  public schemas. Its completed 2026-08-11 feature commit is `550b591`; the source descriptor pins
+  32 entries and executor digest
+  `08f45dab6a36a49cb7d0b588a69236942cd61534540bd4de0772010402dada64`.
+- Exact next outcome: committed machine-readable real-digest end-to-end replay traces over the
+  completed private offline executor.
+- Exact next reviewable slice: committed machine-readable real-digest end-to-end replay traces
+  only.
+- Not implemented yet: committed end-to-end replay traces, a provider or live-model integration,
+  or the bounded tool loop. The contract fixture is not an end-to-end replay result.
 - The planner boundary exists under `src/sovereignlab/execution/planner.py`; its recording registry
   and entry format remain intentionally private. The assembler exists under
   `src/sovereignlab/execution/assembler.py`; its function and error boundary remain internal and
-  are not package-level public exports. No committed provider recording path exists under `data/`.
+  are not package-level public exports. The executor exists under
+  `src/sovereignlab/execution/executor.py`; its function and error boundary are likewise private.
+  No committed provider recording path exists under `data/`.
 - The bounded tool loop is not part of this milestone; ADR 0008 defers it to v1.1.
 
 The authoritative live checkpoint and acceptance criteria are in
 `docs/project/04_macbook_handoff.md`. The filename is retained for history, but the document is now
 the cross-machine Windows continuation handoff.
 
-## Exact next slice — offline executor only
+## Exact next slice — committed real-digest end-to-end replay traces only
 
-The next reviewable outcome is an entirely offline executor over the completed planner, dispatcher,
-and private assembler boundaries. Keep committed end-to-end replay fixtures and live-model work in
-later independent slices.
+The next reviewable outcome is only a small committed set of machine-readable end-to-end replay
+traces over the completed private offline executor. Keep provider/live-model work and the bounded
+tool loop in later independent slices.
 
-- Consume one validated `ExecutionRequest`, use the existing `Planner` boundary, execute only the
-  already validated plan's calls through the frozen explicit dispatcher in order, and pass the
-  ordered typed results to the private evidence-packet assembler.
+- Generate traces through the real private executor, callable registry, artifact registry,
+  retrieval corpus, and planner provenance boundaries; do not hand-author substitute provenance.
+- Commit only deterministic machine-readable replay artifacts whose environment and planner IDs
+  and digests bind the real source tree and committed registries/corpora.
 - Preserve planned abstention, terminal tool abstention, tool failure, and packet-assembly failure
   semantics from the existing `ExecutionTrace` 1.0.0 contract. Do not expose partial evidence or
   continue after a terminal result.
-- Bind the existing execution-environment and planner provenance to the real committed
-  registry/corpus IDs and digests resolved by the harness. Reuse the existing `ExecutionTrace`
-  model; do not invent a new public executor result, provider envelope, or JSON Schema.
-- Reject request, plan, result, provenance, ordering, cutoff, or packet drift and preserve the
-  existing failure phases and sanitized-error boundary.
-- Stop after the executor slice and a green full baseline. Do not commit end-to-end replay fixtures
-  in this slice, add a provider or live model call, change sources, benchmark records, or public
-  schemas, or start the deferred bounded loop.
+- Reuse the existing `ExecutionTrace` 1.0.0 model and completed private executor; do not expose the
+  executor or invent a provider envelope, public result, recording API, or JSON Schema.
+- Stop after the trace slice and a green full baseline. Do not add a provider or live-model call,
+  change sources, benchmark records, rights decisions, or public schemas, or start the deferred
+  bounded loop.
 
 ## New-session onboarding procedure
 
@@ -74,8 +78,9 @@ Before editing:
    under "Local setup and required checks."
 4. State back four facts before implementation: current milestone, approved core count, exact next
    work unit, and hard stops.
-5. Start with one reviewable implementation slice inside the ADR 0008 unit. Do not combine source
-   expansion, new benchmark authoring, a live model call, or a paid operation with onboarding.
+5. Start only with the committed real-digest end-to-end replay-trace slice. Do not combine source
+   expansion, new benchmark authoring, a provider or live-model call, or a paid operation with
+   onboarding.
 
 ## Read before changing anything
 
@@ -111,12 +116,14 @@ Before editing:
     recording boundary, request binding, and deterministic replay.
 15. `docs/project/15_evidence_packet_assembler_contract.md` — implemented private assembler,
     ordered-result binding, abstention semantics, and no-partial-evidence boundary.
-16. The closest additional `AGENTS.md`, if a subdirectory adds one later.
+16. `docs/project/16_offline_executor_contract.md` — implemented private executor, one-shot state
+    machine, sanitized failure mapping, real source-tree provenance, and validation evidence.
+17. The closest additional `AGENTS.md`, if a subdirectory adds one later.
 
-For the exact offline-executor slice, also read `src/sovereignlab/schemas/execution.py` and
-`tests/schemas/test_execution.py`, plus the completed dispatcher, planner, and assembler source/test
-pairs under `src/sovereignlab/execution/` and `tests/execution/`. Coordinate those frozen boundaries;
-do not reopen or combine their behavior with the executor slice.
+For the exact replay-trace slice, also read `src/sovereignlab/schemas/execution.py` and
+`tests/schemas/test_execution.py`, plus the completed dispatcher, planner, assembler, and executor
+source/test pairs under `src/sovereignlab/execution/` and `tests/execution/`. Treat those boundaries
+as frozen; do not reopen or combine their behavior with the trace slice.
 
 The charter is the scope authority. Do not expand sources, agents, UI, or infrastructure before the current milestone gate passes.
 
@@ -236,10 +243,11 @@ commit that machine-specific path. Do not reuse a `.venv` whose interpreter chec
 The Windows requirements include a `win32`-only `tzdata` pin because a standard Windows Python
 installation has no system IANA timezone database.
 
-The handoff baseline is 13 deterministic public schemas, 67 formatted Python files, 1,049 passing
-tests, and 100% SovereignLab statement/branch coverage (4,353 statements, 1,470 branches). A
-different result is a diagnostic signal: stop before implementation and record the discrepancy
-in `docs/PROJECT_STATUS.md`.
+The 2026-08-11 handoff baseline is 13 deterministic public schemas, 69 formatted Python files,
+1,115 passing tests, and 100% SovereignLab statement/branch coverage (4,679 statements, 1,568
+branches). The focused executor acceptance run is 66 passing tests with 100% coverage over 326
+statements and 98 branches. A different result is a diagnostic signal: stop before implementation
+and record the discrepancy in `docs/PROJECT_STATUS.md`.
 
 ## Repository map
 
@@ -248,8 +256,10 @@ in `docs/PROJECT_STATUS.md`.
 - `src/sovereignlab/retrieval/` — cutoff-safe lexical retrieval, trusted synthetic corpus, and
   typed document adapter.
 - `src/sovereignlab/execution/` — frozen three-tool callable registry, explicit deterministic
-  dispatcher, offline one-shot planner boundary, and private deterministic evidence-packet
-  assembler. The offline executor and committed end-to-end replay traces do not exist yet.
+  dispatcher, offline one-shot planner boundary, private deterministic evidence-packet assembler,
+  and private offline executor. The first eight ADR 0008 slices are complete; committed
+  end-to-end replay traces, provider/live-model integration, and the bounded tool loop do not exist
+  yet.
 - `tests/` — offline tests; network calls must be mocked or replayed unless explicitly marked.
 - `data/` — public benchmark and metadata policy; ignored raw/interim material. The KOR-RTD archive layer (edition consolidations, harvester snapshots, manifests) lives here.
 - `artifacts/` — generated outputs policy; generated content is ignored by default.

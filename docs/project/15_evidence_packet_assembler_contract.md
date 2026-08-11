@@ -80,6 +80,15 @@ slice's final validation.
 
 ## Next independent slice
 
-Add only the offline end-to-end executor that consumes the existing planner, dispatcher, and
-assembler boundaries. Keep committed end-to-end replay traces and live model integration in later
-reviewable slices, and do not start the bounded tool loop deferred to v1.1.
+The private offline executor is complete at functional commit `550b591` and is specified in
+`docs/project/16_offline_executor_contract.md`. It coordinates the completed planner, frozen
+dispatcher, and private assembler once and in order while preserving the existing `ExecutionTrace`
+1.0.0 surface; the 13 public schemas remain unchanged.
+
+The exact next reviewable slice is only the committed machine-readable end-to-end replay traces.
+Those traces must use the real executor and bind the real registry, corpus, planner, and executor
+provenance identifiers and digests. The existing contract fixture is not an end-to-end replay
+result, and the minimal typed function-calling path is not shipped until these traces are committed.
+
+Keep provider or live-model integration in a later independent slice, and do not start the bounded
+tool loop deferred by ADR 0008.

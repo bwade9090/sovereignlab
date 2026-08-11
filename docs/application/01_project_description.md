@@ -1,7 +1,7 @@
 # SovereignLab application project description
 
 - Status: application-ready wording for the current M2 midpoint
-- Last updated: 2026-08-07
+- Last updated: 2026-08-11
 - Disclosure level: verified implementation and compatibility results only; no model-quality or
   end-to-end execution claim
 
@@ -34,8 +34,8 @@ large-number presentation, rounding, and grading tolerances are also frozen and 
 The project passed its first milestone gate and is midway through the benchmark-and-baselines
 milestone. Its evidence, benchmark, core-authoring-matrix, availability-ledger, rights, and
 execution contracts are published as 13 synchronized deterministic JSON Schemas; the offline
-resolver and GitHub Actions harvester are operational; and 1,049 tests pass with 100% statement
-and branch coverage (4,353 statements, 1,470 branches) across 67 formatted Python files. The
+  resolver and GitHub Actions harvester are operational; and 1,115 tests pass with 100% statement
+  and branch coverage (4,679 statements, 1,568 branches) across 69 formatted Python files. The
 40-question human-reviewed bilingual
 core is frozen as an allocation, and 6 of 40 records — initially AI-authored, then approved under
 named human review —
@@ -58,19 +58,21 @@ and an explicit dispatcher independently replays and revalidates every call befo
 result. The offline one-shot planner boundary is implemented with scripted and immutable
 recorded/replay modes, exact candidate-byte verification, digest-linked provenance, and request
 cutoff/question/language binding before dispatch. An internal deterministic evidence-packet
-assembler now preserves ordered typed payloads, exact planned/tool abstention reasons, repeated
-cross-call evidence, and no-partial-evidence behavior without adding a public schema or wrapper.
-The offline executor and committed end-to-end replay traces remain in the current work unit, so no
-end-to-end execution result is claimed yet. A
+  assembler now preserves ordered typed payloads, exact planned/tool abstention reasons, repeated
+  cross-call evidence, and no-partial-evidence behavior without adding a public schema or wrapper.
+  A private offline executor now plans exactly once, dispatches validated calls in order, stops at
+  the first terminal result, and binds the real registry, corpus, planner, and canonical source-tree
+  provenance into the existing trace model. Committed end-to-end replay traces remain in the
+  current work unit, so no end-to-end execution result is claimed yet. A
 pinned Ministral 3 3B QLoRA compatibility run also completed one optimizer step on a disposable
 RunPod A40/CUDA 13 instance, verifying NF4 loading,
 language-model-only LoRA boundaries, finite gradients, a changed adapter tensor, and adapter-only
 output. This is deliberately reported as a training-path compatibility result, not as evidence of
 improved model quality.
 
-The exact next implementation slice adds only the offline executor over the completed planner,
-dispatcher, and packet-assembler boundaries. Committed end-to-end replay traces follow in a
-separate reviewable slice. Later M2 work authors the remaining 34 core records plus a separately
+The exact next implementation slice adds only committed machine-readable end-to-end replay traces
+over the completed offline executor and real digest-linked registries. Later M2 work authors the
+remaining 34 core records plus a separately
 reported set of 200–300 deterministic revision probes and runs the four-variant baseline suite
 comparing closed-book generation, temporal RAG, RAG plus deterministic tools, and a QLoRA-tuned
 evidence router. Temporal-leakage rate—whether a system uses information that did not exist at the
@@ -88,13 +90,14 @@ resolver, and exact number-normalization rules, then froze a typed execution-and
 completing the project's 13 public JSON Schemas — and implemented cutoff-filtered bilingual
 temporal document retrieval over a committed synthetic corpus, all three deterministic evidence
 tools behind a replay-checked dispatcher, an offline scripted/immutable recorded-replay planner
-boundary, and an internal deterministic evidence-packet assembler. The repository passes 1,049
-tests with 100% statement and branch coverage (4,353 statements, 1,470 branches). The frozen
+  boundary, an internal deterministic evidence-packet assembler, and a private provenance-bound
+  offline executor. The repository passes 1,115 tests with 100% statement and branch coverage
+  (4,679 statements, 1,568 branches). The frozen
 40-record bilingual K-VINTAGE core has its first 6 records reviewed and approved, including a
 Korean/English documentary pair over the Bank of Korea's May 2026 Economic Outlook and its later
 official English translation. I also verified the pinned Ministral 3 3B NF4/QLoRA training path on
-a disposable A40/CUDA 13 GPU without claiming model-quality gains. Next: the offline executor,
-followed in a separate slice by committed end-to-end replay traces, then the remaining core,
+  a disposable A40/CUDA 13 GPU without claiming model-quality gains. Next: committed machine-readable
+  end-to-end replay traces, then the remaining core,
 separately reported deterministic revision probes, and the four-variant baseline suite, with
 temporal leakage as the headline metric.
 
@@ -110,7 +113,6 @@ temporal leakage as the headline metric.
   described; the real report bodies are manifest-bound and not committed as searchable text.
 - Do not use “agent”, “agentic”, “multi-step”, “orchestration”, or “autonomous” wording; the
   bounded tool loop is deferred to v1.1 (ADR 0008). Do not claim the minimal typed
-  function-calling path has shipped until the offline executor and committed end-to-end replay
-  traces exist.
+  function-calling path has shipped until committed end-to-end replay traces exist.
 - If a novelty claim is needed, qualify it as “to our knowledge, for official statistics” and cite
   the prior art listed in the charter and future datasheet.

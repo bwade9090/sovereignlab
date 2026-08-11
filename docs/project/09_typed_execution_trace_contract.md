@@ -18,8 +18,9 @@ synthetic retrieval registry and typed `retrieve_temporal_documents` adapter und
 dispatcher have also shipped under `docs/project/13_callable_dispatcher_contract.md`, the
 offline planner boundary has shipped under `docs/project/14_offline_planner_contract.md`, and the
 deterministic evidence-packet assembler has shipped under
-`docs/project/15_evidence_packet_assembler_contract.md`. The offline executor and committed
-end-to-end replay traces remain pending. This contract does not change `BenchmarkRecord` or
+`docs/project/15_evidence_packet_assembler_contract.md`, and the private offline executor has
+shipped under `docs/project/16_offline_executor_contract.md`. Committed end-to-end replay traces
+remain pending. This contract does not change `BenchmarkRecord` or
 `BenchmarkBundle` 2.0.0.
 
 The independent execution contract is version 1.0.0. Its Pydantic source is
@@ -184,8 +185,15 @@ any call.
 
 ## Next independent slice
 
-All three deterministic tool adapters, their trusted registries, the frozen callable dispatcher,
-the offline planner boundary, and the deterministic evidence-packet assembler are complete, most
-recently under `docs/project/15_evidence_packet_assembler_contract.md`. Add only the offline
-end-to-end executor next. Keep committed end-to-end replay traces and live model integration in
-later reviewable slices, and do not start the bounded tool loop deferred to v1.1.
+The private offline executor is complete at functional commit `550b591` and is specified in
+`docs/project/16_offline_executor_contract.md`. It coordinates the completed planner, frozen
+dispatcher, and private assembler once and in order while preserving the existing `ExecutionTrace`
+1.0.0 surface; the 13 public schemas remain unchanged.
+
+The exact next reviewable slice is only the committed machine-readable end-to-end replay traces.
+Those traces must use the real executor and bind the real registry, corpus, planner, and executor
+provenance identifiers and digests. The existing contract fixture is not an end-to-end replay
+result, and the minimal typed function-calling path is not shipped until these traces are committed.
+
+Keep provider or live-model integration in a later independent slice, and do not start the bounded
+tool loop deferred by ADR 0008.
