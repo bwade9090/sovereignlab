@@ -19,9 +19,9 @@ dispatcher have also shipped under `docs/project/13_callable_dispatcher_contract
 offline planner boundary has shipped under `docs/project/14_offline_planner_contract.md`, and the
 deterministic evidence-packet assembler has shipped under
 `docs/project/15_evidence_packet_assembler_contract.md`, and the private offline executor has
-shipped under `docs/project/16_offline_executor_contract.md`. Committed end-to-end replay traces
-remain pending. This contract does not change `BenchmarkRecord` or
-`BenchmarkBundle` 2.0.0.
+shipped under `docs/project/16_offline_executor_contract.md`. Five machine-readable, real-digest
+end-to-end replay traces have since shipped under `traces/replay/v1/` at feature commit `883815b`.
+This contract does not change `BenchmarkRecord` or `BenchmarkBundle` 2.0.0.
 
 The independent execution contract is version 1.0.0. Its Pydantic source is
 `src/sovereignlab/schemas/execution.py`.
@@ -185,15 +185,22 @@ any call.
 
 ## Next independent slice
 
-The private offline executor is complete at functional commit `550b591` and is specified in
-`docs/project/16_offline_executor_contract.md`. It coordinates the completed planner, frozen
-dispatcher, and private assembler once and in order while preserving the existing `ExecutionTrace`
-1.0.0 surface; the 13 public schemas remain unchanged.
+The ninth independently reviewable ADR 0008 work-unit-C slice shipped on 2026-08-11 at feature
+commit `883815b`.
+Five deterministic JSON traces under `traces/replay/v1/` were generated through the real private
+executor, `ScriptedPlanner`, callable and artifact registries, and temporal retrieval corpus, then
+checked by exact-byte replay. The first nine work-unit-C slices are complete, the public schema
+count remains 13, and the minimal offline briefing path has shipped. Its public description is
+exactly `typed function calling with committed traces`.
 
-The exact next reviewable slice is only the committed machine-readable end-to-end replay traces.
-Those traces must use the real executor and bind the real registry, corpus, planner, and executor
-provenance identifiers and digests. The existing contract fixture is not an end-to-end replay
-result, and the minimal typed function-calling path is not shipped until these traces are committed.
+The healthy exact committed stack naturally reproduces complete, planned-abstention, and terminal
+tool-abstention outcomes. Planner, tool, and packet-assembly fault semantics remain covered by the
+strict schema and executor regressions; they were not misrepresented as monkeypatched end-to-end
+artifacts. The illustrative `data/fixtures/execution_trace.example.json` remains a contract fixture,
+not an end-to-end replay result.
 
-Keep provider or live-model integration in a later independent slice, and do not start the bounded
-tool loop deferred by ADR 0008.
+The exact next reviewable slice is draft-only Korean/English authoring for the frozen
+`kv-core-data-02` pair over the existing approved ECOS snapshot. Until human review, the approved
+core remains 6/40. Do not change the frozen 40-record matrix, execution schemas, source set, or
+rights decisions. Provider or live-model integration remains absent, and the bounded tool loop
+deferred by ADR 0008 remains outside this slice.

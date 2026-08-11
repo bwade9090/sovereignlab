@@ -22,18 +22,22 @@ This repository is between work units and is ready to continue on the Windows wo
   flat `resolve_stes_as_of` adapter are also complete. The snapshot boundary revalidates exact
   bytes and rebuilt models at call time; the frozen three-tool callable registry, explicit
   dispatcher, offline one-shot scripted/recorded/replay planner, internal deterministic
-  evidence-packet assembler, and private offline executor are complete as the first eight ADR 0008
-  slices. The executor coordinates one planner call, ordered terminal dispatch, and private packet
-  assembly while revalidating bindings and real execution provenance without changing the 13
-  public schemas. Its completed 2026-08-11 feature commit is `550b591`; the source descriptor pins
-  32 entries and executor digest
+  evidence-packet assembler, private offline executor, and five committed machine-readable
+  real-digest replay traces are complete as the first nine ADR 0008 slices and work unit C. The
+  traces were generated through the real private executor, `ScriptedPlanner`, callable and artifact
+  registries, and retrieval corpus; they cover all four routes, all three tools, Korean and English,
+  explicit and implicit cutoffs, complete execution, planned abstention, and terminal tool
+  abstention. They stop at the first terminal result and expose no partial evidence. The source
+  package and 13 public schemas remain unchanged.
+  The completed 2026-08-11 replay-trace feature commit is `883815b`; the source descriptor pins 32
+  entries and executor digest
   `08f45dab6a36a49cb7d0b588a69236942cd61534540bd4de0772010402dada64`.
-- Exact next outcome: committed machine-readable real-digest end-to-end replay traces over the
-  completed private offline executor.
-- Exact next reviewable slice: committed machine-readable real-digest end-to-end replay traces
-  only.
-- Not implemented yet: committed end-to-end replay traces, a provider or live-model integration,
-  or the bounded tool loop. The contract fixture is not an end-to-end replay result.
+- Exact next outcome: a draft-only Korean/English `kv-core-data-02` pair using the existing approved
+  `ecos-200y108-snapshot-20260717` snapshot.
+- Exact next reviewable slice: the two draft records only. Human approval is a later separate gate,
+  so the approved core count remains 6/40.
+- Not implemented yet: a provider or live-model integration or the bounded tool loop. The five
+  committed traces are deterministic offline replay artifacts, not provider recordings.
 - The planner boundary exists under `src/sovereignlab/execution/planner.py`; its recording registry
   and entry format remain intentionally private. The assembler exists under
   `src/sovereignlab/execution/assembler.py`; its function and error boundary remain internal and
@@ -46,24 +50,20 @@ The authoritative live checkpoint and acceptance criteria are in
 `docs/project/04_macbook_handoff.md`. The filename is retained for history, but the document is now
 the cross-machine Windows continuation handoff.
 
-## Exact next slice — committed real-digest end-to-end replay traces only
+## Exact next slice — draft `kv-core-data-02` Korean/English pair only
 
-The next reviewable outcome is only a small committed set of machine-readable end-to-end replay
-traces over the completed private offline executor. Keep provider/live-model work and the bounded
-tool loop in later independent slices.
+The next reviewable outcome is only the draft Korean/English pair assigned to `kv-core-data-02` in
+the frozen core-authoring matrix. It must read one quarterly real-GDP value from the existing
+approved July 2026 ECOS forward snapshot `ecos-200y108-snapshot-20260717`.
 
-- Generate traces through the real private executor, callable registry, artifact registry,
-  retrieval corpus, and planner provenance boundaries; do not hand-author substitute provenance.
-- Commit only deterministic machine-readable replay artifacts whose environment and planner IDs
-  and digests bind the real source tree and committed registries/corpora.
-- Preserve planned abstention, terminal tool abstention, tool failure, and packet-assembly failure
-  semantics from the existing `ExecutionTrace` 1.0.0 contract. Do not expose partial evidence or
-  continue after a terminal result.
-- Reuse the existing `ExecutionTrace` 1.0.0 model and completed private executor; do not expose the
-  executor or invent a provider envelope, public result, recording API, or JSON Schema.
-- Stop after the trace slice and a green full baseline. Do not add a provider or live-model call,
-  change sources, benchmark records, rights decisions, or public schemas, or start the deferred
-  bounded loop.
+- Preserve the frozen matrix row, route, split, evidence group, data-unit binding, and record IDs;
+  do not edit the matrix to make authoring easier.
+- Reuse only the committed approved snapshot and its existing manifest, checksum, rights decision,
+  and normalization rules. Do not add or refresh a source.
+- Author exactly the two draft records and their focused tests. Do not mark them approved or raise
+  the approved count above 6/40; named human review remains a separate later action.
+- Stop after the draft pair and a green full baseline. Do not add probes, change rights decisions or
+  public schemas, add a provider or live-model call, or start the deferred bounded loop.
 
 ## New-session onboarding procedure
 
@@ -78,9 +78,9 @@ Before editing:
    under "Local setup and required checks."
 4. State back four facts before implementation: current milestone, approved core count, exact next
    work unit, and hard stops.
-5. Start only with the committed real-digest end-to-end replay-trace slice. Do not combine source
-   expansion, new benchmark authoring, a provider or live-model call, or a paid operation with
-   onboarding.
+5. Start only with the draft `kv-core-data-02` Korean/English pair over the existing approved
+   `ecos-200y108-snapshot-20260717` snapshot. Do not combine source expansion, human approval,
+   probe generation, a provider or live-model call, or a paid operation with onboarding.
 
 ## Read before changing anything
 
@@ -118,12 +118,17 @@ Before editing:
     ordered-result binding, abstention semantics, and no-partial-evidence boundary.
 16. `docs/project/16_offline_executor_contract.md` — implemented private executor, one-shot state
     machine, sanitized failure mapping, real source-tree provenance, and validation evidence.
-17. The closest additional `AGENTS.md`, if a subdirectory adds one later.
+17. `traces/README.md` — committed replay-artifact policy, deterministic regeneration command, and
+    the boundary between public replay artifacts and private recordings.
+18. The closest additional `AGENTS.md`, if a subdirectory adds one later.
 
-For the exact replay-trace slice, also read `src/sovereignlab/schemas/execution.py` and
-`tests/schemas/test_execution.py`, plus the completed dispatcher, planner, assembler, and executor
-source/test pairs under `src/sovereignlab/execution/` and `tests/execution/`. Treat those boundaries
-as frozen; do not reopen or combine their behavior with the trace slice.
+For the exact draft-pair slice, also read `data/benchmark/core-authoring-matrix-v1.json`,
+`data/benchmark/README.md`, the existing approved records in
+`data/benchmark/core/core-batch-001.jsonl` and `core-batch-002.jsonl`, the benchmark model and
+normalization code in `src/sovereignlab/schemas/benchmark.py` and
+`src/sovereignlab/normalization.py`, and `tests/benchmark/test_core_batch.py` plus the nearest
+focused benchmark tests. Treat the matrix allocation, approved records, source bundle, and
+human-review boundary as frozen.
 
 The charter is the scope authority. Do not expand sources, agents, UI, or infrastructure before the current milestone gate passes.
 
@@ -243,11 +248,11 @@ commit that machine-specific path. Do not reuse a `.venv` whose interpreter chec
 The Windows requirements include a `win32`-only `tzdata` pin because a standard Windows Python
 installation has no system IANA timezone database.
 
-The 2026-08-11 handoff baseline is 13 deterministic public schemas, 69 formatted Python files,
-1,115 passing tests, and 100% SovereignLab statement/branch coverage (4,679 statements, 1,568
-branches). The focused executor acceptance run is 66 passing tests with 100% coverage over 326
-statements and 98 branches. A different result is a diagnostic signal: stop before implementation
-and record the discrepancy in `docs/PROJECT_STATUS.md`.
+The 2026-08-11 handoff baseline is 13 deterministic public schemas, 71 formatted Python files,
+1,129 passing tests, and 100% SovereignLab statement/branch coverage (4,679 statements, 1,568
+branches). The focused executor/replay-trace acceptance run is 80 passing tests with 100% coverage
+over 326 statements and 98 branches. A different result is a diagnostic signal: stop before
+implementation and record the discrepancy in `docs/PROJECT_STATUS.md`.
 
 ## Repository map
 
@@ -257,9 +262,13 @@ and record the discrepancy in `docs/PROJECT_STATUS.md`.
   typed document adapter.
 - `src/sovereignlab/execution/` — frozen three-tool callable registry, explicit deterministic
   dispatcher, offline one-shot planner boundary, private deterministic evidence-packet assembler,
-  and private offline executor. The first eight ADR 0008 slices are complete; committed
-  end-to-end replay traces, provider/live-model integration, and the bounded tool loop do not exist
-  yet.
+  and private offline executor. The source package remains unchanged by the completed ninth ADR
+  0008 slice.
+- `scripts/export_execution_replay_traces.py` — fixed-scenario deterministic writer/checker for the
+  committed real-digest replay set.
+- `traces/` — public machine-readable replay artifacts and their publication/privacy policy. The
+  five v1 traces cover all routes and tools plus complete, planned-abstention, and terminal
+  tool-abstention outcomes without exposing private planner recordings.
 - `tests/` — offline tests; network calls must be mocked or replayed unless explicitly marked.
 - `data/` — public benchmark and metadata policy; ignored raw/interim material. The KOR-RTD archive layer (edition consolidations, harvester snapshots, manifests) lives here.
 - `artifacts/` — generated outputs policy; generated content is ignored by default.

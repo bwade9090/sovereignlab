@@ -72,9 +72,10 @@ serialization. It includes:
 It excludes local absolute paths and raw observation bodies, while separately hashing the exact
 manifest bytes, catalog bytes, and actual archive bytes held by the registry. The current committed
 reference registry has ID `kor-rtd-latest-only-snapshot-registry-v1` and descriptor SHA-256
-`67ebecf0aa15b5a2d53aff737cd28bd8779e3993abebca9e6c3d840f2006aa5b`. A later replay trace must
-record the registry ID and digest for the exact injected candidate set; adding a future capture
-must change the digest rather than silently changing old replay inputs.
+`67ebecf0aa15b5a2d53aff737cd28bd8779e3993abebca9e6c3d840f2006aa5b`. The committed replay traces
+bind the composite artifact registry whose descriptor includes this exact snapshot registry ID and
+digest. Adding a future capture must change the digest rather than silently changing old replay
+inputs.
 
 ## Cutoff-safe deterministic selection
 
@@ -166,15 +167,16 @@ No network, provider read, secret, live model call, GPU operation, or paid opera
 
 ## Next independent slice
 
-The private offline executor is complete at functional commit `550b591` and is specified in
-`docs/project/16_offline_executor_contract.md`. It coordinates the completed planner, frozen
-dispatcher, and private assembler once and in order while preserving the existing `ExecutionTrace`
-1.0.0 surface; the 13 public schemas remain unchanged.
+The ninth independently reviewable ADR 0008 work-unit-C slice shipped on 2026-08-11 at feature
+commit `883815b`.
+Five deterministic JSON traces under `traces/replay/v1/` were generated through the real private
+executor, `ScriptedPlanner`, callable and artifact registries, and temporal retrieval corpus, then
+checked by exact-byte replay. The first nine work-unit-C slices are complete, the public schema
+count remains 13, and the minimal offline briefing path has shipped. Its public description is
+exactly `typed function calling with committed traces`.
 
-The exact next reviewable slice is only the committed machine-readable end-to-end replay traces.
-Those traces must use the real executor and bind the real registry, corpus, planner, and executor
-provenance identifiers and digests. The existing contract fixture is not an end-to-end replay
-result, and the minimal typed function-calling path is not shipped until these traces are committed.
-
-Keep provider or live-model integration in a later independent slice, and do not start the bounded
-tool loop deferred by ADR 0008.
+The exact next reviewable slice is draft-only Korean/English authoring for the frozen
+`kv-core-data-02` pair over the existing approved ECOS snapshot. Until human review, the approved
+core remains 6/40. Do not change the frozen 40-record matrix, execution schemas, source set, or
+rights decisions. Provider or live-model integration remains absent, and the bounded tool loop
+deferred by ADR 0008 remains outside this slice.

@@ -1,8 +1,8 @@
 # SovereignLab CV bullets
 
 - Status: wording bank; use only the section matching the achieved milestone
-- Last updated: 2026-08-11 (M2 mid-window refresh: 6/40 approved core, execution-surface slices 1–8
-  complete, 69-file/1,115-test baseline)
+- Last updated: 2026-08-11 (M2 mid-window refresh: 6/40 approved core, ADR 0008 slices 1–9 and
+  work unit C complete, 71-file/1,129-test baseline)
 - Rule: never replace placeholders with targets or estimates; use measured, reproducible results only
 - Narrative versions: `docs/application/01_project_description.md`
 
@@ -23,21 +23,18 @@
   documentary pair grounded in the Bank of Korea's May 2026 Economic Outlook and its independently
   dated official English translation — with machine-generated revision probes to be reported
   separately.
-- Implemented the deterministic offline evidence surface for the planned reference briefing
-  pipeline: bilingual temporal document retrieval that filters by publication date before scoring
-  (currently over a committed synthetic corpus; the real report bodies remain manifest-bound
-  only), a frozen typed execution-and-trace contract (six new schemas, bringing the project's
-  public surface to 13 deterministic JSON Schemas), three digest-linked deterministic evidence
-  tools, an explicit dispatcher that independently replays and revalidates every call, an offline
-  one-shot planner with scripted and immutable recorded/replay modes, and an internal deterministic
-  evidence-packet assembler that preserves ordered typed evidence and fail-closed planned/tool
-  abstentions without partial-evidence leakage, and a private offline executor that binds the real
-  registry, corpus, planner, and source-tree provenance; plans once; dispatches in order; and stops
-  safely at the first terminal result. Committed end-to-end replay traces do not yet exist, so no
-  end-to-end result is claimed.
+- Shipped `typed function calling with committed traces` for the deterministic offline evidence
+  path: bilingual temporal retrieval filters by publication date before scoring over a committed
+  synthetic corpus; three digest-linked evidence tools run behind a replay-checked dispatcher; and
+  five machine-readable real-digest traces generated through the actual private executor,
+  `ScriptedPlanner`, and committed registries and corpus cover all four routes, all three tools,
+  Korean and English, explicit and implicit cutoffs, complete execution, planned abstention, and
+  terminal tool abstention without partial evidence. The source package and the project's 13
+  public JSON Schemas remain unchanged. These are deterministic offline replay artifacts, not
+  provider or live outputs, and no briefing-quality result is claimed.
 - Verified the pinned Ministral 3 3B NF4/QLoRA compatibility path on a disposable A40/CUDA 13 GPU
-  and maintain 1,115 tests at 100% statement/branch coverage (4,679 statements, 1,568 branches)
-  across 69 formatted Python files; temporal leakage remains the planned headline metric, and no
+  and maintain 1,129 tests at 100% statement/branch coverage (4,679 statements, 1,568 branches)
+  across 71 formatted Python files; temporal leakage remains the planned headline metric, and no
   model-quality result is claimed yet.
 
 ### Short form (single bullet)
@@ -50,14 +47,15 @@
   state: 6/40 reviewed-and-approved bilingual core records, cutoff-filtered bilingual temporal
   retrieval over a committed synthetic corpus, a frozen typed execution-and-trace contract within
   the project's 13 public JSON Schemas, three deterministic evidence tools behind a replay-checked
-  dispatcher, an offline exact-byte-verified planner boundary, an internal deterministic
-  evidence-packet assembler, a private provenance-bound offline executor, a verified Ministral 3 3B
-  NF4/QLoRA compatibility path, and 1,115 tests at 100% statement/branch coverage; temporal leakage
-  is the planned headline metric and no model-quality or end-to-end execution result is claimed yet.
+  dispatcher, a private provenance-bound offline executor, and `typed function calling with
+  committed traces`: five real-digest offline replays covering all routes and tools, both languages,
+  both cutoff modes, complete execution, and planned/tool abstention with terminal stop and no
+  partial evidence. The verified Ministral 3 3B NF4/QLoRA compatibility path is retained, and 1,129
+  tests pass at 100% statement/branch coverage; temporal leakage is the planned headline metric and
+  no model-quality or briefing-performance result is claimed yet.
 
-This version distinguishes the implemented data, evidence-tool, planner, packet-assembly, and
-offline-executor boundaries from the not-yet-committed replay traces, the 34 unauthored core slots,
-and the not-yet-evaluated model variants.
+This version distinguishes the deterministic offline replay slice from provider/live integration,
+the 34 unauthored core slots, and the not-yet-evaluated model variants.
 
 ## Version B — use after the Week 2 baseline is reproducible
 
@@ -76,7 +74,8 @@ and the not-yet-evaluated model variants.
 
 ## Accuracy and disclosure rules
 
-- Keep `(in progress)` until the public repository contains a runnable vertical slice.
+- Keep `(in progress)` while the M2 benchmark and baseline work remains incomplete; the committed
+  replay slice does not imply benchmark completion.
 - Do not say `fine-tuned` until an adapter has been trained, loaded, and evaluated.
 - Do not cite benchmark size until each counted test item passes schema and human review; **always report the human-reviewed core and machine-generated probes as separate counts**. The current approved core count is 6/40; the 34 remaining slots are neither authored nor approved.
 - Core records are initially AI-authored and then human-reviewed; do not claim personal manual
@@ -88,14 +87,11 @@ and the not-yet-evaluated model variants.
 - Attribute the 13 public JSON Schemas to the combined evidence, benchmark, matrix,
   availability-ledger, rights, and execution contracts; the execution/trace contract itself
   contributed six of them.
-- Do not describe CPU/API fallback as `on-prem production deployment`; use `portable local/API deployment path` until a documented fully local end-to-end run exists.
-- Do not use `agent`, `agentic`, `multi-step`, `orchestration`, or `autonomous` wording anywhere:
-  the bounded tool loop is deferred to v1.1 (ADR 0008). After the minimal path ships, the
-  permitted wording is `typed function calling with committed traces` — and only then. Until that
-  point, describe only the implemented components (typed execution-and-trace contract,
-  deterministic evidence tools, replay-checked dispatcher, offline one-shot planner, and internal
-  deterministic evidence-packet assembler, and private provenance-bound offline executor) and state
-  that committed end-to-end replay traces do not yet exist.
+- Do not make deployment claims from compatibility or deterministic replay evidence; neither
+  establishes an integrated serving path.
+- Describe the shipped minimal path only as `typed function calling with committed traces`. The
+  bounded tool loop remains deferred to v1.1 (ADR 0008), and the committed deterministic offline
+  replays do not support provider/live, model-quality, or briefing-performance claims.
 - Every "first" claim must read "to our knowledge, for official statistics" and the datasheet must cite prior art first (arXiv 2605.23497 statutory as-of QA; Dallas Fed real-time OECD dataset; OECD MEI revisions database). Never claim "first Korean macro benchmark" (KMMLU includes economics categories).
 - Do not claim OECD edition/backfill ranges beyond what a recorded verification spike confirmed.
 - Do not cite harvester snapshot counts older than the public commit history that proves them.

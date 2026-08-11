@@ -12,10 +12,10 @@ harness-owned trace metadata and committed tool registry, then returns only the 
 
 The implementation remains internal to `sovereignlab.execution.executor` as
 `_execute_offline_request`. It adds no public executor function, protocol, result wrapper, provider
-envelope, recording format, or JSON Schema. It does not add a committed end-to-end replay trace,
-provider or live-model call, source capture, benchmark record, or paid operation. The public schema
-count remains 13. The minimal question-to-evidence-packet path is therefore not yet claimed as
-shipped; committed real-provenance replay traces remain a later independent slice.
+envelope, recording format, or JSON Schema. The executor slice itself did not add a committed
+end-to-end replay trace, provider or live-model call, source capture, benchmark record, or paid
+operation. The public schema count remains 13. The subsequent ninth work-unit-C slice shipped five
+real-digest replay traces at feature commit `883815b` without changing this private boundary.
 
 ## Harness-owned inputs
 
@@ -138,10 +138,11 @@ silently reuse the initial trace provenance.
   public APIs or schemas.
 - Do not accept model-selected paths, manifests, ledgers, raw bytes, provenance, or credentials.
 - Do not continue dispatch after abstention or error, and do not expose partial evidence.
-- Do not commit end-to-end replay fixtures in this slice; the existing contract fixture is not an
-  executor result.
-- Do not add a provider or live-model call, source capture, benchmark record, or public-schema
-  change.
+- The executor slice itself did not commit end-to-end replay fixtures; the existing contract
+  fixture remains illustrative and is not an executor result. The subsequent trace slice generated
+  its artifacts through the real boundary rather than hand-authoring substitute provenance.
+- The executor and trace slices added no provider or live-model call, source capture, benchmark
+  record, or public-schema change.
 - Do not start the bounded tool loop deferred by ADR 0008.
 
 ## Validation procedure
@@ -177,7 +178,22 @@ OS temporary directories and leave the repository `.pytest_tmp` ACL untouched.
 
 ## Next independent slice
 
-Commit only small machine-readable end-to-end replay traces over this completed offline executor,
-using the real executor, callable registry, artifact registry, retrieval corpus, and planner
-provenance IDs and digests. Keep provider/live-model integration, source expansion, benchmark
-authoring, public-schema changes, and the deferred bounded loop in later independent work.
+The ninth independently reviewable ADR 0008 work-unit-C slice shipped on 2026-08-11 at feature
+commit `883815b`.
+Five deterministic JSON traces under `traces/replay/v1/` were generated through this real private
+executor, `ScriptedPlanner`, callable and artifact registries, and temporal retrieval corpus, then
+checked by exact-byte replay. The first nine work-unit-C slices are complete, the public schema
+count remains 13, and the minimal offline briefing path has shipped. Its public description is
+exactly `typed function calling with committed traces`.
+
+Trace 005 makes terminal behavior reviewable: the document call succeeds, the following snapshot
+call abstains, and the later planned valid STES call is not dispatched. Its evidence packet is
+empty, so the earlier document result cannot leak as partial evidence. The healthy exact committed
+stack does not naturally emit planner, tool, or packet-assembly faults; those semantics remain in
+the strict schema and executor regression coverage rather than monkeypatched end-to-end artifacts.
+
+The exact next reviewable slice is draft-only Korean/English authoring for the frozen
+`kv-core-data-02` pair over the existing approved ECOS snapshot. Until human review, the approved
+core remains 6/40. Do not change the frozen 40-record matrix, execution schemas, source set, or
+rights decisions. Provider or live-model integration remains absent, and the bounded tool loop
+deferred by ADR 0008 remains outside this slice.

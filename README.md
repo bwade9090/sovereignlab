@@ -3,22 +3,23 @@
 > What did the data say *then*? Vintage-conditioned evaluation and auditable briefings for Korean/English economic research.
 
 **Status:** M1b verification and vintage-contract groundwork are complete; M2 benchmark and
-baseline development is in progress (frozen 40-record core matrix, 6/40 records owner-approved,
-temporal document-retrieval baseline and the first real bilingual document manifests complete;
-the manifests record the owner-approved Bank of Korea public-data rights basis, while the first
-bilingual documentary pair is owner-approved and the provider PDFs remain uncommitted by
-repository-scope choice; the three deterministic evidence tools, replay-checked dispatcher,
-offline scripted/recorded/replay planner boundary, and internal deterministic evidence-packet
-assembler are complete, and the private offline executor completed the first eight ADR 0008 slices
-on 2026-08-11 in feature commit `550b591`; the 13 public schemas remain unchanged, while committed
-machine-readable real-digest end-to-end replay traces remain the exact next slice). The executor
-descriptor pins 32 source entries and digest
+baseline development is in progress with a frozen 40-record core matrix and 6/40 records
+owner-approved. The first nine ADR 0008 slices and work unit C are complete: five machine-readable
+real-digest traces were generated through the actual private offline executor, `ScriptedPlanner`,
+and committed registries and corpora in feature commit `883815b`. The trace set covers all four
+routes, all three deterministic evidence tools, Korean and English, explicit and implicit cutoffs,
+complete execution, planned abstention, and terminal tool abstention with no partial evidence. The
+source package is unchanged, the public surface remains 13 deterministic JSON Schemas, and the
+executor descriptor still pins 32 source entries and digest
 `08f45dab6a36a49cb7d0b588a69236942cd61534540bd4de0772010402dada64`.
-The focused executor acceptance run passes 66 tests at 100% coverage over 326 statements and 98
-branches. The full offline baseline is 1,115 tests at 100% statement/branch coverage (4,679
-statements, 1,568 branches) across 69 Ruff-formatted Python files. No committed end-to-end replay
-traces, provider/live-model integration, or bounded tool loop exist yet, and no model-performance
-claims have been made.
+The focused executor/replay-trace acceptance run passes 80 tests at 100% coverage over 326
+statements and 98 branches. The full offline baseline is 1,129 tests at 100% statement/branch
+coverage (4,679 statements, 1,568 branches) across 71 Ruff-formatted Python files. The shipped
+minimal reference path is described only as `typed function calling with committed traces`. These
+are deterministic offline replays, not provider or live outputs; no provider/live integration or
+bounded tool loop exists, and no model-quality or briefing-performance claim is made. Searchable
+document evidence remains synthetic, while the trace catalog records the ECOS/OECD attribution and
+rights boundaries for embedded data evidence.
 
 Korea's official statistics APIs (ECOS, KOSIS) expose latest values only — they offer no "as-of" query path — and no Korean equivalent of the St. Louis Fed's ALFRED archive exists. SovereignLab builds three things in four weeks:
 
@@ -78,14 +79,17 @@ RunPod A40/CUDA 13 host, closing the M1b gate. The exact `Decimal` unit, variant
 grading rules are frozen in the
 [number-normalization specification](docs/project/06_number_normalization_spec.md). Charter v2.4
 ([ADR 0008](docs/decisions/0008-function-calling-execution-contract.md), 2026-07-28) additionally
-fixes the planned minimal briefing execution contract as a model-emitted single-shot typed route
-and exact tool calls over three deterministic offline tools. The first eight independent ADR 0008
-slices, through the private offline executor, completed on 2026-08-11 in feature commit `550b591`
-without changing the 13 public schemas; see the
-[private executor contract](docs/project/16_offline_executor_contract.md). Committed
-machine-readable real-digest end-to-end replay traces remain the exact next independent slice, so
-the minimal path is not yet claimed as shipped. No provider or live-model integration exists, and
-ADR 0008 separately defers the bounded tool loop to post-window v1.1 as an execution-mode ablation.
+fixes the minimal briefing execution contract as one typed route and exact calls over three
+deterministic offline tools. The first nine independent ADR 0008 slices and work unit C completed
+on 2026-08-11 in feature commit `883815b` without changing the source package or 13 public schemas;
+see the [private executor contract](docs/project/16_offline_executor_contract.md) and
+[committed replay-trace catalog](traces/README.md). The five traces bind the real source tree,
+registries, corpus, and planner provenance and stop at the first terminal result without partial
+evidence. The minimal path is now described as `typed function calling with committed traces`.
+No provider/live integration exists, and ADR 0008 separately defers the bounded tool loop to
+post-window v1.1. The exact next reviewable slice is only a draft Korean/English
+`kv-core-data-02` pair using the existing approved `ecos-200y108-snapshot-20260717`; human approval
+remains separate, so the approved count stays 6/40.
 Charter v2.5 and
 [ADR 0009](docs/decisions/0009-bok-economic-outlook-public-data-rights.md) additionally record the
 owner-approved `allowed` public-data ruling for official Bank of Korea Economic Outlook
@@ -108,6 +112,7 @@ Requires Python 3.12.
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install -r requirements.txt
+python scripts/export_execution_replay_traces.py --check
 python -m ruff check .
 python -m ruff format --check .
 python -m pytest
@@ -119,6 +124,7 @@ python -m pytest
 python3.12 -m venv .venv
 source .venv/bin/activate
 python -m pip install -r requirements.txt
+python scripts/export_execution_replay_traces.py --check
 python -m ruff check .
 python -m ruff format --check .
 python -m pytest
@@ -140,14 +146,15 @@ a local `.env` on another machine.
 - [Evidence contract 2.0.0 and availability-ledger migration](docs/project/05_evidence_contract_2_0_migration.md)
 - [Number-normalization specification 1.0.0](docs/project/06_number_normalization_spec.md)
 - [Private offline-executor contract](docs/project/16_offline_executor_contract.md)
-- [MacBook continuation handoff](docs/project/04_macbook_handoff.md)
+- [Committed replay traces and regeneration policy](traces/README.md)
+- [Cross-machine continuation handoff](docs/project/04_macbook_handoff.md)
 - [Current status and handoff](docs/PROJECT_STATUS.md)
 - [Week-1 verification log](docs/discovery/03_week1_verification_log.md)
 - [Role-gap and project-selection analysis](docs/discovery/00_role_gap_analysis.md)
 - [Milestone-gated CV bullets](docs/application/00_cv_bullets.md)
 - [Application-ready project descriptions](docs/application/01_project_description.md)
 - [Architecture decisions](docs/decisions/README.md)
-- [Contributor and agent rules](AGENTS.md)
+- [Contributor rules](AGENTS.md)
 
 ## Responsible disclosure
 

@@ -55,14 +55,18 @@
   evidence-packet assembler strictly revalidates the request, plan, and ordered typed results;
   preserves all four routes, exact cutoff/call/result bindings, ordered and repeated evidence, and
   planned/tool abstention; and returns only the frozen `ExecutionEvidencePacket` without partial
-  evidence. The eighth implementation slice is now complete: the private offline executor invokes
-  the existing planner once, dispatches validated calls in order through the frozen registry, stops
-  on the first abstention or error, assembles only eligible packets, and returns the existing strict
-  `ExecutionTrace` with real executor/registry/corpus and planner provenance. The first eight ADR
-  0008 slices are complete, but committed machine-readable real-digest end-to-end replay traces
-  remain to be implemented, so the minimal question-to-evidence-packet path is not yet shipped.
-  Live integration remains later work, and the bounded multi-step tool loop remains deferred to
-  post-window v1.1.
+  evidence. The eighth implementation slice is complete: the private offline executor invokes the
+  existing planner once, dispatches validated calls in order through the frozen registry, stops on
+  the first abstention or error, assembles only eligible packets, and returns the existing strict
+  `ExecutionTrace` with real executor/registry/corpus and planner provenance. The ninth
+  implementation slice is also complete: five committed machine-readable real-digest end-to-end
+  replay traces are generated only through the real private executor, `ScriptedPlanner`, and
+  committed registry/corpus boundaries. They cover all four routes, all three tools, Korean and
+  English, explicit and implicit cutoffs, complete execution, planned abstention, and terminal tool
+  abstention without partial evidence. Work unit C and its first nine ADR 0008 slices are complete,
+  so the shipped minimal offline path may now be described exactly as **typed function calling with
+  committed traces**. Provider/live-model integration remains absent, and the bounded tool loop
+  remains deferred to post-window v1.1.
 
 ## Approved baseline
 
@@ -421,6 +425,22 @@
   added. Full
   details are in `docs/project/16_offline_executor_contract.md`.
 
+- **Committed real-digest replay traces — work unit C slice 9 (2026-08-11):**
+  Functional commit `883815b` adds five deterministic `ExecutionTrace` 1.0.0 artifacts under
+  `traces/replay/v1/`, generated only by `scripts/export_execution_replay_traces.py` through the
+  real private executor, `ScriptedPlanner`, frozen callable registry, composite artifact registry,
+  and committed retrieval corpus. The matrix covers all four routes and all three tools across
+  Korean/English and explicit/implicit cutoffs, with complete, planned-abstention, and terminal
+  tool-abstention traces. The tool-abstention case records its successful prefix, leaves the trailing
+  STES call unexecuted, and exposes no partial evidence packet. Healthy-stack tool- and packet-
+  failure traces were intentionally not fabricated because runtime fault injection would not be
+  bound by the real executor digest; those mappings remain covered by the strict executor and
+  schema tests. The executor descriptor remains 32 canonical source entries with SHA-256
+  `08f45dab6a36a49cb7d0b588a69236942cd61534540bd4de0772010402dada64`, and the public schema count
+  remains 13. Work unit C is complete, and the minimal offline path is now **typed function calling
+  with committed traces**. No provider/live-model integration, source capture, benchmark record,
+  rights decision, public schema, network/GPU operation, or paid operation was added.
+
 - **Windows baseline reproducibility repair (2026-07-29):** Windows now installs the IANA timezone
   database through the platform-guarded `tzdata==2026.3` requirement, which makes the existing
   `Asia/Seoul` tests and the new snapshot capture cutoff deterministic on a standard Python 3.12
@@ -737,6 +757,23 @@ worktree before this documentation checkpoint. The work was entirely offline and
 or provider call, secret, live model integration, GPU operation, or paid operation; project cost
 was $0.00.
 
+Validated 2026-08-11 on Windows after the committed real-digest replay-trace slice: Python 3.12.13;
+`python scripts/export_json_schemas.py` reproduced all 13 public contracts without a schema diff;
+`python scripts/export_execution_replay_traces.py --check` reproduced the five committed trace
+artifacts byte-for-byte; `python -m ruff check --no-cache .` passed; and `python -m ruff format
+--check .` passed across 71 Python files. The focused executor-plus-replay suite passed all 80 tests
+with 100% executor statement/branch coverage (326 statements, 98 branches). The full suite, run
+with an explicit fresh OS `--basetemp`, passed all 1,129 tests with 100% SovereignLab
+statement/branch coverage (4,679 statements, 1,568 branches). The executor descriptor remains 32
+canonical source entries with SHA-256
+`08f45dab6a36a49cb7d0b588a69236942cd61534540bd4de0772010402dada64`. During onboarding, the
+canonical command collected 1,115 baseline tests and reported 1,009 passed plus 106 setup errors,
+all caused by the documented repository-root `.pytest_tmp` `WinError 5`; the unchanged baseline
+then passed all 1,115 tests with a fresh OS `--basetemp`. The directory and ACL were left untouched.
+`git diff --check` passed. Functional commit `883815b` contains the trace slice. The work was
+entirely offline, used no provider/live-model integration, source or rights change, secret,
+network/GPU operation, or paid operation, and cost $0.00.
+
 ## M1b verification spike record (2026-07-15)
 
 All network work below was read-only, key-free, and free of charge. Raw responses were written only
@@ -954,21 +991,49 @@ response bodies.
   and full validation used fresh OS basetemp directories. The next session starts from the completed
   executor and adds replay traces only.
 
+## Session-close snapshot (2026-08-11, seventeenth close: committed replay traces complete)
+
+- Work unit C is complete. Its first nine independently reviewable ADR 0008 slices now include the
+  frozen execution contract, three deterministic tool adapters, callable dispatcher, offline
+  planner, private assembler, private executor, and committed real-digest replay artifacts.
+- Functional commit `883815b` adds five machine-readable `ExecutionTrace` 1.0.0 files under
+  `traces/replay/v1/`. The exporter generates them only through the real private executor,
+  `ScriptedPlanner`, and committed registry/corpus boundaries; they are not hand-authored
+  provenance substitutes.
+- The five traces cover all four routes, all three tools, Korean and English, explicit and implicit
+  cutoffs, complete execution, planned abstention, and terminal tool abstention. In the terminal
+  case the successful prefix is retained, the trailing STES call is not run, and the evidence packet
+  remains empty, so no partial evidence is exposed.
+- Healthy-stack fault traces were not fabricated. Tool-failure and packet-assembly-failure mappings
+  remain strict executor/schema-tested behavior, avoiding unbound runtime fault injection under a
+  real source-tree digest.
+- The minimal offline path is now **typed function calling with committed traces**. Provider/live-
+  model integration and the bounded loop remain absent; the latter stays deferred to v1.1.
+- M2 remains active, the frozen matrix remains unchanged, exactly 6/40 core records are owner-
+  approved, and the public schema count remains 13. The executor descriptor still contains 32
+  entries with digest
+  `08f45dab6a36a49cb7d0b588a69236942cd61534540bd4de0772010402dada64`.
+- Python 3.12.13 validation is green: 71 formatted Python files; 80 focused executor-plus-replay
+  tests at 100% executor coverage (326 statements, 98 branches); and 1,129 full-suite tests at 100%
+  SovereignLab coverage (4,679 statements, 1,568 branches) with a fresh OS `--basetemp`. Schema
+  export and trace byte checks are clean. The documented repository `.pytest_tmp` ACL was untouched,
+  and this slice cost $0.00.
+- The exact next reviewable slice is only the draft `kv-core-data-02-ko` / `kv-core-data-02-en`
+  pair using the already approved `ecos-200y108-snapshot-20260717`. It must not be approved in the
+  authoring change, and it must not alter the frozen matrix, source artifacts, or rights decisions.
+
 ## Immediate next action (M2 — do these in order)
 
-1. Add only small committed machine-readable end-to-end replay traces over the completed private
-   executor, using the real executor, callable-registry, composite artifact-registry,
-   retrieval-corpus, and planner provenance IDs and digests. The existing contract fixture is not
-   an end-to-end replay result. Stop after trace-focused checks and the full offline baseline.
-2. Validate exact request/plan/ordered-result/packet equality, all four routes, Korean and English,
-   explicit and implicit cutoffs, every traceable terminal phase, and deterministic round-trip
-   replay from the committed trace artifacts. Do not change a public schema or reopen the frozen
-   planner, dispatcher, assembler, or executor boundaries merely to simplify fixtures.
-3. Only after the committed real-digest traces and a green reproducible baseline may the minimal
-   question-to-evidence-packet path be described as shipped.
-4. Keep provider/live-model integration, additional source ingestion, new benchmark authoring, and
-   the bounded v1.1 loop outside this slice. Any later live call requires its own smoke test,
-   authorization, and spend-ledger entry.
+1. Author only the draft bilingual `kv-core-data-02-ko` / `kv-core-data-02-en` pair from the frozen
+   allocation, using the already committed and owner-approved
+   `ecos-200y108-snapshot-20260717` evidence bundle. Reuse the existing point-in-time resolver and
+   normalization boundaries; do not fetch or add a source.
+2. Validate the two draft records against the unchanged 40-record matrix, evidence bundle, split and
+   language constraints, then run the relevant focused checks and full offline baseline. Keep the
+   approved human-reviewed count at 6/40 until a separate explicit owner review.
+3. Stop after the draft-only pair. Do not alter the matrix, approve the records, change a source or
+   rights decision, add a public schema, begin provider/live-model integration, or start the deferred
+   bounded loop.
 
 Open operational check, not an M2 blocker: manually dispatch one secret-backed append-only
 harvester run only with separate owner authorization; otherwise the next weekly schedule will use
@@ -1062,6 +1127,7 @@ complete.
 | 2026-08-02 | Offline one-shot planner boundary | $0.00 | Offline implementation, exact-byte replay tests, specification, and full validation only; no provider, live model API, GPU, or paid call |
 | 2026-08-07 | Deterministic evidence-packet assembler | $0.00 | Offline private assembler, focused tests, specification, review, and full validation only; no provider, live model API, GPU, or paid call |
 | 2026-08-11 | Private offline executor | $0.00 | Offline executor, real committed registry/corpus replay, focused tests, specification, review, and full fresh-OS-basetemp validation only; no network, provider, live model integration, GPU, or paid call; repository `.pytest_tmp` ACL untouched |
+| 2026-08-11 | Committed real-digest replay traces | $0.00 | Five deterministic traces generated through the real private executor and committed registry/corpus, exact-byte checks, focused/full offline validation, and review only; no network, provider/live-model integration, source or rights change, GPU, or paid call; repository `.pytest_tmp` ACL untouched |
 
 **Cumulative external spend: $0.23584524099715054 / $100.00**
 
@@ -1100,20 +1166,26 @@ Read in this order, in full, before changing anything:
 16. `docs/project/15_evidence_packet_assembler_contract.md` — the implemented private assembler,
     ordered-result binding, abstention semantics, and no-partial-evidence boundary.
 17. `docs/project/16_offline_executor_contract.md` — the implemented private executor, one-shot
-    state machine, sanitized trace/failure mapping, real provenance construction, and explicit
-    boundary before committed replay traces.
-18. `src/sovereignlab/schemas/execution.py` and `tests/schemas/test_execution.py` — frozen
+    state machine, sanitized trace/failure mapping, and real provenance construction.
+18. `traces/README.md` — the public/private trace boundary, committed replay matrix, exact-byte
+    reproduction commands, and rationale for not fabricating healthy-stack failure traces.
+19. `scripts/export_execution_replay_traces.py`, `tests/execution/test_replay_traces.py`, and the
+    five JSON files under `traces/replay/v1/` — the deterministic exporter, real-boundary replay
+    checks, and committed machine-readable outcomes that complete work unit C.
+20. `src/sovereignlab/schemas/execution.py` and `tests/schemas/test_execution.py` — frozen
     request/plan/result/packet/trace invariants reused by the executor and committed traces.
-19. `src/sovereignlab/execution/executor.py` and `tests/execution/test_executor.py` — the completed
+21. `src/sovereignlab/execution/executor.py` and `tests/execution/test_executor.py` — the completed
     private offline executor and its focused real-registry, state-machine, provenance, drift,
     sanitization, and deterministic round-trip coverage.
-20. The dispatcher, planner, and assembler source/test pairs under `src/sovereignlab/execution/`
+22. The dispatcher, planner, and assembler source/test pairs under `src/sovereignlab/execution/`
     and `tests/execution/` — completed frozen boundaries coordinated by the executor and replay
     traces without reopening them.
 
 Then start with "Immediate next action" item 1. The structural matrix and first six records are
-owner-approved; the other 34 slots are neither authored nor approved. The synthetic retrieval
-baseline and first real bilingual document manifests are complete. ADR 0009 resolves those
+owner-approved; the other 34 slots are neither authored nor approved. The next change drafts only
+the frozen `kv-core-data-02-ko` / `kv-core-data-02-en` pair and does not change that count. The
+synthetic retrieval baseline and first real bilingual document manifests are complete. ADR 0009
+resolves those
 manifests to `allowed`, but full PDFs and extracted full text remain outside Git by current
 repository-scope choice. Do not start full LoRA tuning, UI, or release work before the M2 gate
 closes. The harvester must stay within approved rights scopes, and every later paid operation

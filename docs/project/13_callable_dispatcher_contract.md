@@ -35,7 +35,8 @@ the canonical Pydantic argument schema. The frozen hashes are:
 The canonical callable descriptor is order-independent and has SHA-256
 `cd00b5c543cffc53024f98b9fafa73ed3fecd519fde81a826d060c8af4d2ad91`.
 It contains no function representation, local path, URL, manifest, ledger, raw bytes, source row,
-or evidence value. Executable-code provenance remains the later executor digest's responsibility.
+or evidence value. Executable-code provenance is bound by the completed executor digest and the
+committed real-digest replay traces.
 
 The registry returns a fresh argument schema for a validated `ToolName`; mutating the returned
 dictionary cannot alter the frozen registration. A raw string, unknown name, or missing
@@ -152,15 +153,16 @@ No network, provider read, secret, live model call, GPU operation, or paid opera
 
 ## Next independent slice
 
-The private offline executor is complete at functional commit `550b591` and is specified in
-`docs/project/16_offline_executor_contract.md`. It coordinates the completed planner, frozen
-dispatcher, and private assembler once and in order while preserving the existing `ExecutionTrace`
-1.0.0 surface; the 13 public schemas remain unchanged.
+The ninth independently reviewable ADR 0008 work-unit-C slice shipped on 2026-08-11 at feature
+commit `883815b`.
+Five deterministic JSON traces under `traces/replay/v1/` were generated through the real private
+executor, `ScriptedPlanner`, callable and artifact registries, and temporal retrieval corpus, then
+checked by exact-byte replay. The first nine work-unit-C slices are complete, the public schema
+count remains 13, and the minimal offline briefing path has shipped. Its public description is
+exactly `typed function calling with committed traces`.
 
-The exact next reviewable slice is only the committed machine-readable end-to-end replay traces.
-Those traces must use the real executor and bind the real registry, corpus, planner, and executor
-provenance identifiers and digests. The existing contract fixture is not an end-to-end replay
-result, and the minimal typed function-calling path is not shipped until these traces are committed.
-
-Keep provider or live-model integration in a later independent slice, and do not start the bounded
-tool loop deferred by ADR 0008.
+The exact next reviewable slice is draft-only Korean/English authoring for the frozen
+`kv-core-data-02` pair over the existing approved ECOS snapshot. Until human review, the approved
+core remains 6/40. Do not change the frozen 40-record matrix, execution schemas, source set, or
+rights decisions. Provider or live-model integration remains absent, and the bounded tool loop
+deferred by ADR 0008 remains outside this slice.
