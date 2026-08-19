@@ -1,6 +1,6 @@
 # SovereignLab project status
 
-- Last updated: 2026-08-11
+- Last updated: 2026-08-19
 - Owner: Hyungbae Cho (`bwade9090`)
 - Delivery window: four weeks, approximately 80 hours
 - Current milestone: M2 — week-2 benchmark and baselines (charter v2.5 §7, Week 2)
@@ -17,8 +17,9 @@
   check. Number-normalization 1.0.0, the zero-cost QLoRA preflight, and the paid A40/CUDA 13
   one-step compatibility run are complete. The M1b week-1 gate passed on 2026-07-18. In M2, the
   40-record core authoring allocation and the first four-record bilingual batch are owner-approved.
-  The approved human-reviewed core count is now 6/40: the first four data/abstention records and
-  the first Korean/English documentary pair. The other 34 matrix slots are not yet authored or
+  The approved human-reviewed core count remains 6/40: the first four data/abstention records and
+  the first Korean/English documentary pair. The frozen `kv-core-data-02` Korean/English pair is
+  now authored as exactly two draft records; the other 32 matrix slots are not yet authored or
   approved. The offline bilingual temporal document retriever is now implemented with
   manifest-bound chunks and publication-date filtering before scoring; only synthetic fixtures
   were used. The first real bilingual document-manifest unit is also complete: the Korean May 2026
@@ -448,6 +449,15 @@
   `PYTEST_CURRENT_TEST` from exceeding Windows' 32,767-character environment-variable limit.
   Neither change alters Linux/macOS dependency resolution or test semantics.
 
+- **Bilingual ECOS GDP draft pair (2026-08-19):** functional commit `f2d2523` adds exactly
+  `kv-core-data-02-ko` and `kv-core-data-02-en` at `status=draft` in
+  `data/benchmark/drafts/core-draft-003.jsonl`, plus focused contract tests. Both records preserve
+  the frozen `train` / `data` allocation and `eg-data-ecos-gdp-20260717` evidence group, reuse only
+  the existing owner-approved `ecos-200y108-snapshot-20260717` KOR-RTD snapshot, and answer its
+  2026Q1 real-GDP observation as `596692.8` `billion_krw`. The matrix, source bytes, manifest,
+  checksum, rights decision, normalization rule, 13 public schemas, and five committed traces are
+  unchanged. These are drafts only, so the approved human-reviewed core count remains 6/40.
+
 ## Current validation evidence
 
 Run from the repository root after activating `.venv` (any OS; see README quick start):
@@ -774,6 +784,18 @@ then passed all 1,115 tests with a fresh OS `--basetemp`. The directory and ACL 
 entirely offline, used no provider/live-model integration, source or rights change, secret,
 network/GPU operation, or paid operation, and cost $0.00.
 
+Validated 2026-08-19 on Windows after the bilingual ECOS GDP draft slice: Python 3.12.13; all 13
+public schemas and five committed replay traces remained unchanged; `python -m ruff check
+--no-cache .` passed; and `python -m ruff format --check .` passed across 72 Python files. The
+focused benchmark slice passed all 27 tests. The full suite, run with an explicit fresh OS
+`--basetemp`, passed all 1,135 tests with 100% SovereignLab statement/branch coverage (4,679
+statements, 1,568 branches). During onboarding, the canonical baseline collected 1,129 tests and
+reported 1,023 passed plus 106 setup errors, all the documented repository-root `.pytest_tmp`
+`WinError 5`; the same pre-change baseline passed 1,129/1,129 with a fresh OS `--basetemp`. The
+directory and ACL were left untouched. Functional commit `f2d2523` contains exactly the two draft
+records and their focused tests. The work was entirely offline, used no network, provider/live-
+model call, source refresh, GPU, or paid operation, and cost $0.00.
+
 ## M1b verification spike record (2026-07-15)
 
 All network work below was read-only, key-free, and free of charge. Raw responses were written only
@@ -1022,18 +1044,39 @@ response bodies.
   pair using the already approved `ecos-200y108-snapshot-20260717`. It must not be approved in the
   authoring change, and it must not alter the frozen matrix, source artifacts, or rights decisions.
 
+## Session-close snapshot (2026-08-19, eighteenth close: ECOS GDP bilingual drafts complete)
+
+- Functional commit `f2d2523` adds exactly two records, `kv-core-data-02-ko` and
+  `kv-core-data-02-en`, to `data/benchmark/drafts/core-draft-003.jsonl` at `status=draft`, together
+  with focused tests. No other benchmark record or frozen matrix row changed.
+- Both drafts use only the existing owner-approved `ecos-200y108-snapshot-20260717` KOR-RTD
+  evidence bundle and preserve its exact snapshot, manifest, checksum, rights, cutoff, and
+  normalization boundaries. Their gold observation is 2026Q1 real GDP at `596692.8`
+  `billion_krw`.
+- M2 remains active. Exactly 6/40 core records remain owner-approved; the new pair is not counted
+  until a separate named human review explicitly approves it. The other 32 matrix slots remain
+  unauthored and unapproved.
+- Python 3.12.13 validation is green: 27 focused tests; 1,135 full-suite tests at 100%
+  SovereignLab statement/branch coverage (4,679 statements, 1,568 branches) with a fresh OS
+  `--basetemp`; and Ruff format checking across 72 Python files. The public schema count remains 13
+  and the committed trace count remains five.
+- The canonical onboarding failure remains environmental: 1,023 of 1,129 tests passed before 106
+  `.pytest_tmp` `WinError 5` setup errors, then all 1,129 passed against a fresh OS basetemp. The
+  repository `.pytest_tmp` directory and ACL were untouched.
+- The exact next action is only a separate named human review of these two drafts. No source,
+  rights, matrix, schema, trace, provider/live-model, GPU, paid, or deferred-loop work belongs in
+  that review gate; this slice cost $0.00.
+
 ## Immediate next action (M2 — do these in order)
 
-1. Author only the draft bilingual `kv-core-data-02-ko` / `kv-core-data-02-en` pair from the frozen
-   allocation, using the already committed and owner-approved
-   `ecos-200y108-snapshot-20260717` evidence bundle. Reuse the existing point-in-time resolver and
-   normalization boundaries; do not fetch or add a source.
-2. Validate the two draft records against the unchanged 40-record matrix, evidence bundle, split and
-   language constraints, then run the relevant focused checks and full offline baseline. Keep the
-   approved human-reviewed count at 6/40 until a separate explicit owner review.
-3. Stop after the draft-only pair. Do not alter the matrix, approve the records, change a source or
-   rights decision, add a public schema, begin provider/live-model integration, or start the deferred
-   bounded loop.
+1. Conduct only a separate named human review of `kv-core-data-02-ko` and
+   `kv-core-data-02-en` against the frozen matrix row and the already approved
+   `ecos-200y108-snapshot-20260717` evidence bundle. Do not re-author the pair or fetch a source.
+2. Record an explicit approve-or-reject decision. Until explicit approval, keep both records at
+   `status=draft` and keep the approved human-reviewed core count at 6/40.
+3. Stop after that two-record review gate. Do not alter another matrix slot, source, rights
+   decision, public schema, or committed trace; do not begin provider/live-model integration or the
+   deferred bounded loop.
 
 Open operational check, not an M2 blocker: manually dispatch one secret-backed append-only
 harvester run only with separate owner authorization; otherwise the next weekly schedule will use
@@ -1128,6 +1171,7 @@ complete.
 | 2026-08-07 | Deterministic evidence-packet assembler | $0.00 | Offline private assembler, focused tests, specification, review, and full validation only; no provider, live model API, GPU, or paid call |
 | 2026-08-11 | Private offline executor | $0.00 | Offline executor, real committed registry/corpus replay, focused tests, specification, review, and full fresh-OS-basetemp validation only; no network, provider, live model integration, GPU, or paid call; repository `.pytest_tmp` ACL untouched |
 | 2026-08-11 | Committed real-digest replay traces | $0.00 | Five deterministic traces generated through the real private executor and committed registry/corpus, exact-byte checks, focused/full offline validation, and review only; no network, provider/live-model integration, source or rights change, GPU, or paid call; repository `.pytest_tmp` ACL untouched |
+| 2026-08-19 | Bilingual ECOS GDP draft pair | $0.00 | Exactly two draft records from the existing ECOS snapshot whose KOR-RTD use is owner-approved, focused tests, and full fresh-OS-basetemp validation only; no network, provider/live-model call, source or rights change, GPU, or paid call; repository `.pytest_tmp` ACL untouched |
 
 **Cumulative external spend: $0.23584524099715054 / $100.00**
 
@@ -1180,12 +1224,16 @@ Read in this order, in full, before changing anything:
 22. The dispatcher, planner, and assembler source/test pairs under `src/sovereignlab/execution/`
     and `tests/execution/` — completed frozen boundaries coordinated by the executor and replay
     traces without reopening them.
+23. `data/benchmark/drafts/core-draft-003.jsonl` and
+    `tests/benchmark/test_ecos_gdp_draft.py` — the completed two-record ECOS GDP draft slice and
+    its focused frozen-allocation, evidence, cutoff, bilingual-parity, and lifecycle checks.
 
 Then start with "Immediate next action" item 1. The structural matrix and first six records are
-owner-approved; the other 34 slots are neither authored nor approved. The next change drafts only
-the frozen `kv-core-data-02-ko` / `kv-core-data-02-en` pair and does not change that count. The
-synthetic retrieval baseline and first real bilingual document manifests are complete. ADR 0009
-resolves those
+owner-approved; `kv-core-data-02-ko` and `kv-core-data-02-en` are authored drafts awaiting a
+separate named human review; and the other 32 slots are neither authored nor approved. The next
+change is only that two-record review gate and does not change the 6/40 count without explicit
+approval. The synthetic retrieval baseline and first real bilingual document manifests are
+complete. ADR 0009 resolves those
 manifests to `allowed`, but full PDFs and extracted full text remain outside Git by current
 repository-scope choice. Do not start full LoRA tuning, UI, or release work before the M2 gate
 closes. The harvester must stay within approved rights scopes, and every later paid operation

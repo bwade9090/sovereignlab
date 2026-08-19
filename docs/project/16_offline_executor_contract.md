@@ -192,8 +192,12 @@ empty, so the earlier document result cannot leak as partial evidence. The healt
 stack does not naturally emit planner, tool, or packet-assembly faults; those semantics remain in
 the strict schema and executor regression coverage rather than monkeypatched end-to-end artifacts.
 
-The exact next reviewable slice is draft-only Korean/English authoring for the frozen
-`kv-core-data-02` pair over the existing approved ECOS snapshot. Until human review, the approved
-core remains 6/40. Do not change the frozen 40-record matrix, execution schemas, source set, or
-rights decisions. Provider or live-model integration remains absent, and the bounded tool loop
-deferred by ADR 0008 remains outside this slice.
+The draft-only Korean/English authoring slice for the frozen `kv-core-data-02` pair completed on
+2026-08-19 at feature commit `f2d2523`, using only `ecos-200y108-snapshot-20260717`, whose use in
+KOR-RTD is owner-approved. It added exactly two draft records. They remain pending
+a separate named human review, so the approved core remains 6/40. The frozen 40-record matrix,
+source set, rights decisions, 13 public schemas, and frozen execution runtime remain unchanged.
+
+The exact next reviewable slice is owner review of exactly these two drafts. This text does not
+approve them or change the approval count. Provider or live-model integration remains absent, and
+the bounded tool loop deferred by ADR 0008 remains outside this review slice.

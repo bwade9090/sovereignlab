@@ -1,7 +1,8 @@
 # K-VINTAGE human-reviewed core authoring matrix 1.0.0
 
-- Status: structural allocation and first six records owner-approved
-- Date: 2026-07-29
+- Status: structural allocation frozen; first six records owner-approved; `kv-core-data-02`
+  drafted and pending named human review
+- Date: 2026-08-19
 - Scope authority: charter v2.5 §5 and M2 continuation order
 - Canonical matrix: `data/benchmark/core-authoring-matrix-v1.json`
 - Public schema: `data/schemas/core-authoring-matrix-v1.schema.json`
@@ -64,9 +65,30 @@ question, answer, route, evidence, `as_of`, or frozen-allocation change. Their a
 the AI author and record the named human reviewer and aware review timestamp. The lifecycle tag
 changed from `draft-002` to `batch-002` when the file moved into `core/`.
 
-The approved human-reviewed core is now 6/40 records; the other 34 are not authored.
+The approved human-reviewed core is now 6/40 records. Two additional records are drafts pending
+named human review; the other 32 are not authored.
 
-## 4. Approval records
+## 4. Draft ECOS GDP pair pending human review
+
+`data/benchmark/drafts/core-draft-003.jsonl` contains the frozen `kv-core-data-02` Korean/English
+pair completed on 2026-08-19. Both records use the `data` route, `train` split,
+`eg-data-ecos-gdp-20260717` evidence group, and `kv-core-data-02` parallel group. Their only
+data-unit binding remains `ecos-200y108-snapshot-20260717`.
+
+Both questions ask for Korea's seasonally adjusted real expenditure on GDP in 2026 Q1 as available
+at the inclusive end of 2026-07-17 in Asia/Seoul. The reference answers and typed tool expectations
+reproduce raw and normalized value `596692.8`, canonical unit `billion_krw`, one-decimal display,
+the committed snapshot checksum, rights catalog, rights decision, and Bank of Korea attribution.
+The records retain `annotation.status=draft` and the `draft-003` lifecycle tag.
+
+The focused benchmark acceptance suite passes 27 tests. It validates the two records against the
+frozen matrix and committed source bytes, rebuilds the manifest and rights bundle, calls
+`read_snapshot_as_of` at the record cutoff, verifies normalization and bilingual parity, and
+confirms the approved count is still six. The matrix, source bundle, rights decisions, public
+schemas, and source package are unchanged. The exact next slice is named human review of these two
+drafts only; no approval or next-pair selection is implied.
+
+## 5. Approval records
 
 On 2026-07-25, Hyungbae Cho explicitly approved:
 
@@ -82,7 +104,7 @@ pair. The substantive record fields and frozen matrix remain unchanged; the seco
 from `drafts/core-draft-002.jsonl` to `core/core-batch-002.jsonl` with approval metadata and the
 corresponding lifecycle tag.
 
-## 5. Human-review checklist
+## 6. Human-review checklist
 
 For each bilingual pair, the reviewer must verify:
 
@@ -98,12 +120,13 @@ Future corrections remain in their draft batch until review is complete. An appr
 reviewer and review timestamp in each `BenchmarkRecord`; it does not rewrite the frozen matrix
 allocation.
 
-## 6. Reproduction
+## 7. Reproduction
 
 ```bash
 python scripts/export_json_schemas.py
 python -m pytest tests/benchmark/test_core_batch.py
 python -m pytest tests/benchmark/test_bok_outlook_core.py
+python -m pytest tests/benchmark/test_ecos_gdp_draft.py
 python -m ruff check .
 python -m ruff format --check .
 ```
@@ -115,3 +138,7 @@ normalization 1.0.0, and checks the earlier-cutoff abstention.
 The documentary-core test validates both records against their strict manifests and the frozen
 matrix, enforces language-specific publication cutoffs and split-group integrity, verifies the
 named reviewer metadata, and confirms the approved count is six.
+
+The ECOS GDP draft test validates both draft records against the frozen matrix, existing snapshot,
+manifest, checksum, rights decision, and normalization rule. Across the three focused benchmark
+files above, 27 tests pass while the approved count remains six.

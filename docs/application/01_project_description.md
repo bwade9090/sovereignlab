@@ -1,7 +1,7 @@
 # SovereignLab application project description
 
 - Status: application-ready wording for the current M2 midpoint
-- Last updated: 2026-08-11
+- Last updated: 2026-08-19
 - Disclosure level: verified implementation, compatibility, and deterministic offline replay
   results only; no provider/live, model-quality, or briefing-performance claim
 
@@ -34,8 +34,8 @@ large-number presentation, rounding, and grading tolerances are also frozen and 
 The project passed its first milestone gate and is midway through the benchmark-and-baselines
 milestone. Its evidence, benchmark, core-authoring-matrix, availability-ledger, rights, and
 execution contracts are published as 13 synchronized deterministic JSON Schemas; the offline
-resolver and GitHub Actions harvester are operational; and 1,129 tests pass with 100% statement
-and branch coverage (4,679 statements, 1,568 branches) across 71 formatted Python files. The
+resolver and GitHub Actions harvester are operational; and 1,135 tests pass with 100% statement
+and branch coverage (4,679 statements, 1,568 branches) across 72 formatted Python files. The
 40-question human-reviewed bilingual
 core is frozen as an allocation, and 6 of 40 records — initially AI-authored, then approved under
 named human review —
@@ -47,6 +47,12 @@ synthetic Korean/English corpus — the real Bank of Korea report bodies are man
 yet committed as searchable text — with publication-date filtering before scoring; regression
 tests on that corpus prove documents published after a question's cutoff cannot change eligible
 results or scores.
+
+Two additional Korean/English records are complete as the draft `kv-core-data-02` pair. They read
+the 2026 Q1 seasonally adjusted real GDP value of 596,692.8 billion won from the 2026-07-17 ECOS
+snapshot that the owner approved for use in KOR-RTD, and their focused benchmark suite contributes
+to 27 passing tests. They remain pending named human review, so the approved count stays 6/40; the
+frozen matrix, source bundle, rights decisions, source package, and public schemas are unchanged.
 
 On the execution side, the project has shipped `typed function calling with committed traces`.
 A strict typed execution-and-trace contract freezes the bilingual request, four-route plan, exactly
@@ -66,14 +72,13 @@ language-model-only LoRA boundaries, finite gradients, a changed adapter tensor,
 output. This is deliberately reported as a training-path compatibility result, not as evidence of
 improved model quality.
 
-The exact next implementation slice drafts only the Korean/English `kv-core-data-02` pair using the
-existing approved `ecos-200y108-snapshot-20260717`; named human approval remains separate, so the
-approved count stays 6/40. Later M2 work authors the remaining core records plus a separately
-reported set of 200–300 deterministic revision probes and runs the four-variant baseline suite
-comparing closed-book generation, temporal RAG, RAG plus deterministic tools, and a QLoRA-tuned
-evidence router. Temporal-leakage rate—whether a system uses information that did not exist at the
-question's `as_of` date—is the headline metric; all performance claims will be derived only from
-committed evaluation artifacts.
+The exact next slice is named human review of only the two `kv-core-data-02` drafts; they are not
+pre-approved, and no later pair has been selected. Later M2 work authors the remaining core records
+plus a separately reported set of 200–300 deterministic revision probes and runs the four-variant
+baseline suite comparing closed-book generation, temporal RAG, RAG plus deterministic tools, and a
+QLoRA-tuned evidence router. Temporal-leakage rate—whether a system uses information that did not
+exist at the question's `as_of` date—is the headline metric; all performance claims will be
+derived only from committed evaluation artifacts.
 
 ## Brief version
 
@@ -90,16 +95,19 @@ boundary, an internal deterministic evidence-packet assembler, and a private pro
 offline executor. Five real-digest offline replays now provide `typed function calling with
 committed traces`, covering all routes and tools, Korean and English, explicit and implicit cutoffs,
 complete execution, and terminal planned/tool abstention without partial evidence. The repository
-passes 1,129 tests with 100% statement and branch coverage (4,679 statements, 1,568 branches). The
+passes 1,135 tests with 100% statement and branch coverage (4,679 statements, 1,568 branches)
+across 72 formatted Python files. The
 frozen
 40-record bilingual K-VINTAGE core has its first 6 records reviewed and approved, including a
 Korean/English documentary pair over the Bank of Korea's May 2026 Economic Outlook and its later
-official English translation. I also verified the pinned Ministral 3 3B NF4/QLoRA training path on
-  a disposable A40/CUDA 13 GPU without claiming model-quality gains. Next: draft only the
-  Korean/English `kv-core-data-02` pair from the existing approved ECOS GDP snapshot, without
-  changing the 6/40 approval count; later work covers the remaining core, separately reported
-  deterministic revision probes, and the four-variant baseline suite, with temporal leakage as the
-  headline metric.
+official English translation. A further Korean/English `kv-core-data-02` pair is complete as two
+draft records over the 2026-07-17 ECOS GDP snapshot that the owner approved for use in KOR-RTD,
+with the focused benchmark suite at 27 passing tests; named human review is still pending, so the
+approved count remains 6/40. I also
+verified the pinned Ministral 3 3B NF4/QLoRA training path on a disposable A40/CUDA 13 GPU without
+claiming model-quality gains. Next: named human review of those two drafts only; later work covers
+the remaining core, separately reported deterministic revision probes, and the four-variant
+baseline suite, with temporal leakage as the headline metric.
 
 ## Usage guardrails
 

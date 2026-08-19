@@ -4,7 +4,9 @@
 
 **Status:** M1b verification and vintage-contract groundwork are complete; M2 benchmark and
 baseline development is in progress with a frozen 40-record core matrix and 6/40 records
-owner-approved. The first nine ADR 0008 slices and work unit C are complete: five machine-readable
+owner-approved. The Korean/English `kv-core-data-02` pair is complete as two draft records in
+`data/benchmark/drafts/core-draft-003.jsonl` and awaits named human review; it does not increase
+the approved count. The first nine ADR 0008 slices and work unit C are complete: five machine-readable
 real-digest traces were generated through the actual private offline executor, `ScriptedPlanner`,
 and committed registries and corpora in feature commit `883815b`. The trace set covers all four
 routes, all three deterministic evidence tools, Korean and English, explicit and implicit cutoffs,
@@ -13,8 +15,9 @@ source package is unchanged, the public surface remains 13 deterministic JSON Sc
 executor descriptor still pins 32 source entries and digest
 `08f45dab6a36a49cb7d0b588a69236942cd61534540bd4de0772010402dada64`.
 The focused executor/replay-trace acceptance run passes 80 tests at 100% coverage over 326
-statements and 98 branches. The full offline baseline is 1,129 tests at 100% statement/branch
-coverage (4,679 statements, 1,568 branches) across 71 Ruff-formatted Python files. The shipped
+statements and 98 branches, and the focused benchmark acceptance run passes 27 tests. The full
+offline baseline is 1,135 tests at 100% statement/branch coverage (4,679 statements, 1,568
+branches) across 72 Ruff-formatted Python files. The shipped
 minimal reference path is described only as `typed function calling with committed traces`. These
 are deterministic offline replays, not provider or live outputs; no provider/live integration or
 bounded tool loop exists, and no model-quality or briefing-performance claim is made. Searchable
@@ -87,9 +90,12 @@ see the [private executor contract](docs/project/16_offline_executor_contract.md
 registries, corpus, and planner provenance and stop at the first terminal result without partial
 evidence. The minimal path is now described as `typed function calling with committed traces`.
 No provider/live integration exists, and ADR 0008 separately defers the bounded tool loop to
-post-window v1.1. The exact next reviewable slice is only a draft Korean/English
-`kv-core-data-02` pair using the existing approved `ecos-200y108-snapshot-20260717`; human approval
-remains separate, so the approved count stays 6/40.
+post-window v1.1. On 2026-08-19, feature commit `f2d2523` added only the draft Korean/English
+`kv-core-data-02` pair and its focused tests using `ecos-200y108-snapshot-20260717`, whose use in
+KOR-RTD is owner-approved. The matrix, source bundle, rights decisions, source package, and
+13 public schemas remain unchanged. The exact next reviewable slice is named human review of those
+two drafts only; do not pre-approve them or select another pair, so the approved count stays 6/40
+until that review gate is completed.
 Charter v2.5 and
 [ADR 0009](docs/decisions/0009-bok-economic-outlook-public-data-rights.md) additionally record the
 owner-approved `allowed` public-data ruling for official Bank of Korea Economic Outlook
