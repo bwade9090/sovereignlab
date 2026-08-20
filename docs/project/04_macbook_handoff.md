@@ -1,8 +1,8 @@
 # Cross-machine continuation handoff
 
 - Legacy filename: retained so existing links and onboarding instructions do not break.
-- Prepared: 2026-07-16; refreshed 2026-08-19 after the bilingual ECOS GDP draft continuation
-  (eighteenth refresh: draft pair complete, named human review ready)
+- Prepared: 2026-07-16; refreshed 2026-08-20 after the bilingual ECOS GDP owner-approval transition
+  (nineteenth refresh: third core batch approved, no later slice selected)
 - Target continuation machine: Windows workstation
 - Authority: charter v2.5; accepted ADRs 0001–0009
 - Branch to continue: `main` from `origin`
@@ -10,8 +10,10 @@
 - Session state: work unit C and its first nine ADR 0008 slices are complete and reviewable; all
   three deterministic runtime adapters, the explicit dispatcher, offline planner boundary, private
   deterministic evidence-packet assembler, private offline executor, and five committed real-
-  digest replay traces are complete; the frozen `kv-core-data-02` Korean/English pair is now
-  authored as exactly two drafts and awaits a separate named human review
+  digest replay traces are complete; Hyungbae Cho approved the unchanged `kv-core-data-02`
+  Korean/English pair, so the core is now 8/40 with no pending draft; no later pair or slice is
+  selected, and continuation awaits explicit owner instruction
+- Completed ECOS GDP approval feature checkpoint: `473a733` (`feat: approve ECOS GDP bilingual pair`).
 - Completed ECOS GDP draft functional checkpoint: `f2d2523` (`feat: add ECOS GDP bilingual drafts`).
 - Completed replay-trace functional checkpoint: `883815b` (`feat: add committed execution replay traces`).
 - Completed offline-executor functional checkpoint: `550b591` (`feat: add offline executor`).
@@ -35,8 +37,8 @@ state from the Mac. At the beginning of the Windows session:
 3. Create or verify the Windows-local `.venv` and run the PowerShell baseline in section 2 before
    changing files.
 4. State back the current milestone, approved core count, exact next work unit, and hard stops.
-5. Start only with section 5's separate named human review of the completed ECOS GDP draft pair.
-   Do not redo the completed retrieval, manifest, authoring, or prior owner-approval units.
+5. Do not start a new work unit. Section 5 records the completed approval gate; await explicit
+   owner instruction naming the next bounded outcome.
 
 If the worktree is dirty, preserve the existing changes and determine their owner before editing.
 If local `main` has diverged from `origin/main`, stop rather than rewriting history.
@@ -116,7 +118,8 @@ If local `main` has diverged from `origin/main`, stop rather than rewriting hist
   Korea, and disclose paraphrase/transformation. The official PDFs were re-fetched only into a
   temporary directory, matched the committed byte sizes and hashes, and had both evidence pages
   rendered and visually inspected before all temporary files were deleted. Bundle tests enforce
-  language matching, publication cutoffs, frozen allocation, split-group integrity, and 6/40.
+  language matching, publication cutoffs, frozen allocation, split-group integrity, and the
+  current 8/40 approved-core count.
 - **Execution-contract adjustment (2026-07-28, ADR 0008 / charter v2.4, documentation only):**
   after a four-lens review with adversarial verification, the owner approved implementing the
   minimal question-to-evidence-packet path as a typed function-calling artifact (model-emitted
@@ -261,6 +264,15 @@ If local `main` has diverged from `origin/main`, stop rather than rewriting hist
   touched. Functional commit `f2d2523` contains exactly the two drafts and focused tests. No
   network, provider/live-model call, source refresh, GPU operation, or paid operation occurred;
   cost was $0.00.
+- ECOS GDP approval transition validated 2026-08-20 on Windows/Python 3.12.13: the three focused
+  benchmark files passed all 27 tests; the full suite passed all 1,135 tests with 100% SovereignLab
+  statement/branch coverage (4,679 statements, 1,568 branches) under a fresh OS `--basetemp`; and
+  Ruff check plus format check passed across 72 Python files. The 13 public schemas and five
+  committed traces remained unchanged. The repository `.pytest_tmp` directory and ACL were not
+  touched. Feature commit `473a733` contains the two-record approval lifecycle transition and
+  focused test updates only; the matrix, source, rights, schema, and runtime boundaries are
+  unchanged. No network, provider/live-model call, GPU operation, or paid operation occurred; cost
+  was $0.00.
 
 ## 2. Set up and validate the Windows machine
 
@@ -315,8 +327,8 @@ do not remove it merely because another operating system supplies an IANA timezo
    behind the v2 direction.
 6. `docs/project/05_evidence_contract_2_0_migration.md` — the implemented contract surface the
    next work units build on.
-7. `docs/project/07_core_authoring_matrix.md` — the approved 40-record allocation, first two
-   approved batches (6/40), and human-review boundary.
+7. `docs/project/07_core_authoring_matrix.md` — the approved 40-record allocation, first three
+   approved batches (8/40), and human-review boundary.
 8. `docs/project/08_temporal_document_retrieval.md` — the implemented document cutoff and
    filter-before-scoring contract.
 9. `docs/project/09_typed_execution_trace_contract.md` — the frozen execution/trace contract.
@@ -347,13 +359,14 @@ do not remove it merely because another operating system supplies an IANA timezo
 21. The dispatcher, planner, and assembler source/test pairs under `src/sovereignlab/execution/`
     and `tests/execution/` — completed frozen boundaries coordinated by the executor and replay
     traces without reopening.
-22. `data/benchmark/drafts/core-draft-003.jsonl` and
-    `tests/benchmark/test_ecos_gdp_draft.py` — the completed two-record ECOS GDP draft slice and
-    its focused frozen-allocation, evidence, cutoff, bilingual-parity, and lifecycle checks.
+22. `data/benchmark/core/core-batch-003.jsonl` and
+    `tests/benchmark/test_ecos_gdp_core.py` — the approved two-record ECOS GDP core batch and its
+    focused frozen-allocation, evidence, cutoff, bilingual-parity, and approval-lifecycle checks.
 
 Only when changing source/resolver/harvester behavior, also read
 `docs/discovery/03_week1_verification_log.md` and the relevant resolver, retrieval, registry,
-adapter, or harvester source/tests. They are not prerequisites for the named human review.
+adapter, or harvester source/tests. They are not prerequisites while awaiting the next explicit
+owner instruction.
 
 ## 4. External state for the new session
 
@@ -366,18 +379,18 @@ adapter, or harvester source/tests. They are not prerequisites for the named hum
   a remaining balance of USD `19.7641547592`. Do not start another paid Pod without a new explicit
   authorization and cost estimate.
 - Do not assume the Mac's RunPod CLI, SSH key, GitHub CLI login, local `.env`, or virtual
-  environment exists on Windows. They are machine-local and are not needed for the next offline
-  work unit.
+  environment exists on Windows. They are machine-local and are not needed while no next work unit
+  is selected.
 - No model weights or adapter were copied from RunPod. The repository contains only the harness,
   synthetic fixture, and recorded compatibility evidence.
 - The application-ready detailed and brief English descriptions are in
   `docs/application/01_project_description.md`. They intentionally make no model-performance claim.
-- The approved core count is exactly 6/40. The four records in
-  `data/benchmark/core/core-batch-001.jsonl` and the two records in
-  `data/benchmark/core/core-batch-002.jsonl` are approved. The two records in
-  `data/benchmark/drafts/core-draft-003.jsonl` are drafts awaiting named human review; the remaining
-  32 matrix slots are neither authored nor approved.
-- The filenames and field names in the approved matrix and first core batch are intentionally
+- The approved core count is exactly 8/40. The four records in
+  `data/benchmark/core/core-batch-001.jsonl`, the two records in
+  `data/benchmark/core/core-batch-002.jsonl`, and the two records in
+  `data/benchmark/core/core-batch-003.jsonl` are approved. No draft is pending; the remaining 32
+  matrix slots are neither authored nor approved.
+- The field names and allocation in the approved matrix and three core batches are intentionally
   unchanged. Do not rename them or alter the frozen allocation.
 - Two real BOK document manifests are committed, but no provider report body or extracted provider
   text has been added. ADR 0009 classifies the manifests as `allowed`; their absence is a
@@ -407,7 +420,8 @@ Target only the same frozen documentary pair:
 - intent: explain one stated driver from the May 2026 Bank of Korea outlook release family.
 
 Both records validate against the committed manifests and frozen matrix. Hyungbae approved them on
-2026-07-29, they now live in `core/core-batch-002.jsonl`, and the approved count is 6/40. The source
+2026-07-29 and moved them to `core/core-batch-002.jsonl`; at that checkpoint, the approved count
+was 6/40. The source
 PDFs and extracted text remain outside Git, and the synthetic fixture remains the only searchable
 corpus.
 
@@ -519,25 +533,37 @@ in replayable committed traces, existing temporal-leakage protections still pass
 are exercised, and the full offline suite is green. Provider/live-model integration, additional
 source ingestion, and the v1.1 bounded loop remain separate units.
 
-### Completed `kv-core-data-02` draft slice and exact next M2 gate
+### Completed `kv-core-data-02` draft and owner-approval slices
 
 Functional commit `f2d2523` adds exactly `kv-core-data-02-ko` and `kv-core-data-02-en` at
 `status=draft` in `data/benchmark/drafts/core-draft-003.jsonl`. Both records preserve the frozen
 `train` / `data` allocation and `eg-data-ecos-gdp-20260717` evidence group, use only the existing
-owner-approved `ecos-200y108-snapshot-20260717` KOR-RTD snapshot, and answer its 2026Q1 real-GDP
+`ecos-200y108-snapshot-20260717` snapshot whose use in KOR-RTD is owner-approved, and answer its
+2026Q1 real-GDP
 observation as `596692.8` `billion_krw`. Focused and full validation are green. The matrix, source
 bundle, rights decision, normalization contract, 13 public schemas, and five committed traces are
-unchanged, and the approved count remains 6/40.
+unchanged. At that checkpoint, the approved count remained 6/40.
 
-The exact next reviewable slice is named human review only:
+On 2026-08-20, Hyungbae Cho approved the unchanged Korean/English pair. Approval feature commit
+`473a733` moves the two records to `data/benchmark/core/core-batch-003.jsonl`, records reviewer
+`Hyungbae Cho` and aware review timestamp `2026-08-20T00:24:18Z`, and replaces only the lifecycle
+tag `draft-003` with `batch-003`. The questions, answers, cutoff, route, split, evidence group,
+data-unit binding, tool expectations, attribution, and normalization are unchanged from `f2d2523`.
+The approved core is now 8/40, the remaining 32 slots are unauthored and unapproved, and no draft
+is pending. The matrix, source bundle, rights decisions, 13 public schemas, five committed traces,
+and runtime source remain unchanged.
 
-1. Review exactly `kv-core-data-02-ko` and `kv-core-data-02-en` against their unchanged frozen
-   allocation and `ecos-200y108-snapshot-20260717` evidence bundle, whose use in KOR-RTD is
-   owner-approved; do not re-author the pair or fetch a source.
-2. Record an explicit approve-or-reject decision. Until explicit approval, keep both records at
-   `status=draft` and keep the approved human-reviewed count at 6/40.
-3. Stop after the two-record review. Do not change another matrix slot, source artifact, rights
-   decision, public schema, committed trace, provider/live-model boundary, or deferred loop.
+The approval transition passed 27 focused benchmark tests and the full 1,135-test suite with 100%
+SovereignLab statement/branch coverage (4,679 statements, 1,568 branches) under a fresh OS
+`--basetemp`; Ruff check and format check passed across 72 Python files. The repository
+`.pytest_tmp` directory and ACL were untouched, and the slice cost $0.00.
+
+No later pair or reviewable slice has been selected. The exact continuation order is therefore:
+
+1. Stop after onboarding and baseline validation; do not select or begin another pair or work unit.
+2. Await explicit owner instruction naming the next bounded outcome.
+3. Preserve the frozen matrix, source, rights, schema, trace, and runtime boundaries while waiting;
+   do not begin provider/live-model integration, paid work, or the deferred bounded loop.
 
 Open operational check, not an M2 blocker: manually dispatch one append-only secret-backed
 workflow smoke only after separate owner authorization; otherwise let the weekly schedule exercise
@@ -546,9 +572,9 @@ the configured secrets.
 ## 6. What not to redo
 
 - Do not rebuild or rename the 40-record matrix, the approved four-record first batch, the approved
-  two-record documentary batch, or the completed two-record ECOS GDP draft batch.
+  two-record documentary batch, or the approved two-record ECOS GDP third batch.
 - Do not redo the first real BOK document manifests, revert their ADR 0009 `allowed` conclusion, or
-  merge full-document/corpus ingestion into the small draft-only work unit.
+  merge full-document/corpus ingestion into the completed GDP authoring or approval units.
 - Do not replace the retrieval baseline with embeddings yet. Its filter-before-scoring invariant
   and synthetic future-document regression are already complete.
 - Do not rerun the paid QLoRA compatibility spike. It passed, all Pods were deleted, and it is not
@@ -558,7 +584,7 @@ the configured secrets.
   with the runtime-adapter slice.
 - Do not replace the planner, dispatcher, assembler, or executor boundaries; expose their private
   recording, assembly, or execution internals as public wrappers/schemas; or merge provider/live
-  integration into the named human-review slice.
+  integration into an unselected future slice.
 - Do not reopen accepted ADRs 0003–0009 without new evidence that requires a superseding decision.
 - Do not implement the bounded multi-step tool loop in-window; ADR 0008 defers it to v1.1. Do
   not re-litigate that deferral — the supporting matrix/schema arithmetic is recorded in the ADR.

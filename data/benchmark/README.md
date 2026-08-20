@@ -8,21 +8,24 @@ Files under `drafts/` are review candidates, not approved gold records. In parti
 they must remain `annotation.status=draft` until a named human reviewer verifies them. Never merge
 draft counts with the human-reviewed core or with machine-generated tier-2 probes.
 
-`drafts/core-draft-003.jsonl` contains the Korean/English `kv-core-data-02` pair completed on
-2026-08-19. Both records use the frozen `data` route, `train` split,
-`eg-data-ecos-gdp-20260717` evidence group, and
-`ecos-200y108-snapshot-20260717` data-unit binding. They reproduce the 2026 Q1 value of `596,692.8`
-billion won from the latest-only ECOS snapshot that the owner approved for use in KOR-RTD through
-`read_snapshot_as_of`, and remain pending named human review. The matrix, source bundle, rights
-decisions, and public schemas were not changed.
+The Korean/English `kv-core-data-02` pair was completed as
+`drafts/core-draft-003.jsonl` on 2026-08-19 in feature commit `f2d2523`. Hyungbae Cho approved both
+records on 2026-08-20 with review timestamp `2026-08-20T00:24:18Z`; approval feature commit
+`473a733` moved them unchanged in substance to `core/core-batch-003.jsonl` and changed the
+lifecycle tag to `batch-003`. Both records use the frozen `data` route, `train` split,
+`eg-data-ecos-gdp-20260717` evidence group, and `ecos-200y108-snapshot-20260717` data-unit binding.
+They reproduce the 2026 Q1 value of `596,692.8` billion won through `read_snapshot_as_of`. The
+matrix, source bundle, rights decisions, public schemas, and execution runtime were not changed.
 
 Files under `core/` are human-reviewed records. `core/core-batch-001.jsonl` contains the first four
 owner-approved core records, and `core/core-batch-002.jsonl` contains the first two documentary
-core records. Their annotations preserve the AI author and name the human reviewer and review
-timestamp. Together they total 6/40 approved records.
+core records. `core/core-batch-003.jsonl` contains the two approved ECOS GDP records. Their
+annotations preserve the AI author and name the human reviewer and review timestamp. Together they
+total 8/40 approved records; the other 32 matrix slots remain unauthored and unapproved, and no
+draft review candidate remains.
 
-The focused benchmark acceptance suite, including `tests/benchmark/test_ecos_gdp_draft.py`,
-passes 27 tests. The draft pair remains excluded from the 6/40 approved count.
+The focused benchmark acceptance suite, including `tests/benchmark/test_ecos_gdp_core.py`, passes
+27 tests and confirms the approved count is 8/40. No subsequent pair is selected.
 
 The matrix assigns every planned documentary or data source unit to one dataset split. Do not
 replace a reserved unit or move a pair between splits without a versioned matrix change, tests, and

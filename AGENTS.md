@@ -11,11 +11,11 @@ Build **KOR-RTD**, a provenance-contracted point-in-time (vintage) data layer fo
 This repository is between work units and is ready to continue on the Windows workstation.
 
 - Current milestone: **M2 — benchmark and baselines**.
-- Approved human-reviewed core: **6/40** records. The frozen 40-record matrix must not be edited
+- Approved human-reviewed core: **8/40** records. The frozen 40-record matrix must not be edited
   merely to accelerate authoring.
-- Draft review candidates: the Korean/English `kv-core-data-02` pair is complete in
-  `data/benchmark/drafts/core-draft-003.jsonl` and remains pending named human review. These two
-  records do not increase the approved count.
+- The Korean/English `kv-core-data-02` pair is approved in
+  `data/benchmark/core/core-batch-003.jsonl`. Hyungbae Cho approved both records on 2026-08-20;
+  their review timestamp is `2026-08-20T00:24:18Z`. No draft review candidate remains.
 - Completed: fail-closed vintage resolver, weekly append-only harvester, approved ECOS/KOSIS/OECD
   captures, number normalization, offline bilingual temporal retrieval, strict Korean/English Bank
   of Korea May-2026 Outlook manifests, the approved `kv-core-doc-01` documentary pair, and strict
@@ -38,10 +38,14 @@ This repository is between work units and is ready to continue on the Windows wo
 - The 2026-08-19 draft-pair feature commit is `f2d2523`. It adds exactly the two draft records and
   their focused tests; the frozen matrix, source bundle, rights decisions, public schemas, and
   source package are unchanged.
-- Exact next outcome: named human review of only the Korean/English `kv-core-data-02` drafts.
-- Exact next reviewable slice: the two records in `core-draft-003.jsonl` only. Do not pre-approve
-  them or select another pair; until the named review gate is complete, the approved core count
-  remains 6/40.
+- The 2026-08-20 approval feature commit is `473a733`. It records only the named review decision,
+  approval metadata, lifecycle tag, file move into `core/`, and focused-test transition; the
+  record substance, frozen matrix, source bundle, rights decisions, public schemas, source
+  package, and execution runtime are unchanged.
+- Exact next outcome: no subsequent pair or implementation slice is selected. The repository is
+  between work units and must wait for separate explicit owner direction.
+- Exact next reviewable slice: none. Do not infer or select one from the 32 unauthored and
+  unapproved matrix slots.
 - Not implemented yet: a provider or live-model integration or the bounded tool loop. The five
   committed traces are deterministic offline replay artifacts, not provider recordings.
 - The planner boundary exists under `src/sovereignlab/execution/planner.py`; its recording registry
@@ -56,21 +60,21 @@ The authoritative live checkpoint and acceptance criteria are in
 `docs/project/04_macbook_handoff.md`. The filename is retained for history, but the document is now
 the cross-machine Windows continuation handoff.
 
-## Exact next slice — named human review of `kv-core-data-02` only
+## Exact next slice — none selected after approval
 
-The Korean/English pair assigned to `kv-core-data-02` in the frozen core-authoring matrix is now
-complete as `data/benchmark/drafts/core-draft-003.jsonl`. Both records read one quarterly real-GDP
-value from the July 2026 ECOS forward snapshot `ecos-200y108-snapshot-20260717`, whose use in
-KOR-RTD is owner-approved. The next outcome is only named human review of those two drafts.
+The Korean/English pair assigned to `kv-core-data-02` in the frozen core-authoring matrix was
+drafted on 2026-08-19 and approved by Hyungbae Cho on 2026-08-20. It now lives in
+`data/benchmark/core/core-batch-003.jsonl`. Both records read one quarterly real-GDP value from the
+July 2026 ECOS forward snapshot `ecos-200y108-snapshot-20260717`, whose use in KOR-RTD is
+owner-approved. The approved core count is 8/40; the other 32 slots are unauthored and unapproved.
 
-- Review the Korean/English questions, answers, cutoff, route, split, evidence group, data-unit
-  binding, record IDs, tool expectations, attribution, and normalization against the frozen matrix
-  and existing committed evidence only.
-- Do not mark the records approved, move them into `core/`, or raise the approved count above 6/40
-  without an explicit named human decision.
-- Stop after recording that decision and a green full baseline. Do not choose another pair, add
-  probes, alter the matrix, source, rights decisions, or public schemas, add a provider or
-  live-model call, or start the deferred bounded loop.
+- Preserve the approved questions, answers, cutoff, route, split, evidence group, data-unit
+  binding, record IDs, tool expectations, attribution, normalization, and named-review metadata.
+- Do not select or author another pair until a separate explicit owner instruction identifies the
+  next bounded work unit.
+- Stop at this checkpoint. Do not add probes, alter the matrix, source, rights decisions, or public
+  schemas, add a provider or live-model call, start the deferred bounded loop, or initiate a paid
+  operation.
 
 ## New-session onboarding procedure
 
@@ -85,10 +89,8 @@ Before editing:
    under "Local setup and required checks."
 4. State back four facts before implementation: current milestone, approved core count, exact next
    work unit, and hard stops.
-5. Start only with named human review of the two `kv-core-data-02` records in
-   `data/benchmark/drafts/core-draft-003.jsonl`. Do not pre-approve them, choose another pair, or
-   combine source expansion, probe generation, a provider or live-model call, or a paid operation
-   with onboarding.
+5. Do not start a new implementation slice during onboarding. The `kv-core-data-02` review is
+   complete and no subsequent pair is selected; wait for a separate explicit owner instruction.
 
 ## Read before changing anything
 
@@ -106,7 +108,7 @@ Before editing:
 5. `docs/discovery/01_concept_upgrade_proposal.md` — background rationale for v2: verified data facts, judged alternatives, risk register.
 6. `docs/project/05_evidence_contract_2_0_migration.md` — implemented evidence/rights contract
    that the execution path must not change.
-7. `docs/project/07_core_authoring_matrix.md` — approved 40-record allocation, 6/40 review state,
+7. `docs/project/07_core_authoring_matrix.md` — approved 40-record allocation, 8/40 review state,
    and frozen human-review boundary.
 8. `docs/project/08_temporal_document_retrieval.md` — implemented cutoff-before-scoring retrieval
    contract.
@@ -130,13 +132,13 @@ Before editing:
     the boundary between public replay artifacts and private recordings.
 18. The closest additional `AGENTS.md`, if a subdirectory adds one later.
 
-For the exact human-review slice, also read `data/benchmark/core-authoring-matrix-v1.json`,
-`data/benchmark/README.md`, the existing approved records in
-`data/benchmark/core/core-batch-001.jsonl` and `core-batch-002.jsonl`, the pending records in
-`data/benchmark/drafts/core-draft-003.jsonl`, the benchmark model and normalization code in
+For the current post-review checkpoint, also read `data/benchmark/core-authoring-matrix-v1.json`,
+`data/benchmark/README.md`, the approved records in
+`data/benchmark/core/core-batch-001.jsonl`, `core-batch-002.jsonl`, and `core-batch-003.jsonl`, the
+benchmark model and normalization code in
 `src/sovereignlab/schemas/benchmark.py` and `src/sovereignlab/normalization.py`, and
 `tests/benchmark/test_core_batch.py`, `test_bok_outlook_core.py`, and
-`test_ecos_gdp_draft.py`. Treat the matrix allocation, approved records, source bundle, and
+`test_ecos_gdp_core.py`. Treat the matrix allocation, approved records, source bundle, and
 human-review boundary as frozen.
 
 The charter is the scope authority. Do not expand sources, agents, UI, or infrastructure before the current milestone gate passes.
@@ -257,7 +259,7 @@ commit that machine-specific path. Do not reuse a `.venv` whose interpreter chec
 The Windows requirements include a `win32`-only `tzdata` pin because a standard Windows Python
 installation has no system IANA timezone database.
 
-The 2026-08-19 handoff baseline is 13 deterministic public schemas, 72 formatted Python files,
+The 2026-08-20 handoff baseline is 13 deterministic public schemas, 72 formatted Python files,
 1,135 passing tests, and 100% SovereignLab statement/branch coverage (4,679 statements, 1,568
 branches). The focused benchmark acceptance run is 27 passing tests. A different result is a
 diagnostic signal: stop before implementation and record the discrepancy in

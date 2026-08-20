@@ -1,8 +1,8 @@
 # K-VINTAGE human-reviewed core authoring matrix 1.0.0
 
-- Status: structural allocation frozen; first six records owner-approved; `kv-core-data-02`
-  drafted and pending named human review
-- Date: 2026-08-19
+- Status: structural allocation frozen; first eight records owner-approved; no subsequent pair
+  selected
+- Date: 2026-08-20
 - Scope authority: charter v2.5 §5 and M2 continuation order
 - Canonical matrix: `data/benchmark/core-authoring-matrix-v1.json`
 - Public schema: `data/schemas/core-authoring-matrix-v1.schema.json`
@@ -65,13 +65,17 @@ question, answer, route, evidence, `as_of`, or frozen-allocation change. Their a
 the AI author and record the named human reviewer and aware review timestamp. The lifecycle tag
 changed from `draft-002` to `batch-002` when the file moved into `core/`.
 
-The approved human-reviewed core is now 6/40 records. Two additional records are drafts pending
-named human review; the other 32 are not authored.
+At the 2026-07-29 checkpoint, these two records brought the approved human-reviewed core to 6/40.
+The later ECOS GDP approval described below brings the current total to 8/40; the other 32 records
+are unauthored and unapproved.
 
-## 4. Draft ECOS GDP pair pending human review
+## 4. Approved ECOS GDP pair
 
-`data/benchmark/drafts/core-draft-003.jsonl` contains the frozen `kv-core-data-02` Korean/English
-pair completed on 2026-08-19. Both records use the `data` route, `train` split,
+The frozen `kv-core-data-02` Korean/English pair was completed as
+`data/benchmark/drafts/core-draft-003.jsonl` on 2026-08-19 in feature commit `f2d2523`. Hyungbae
+Cho approved both records on 2026-08-20 with review timestamp `2026-08-20T00:24:18Z`; approval
+feature commit `473a733` moved the pair to `data/benchmark/core/core-batch-003.jsonl`. Both records
+use the `data` route, `train` split,
 `eg-data-ecos-gdp-20260717` evidence group, and `kv-core-data-02` parallel group. Their only
 data-unit binding remains `ecos-200y108-snapshot-20260717`.
 
@@ -79,14 +83,17 @@ Both questions ask for Korea's seasonally adjusted real expenditure on GDP in 20
 at the inclusive end of 2026-07-17 in Asia/Seoul. The reference answers and typed tool expectations
 reproduce raw and normalized value `596692.8`, canonical unit `billion_krw`, one-decimal display,
 the committed snapshot checksum, rights catalog, rights decision, and Bank of Korea attribution.
-The records retain `annotation.status=draft` and the `draft-003` lifecycle tag.
+The approved records preserve the original AI author, add the named reviewer and aware review
+timestamp, record `annotation.status=approved`, and use the `batch-003` lifecycle tag. The
+questions, answers, cutoff, route, split, evidence group, data-unit binding, record IDs, tool
+expectations, attribution, and normalization did not change during review.
 
 The focused benchmark acceptance suite passes 27 tests. It validates the two records against the
 frozen matrix and committed source bytes, rebuilds the manifest and rights bundle, calls
 `read_snapshot_as_of` at the record cutoff, verifies normalization and bilingual parity, and
-confirms the approved count is still six. The matrix, source bundle, rights decisions, public
-schemas, and source package are unchanged. The exact next slice is named human review of these two
-drafts only; no approval or next-pair selection is implied.
+confirms the approved count is eight. The matrix, source bundle, rights decisions, public schemas,
+source package, and execution runtime are unchanged. No subsequent pair or implementation slice is
+selected; separate explicit owner direction is required before further authoring.
 
 ## 5. Approval records
 
@@ -103,6 +110,12 @@ On 2026-07-29, Hyungbae Cho explicitly approved both records in the `kv-core-doc
 pair. The substantive record fields and frozen matrix remain unchanged; the second batch moved
 from `drafts/core-draft-002.jsonl` to `core/core-batch-002.jsonl` with approval metadata and the
 corresponding lifecycle tag.
+
+On 2026-08-20, Hyungbae Cho explicitly approved both records in the `kv-core-data-02` ECOS GDP
+pair. The substantive record fields and frozen matrix remain unchanged; approval feature commit
+`473a733` records reviewer `Hyungbae Cho`, review timestamp `2026-08-20T00:24:18Z`,
+`annotation.status=approved`, the `batch-003` lifecycle tag, and the move from
+`drafts/core-draft-003.jsonl` to `core/core-batch-003.jsonl`.
 
 ## 6. Human-review checklist
 
@@ -126,7 +139,7 @@ allocation.
 python scripts/export_json_schemas.py
 python -m pytest tests/benchmark/test_core_batch.py
 python -m pytest tests/benchmark/test_bok_outlook_core.py
-python -m pytest tests/benchmark/test_ecos_gdp_draft.py
+python -m pytest tests/benchmark/test_ecos_gdp_core.py
 python -m ruff check .
 python -m ruff format --check .
 ```
@@ -137,8 +150,8 @@ normalization 1.0.0, and checks the earlier-cutoff abstention.
 
 The documentary-core test validates both records against their strict manifests and the frozen
 matrix, enforces language-specific publication cutoffs and split-group integrity, verifies the
-named reviewer metadata, and confirms the approved count is six.
+named reviewer metadata, and confirms the current approved count is eight.
 
-The ECOS GDP draft test validates both draft records against the frozen matrix, existing snapshot,
-manifest, checksum, rights decision, and normalization rule. Across the three focused benchmark
-files above, 27 tests pass while the approved count remains six.
+The ECOS GDP core test validates both approved records and named-review metadata against the frozen
+matrix, existing snapshot, manifest, checksum, rights decision, and normalization rule. Across the
+three focused benchmark files above, 27 tests pass while the approved count is eight.

@@ -177,10 +177,18 @@ therefore not treated as a later edition availability date.
 
 The draft-only Korean/English authoring slice for the frozen `kv-core-data-02` pair completed on
 2026-08-19 at feature commit `f2d2523`, using only `ecos-200y108-snapshot-20260717`, whose use in
-KOR-RTD is owner-approved. It added exactly two draft records. They remain pending
-a separate named human review, so the approved core remains 6/40. The frozen 40-record matrix,
+KOR-RTD is owner-approved. It added exactly two draft records. At that checkpoint, they remained
+pending a separate named human review, so the approved core remained 6/40. The frozen 40-record matrix,
 source set, rights decisions, 13 public schemas, and frozen execution runtime remain unchanged.
 
-The exact next reviewable slice is owner review of exactly these two drafts. This text does not
-approve them or change the approval count. Provider or live-model integration remains absent, and
-the bounded tool loop deferred by ADR 0008 remains outside this review slice.
+That review gate completed on 2026-08-20 at approval feature commit `473a733`. Hyungbae Cho
+approved exactly the two `kv-core-data-02` records, which now live in
+`data/benchmark/core/core-batch-003.jsonl`; the approved core is now 8/40. This was a
+lifecycle-only transition: questions, answers, cutoff, tool expectations, the frozen matrix,
+execution contracts and runtime, source bytes and manifests, rights decisions, normalization,
+and the 13 public schemas remain unchanged.
+
+No benchmark draft is pending and no later matrix pair has been selected. The current next step is
+to await a separate explicit instruction before selecting or authoring another pair or opening a
+new implementation slice. Provider or live-model integration remains absent, and the bounded tool
+loop deferred by ADR 0008 remains outside the completed approval slice.

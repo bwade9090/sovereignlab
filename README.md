@@ -3,12 +3,13 @@
 > What did the data say *then*? Vintage-conditioned evaluation and auditable briefings for Korean/English economic research.
 
 **Status:** M1b verification and vintage-contract groundwork are complete; M2 benchmark and
-baseline development is in progress with a frozen 40-record core matrix and 6/40 records
-owner-approved. The Korean/English `kv-core-data-02` pair is complete as two draft records in
-`data/benchmark/drafts/core-draft-003.jsonl` and awaits named human review; it does not increase
-the approved count. The first nine ADR 0008 slices and work unit C are complete: five machine-readable
-real-digest traces were generated through the actual private offline executor, `ScriptedPlanner`,
-and committed registries and corpora in feature commit `883815b`. The trace set covers all four
+baseline development is in progress with a frozen 40-record core matrix and 8/40 records
+owner-approved. Hyungbae Cho approved the Korean/English `kv-core-data-02` pair on 2026-08-20; the
+two records now live in `data/benchmark/core/core-batch-003.jsonl`. No draft review candidate or
+subsequent pair is selected, and the other 32 matrix slots remain unauthored and unapproved. The
+first nine ADR 0008 slices and work unit C are complete: five machine-readable real-digest traces
+were generated through the actual private offline executor, `ScriptedPlanner`, and committed
+registries and corpora in feature commit `883815b`. The trace set covers all four
 routes, all three deterministic evidence tools, Korean and English, explicit and implicit cutoffs,
 complete execution, planned abstention, and terminal tool abstention with no partial evidence. The
 source package is unchanged, the public surface remains 13 deterministic JSON Schemas, and the
@@ -24,7 +25,9 @@ bounded tool loop exists, and no model-quality or briefing-performance claim is 
 document evidence remains synthetic, while the trace catalog records the ECOS/OECD attribution and
 rights boundaries for embedded data evidence.
 
-Korea's official statistics APIs (ECOS, KOSIS) expose latest values only — they offer no "as-of" query path — and no Korean equivalent of the St. Louis Fed's ALFRED archive exists. SovereignLab builds three things in four weeks:
+For the project's in-scope series, Korea's official statistics APIs (ECOS, KOSIS) expose latest
+values without an "as-of" query path. SovereignLab complements Korea's public statistical
+infrastructure by building three things in four weeks:
 
 1. **KOR-RTD** — a provenance-contracted point-in-time data layer for Korean macroeconomics: consolidated OECD edition histories plus a scheduled public harvester that forward-captures the latest-only official APIs (append-only, checksummed; commit history is the proof of capture dates).
 2. **K-VINTAGE** — a bilingual Korean/English benchmark whose gold answers are computed from the data vintage available at each question's `as_of` date. To our knowledge, for official statistics, this is the first such benchmark (prior art cited in the datasheet: arXiv 2605.23497 statutory as-of QA, the Dallas Fed real-time OECD dataset, the OECD MEI revisions database).
@@ -59,8 +62,9 @@ documented; see
 [the proposal](docs/discovery/01_concept_upgrade_proposal.md). M1a froze strict source-manifest and
 benchmark-record models with synchronized JSON Schema, synthetic fixtures, and dataset-wide
 temporal/split leakage checks. M1b has now verified the primary OECD examples, fixed the claimable
-recent Economic Outlook range at EO114–EO119, and exposed two contract gaps: monthly edition labels
-do not prove day-level availability, and ECOS/KOSIS do not expose the assumed per-series KOGL field.
+recent Economic Outlook range at EO114–EO119, and converted two evidence-boundary assumptions into
+fail-closed contracts: monthly edition labels do not prove day-level availability, and ECOS/KOSIS
+do not expose the assumed per-series KOGL field.
 Their official use guides instead govern reuse through the original producer or content category.
 The current-account candidate is directly identified as Bank of Korea-produced; official
 title/frequency evidence supports the same classification for the GDP candidate. The owner approved
@@ -93,9 +97,11 @@ No provider/live integration exists, and ADR 0008 separately defers the bounded 
 post-window v1.1. On 2026-08-19, feature commit `f2d2523` added only the draft Korean/English
 `kv-core-data-02` pair and its focused tests using `ecos-200y108-snapshot-20260717`, whose use in
 KOR-RTD is owner-approved. The matrix, source bundle, rights decisions, source package, and
-13 public schemas remain unchanged. The exact next reviewable slice is named human review of those
-two drafts only; do not pre-approve them or select another pair, so the approved count stays 6/40
-until that review gate is completed.
+13 public schemas remained unchanged. On 2026-08-20, Hyungbae Cho approved both records without a
+substantive change; feature commit `473a733` records the named-review metadata, `batch-003`
+lifecycle tag, move to `data/benchmark/core/core-batch-003.jsonl`, and focused-test transition.
+The approved count is now 8/40. No subsequent pair or implementation slice is selected; wait for
+separate explicit owner direction rather than inferring one from the frozen matrix.
 Charter v2.5 and
 [ADR 0009](docs/decisions/0009-bok-economic-outlook-public-data-rights.md) additionally record the
 owner-approved `allowed` public-data ruling for official Bank of Korea Economic Outlook
