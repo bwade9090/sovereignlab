@@ -2,7 +2,7 @@
 
 - Status: wording bank; use only the section matching the achieved milestone
 - Last updated: 2026-08-20 (M2 mid-window refresh: 8/40 approved core, ADR 0008 slices 1–9 and
-  work unit C complete, 72-file/1,135-test baseline)
+  work unit C complete, two current-account drafts pending review, 73-file/1,141-test baseline)
 - Rule: never replace placeholders with targets or estimates; use measured, reproducible results only
 - Narrative versions: `docs/application/01_project_description.md`
 
@@ -22,7 +22,9 @@
   four data/abstention records over the OECD Korea CLI revision archive plus a Korean/English
   documentary pair grounded in the Bank of Korea's May 2026 Economic Outlook and its independently
   dated official English translation, and a Korean/English data pair over the 2026-07-17 ECOS GDP
-  snapshot — with machine-generated revision probes to be reported separately.
+  snapshot. A separate Korean/English current-account pair is complete only as two AI-authored
+  drafts pending named human review and is not included in the 8/40 approved count; machine-
+  generated revision probes will be reported separately.
 - Shipped `typed function calling with committed traces` for the deterministic offline evidence
   path: bilingual temporal retrieval filters by publication date before scoring over a committed
   synthetic corpus; three digest-linked evidence tools run behind a replay-checked dispatcher; and
@@ -33,8 +35,8 @@
   public JSON Schemas remain unchanged. These are deterministic offline replay artifacts, not
   provider or live outputs, and no briefing-quality result is claimed.
 - Verified the pinned Ministral 3 3B NF4/QLoRA compatibility path on a disposable A40/CUDA 13 GPU
-  and maintain 1,135 tests at 100% statement/branch coverage (4,679 statements, 1,568 branches)
-  across 72 formatted Python files; temporal leakage remains the planned headline metric, and no
+  and maintain 1,141 tests at 100% statement/branch coverage (4,679 statements, 1,568 branches)
+  across 73 formatted Python files; temporal leakage remains the planned headline metric, and no
   model-quality result is claimed yet.
 
 ### Short form (single bullet)
@@ -50,12 +52,15 @@
   dispatcher, a private provenance-bound offline executor, and `typed function calling with
   committed traces`: five real-digest offline replays covering all routes and tools, both languages,
   both cutoff modes, complete execution, and planned/tool abstention with terminal stop and no
-  partial evidence. The verified Ministral 3 3B NF4/QLoRA compatibility path is retained, and 1,135
-  tests pass at 100% statement/branch coverage; temporal leakage is the planned headline metric and
+  partial evidence. Two additional current-account records remain draft-only pending named human
+  review and are not counted in the 8/40 approved core. The verified Ministral 3 3B NF4/QLoRA
+  compatibility path is retained, and 1,141 tests pass at 100% statement/branch coverage; temporal
+  leakage is the planned headline metric and
   no model-quality or briefing-performance result is claimed yet.
 
 This version distinguishes the deterministic offline replay slice from provider/live integration,
-the 32 unauthored core slots, and the not-yet-evaluated model variants.
+the two pending draft records, the 30 unauthored core slots, and the not-yet-evaluated model
+variants.
 
 ## Version B — use after the Week 2 baseline is reproducible
 
@@ -77,7 +82,7 @@ the 32 unauthored core slots, and the not-yet-evaluated model variants.
 - Keep `(in progress)` while the M2 benchmark and baseline work remains incomplete; the committed
   replay slice does not imply benchmark completion.
 - Do not say `fine-tuned` until an adapter has been trained, loaded, and evaluated.
-- Do not cite benchmark size until each counted test item passes schema and human review; **always report the human-reviewed core and machine-generated probes as separate counts**. The current approved core count is 8/40; the 32 remaining slots are neither authored nor approved.
+- Do not cite benchmark size until each counted test item passes schema and human review; **always report the human-reviewed core and machine-generated probes as separate counts**. The current approved core count is 8/40; of the 32 unapproved slots, two are AI-authored drafts pending named human review and 30 remain unauthored.
 - Core records are initially AI-authored and then human-reviewed; do not claim personal manual
   authorship of individual records. "Reviewed and approved" is the accurate personal-CV verb.
 - Do not cite improvement, cost, latency, leakage, or error-rate figures until the aggregation command reproduces them from committed artifacts.

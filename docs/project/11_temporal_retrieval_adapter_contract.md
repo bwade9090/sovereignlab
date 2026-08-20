@@ -122,7 +122,16 @@ lifecycle-only transition: questions, answers, cutoff, tool expectations, the fr
 execution contracts and runtime, source bytes and manifests, rights decisions, normalization,
 and the 13 public schemas remain unchanged.
 
-No benchmark draft is pending and no later matrix pair has been selected. The current next step is
-to await a separate explicit instruction before selecting or authoring another pair or opening a
-new implementation slice. Provider or live-model integration remains absent, and the bounded tool
-loop deferred by ADR 0008 remains outside the completed approval slice.
+The next bounded authoring slice completed on 2026-08-20 at feature commit `50c4d9c`. It added
+exactly the two draft-only `kv-core-data-03` Korean/English records in
+`data/benchmark/drafts/core-draft-004.jsonl`, using only
+`ecos-301y017-snapshot-20260717`, whose use in KOR-RTD is owner-approved. Neither record has named
+review metadata or enters `core/`, so the approved core remains 8/40: two draft records are pending
+review and 30 matrix slots remain unauthored and unapproved.
+
+The frozen matrix, execution contracts and runtime, source bytes and manifests, rights decisions,
+normalization rules, approved core, 13 public schemas, and five committed traces are unchanged.
+The exact next independent slice is only named human review of those two drafts. Do not pre-approve
+or move them into `core/`, increase the approved count, or select or author a later pair before
+that decision. Provider or live-model integration remains absent, and the bounded tool loop
+deferred by ADR 0008 remains outside this authoring slice.

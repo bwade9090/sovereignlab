@@ -1,7 +1,7 @@
 # K-VINTAGE human-reviewed core authoring matrix 1.0.0
 
-- Status: structural allocation frozen; first eight records owner-approved; no subsequent pair
-  selected
+- Status: structural allocation frozen; first eight records owner-approved; `kv-core-data-03`
+  drafted and pending named human review
 - Date: 2026-08-20
 - Scope authority: charter v2.5 §5 and M2 continuation order
 - Canonical matrix: `data/benchmark/core-authoring-matrix-v1.json`
@@ -66,8 +66,9 @@ the AI author and record the named human reviewer and aware review timestamp. Th
 changed from `draft-002` to `batch-002` when the file moved into `core/`.
 
 At the 2026-07-29 checkpoint, these two records brought the approved human-reviewed core to 6/40.
-The later ECOS GDP approval described below brings the current total to 8/40; the other 32 records
-are unauthored and unapproved.
+The later ECOS GDP approval described below brings the current total to 8/40. The current-account
+draft described after it accounts for two of the 32 unapproved records; the other 30 remain
+unauthored and unapproved.
 
 ## 4. Approved ECOS GDP pair
 
@@ -88,14 +89,41 @@ timestamp, record `annotation.status=approved`, and use the `batch-003` lifecycl
 questions, answers, cutoff, route, split, evidence group, data-unit binding, record IDs, tool
 expectations, attribution, and normalization did not change during review.
 
-The focused benchmark acceptance suite passes 27 tests. It validates the two records against the
-frozen matrix and committed source bytes, rebuilds the manifest and rights bundle, calls
-`read_snapshot_as_of` at the record cutoff, verifies normalization and bilingual parity, and
-confirms the approved count is eight. The matrix, source bundle, rights decisions, public schemas,
-source package, and execution runtime are unchanged. No subsequent pair or implementation slice is
-selected; separate explicit owner direction is required before further authoring.
+At the ECOS GDP approval checkpoint, the focused benchmark acceptance suite passed 27 tests. Those
+tests validated the two records against the frozen matrix and committed source bytes, rebuilt the
+manifest and rights bundle, called `read_snapshot_as_of` at the record cutoff, verified
+normalization and bilingual parity, and confirmed the approved count was eight. The matrix,
+source bundle, rights decisions, public schemas,
+source package, and execution runtime are unchanged. At that approval checkpoint, no subsequent
+pair or implementation slice had been selected.
 
-## 5. Approval records
+## 5. Draft ECOS current-account pair
+
+Feature commit `50c4d9c` adds exactly the frozen `kv-core-data-03` Korean/English pair to
+`data/benchmark/drafts/core-draft-004.jsonl` at `annotation.status=draft`. Both records use the
+`data` route, `train` split, `eg-data-ecos-current-account-20260717` evidence group, and
+`kv-core-data-03` parallel group. Their only data-unit binding is the existing
+`ecos-301y017-snapshot-20260717` evidence whose use in KOR-RTD is owner-approved.
+
+Both questions ask for Korea's seasonally adjusted current account in May 2026 as available at the
+inclusive end of 2026-07-17 in Asia/Seoul. The reference answers and typed tool expectations
+reproduce raw and normalized value `38121.1`, canonical unit `million_usd`, one-decimal display,
+the committed snapshot checksum, rights catalog, rights decision, and Bank of Korea attribution.
+Their annotations preserve `annotated_by="Codex AI draft"`, contain no review metadata, and use
+only the `draft-004` lifecycle tag.
+
+The pair-specific focused test passes six tests, the combined focused benchmark suite passes 33,
+and the full suite passes 1,141 tests at 100% SovereignLab statement/branch coverage (4,679
+statements, 1,568 branches) across 73 Ruff-formatted Python files using a fresh OS
+`--basetemp`. The repository `.pytest_tmp` ACL was untouched, the 13 public schemas and five
+committed traces remain unchanged, and the slice cost $0.00. The frozen matrix, approved core,
+source bundle, rights decisions, source package, and execution runtime did not change.
+
+The approved core remains 8/40. These two drafts and the 30 unauthored slots comprise the other 32
+unapproved records. The exact next action is named human review of only
+`kv-core-data-03-ko` and `kv-core-data-03-en`; do not pre-approve them or select another pair.
+
+## 6. Approval records
 
 On 2026-07-25, Hyungbae Cho explicitly approved:
 
@@ -117,7 +145,7 @@ pair. The substantive record fields and frozen matrix remain unchanged; approval
 `annotation.status=approved`, the `batch-003` lifecycle tag, and the move from
 `drafts/core-draft-003.jsonl` to `core/core-batch-003.jsonl`.
 
-## 6. Human-review checklist
+## 7. Human-review checklist
 
 For each bilingual pair, the reviewer must verify:
 
@@ -133,13 +161,14 @@ Future corrections remain in their draft batch until review is complete. An appr
 reviewer and review timestamp in each `BenchmarkRecord`; it does not rewrite the frozen matrix
 allocation.
 
-## 7. Reproduction
+## 8. Reproduction
 
 ```bash
 python scripts/export_json_schemas.py
 python -m pytest tests/benchmark/test_core_batch.py
 python -m pytest tests/benchmark/test_bok_outlook_core.py
 python -m pytest tests/benchmark/test_ecos_gdp_core.py
+python -m pytest tests/benchmark/test_ecos_current_account_draft.py
 python -m ruff check .
 python -m ruff format --check .
 ```
@@ -153,5 +182,11 @@ matrix, enforces language-specific publication cutoffs and split-group integrity
 named reviewer metadata, and confirms the current approved count is eight.
 
 The ECOS GDP core test validates both approved records and named-review metadata against the frozen
-matrix, existing snapshot, manifest, checksum, rights decision, and normalization rule. Across the
-three focused benchmark files above, 27 tests pass while the approved count is eight.
+matrix, existing snapshot, manifest, checksum, rights decision, and normalization rule. At its
+approval checkpoint, the first three focused benchmark files passed 27 tests while the approved
+count became eight.
+
+The ECOS current-account draft test validates the two unapproved records against the frozen
+allocation, existing snapshot, manifest, checksum, rights decision, exact `202605` observation,
+normalization rule, attribution, and prior-day abstention. It adds six tests, bringing the current
+focused benchmark suite to 33 while the approved count remains eight.

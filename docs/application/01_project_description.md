@@ -34,8 +34,8 @@ large-number presentation, rounding, and grading tolerances are also frozen and 
 The project passed its first milestone gate and is midway through the benchmark-and-baselines
 milestone. Its evidence, benchmark, core-authoring-matrix, availability-ledger, rights, and
 execution contracts are published as 13 synchronized deterministic JSON Schemas; the offline
-resolver and GitHub Actions harvester are operational; and 1,135 tests pass with 100% statement
-and branch coverage (4,679 statements, 1,568 branches) across 72 formatted Python files. The
+resolver and GitHub Actions harvester are operational; and 1,141 tests pass with 100% statement
+and branch coverage (4,679 statements, 1,568 branches) across 73 formatted Python files. The
 40-question human-reviewed bilingual core is frozen as an allocation, and 8 of 40 records —
 initially AI-authored, then approved under
 named human review —
@@ -52,11 +52,21 @@ results or scores.
 The `kv-core-data-02` pair was completed as two drafts on 2026-08-19 and approved without a
 substantive change by Hyungbae Cho on 2026-08-20. It reads the 2026 Q1 seasonally adjusted real GDP
 value of 596,692.8 billion won from the 2026-07-17 ECOS snapshot whose use in KOR-RTD is
-owner-approved, and its focused benchmark suite contributes to 27 passing tests. The records now live in
+owner-approved. The records now live in
 `data/benchmark/core/core-batch-003.jsonl`; the frozen matrix, source bundle, rights decisions,
 source package,
-public schemas, and execution runtime are unchanged. The other 32 matrix slots remain unauthored
-and unapproved.
+public schemas, and execution runtime are unchanged. At that approval checkpoint, the focused
+benchmark suite passed 27 tests and the full baseline passed 1,135 tests across 72 formatted
+Python files.
+
+Feature commit `50c4d9c` adds the Korean/English `kv-core-data-03` pair as two AI-authored drafts
+in `data/benchmark/drafts/core-draft-004.jsonl`. They read the May 2026 seasonally adjusted
+current-account value of 38,121.1 million US dollars from the existing 2026-07-17 ECOS snapshot
+whose use in KOR-RTD is owner-approved. Six pair-specific tests and 33 focused benchmark tests
+pass; the pair remains pending named human review, so the approved count stays 8/40. Of the 32
+unapproved records, these two are drafted and the other 30 remain unauthored. The frozen matrix,
+approved core, source bundle, rights decisions, 13 public schemas, five committed traces, source
+package, and execution runtime are unchanged.
 
 On the execution side, the project has shipped `typed function calling with committed traces`.
 A strict typed execution-and-trace contract freezes the bilingual request, four-route plan, exactly
@@ -76,9 +86,10 @@ language-model-only LoRA boundaries, finite gradients, a changed adapter tensor,
 output. This is deliberately reported as a training-path compatibility result, not as evidence of
 improved model quality.
 
-No subsequent pair or implementation slice is selected; further work waits for separate explicit
-owner direction. Later M2 work authors the remaining core records plus a separately reported set
-of 200–300 deterministic revision probes and runs the four-variant baseline suite comparing
+The exact next action is named human review of only the two `kv-core-data-03` drafts. They must not
+be pre-approved, and no later pair should be selected within that review gate. Later M2 work
+authors the remaining core records plus a separately reported set of 200–300 deterministic
+revision probes and runs the four-variant baseline suite comparing
 closed-book generation, temporal RAG, RAG plus deterministic tools, and a QLoRA-tuned evidence
 router. Temporal-leakage rate—whether a system uses information that did not exist at the
 question's `as_of` date—is the headline metric; all performance claims will be derived only from
@@ -99,17 +110,20 @@ boundary, an internal deterministic evidence-packet assembler, and a private pro
 offline executor. Five real-digest offline replays now provide `typed function calling with
 committed traces`, covering all routes and tools, Korean and English, explicit and implicit cutoffs,
 complete execution, and terminal planned/tool abstention without partial evidence. The repository
-passes 1,135 tests with 100% statement and branch coverage (4,679 statements, 1,568 branches)
-across 72 formatted Python files. The frozen 40-record bilingual K-VINTAGE core has its first 8
+passes 1,141 tests with 100% statement and branch coverage (4,679 statements, 1,568 branches)
+across 73 formatted Python files. The frozen 40-record bilingual K-VINTAGE core has its first 8
 records reviewed and approved, including a
 Korean/English documentary pair over the Bank of Korea's May 2026 Economic Outlook and its later
 official English translation. A further Korean/English `kv-core-data-02` pair over the 2026-07-17
 ECOS GDP snapshot was approved by Hyungbae Cho on 2026-08-20, with the focused benchmark suite at
-27 passing tests. The other 32 slots remain unauthored and unapproved. I also
+27 passing tests at that checkpoint. Feature commit `50c4d9c` subsequently added two
+`kv-core-data-03` current-account drafts over the existing ECOS snapshot whose use in KOR-RTD is
+owner-approved; current focused validation is 33 tests, but named human review is pending, so the
+approved count remains 8/40 and the other 30 slots remain unauthored. I also
 verified the pinned Ministral 3 3B NF4/QLoRA training path on a disposable A40/CUDA 13 GPU without
-claiming model-quality gains. No subsequent pair is selected; after separate owner direction,
-later work covers the remaining core, separately reported deterministic revision probes, and the
-four-variant baseline suite, with temporal leakage as the headline metric.
+claiming model-quality gains. Next is named human review of only those two drafts; later work
+covers the remaining core, separately reported deterministic revision probes, and the four-variant
+baseline suite, with temporal leakage as the headline metric.
 
 ## Usage guardrails
 

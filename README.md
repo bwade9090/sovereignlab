@@ -5,8 +5,12 @@
 **Status:** M1b verification and vintage-contract groundwork are complete; M2 benchmark and
 baseline development is in progress with a frozen 40-record core matrix and 8/40 records
 owner-approved. Hyungbae Cho approved the Korean/English `kv-core-data-02` pair on 2026-08-20; the
-two records now live in `data/benchmark/core/core-batch-003.jsonl`. No draft review candidate or
-subsequent pair is selected, and the other 32 matrix slots remain unauthored and unapproved. The
+two records now live in `data/benchmark/core/core-batch-003.jsonl`. Feature commit `50c4d9c` adds
+the Korean/English `kv-core-data-03` pair as two drafts in
+`data/benchmark/drafts/core-draft-004.jsonl` over the existing ECOS current-account snapshot whose
+use in KOR-RTD is owner-approved. They remain pending named human review and do not increase the
+approved count; of the 32 unapproved slots, these two are drafted and the other 30 remain
+unauthored. The
 first nine ADR 0008 slices and work unit C are complete: five machine-readable real-digest traces
 were generated through the actual private offline executor, `ScriptedPlanner`, and committed
 registries and corpora in feature commit `883815b`. The trace set covers all four
@@ -16,9 +20,9 @@ source package is unchanged, the public surface remains 13 deterministic JSON Sc
 executor descriptor still pins 32 source entries and digest
 `08f45dab6a36a49cb7d0b588a69236942cd61534540bd4de0772010402dada64`.
 The focused executor/replay-trace acceptance run passes 80 tests at 100% coverage over 326
-statements and 98 branches, and the focused benchmark acceptance run passes 27 tests. The full
-offline baseline is 1,135 tests at 100% statement/branch coverage (4,679 statements, 1,568
-branches) across 72 Ruff-formatted Python files. The shipped
+statements and 98 branches, and the focused benchmark acceptance run passes 33 tests. The full
+offline baseline is 1,141 tests at 100% statement/branch coverage (4,679 statements, 1,568
+branches) across 73 Ruff-formatted Python files. The shipped
 minimal reference path is described only as `typed function calling with committed traces`. These
 are deterministic offline replays, not provider or live outputs; no provider/live integration or
 bounded tool loop exists, and no model-quality or briefing-performance claim is made. Searchable
@@ -100,8 +104,14 @@ KOR-RTD is owner-approved. The matrix, source bundle, rights decisions, source p
 13 public schemas remained unchanged. On 2026-08-20, Hyungbae Cho approved both records without a
 substantive change; feature commit `473a733` records the named-review metadata, `batch-003`
 lifecycle tag, move to `data/benchmark/core/core-batch-003.jsonl`, and focused-test transition.
-The approved count is now 8/40. No subsequent pair or implementation slice is selected; wait for
-separate explicit owner direction rather than inferring one from the frozen matrix.
+At that approval checkpoint, the focused benchmark suite passed 27 tests and the full baseline
+passed 1,135 tests across 72 formatted Python files. Later on 2026-08-20, feature commit `50c4d9c`
+added only the draft Korean/English `kv-core-data-03` pair and six focused tests using the existing
+`ecos-301y017-snapshot-20260717` evidence. The pair reproduces the May 2026 seasonally adjusted
+current-account value as `38121.1` `million_usd`. Current validation is 33 focused benchmark tests
+and 1,141 full-suite tests across 73 formatted Python files. The approved count remains 8/40, and
+the exact next action is named human review of only these two drafts; do not pre-approve them or
+select another pair.
 Charter v2.5 and
 [ADR 0009](docs/decisions/0009-bok-economic-outlook-public-data-rights.md) additionally record the
 owner-approved `allowed` public-data ruling for official Bank of Korea Economic Outlook
