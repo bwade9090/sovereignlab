@@ -1,6 +1,6 @@
-"""Contract and evidence checks for the draft kv-core-data-02 pair."""
+"""Contract and evidence checks for the approved kv-core-data-02 pair."""
 
-from datetime import date
+from datetime import date, timedelta
 from decimal import Decimal
 from pathlib import Path
 
@@ -34,8 +34,9 @@ from sovereignlab.snapshots import (
 
 ROOT = Path(__file__).resolve().parents[2]
 MATRIX_PATH = ROOT / "data" / "benchmark" / "core-authoring-matrix-v1.json"
-DRAFT_PATH = ROOT / "data" / "benchmark" / "drafts" / "core-draft-003.jsonl"
 CORE_DIRECTORY = ROOT / "data" / "benchmark" / "core"
+BATCH_PATH = CORE_DIRECTORY / "core-batch-003.jsonl"
+DRAFT_PATH = ROOT / "data" / "benchmark" / "drafts" / "core-draft-003.jsonl"
 SOURCE_ID = "ecos-200y108-10601-20260717t115242998550z"
 SOURCE_SHA256 = "75c96ce62270a8a6c2a3c6bebaef981945b41f37f62cab6911698ce64d8dd9ea"
 SOURCE_URL = (
@@ -69,8 +70,8 @@ def _records(path: Path) -> tuple[BenchmarkRecord, ...]:
     )
 
 
-def _draft_records() -> tuple[BenchmarkRecord, ...]:
-    return _records(DRAFT_PATH)
+def _core_records() -> tuple[BenchmarkRecord, ...]:
+    return _records(BATCH_PATH)
 
 
 def _fact_map(record: BenchmarkRecord) -> dict[str, str]:
@@ -91,11 +92,12 @@ def _call(record: BenchmarkRecord, *, as_of: date | None = None) -> SnapshotAsOf
     )
 
 
-def test_draft_pair_matches_the_frozen_allocation_without_review_metadata() -> None:
+def test_approved_pair_matches_the_frozen_allocation_and_review_metadata() -> None:
     matrix = CoreAuthoringMatrix.model_validate_json(MATRIX_PATH.read_text(encoding="utf-8"))
     pair = next(item for item in matrix.pairs if item.pair_id == "kv-core-data-02")
-    records = _draft_records()
+    records = _core_records()
 
+    assert not DRAFT_PATH.exists()
     assert tuple(record.record_id for record in records) == (
         pair.ko_record_id,
         pair.en_record_id,
@@ -110,30 +112,34 @@ def test_draft_pair_matches_the_frozen_allocation_without_review_metadata() -> N
     assert all(record.evidence_group_id == pair.evidence_group_id for record in records)
     assert all(record.parallel_group_id == pair.pair_id for record in records)
     assert all(record.document_evidence == () for record in records)
-    assert all(record.annotation.status is AnnotationStatus.DRAFT for record in records)
+    assert all(record.annotation.status is AnnotationStatus.APPROVED for record in records)
     assert all(record.annotation.annotated_by == "Codex AI draft" for record in records)
-    assert all(record.annotation.reviewed_by is None for record in records)
-    assert all(record.annotation.reviewed_at is None for record in records)
-    assert all("draft-003" in record.tags for record in records)
-    assert all("batch-003" not in record.tags for record in records)
+    assert all(record.annotation.reviewed_by == "Hyungbae Cho" for record in records)
+    review_times = {record.annotation.reviewed_at for record in records}
+    assert None not in review_times
+    assert len(review_times) == 1
+    reviewed_at = next(iter(review_times))
+    assert reviewed_at is not None
+    assert reviewed_at.utcoffset() == timedelta(0)
+    assert all(record.annotation.annotated_at <= reviewed_at for record in records)
+    assert all("batch-003" in record.tags for record in records)
+    assert all("draft-003" not in record.tags for record in records)
 
 
-def test_approved_core_remains_six_and_excludes_the_drafts() -> None:
+def test_approved_core_contains_eight_records_and_the_new_pair() -> None:
     approved = tuple(
         record for path in sorted(CORE_DIRECTORY.glob("*.jsonl")) for record in _records(path)
     )
-    drafts = _draft_records()
+    records = _core_records()
 
-    assert len(approved) == 6
+    assert len(approved) == 8
     assert all(record.annotation.status is AnnotationStatus.APPROVED for record in approved)
-    assert {record.record_id for record in approved}.isdisjoint(
-        record.record_id for record in drafts
-    )
-    assert len(drafts) == 2
-    assert all(record.annotation.status is AnnotationStatus.DRAFT for record in drafts)
+    assert {record.record_id for record in records} <= {record.record_id for record in approved}
+    assert len(records) == 2
+    assert all(record.annotation.status is AnnotationStatus.APPROVED for record in records)
 
 
-def test_draft_pair_forms_a_real_bundle_with_the_approved_snapshot_rights() -> None:
+def test_approved_pair_forms_a_real_bundle_with_the_approved_snapshot_rights() -> None:
     manifest = SourceManifest.model_validate_json(
         (ROOT / "data" / "manifests" / f"{SOURCE_ID}.json").read_text(encoding="utf-8")
     )
@@ -143,7 +149,7 @@ def test_draft_pair_forms_a_real_bundle_with_the_approved_snapshot_rights() -> N
 
     BenchmarkBundle(
         sources=(manifest,),
-        records=_draft_records(),
+        records=_core_records(),
         rights_catalogs=(catalog,),
     )
 
@@ -162,7 +168,7 @@ def test_real_snapshot_reader_reproduces_every_declared_gold_fact() -> None:
     registry = load_committed_snapshot_registry(ROOT)
     payloads = []
 
-    for record in _draft_records():
+    for record in _core_records():
         expectation = record.tool_expectations[0]
         facts = _fact_map(record)
         result = read_snapshot_as_of(call=_call(record), registry=registry)
@@ -204,7 +210,7 @@ def test_real_snapshot_reader_reproduces_every_declared_gold_fact() -> None:
 
 
 def test_normalization_precision_and_bilingual_claims_are_exact() -> None:
-    korean, english = _draft_records()
+    korean, english = _core_records()
     facts = _fact_map(korean)
     rule = normalization_rule(SourceSystem.ECOS, "200Y108", "10601")
     normalized = normalize_source_value(rule, facts["raw_value"])
@@ -239,7 +245,7 @@ def test_normalization_precision_and_bilingual_claims_are_exact() -> None:
 
 
 def test_day_before_capture_abstains_without_future_value_or_source() -> None:
-    record = _draft_records()[0]
+    record = _core_records()[0]
     result = read_snapshot_as_of(
         call=_call(record, as_of=date(2026, 7, 16)),
         registry=load_committed_snapshot_registry(ROOT),
