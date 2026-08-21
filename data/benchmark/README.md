@@ -22,8 +22,7 @@ owner-approved core records, and `core/core-batch-002.jsonl` contains the first 
 core records. `core/core-batch-003.jsonl` contains the two approved ECOS GDP records, and
 `core/core-batch-004.jsonl` contains the two approved ECOS current-account records. Their
 annotations preserve the AI author and name the human reviewer and review timestamp. Together they
-total 10/40 approved records; the other 30 matrix slots remain unauthored and unapproved, and no
-draft review candidate remains.
+total 10/40 approved records.
 
 The Korean/English `kv-core-data-03` pair was completed as
 `drafts/core-draft-004.jsonl` on 2026-08-20 in feature commit `50c4d9c`. Hyungbae Cho approved both
@@ -38,13 +37,26 @@ decisions, public schemas, and execution runtime were not changed.
 The approval renamed `tests/benchmark/test_ecos_current_account_draft.py` to
 `tests/benchmark/test_ecos_current_account_core.py` with approved expectations and raised the
 approved-count assertions in `test_bok_outlook_core.py` and `test_ecos_gdp_core.py` from 8 to 10.
-The focused benchmark acceptance suite passes 33 tests across four files and confirms the approved
-count is 10/40, and the full suite passes 1,141 at 100% SovereignLab statement/branch coverage
-across 73 Ruff-formatted Python files. The 13 public schemas and five committed traces are
-unchanged. The exact next outcome is an owner-directed draft-only authoring slice for the frozen
-`kv-core-data-04` pair (KOSIS national CPI) using only the existing committed
-`kosis-cpi-snapshot-20260717` evidence, whose use in KOR-RTD is owner-approved (ADR 0007); the new
-drafts must remain `annotation.status=draft` pending a separate named human review.
+
+Feature commit `5e0da06` adds exactly `kv-core-data-04-ko` and `kv-core-data-04-en` at
+`annotation.status=draft` in `drafts/core-draft-005.jsonl`. Both records use the frozen `data`
+route, `dev` split, `eg-data-kosis-cpi-20260717` evidence group, and `kosis-cpi-snapshot-20260717`
+data-unit binding, whose use in KOR-RTD is owner-approved (ADR 0007). They read the June 2026
+(period `2026-06`) national all-items consumer price index (2020=100) as raw and normalized
+`119.99` `index_2020_100` through `read_snapshot_as_of`. This is the first authored pair on the
+KOSIS CPI snapshot and the first dev-split data pair, completing coverage of all three frozen
+`read_snapshot_as_of` bindings. The existing source, manifest, checksum, rights decision,
+attribution, and normalization boundaries are unchanged. These two records remain pending named
+human review and do not count toward the approved core: 10/40 records are approved, two of the
+other 30 are drafts, and 28 remain unauthored and unapproved.
+
+The preceding approval checkpoint passed 33 focused benchmark tests and 1,141 full-suite tests
+across 73 formatted Python files. The current draft checkpoint adds six focused tests:
+`tests/benchmark/test_kosis_cpi_draft.py` passes all six, the combined focused benchmark suite
+passes 39 across five files, and the full suite passes 1,147 at 100% SovereignLab statement/branch
+coverage across 74 Ruff-formatted Python files. The 13 public schemas and five committed traces are
+unchanged. The exact next action is named human review of only these two drafts; do not pre-approve
+them or select another pair.
 
 The matrix assigns every planned documentary or data source unit to one dataset split. Do not
 replace a reserved unit or move a pair between splits without a versioned matrix change, tests, and

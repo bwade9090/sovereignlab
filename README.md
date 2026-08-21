@@ -5,8 +5,12 @@
 **Status:** M1b verification and vintage-contract groundwork are complete; M2 benchmark and
 baseline development is in progress with a frozen 40-record core matrix and 10/40 records
 owner-approved. Hyungbae Cho approved the Korean/English `kv-core-data-03` pair on 2026-08-21; the
-two records now live in `data/benchmark/core/core-batch-004.jsonl`. No draft review candidate is
-pending, and the other 30 matrix slots remain unauthored and unapproved. The
+two records now live in `data/benchmark/core/core-batch-004.jsonl`. Feature commit `5e0da06` adds
+the Korean/English `kv-core-data-04` pair as two drafts in
+`data/benchmark/drafts/core-draft-005.jsonl` over the existing KOSIS CPI snapshot whose use in
+KOR-RTD is owner-approved under ADR 0007. They remain pending named human review and do not
+increase the approved count; of the 30 unapproved slots, these two are drafted and the other 28
+remain unauthored. The
 first nine ADR 0008 slices and work unit C are complete: five machine-readable real-digest traces
 were generated through the actual private offline executor, `ScriptedPlanner`, and committed
 registries and corpora in feature commit `883815b`. The trace set covers all four
@@ -16,9 +20,9 @@ source package is unchanged, the public surface remains 13 deterministic JSON Sc
 executor descriptor still pins 32 source entries and digest
 `08f45dab6a36a49cb7d0b588a69236942cd61534540bd4de0772010402dada64`.
 The focused executor/replay-trace acceptance run passes 80 tests at 100% coverage over 326
-statements and 98 branches, and the focused benchmark acceptance run passes 33 tests. The full
-offline baseline is 1,141 tests at 100% statement/branch coverage (4,679 statements, 1,568
-branches) across 73 Ruff-formatted Python files. The shipped
+statements and 98 branches, and the focused benchmark acceptance run passes 39 tests. The full
+offline baseline is 1,147 tests at 100% statement/branch coverage (4,679 statements, 1,568
+branches) across 74 Ruff-formatted Python files. The shipped
 minimal reference path is described only as `typed function calling with committed traces`. These
 are deterministic offline replays, not provider or live outputs; no provider/live integration or
 bounded tool loop exists, and no model-quality or briefing-performance claim is made. Searchable
@@ -107,12 +111,15 @@ added only the draft Korean/English `kv-core-data-03` pair and six focused tests
 current-account value as `38121.1` `million_usd`. On 2026-08-21, Hyungbae Cho approved both
 records without a substantive change; feature commit `db6700e` records the named-review metadata,
 `batch-004` lifecycle tag, move to `data/benchmark/core/core-batch-004.jsonl`, and focused-test
-transition. The approved count is now 10/40, and current validation is 33 focused benchmark tests
-and 1,141 full-suite tests across 73 formatted Python files. The exact next outcome is an
-owner-directed draft-only authoring slice for the frozen `kv-core-data-04` pair (KOSIS national
-CPI) using only the existing committed `kosis-cpi-snapshot-20260717` evidence, whose use in
-KOR-RTD is owner-approved (ADR 0007); the new drafts must remain `annotation.status=draft` pending
-a separate named human review.
+transition. At that approval checkpoint, the focused benchmark suite passed 33 tests and the full
+baseline passed 1,141 tests across 73 formatted Python files. Later on 2026-08-21, feature commit
+`5e0da06` added only the draft Korean/English `kv-core-data-04` pair and six focused tests using
+the existing committed `kosis-cpi-snapshot-20260717` evidence, whose use in KOR-RTD is
+owner-approved (ADR 0007). The pair reads the June 2026 national all-items CPI (2020=100) as
+`119.99` `index_2020_100` and completes coverage of all three frozen `read_snapshot_as_of`
+bindings. Current validation is 39 focused benchmark tests and 1,147 full-suite tests across 74
+formatted Python files. The approved count remains 10/40, and the exact next action is named human
+review of only these two drafts; do not pre-approve them or select another pair.
 Charter v2.5 and
 [ADR 0009](docs/decisions/0009-bok-economic-outlook-public-data-rights.md) additionally record the
 owner-approved `allowed` public-data ruling for official Bank of Korea Economic Outlook

@@ -227,9 +227,16 @@ cutoff, tool expectations, the frozen matrix, execution contracts and runtime, s
 manifests, rights decisions, normalization, the 13 public schemas, and the five committed traces
 remain unchanged.
 
-No benchmark draft is pending. The exact next slice, directed by the owner in the same session, is
-a bounded draft-only authoring slice for the frozen `kv-core-data-04` pair (KOSIS national CPI),
-using only the existing committed `kosis-cpi-snapshot-20260717` evidence, whose use in KOR-RTD is
-owner-approved under ADR 0007. Those new drafts must stay `annotation.status=draft` pending a
-separate named human review. Provider or live-model integration remains absent, and the bounded
-tool loop deferred by ADR 0008 remains outside the completed approval slice.
+The next bounded authoring slice completed on 2026-08-21 at feature commit `5e0da06`. It added
+exactly the two draft-only `kv-core-data-04` Korean/English records in
+`data/benchmark/drafts/core-draft-005.jsonl`, using only
+`kosis-cpi-snapshot-20260717`, whose use in KOR-RTD is owner-approved under ADR 0007. Neither
+record has named review metadata or enters `core/`, so the approved core remains 10/40: two draft
+records are pending review and 28 matrix slots remain unauthored and unapproved.
+
+The frozen matrix, execution contracts and runtime, source bytes and manifests, rights decisions,
+normalization rules, approved core, 13 public schemas, and five committed traces are unchanged.
+The exact next independent slice is only named human review of those two drafts. Do not pre-approve
+or move them into `core/`, increase the approved count, or select or author a later pair before
+that decision. Provider or live-model integration remains absent, and the bounded tool loop
+deferred by ADR 0008 remains outside this authoring slice.

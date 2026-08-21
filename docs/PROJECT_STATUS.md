@@ -20,9 +20,11 @@
   The approved human-reviewed core count is 10/40: the first four data/abstention records, the
   first Korean/English documentary pair, the `kv-core-data-02` Korean/English ECOS GDP pair in
   `data/benchmark/core/core-batch-003.jsonl`, and the `kv-core-data-03` Korean/English ECOS
-  current-account pair now in `data/benchmark/core/core-batch-004.jsonl`. No draft is pending, and
-  the other 30 matrix slots are not yet authored or approved. The offline bilingual temporal
-  document retriever is now
+  current-account pair now in `data/benchmark/core/core-batch-004.jsonl`. The `kv-core-data-04`
+  Korean/English KOSIS CPI pair is complete at `status=draft` in
+  `data/benchmark/drafts/core-draft-005.jsonl` and awaits named human review. The other 30 matrix
+  slots remain unapproved: two are the pending drafts and 28 are unauthored. The offline bilingual
+  temporal document retriever is now
   implemented with manifest-bound chunks and publication-date filtering before scoring; only
   synthetic fixtures were used. The first real bilingual document-manifest unit is also complete:
   the Korean May 2026
@@ -490,11 +492,28 @@
   aware review timestamp `2026-08-21T07:14:13Z`, changes only the lifecycle tag from `draft-004`
   to `batch-004`, renames the focused draft tests to `test_ecos_current_account_core.py` with
   approved expectations, and raises the approved-count assertions in `test_bok_outlook_core.py`
-  and `test_ecos_gdp_core.py` from 8 to 10. The approved human-reviewed core is now 10/40 across
-  `core-batch-001.jsonl` (4 records), `core-batch-002.jsonl` (2), `core-batch-003.jsonl` (2), and
-  `core-batch-004.jsonl` (2); the remaining 30 matrix slots are unauthored and unapproved, and no
-  draft is pending. The frozen matrix, source bundle, rights decisions, normalization contract, 13
-  public schemas, five committed traces, and runtime source are unchanged.
+  and `test_ecos_gdp_core.py` from 8 to 10. At that approval checkpoint, the approved core was
+  10/40 across `core-batch-001.jsonl` (4 records), `core-batch-002.jsonl` (2),
+  `core-batch-003.jsonl` (2), and `core-batch-004.jsonl` (2); the remaining 30 matrix slots were
+  unauthored and unapproved, and no draft was pending. The frozen matrix, source bundle, rights
+  decisions, normalization contract, 13 public schemas, five committed traces, and runtime source
+  are unchanged.
+
+- **Bilingual KOSIS CPI draft pair (2026-08-21):** functional commit `5e0da06` adds exactly
+  `kv-core-data-04-ko` and `kv-core-data-04-en` at `status=draft` in
+  `data/benchmark/drafts/core-draft-005.jsonl`, plus focused contract tests. Both records preserve
+  the frozen `dev` / `data` allocation and `eg-data-kosis-cpi-20260717` evidence group, reuse only
+  the existing `kosis-cpi-snapshot-20260717` data unit — the July 2026 KOSIS forward snapshot
+  `kosis-101-dt-1j22003-t-t10-20260717t115242998550z` (KOSIS table `DT_1J22003`, item `T/T10`,
+  producer 국가데이터처), whose use in KOR-RTD is owner-approved under ADR 0007 — and answer its
+  June 2026 (period `2026-06`) national all-items consumer price index (2020=100) observation as
+  `119.99` `index_2020_100` at `as_of=2026-07-17`. This is the first authored pair on the KOSIS
+  CPI snapshot and the first `dev`-split data pair, completing coverage of all three frozen
+  `read_snapshot_as_of` bindings (ECOS GDP, ECOS current account, KOSIS CPI). The approved
+  human-reviewed core remains 10/40; of the other 30 unapproved matrix slots, these two are
+  pending drafts and 28 remain unauthored. The matrix, approved core, source bytes, manifest,
+  rights decision, normalization rule, 13 public schemas, five committed traces, and runtime
+  source are unchanged.
 
 ## Current validation evidence
 
@@ -864,6 +883,17 @@ commit `db6700e` contains only the two-record lifecycle transition and focused t
 frozen matrix, source, rights, schema, trace, and runtime boundaries did not change. The work was
 entirely offline and cost $0.00.
 
+Validated 2026-08-21 on Windows after the bilingual KOSIS CPI draft slice: all six new focused
+tests passed, the five focused benchmark files (`test_core_batch.py`, `test_bok_outlook_core.py`,
+`test_ecos_gdp_core.py`, `test_ecos_current_account_core.py`, and `test_kosis_cpi_draft.py`)
+passed all 39 tests, and the full suite passed all 1,147 tests with 100% SovereignLab
+statement/branch coverage (4,679 statements, 1,568 branches) under a fresh OS `--basetemp`. Ruff
+check and format check passed across 74 Python files. All 13 public schemas regenerated
+deterministically and the git diff was clean. Functional commit `5e0da06` contains exactly the two
+draft records and their six focused tests (278 insertions, nothing else changed); the frozen
+matrix, approved core, source, rights, schema, trace, and runtime boundaries did not change. The
+work was entirely offline and cost $0.00.
+
 ## M1b verification spike record (2026-07-15)
 
 All network work below was read-only, key-free, and free of charge. Raw responses were written only
@@ -1210,14 +1240,45 @@ response bodies.
   `kosis-cpi-snapshot-20260717` evidence, whose use in KOR-RTD is owner-approved (ADR 0007). The
   new drafts must stay `status=draft` pending a separate named human review.
 
-## Immediate next action (M2 — draft-only authoring of the `kv-core-data-04` pair)
+## Session-close snapshot (2026-08-21, twenty-second close: KOSIS CPI bilingual drafts complete)
 
-1. Author only the frozen `kv-core-data-04` Korean/English KOSIS national CPI pair as a bounded
-   draft-only slice, using only the existing committed `kosis-cpi-snapshot-20260717` evidence,
-   whose use in KOR-RTD is owner-approved (ADR 0007). Do not fetch a source or touch another
-   matrix slot.
-2. Keep both new records at `status=draft` pending a separate named human review. Do not approve
-   them, move them into `core/`, or raise the approved count above 10/40 in the authoring change.
+- Functional commit `5e0da06` adds exactly `kv-core-data-04-ko` and `kv-core-data-04-en` to
+  `data/benchmark/drafts/core-draft-005.jsonl` at `status=draft`, together with six focused tests
+  in `tests/benchmark/test_kosis_cpi_draft.py` — 278 insertions and nothing else. No approved
+  benchmark record or frozen matrix row changed.
+- Both drafts use only the existing `kosis-cpi-snapshot-20260717` evidence bundle — the July 2026
+  KOSIS forward snapshot `kosis-101-dt-1j22003-t-t10-20260717t115242998550z` (KOSIS table
+  `DT_1J22003`, item `T/T10`, producer 국가데이터처), whose use in KOR-RTD is owner-approved under
+  ADR 0007 — and preserve its exact snapshot, manifest, checksum, rights, cutoff, and
+  normalization boundaries. Their gold observation is the June 2026 (period `2026-06`) national
+  all-items consumer price index (2020=100) at `119.99` `index_2020_100`, normalized by frozen
+  rule `kosis-101-dt-1j22003-t-t10-index-v1` with two display places, at `as_of=2026-07-17`
+  (inclusive end of day Asia/Seoul). Their annotations record `Claude AI draft` at
+  `2026-08-21T07:17:23Z` with no reviewer metadata.
+- This is the first authored pair on the KOSIS CPI snapshot and the first `dev`-split data pair;
+  it completes coverage of all three frozen `read_snapshot_as_of` bindings (ECOS GDP, ECOS
+  current account, KOSIS CPI).
+- M2 remains active with exactly 10/40 owner-approved core records. The other 30 matrix slots
+  remain unapproved: these two records are pending drafts and 28 slots remain unauthored. No
+  subsequent pair or implementation slice is selected.
+- Python 3.12.13 validation is green: six new focused tests; 39 focused benchmark tests across
+  five files; 1,147 full-suite tests at 100% SovereignLab statement/branch coverage (4,679
+  statements, 1,568 branches) with a fresh OS `--basetemp`; Ruff checking and format checking
+  across 74 Python files; deterministic regeneration of all 13 public schemas; and a clean git
+  diff. The committed trace count remains five, and this draft slice cost $0.00.
+- The exact next action is only named human review of these two drafts. Do not pre-approve them,
+  move them into `core/`, raise the approved count, select another pair, or change the source,
+  rights, matrix, schema, trace, runtime, provider/live-model, GPU, paid, or deferred-loop scope.
+
+## Immediate next action (M2 — named human review of `kv-core-data-04` only)
+
+1. Review only `kv-core-data-04-ko` and `kv-core-data-04-en` in
+   `data/benchmark/drafts/core-draft-005.jsonl` against the frozen matrix and existing committed
+   evidence: bilingual wording, `as_of`, route, split, evidence group, data-unit binding, period,
+   value, unit, tool expectations, attribution, and normalization.
+2. Do not mark either record approved, move it into `core/`, or raise the approved count above
+   10/40 without an explicit named human decision. Stop after recording that decision and a green
+   full baseline; do not select or author another pair.
 3. Preserve the frozen matrix, approved core, source, rights, schema, trace, and runtime boundaries;
    do not begin provider/live-model integration, paid work, probes, or the deferred bounded loop.
 
@@ -1318,6 +1379,7 @@ complete.
 | 2026-08-20 | Owner approval of the bilingual ECOS GDP pair | $0.00 | Named reviewer metadata, lifecycle move to `core-batch-003`, focused/full offline validation, and governance update only; no matrix, source, rights, schema, trace, runtime, network, provider/live-model, GPU, or paid change; repository `.pytest_tmp` ACL untouched |
 | 2026-08-20 | Bilingual ECOS current-account draft pair | $0.00 | Exactly two draft records from the existing ECOS snapshot whose KOR-RTD use is owner-approved, focused tests, and full fresh-OS-basetemp validation only; no matrix, approved-core, source, rights, schema, trace, runtime, network, provider/live-model, GPU, or paid change; repository `.pytest_tmp` ACL untouched |
 | 2026-08-21 | Owner approval of the bilingual ECOS current-account pair | $0.00 | Named reviewer metadata, lifecycle move to `core-batch-004`, focused/full offline validation, and governance update only; no matrix, source, rights, schema, trace, runtime, network, provider/live-model, GPU, or paid change |
+| 2026-08-21 | Bilingual KOSIS CPI draft pair | $0.00 | Exactly two draft records from the existing KOSIS snapshot whose KOR-RTD use is owner-approved, focused tests, and full fresh-OS-basetemp validation only; no matrix, approved-core, source, rights, schema, trace, runtime, network, provider/live-model, GPU, or paid change |
 
 **Cumulative external spend: $0.23584524099715054 / $100.00**
 
@@ -1377,11 +1439,15 @@ Read in this order, in full, before changing anything:
     `tests/benchmark/test_ecos_current_account_core.py` — the approved two-record ECOS current-
     account core batch and its focused frozen-allocation, evidence, cutoff, bilingual-parity, and
     approval-lifecycle checks.
+25. `data/benchmark/drafts/core-draft-005.jsonl` and
+    `tests/benchmark/test_kosis_cpi_draft.py` — the pending two-record KOSIS CPI draft pair and
+    its frozen-allocation, evidence, cutoff, bilingual-parity, draft-lifecycle, and
+    no-future-leak checks.
 
-Then follow "Immediate next action" item 1: author only the two `kv-core-data-04` drafts. The
-structural matrix and first ten records are owner-approved; no draft is pending, and the other 30
-slots are neither authored nor approved. The owner-directed next outcome is only the bounded
-draft-only `kv-core-data-04` authoring slice.
+Then follow "Immediate next action" item 1: review only the two `kv-core-data-04` drafts. The
+structural matrix and first ten records are owner-approved; the other 30 slots remain unapproved,
+with two pending drafts and 28 unauthored slots. No later pair or implementation slice has been
+selected.
 The synthetic retrieval baseline and first real bilingual document manifests are complete. ADR
 0009 resolves those
 manifests to `allowed`, but full PDFs and extracted full text remain outside Git by current

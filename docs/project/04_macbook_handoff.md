@@ -1,9 +1,8 @@
 # Cross-machine continuation handoff
 
 - Legacy filename: retained so existing links and onboarding instructions do not break.
-- Prepared: 2026-07-16; refreshed 2026-08-21 after the bilingual ECOS current-account
-  owner-approval transition (twenty-first refresh: fourth core batch approved, owner-directed
-  draft slice next)
+- Prepared: 2026-07-16; refreshed 2026-08-21 after the bilingual KOSIS CPI draft slice
+  (twenty-second refresh: two review candidates complete, named human review next)
 - Target continuation machine: Windows workstation
 - Authority: charter v2.5; accepted ADRs 0001–0009
 - Branch to continue: `main` from `origin`
@@ -12,9 +11,10 @@
   three deterministic runtime adapters, the explicit dispatcher, offline planner boundary, private
   deterministic evidence-packet assembler, private offline executor, and five committed real-
   digest replay traces are complete; Hyungbae Cho approved the unchanged `kv-core-data-03`
-  Korean/English pair, so the core is now 10/40 with no pending draft; the owner directed a
-  bounded draft-only authoring slice for the frozen `kv-core-data-04` pair as the exact next
-  outcome
+  Korean/English pair, so the core remains 10/40; the `kv-core-data-04` Korean/English pair is
+  now complete at `status=draft` and awaits named human review, while no later pair or slice is
+  selected
+- Completed KOSIS CPI draft functional checkpoint: `5e0da06` (`feat: add KOSIS CPI bilingual drafts`).
 - Completed ECOS current-account approval feature checkpoint: `db6700e` (`feat: approve ECOS current-account bilingual pair`).
 - Completed ECOS current-account draft functional checkpoint: `50c4d9c` (`feat: add ECOS current-account bilingual drafts`).
 - Completed ECOS GDP approval feature checkpoint: `473a733` (`feat: approve ECOS GDP bilingual pair`).
@@ -41,8 +41,8 @@ state from the Mac. At the beginning of the Windows session:
 3. Create or verify the Windows-local `.venv` and run the PowerShell baseline in section 2 before
    changing files.
 4. State back the current milestone, approved core count, exact next work unit, and hard stops.
-5. Start only with section 5's owner-directed draft-only authoring slice for the frozen
-   `kv-core-data-04` pair; do not pre-approve its new drafts or select another pair.
+5. Do not start a new work unit. Section 5 names only the pending human review of the
+   `kv-core-data-04` Korean/English drafts; do not pre-approve them or select another pair.
 
 If the worktree is dirty, preserve the existing changes and determine their owner before editing.
 If local `main` has diverged from `origin/main`, stop rather than rewriting history.
@@ -295,6 +295,15 @@ If local `main` has diverged from `origin/main`, stop rather than rewriting hist
   the two-record approval lifecycle transition and focused test updates only; the matrix, source,
   rights, schema, and runtime boundaries are unchanged. No network, provider/live-model call, GPU
   operation, or paid operation occurred; cost was $0.00.
+- KOSIS CPI draft slice validated 2026-08-21 on Windows/Python 3.12.13: all six new focused tests
+  passed, the five focused benchmark files passed all 39 tests, and the full suite passed all
+  1,147 tests with 100% SovereignLab statement/branch coverage (4,679 statements, 1,568 branches)
+  under a fresh OS `--basetemp`. Ruff check plus format check passed across 74 Python files. All
+  13 public schemas regenerated deterministically and all five committed replay traces remained
+  unchanged. The repository `.pytest_tmp` directory and ACL were not touched. Functional commit
+  `5e0da06` contains exactly the two drafts and focused tests; the matrix, approved core, source,
+  rights, schema, trace, and runtime boundaries are unchanged. No network, provider/live-model
+  call, GPU operation, or paid operation occurred; cost was $0.00.
 
 ## 2. Set up and validate the Windows machine
 
@@ -322,8 +331,8 @@ $venvPython = (Resolve-Path .\.venv\Scripts\python.exe).Path
 git diff --exit-code
 ```
 
-Expected handoff baseline: Python 3.12, 13 deterministic public schemas, 73 formatted Python
-files, 1,141 passing tests, 100% SovereignLab statement/branch coverage (4,679 statements, 1,568
+Expected handoff baseline: Python 3.12, 13 deterministic public schemas, 74 formatted Python
+files, 1,147 passing tests, 100% SovereignLab statement/branch coverage (4,679 statements, 1,568
 branches), and no unexpected Git diff.
 On this workstation, the ignored repository-root `.pytest_tmp` can retain an access-denying ACL
 and make the canonical pytest command report only tmp-path setup errors. Do not treat that known
@@ -388,11 +397,15 @@ do not remove it merely because another operating system supplies an IANA timezo
     `tests/benchmark/test_ecos_current_account_core.py` — the approved two-record ECOS current-
     account core batch and its focused frozen-allocation, evidence, cutoff, bilingual-parity,
     approval-lifecycle, and no-future-leak checks.
+24. `data/benchmark/drafts/core-draft-005.jsonl` and
+    `tests/benchmark/test_kosis_cpi_draft.py` — the pending two-record KOSIS CPI draft pair and
+    its focused frozen-allocation, evidence, cutoff, bilingual-parity, draft-lifecycle, and
+    no-future-leak checks.
 
 Only when changing source/resolver/harvester behavior, also read
 `docs/discovery/03_week1_verification_log.md` and the relevant resolver, retrieval, registry,
-adapter, or harvester source/tests. They are not prerequisites for the owner-directed draft-only
-authoring slice.
+adapter, or harvester source/tests. They are not prerequisites for the current named human-review
+gate.
 
 ## 4. External state for the new session
 
@@ -405,8 +418,8 @@ authoring slice.
   a remaining balance of USD `19.7641547592`. Do not start another paid Pod without a new explicit
   authorization and cost estimate.
 - Do not assume the Mac's RunPod CLI, SSH key, GitHub CLI login, local `.env`, or virtual
-  environment exists on Windows. They are machine-local and are not needed for the next offline
-  draft-only work unit.
+  environment exists on Windows. They are machine-local and are not needed for the pending
+  offline human-review gate.
 - No model weights or adapter were copied from RunPod. The repository contains only the harness,
   synthetic fixture, and recorded compatibility evidence.
 - The application-ready detailed and brief English descriptions are in
@@ -415,8 +428,10 @@ authoring slice.
   `data/benchmark/core/core-batch-001.jsonl`, the two records in
   `data/benchmark/core/core-batch-002.jsonl`, the two records in
   `data/benchmark/core/core-batch-003.jsonl`, and the two records in
-  `data/benchmark/core/core-batch-004.jsonl` are approved. No draft is pending; the remaining 30
-  matrix slots are neither authored nor approved.
+  `data/benchmark/core/core-batch-004.jsonl` are approved. The two `kv-core-data-04` records in
+  `data/benchmark/drafts/core-draft-005.jsonl` are pending named human review and do not increase
+  the approved count. The other 30 matrix slots remain unapproved: two are drafts and 28 are
+  unauthored.
 - The field names and allocation in the approved matrix and four core batches are intentionally
   unchanged. Do not rename them or alter the frozen allocation.
 - Two real BOK document manifests are committed, but no provider report body or extracted provider
@@ -603,24 +618,34 @@ On 2026-08-21, Hyungbae Cho approved the unchanged Korean/English pair. Approval
 `Hyungbae Cho` and aware review timestamp `2026-08-21T07:14:13Z`, and replaces only the lifecycle
 tag `draft-004` with `batch-004`. The questions, answers, cutoff, route, split, evidence group,
 data-unit binding, tool expectations, attribution, and normalization are unchanged from `50c4d9c`.
-The approved core is now 10/40, the remaining 30 slots are unauthored and unapproved, and no draft
-is pending. The matrix, source bundle, rights decisions, 13 public schemas, five committed traces,
-and runtime source remain unchanged.
+At that approval checkpoint, the approved core was 10/40, the remaining 30 slots were unauthored
+and unapproved, and no draft was pending. The matrix, source bundle, rights decisions, 13 public
+schemas, five committed traces, and runtime source remained unchanged.
 
 The approval transition passed 33 focused benchmark tests across four files and the full
 1,141-test suite with 100% SovereignLab statement/branch coverage (4,679 statements, 1,568
 branches) under a fresh OS `--basetemp`; Ruff check and format check passed across 73 Python
 files. The repository `.pytest_tmp` directory and ACL were untouched, and the slice cost $0.00.
 
-The owner directed the next bounded outcome in the same session. The exact continuation order is
-therefore:
+### Completed `kv-core-data-04` draft slice — named human review only
 
-1. Author only the frozen `kv-core-data-04` pair (KOSIS national CPI) as a bounded draft-only
-   slice, using only the existing committed `kosis-cpi-snapshot-20260717` evidence, whose use in
-   KOR-RTD is owner-approved (ADR 0007).
-2. Keep both new records at `annotation.status=draft`; they await a separate named human review
-   and do not raise the approved count. Stop after the draft slice and a green full baseline; do
-   not select or author another pair.
+Functional commit `5e0da06` adds exactly `kv-core-data-04-ko` and `kv-core-data-04-en` at
+`status=draft` in `data/benchmark/drafts/core-draft-005.jsonl`, together with six focused tests.
+Both records preserve the frozen `dev` / `data` allocation, `eg-data-kosis-cpi-20260717` evidence
+group, and `kosis-cpi-snapshot-20260717` data-unit binding. They use only that existing snapshot
+whose use in KOR-RTD is owner-approved under ADR 0007 and reproduce the June 2026 national
+all-items consumer price index (2020=100) as `119.99` `index_2020_100`. The matrix, approved
+core, source bundle, rights decisions, normalization contract, 13 public schemas, five committed
+traces, and runtime source are unchanged. The approved count remains 10/40; of the other 30
+unapproved slots, these two are pending drafts and 28 remain unauthored.
+
+The exact continuation order is therefore:
+
+1. Review only `kv-core-data-04-ko` and `kv-core-data-04-en` against the frozen matrix and
+   existing committed evidence.
+2. Do not mark either record approved, move it into `core/`, or raise the approved count without
+   an explicit named human decision. Stop after recording that decision and a green full baseline;
+   do not select or author another pair.
 3. Preserve the frozen matrix, approved core, source, rights, schema, trace, and runtime boundaries;
    do not begin provider/live-model integration, probes, paid work, or the deferred bounded loop.
 
@@ -633,6 +658,8 @@ the configured secrets.
 - Do not rebuild or rename the 40-record matrix, the approved four-record first batch, the approved
   two-record documentary batch, the approved two-record ECOS GDP third batch, or the approved
   two-record ECOS current-account fourth batch.
+- Do not re-author or pre-approve the two `kv-core-data-04` KOSIS CPI drafts, or select a later
+  pair before their separate named human review is complete.
 - Do not re-author or re-review the approved `kv-core-data-03` current-account pair; its separate
   named human review is complete.
 - Do not redo the first real BOK document manifests, revert their ADR 0009 `allowed` conclusion, or
