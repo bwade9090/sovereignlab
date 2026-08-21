@@ -515,6 +515,13 @@
   rights decision, normalization rule, 13 public schemas, five committed traces, and runtime
   source are unchanged.
 
+- **KOSIS CPI draft attribution amendment (2026-08-21):** the owner supplied the official English
+  name of 국가데이터처 — the Ministry of Data and Statistics. A follow-up draft-only amendment
+  replaces the Korean agency name in the English record's rendered attribution with that official
+  English name and updates the focused attribution assertions; the Korean record, gold values,
+  tool expectations, and every frozen boundary are unchanged, both records stay at `status=draft`
+  pending named human review, and the approved core remains 10/40.
+
 ## Current validation evidence
 
 Run from the repository root after activating `.venv` (any OS; see README quick start):
