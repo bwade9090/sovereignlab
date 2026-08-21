@@ -1,8 +1,8 @@
 # K-VINTAGE human-reviewed core authoring matrix 1.0.0
 
-- Status: structural allocation frozen; first eight records owner-approved; `kv-core-data-03`
-  drafted and pending named human review
-- Date: 2026-08-20
+- Status: structural allocation frozen; first ten records owner-approved; owner-directed next
+  slice is the `kv-core-data-04` draft pair
+- Date: 2026-08-21
 - Scope authority: charter v2.5 §5 and M2 continuation order
 - Canonical matrix: `data/benchmark/core-authoring-matrix-v1.json`
 - Public schema: `data/schemas/core-authoring-matrix-v1.schema.json`
@@ -66,9 +66,8 @@ the AI author and record the named human reviewer and aware review timestamp. Th
 changed from `draft-002` to `batch-002` when the file moved into `core/`.
 
 At the 2026-07-29 checkpoint, these two records brought the approved human-reviewed core to 6/40.
-The later ECOS GDP approval described below brings the current total to 8/40. The current-account
-draft described after it accounts for two of the 32 unapproved records; the other 30 remain
-unauthored and unapproved.
+The later ECOS GDP and ECOS current-account approvals described below bring the current total to
+10/40; the other 30 records remain unauthored and unapproved.
 
 ## 4. Approved ECOS GDP pair
 
@@ -97,31 +96,37 @@ source bundle, rights decisions, public schemas,
 source package, and execution runtime are unchanged. At that approval checkpoint, no subsequent
 pair or implementation slice had been selected.
 
-## 5. Draft ECOS current-account pair
+## 5. Approved ECOS current-account pair
 
-Feature commit `50c4d9c` adds exactly the frozen `kv-core-data-03` Korean/English pair to
-`data/benchmark/drafts/core-draft-004.jsonl` at `annotation.status=draft`. Both records use the
-`data` route, `train` split, `eg-data-ecos-current-account-20260717` evidence group, and
-`kv-core-data-03` parallel group. Their only data-unit binding is the existing
+The frozen `kv-core-data-03` Korean/English pair was completed as
+`data/benchmark/drafts/core-draft-004.jsonl` on 2026-08-20 in feature commit `50c4d9c`. Hyungbae
+Cho approved both records on 2026-08-21 with review timestamp `2026-08-21T07:14:13Z`; approval
+feature commit `db6700e` moved the pair to `data/benchmark/core/core-batch-004.jsonl`. Both
+records use the `data` route, `train` split, `eg-data-ecos-current-account-20260717` evidence
+group, and `kv-core-data-03` parallel group. Their only data-unit binding remains the existing
 `ecos-301y017-snapshot-20260717` evidence whose use in KOR-RTD is owner-approved.
 
 Both questions ask for Korea's seasonally adjusted current account in May 2026 as available at the
 inclusive end of 2026-07-17 in Asia/Seoul. The reference answers and typed tool expectations
 reproduce raw and normalized value `38121.1`, canonical unit `million_usd`, one-decimal display,
 the committed snapshot checksum, rights catalog, rights decision, and Bank of Korea attribution.
-Their annotations preserve `annotated_by="Codex AI draft"`, contain no review metadata, and use
-only the `draft-004` lifecycle tag.
+The approved records preserve the original AI author, add the named reviewer and aware review
+timestamp, record `annotation.status=approved`, and use the `batch-004` lifecycle tag. The
+questions, answers, cutoff, route, split, evidence group, data-unit binding, record IDs, tool
+expectations, attribution, and normalization did not change during review.
 
-The pair-specific focused test passes six tests, the combined focused benchmark suite passes 33,
-and the full suite passes 1,141 tests at 100% SovereignLab statement/branch coverage (4,679
-statements, 1,568 branches) across 73 Ruff-formatted Python files using a fresh OS
-`--basetemp`. The repository `.pytest_tmp` ACL was untouched, the 13 public schemas and five
-committed traces remain unchanged, and the slice cost $0.00. The frozen matrix, approved core,
-source bundle, rights decisions, source package, and execution runtime did not change.
+The focused benchmark acceptance suite passes 33 tests across the four files listed in the
+reproduction commands, and the full suite passes 1,141 tests at 100% SovereignLab statement/branch
+coverage (4,679 statements, 1,568 branches) across 73 Ruff-formatted Python files using a fresh OS
+`--basetemp`. The 13 public schemas regenerate deterministically, the five committed traces remain
+unchanged, the working tree diff is clean, and the slice cost $0.00. The record substance, frozen
+matrix, source bundle, rights decisions, source package, and execution runtime did not change.
 
-The approved core remains 8/40. These two drafts and the 30 unauthored slots comprise the other 32
-unapproved records. The exact next action is named human review of only
-`kv-core-data-03-ko` and `kv-core-data-03-en`; do not pre-approve them or select another pair.
+The approved core is now 10/40 and no draft review candidate remains in the committed tree; the
+other 30 records remain unauthored and unapproved. The owner-directed next slice is a bounded draft-only authoring pass
+for the frozen `kv-core-data-04` pair (KOSIS national CPI) using only the existing committed
+`kosis-cpi-snapshot-20260717` evidence, whose use in KOR-RTD is owner-approved (ADR 0007). The new
+drafts must stay `annotation.status=draft` pending a separate named human review.
 
 ## 6. Approval records
 
@@ -144,6 +149,12 @@ pair. The substantive record fields and frozen matrix remain unchanged; approval
 `473a733` records reviewer `Hyungbae Cho`, review timestamp `2026-08-20T00:24:18Z`,
 `annotation.status=approved`, the `batch-003` lifecycle tag, and the move from
 `drafts/core-draft-003.jsonl` to `core/core-batch-003.jsonl`.
+
+On 2026-08-21, Hyungbae Cho explicitly approved both records in the `kv-core-data-03` ECOS
+current-account pair. The substantive record fields and frozen matrix remain unchanged; approval
+feature commit `db6700e` records reviewer `Hyungbae Cho`, review timestamp `2026-08-21T07:14:13Z`,
+`annotation.status=approved`, the `batch-004` lifecycle tag, and the move from
+`drafts/core-draft-004.jsonl` to `core/core-batch-004.jsonl`.
 
 ## 7. Human-review checklist
 
@@ -168,7 +179,7 @@ python scripts/export_json_schemas.py
 python -m pytest tests/benchmark/test_core_batch.py
 python -m pytest tests/benchmark/test_bok_outlook_core.py
 python -m pytest tests/benchmark/test_ecos_gdp_core.py
-python -m pytest tests/benchmark/test_ecos_current_account_draft.py
+python -m pytest tests/benchmark/test_ecos_current_account_core.py
 python -m ruff check .
 python -m ruff format --check .
 ```
@@ -179,14 +190,14 @@ normalization 1.0.0, and checks the earlier-cutoff abstention.
 
 The documentary-core test validates both records against their strict manifests and the frozen
 matrix, enforces language-specific publication cutoffs and split-group integrity, verifies the
-named reviewer metadata, and confirms the current approved count is eight.
+named reviewer metadata, and confirms the current approved count is ten.
 
 The ECOS GDP core test validates both approved records and named-review metadata against the frozen
 matrix, existing snapshot, manifest, checksum, rights decision, and normalization rule. At its
-approval checkpoint, the first three focused benchmark files passed 27 tests while the approved
-count became eight.
+approval checkpoint, the first three focused benchmark files passed 27 tests; the approved count it
+verifies is now ten.
 
-The ECOS current-account draft test validates the two unapproved records against the frozen
-allocation, existing snapshot, manifest, checksum, rights decision, exact `202605` observation,
-normalization rule, attribution, and prior-day abstention. It adds six tests, bringing the current
-focused benchmark suite to 33 while the approved count remains eight.
+The ECOS current-account core test validates both approved records and named-review metadata
+against the frozen allocation, existing snapshot, manifest, checksum, rights decision, exact
+`202605` observation, normalization rule, attribution, and prior-day abstention. Across the four
+focused benchmark files above, 33 tests pass while the approved count is ten.

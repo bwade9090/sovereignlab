@@ -1,6 +1,6 @@
 # SovereignLab project status
 
-- Last updated: 2026-08-20
+- Last updated: 2026-08-21
 - Owner: Hyungbae Cho (`bwade9090`)
 - Delivery window: four weeks, approximately 80 hours
 - Current milestone: M2 — week-2 benchmark and baselines (charter v2.5 §7, Week 2)
@@ -16,13 +16,13 @@
   manually dispatched secret-backed run remains an optional separately authorized operational
   check. Number-normalization 1.0.0, the zero-cost QLoRA preflight, and the paid A40/CUDA 13
   one-step compatibility run are complete. The M1b week-1 gate passed on 2026-07-18. In M2, the
-  40-record core authoring allocation and the first three core batch files are owner-approved.
-  The approved human-reviewed core count is 8/40: the first four data/abstention records, the first
-  Korean/English documentary pair, and the `kv-core-data-02` Korean/English ECOS GDP pair now in
-  `data/benchmark/core/core-batch-003.jsonl`. The `kv-core-data-03` Korean/English ECOS current-
-  account pair is complete at `status=draft` in `data/benchmark/drafts/core-draft-004.jsonl` and
-  awaits named human review. The other 32 matrix slots remain unapproved: two are the pending
-  drafts and 30 are unauthored. The offline bilingual temporal document retriever is now
+  40-record core authoring allocation and the first four core batch files are owner-approved.
+  The approved human-reviewed core count is 10/40: the first four data/abstention records, the
+  first Korean/English documentary pair, the `kv-core-data-02` Korean/English ECOS GDP pair in
+  `data/benchmark/core/core-batch-003.jsonl`, and the `kv-core-data-03` Korean/English ECOS
+  current-account pair now in `data/benchmark/core/core-batch-004.jsonl`. No draft is pending, and
+  the other 30 matrix slots are not yet authored or approved. The offline bilingual temporal
+  document retriever is now
   implemented with manifest-bound chunks and publication-date filtering before scoring; only
   synthetic fixtures were used. The first real bilingual document-manifest unit is also complete:
   the Korean May 2026
@@ -467,9 +467,9 @@
   unchanged `kv-core-data-02` Korean/English pair. Approval feature commit `473a733` moves the two
   records to `data/benchmark/core/core-batch-003.jsonl`, records reviewer `Hyungbae Cho` and aware
   review timestamp `2026-08-20T00:24:18Z`, changes only the lifecycle tag from `draft-003` to
-  `batch-003`, and updates the focused lifecycle assertions. The approved human-reviewed core is
-  At that approval checkpoint, the approved core was 8/40; the remaining 32 matrix slots were
-  unauthored and unapproved, and no draft was pending.
+  `batch-003`, and updates the focused lifecycle assertions. At that approval checkpoint, the
+  approved core was 8/40; the remaining 32 matrix slots were unauthored and unapproved, and no
+  draft was pending.
   The frozen matrix, source bundle, rights decisions, normalization contract, 13 public schemas,
   five committed traces, and runtime source are unchanged.
 
@@ -479,10 +479,22 @@
   the frozen `train` / `data` allocation and `eg-data-ecos-current-account-20260717` evidence
   group, reuse only the existing `ecos-301y017-snapshot-20260717` snapshot whose use in KOR-RTD is
   owner-approved, and answer its 2026-05 seasonally adjusted current-account observation as
-  `38121.1` `million_usd`. The approved human-reviewed core remains 8/40; of the other 32
-  unapproved matrix slots, these two are pending drafts and 30 remain unauthored. The matrix,
-  approved core, source bytes, manifest, rights decision, normalization rule, 13 public schemas,
-  five committed traces, and runtime source are unchanged.
+  `38121.1` `million_usd`. At that checkpoint the approved human-reviewed core remained 8/40; of
+  the other 32 unapproved matrix slots, these two were pending drafts and 30 remained unauthored.
+  The matrix, approved core, source bytes, manifest, rights decision, normalization rule, 13
+  public schemas, five committed traces, and runtime source are unchanged.
+
+- **Bilingual ECOS current-account owner approval (2026-08-21):** Hyungbae Cho explicitly approved
+  the unchanged `kv-core-data-03` Korean/English pair. Approval feature commit `db6700e` moves the
+  two records to `data/benchmark/core/core-batch-004.jsonl`, records reviewer `Hyungbae Cho` and
+  aware review timestamp `2026-08-21T07:14:13Z`, changes only the lifecycle tag from `draft-004`
+  to `batch-004`, renames the focused draft tests to `test_ecos_current_account_core.py` with
+  approved expectations, and raises the approved-count assertions in `test_bok_outlook_core.py`
+  and `test_ecos_gdp_core.py` from 8 to 10. The approved human-reviewed core is now 10/40 across
+  `core-batch-001.jsonl` (4 records), `core-batch-002.jsonl` (2), `core-batch-003.jsonl` (2), and
+  `core-batch-004.jsonl` (2); the remaining 30 matrix slots are unauthored and unapproved, and no
+  draft is pending. The frozen matrix, source bundle, rights decisions, normalization contract, 13
+  public schemas, five committed traces, and runtime source are unchanged.
 
 ## Current validation evidence
 
@@ -841,6 +853,17 @@ unchanged. The repository `.pytest_tmp` directory and ACL were untouched. Functi
 core, source, rights, schema, trace, and runtime boundaries did not change. The work was entirely
 offline and cost $0.00.
 
+Validated 2026-08-21 on Windows after recording Hyungbae Cho's approval of the bilingual ECOS
+current-account pair: the four focused benchmark files (`test_core_batch.py`,
+`test_bok_outlook_core.py`, `test_ecos_gdp_core.py`, and `test_ecos_current_account_core.py`)
+passed all 33 tests; the full suite passed all 1,141 tests with 100% SovereignLab statement/branch
+coverage (4,679 statements, 1,568 branches) under a fresh OS `--basetemp`; and Ruff check plus
+format check passed across 73 Python files. All 13 public schemas regenerated deterministically,
+the five committed replay traces remained unchanged, and the git diff was clean. Approval feature
+commit `db6700e` contains only the two-record lifecycle transition and focused test updates; the
+frozen matrix, source, rights, schema, trace, and runtime boundaries did not change. The work was
+entirely offline and cost $0.00.
+
 ## M1b verification spike record (2026-07-15)
 
 All network work below was read-only, key-free, and free of charge. Raw responses were written only
@@ -995,6 +1018,10 @@ response bodies.
 - On 2026-08-20 Hyungbae Cho approved the unchanged `kv-core-data-02` Korean/English ECOS GDP pair.
   Both records carry reviewer `Hyungbae Cho` and aware timestamp `2026-08-20T00:24:18Z` in
   `data/benchmark/core/core-batch-003.jsonl`; the approved core count is now 8/40.
+- On 2026-08-21 Hyungbae Cho approved the unchanged `kv-core-data-03` Korean/English ECOS
+  current-account pair. Both records carry reviewer `Hyungbae Cho` and aware timestamp
+  `2026-08-21T07:14:13Z` in `data/benchmark/core/core-batch-004.jsonl`; the approved core count is
+  now 10/40.
 
 ## Session-close snapshot (2026-08-02, fourteenth close: planner boundary complete)
 
@@ -1159,15 +1186,38 @@ response bodies.
   move them into `core/`, raise the approved count, select another pair, or change the source,
   rights, matrix, schema, trace, runtime, provider/live-model, GPU, paid, or deferred-loop scope.
 
-## Immediate next action (M2 — named human review of `kv-core-data-03` only)
+## Session-close snapshot (2026-08-21, twenty-first close: ECOS current-account bilingual pair approved)
 
-1. Review only `kv-core-data-03-ko` and `kv-core-data-03-en` in
-   `data/benchmark/drafts/core-draft-004.jsonl` against the frozen matrix and existing committed
-   evidence: bilingual wording, `as_of`, route, split, evidence group, data-unit binding, period,
-   value, unit, tool expectations, attribution, and normalization.
-2. Do not mark either record approved, move it into `core/`, or raise the approved count above
-   8/40 without an explicit named human decision. Stop after recording that decision and a green
-   full baseline; do not select or author another pair.
+- Approval feature commit `db6700e` records Hyungbae Cho's approval of exactly
+  `kv-core-data-03-ko` and `kv-core-data-03-en` at aware timestamp `2026-08-21T07:14:13Z`. The
+  pair now lives in `data/benchmark/core/core-batch-004.jsonl` at `status=approved` with lifecycle
+  tag `batch-004`; the former draft file is absent and `data/benchmark/drafts/` is empty in the
+  committed tree.
+- The questions, answers, cutoff, route, split, evidence group, data-unit binding, tool
+  expectations, attribution, and normalization remain byte-for-byte unchanged from functional
+  draft commit `50c4d9c`. Only `annotation.status`, `reviewed_by`, `reviewed_at`, and the
+  lifecycle tag changed. The frozen matrix, source bundle, rights decisions, 13 public schemas,
+  five committed traces, and runtime source are unchanged.
+- M2 remains active with exactly 10/40 owner-approved core records. The remaining 30 matrix slots
+  are unauthored and unapproved, and no draft is pending.
+- Python 3.12.13 validation is green: 33 focused benchmark tests across four files; 1,141
+  full-suite tests at 100% SovereignLab statement/branch coverage (4,679 statements, 1,568
+  branches) with a fresh OS `--basetemp`; Ruff checking and format checking across 73 Python
+  files; deterministic regeneration of all 13 public schemas; and a clean git diff. The committed
+  trace count remains five, and this approval transition cost $0.00.
+- The exact next owner-directed outcome is only a bounded draft-only authoring slice for the
+  frozen `kv-core-data-04` pair (KOSIS national CPI) using only the existing committed
+  `kosis-cpi-snapshot-20260717` evidence, whose use in KOR-RTD is owner-approved (ADR 0007). The
+  new drafts must stay `status=draft` pending a separate named human review.
+
+## Immediate next action (M2 — draft-only authoring of the `kv-core-data-04` pair)
+
+1. Author only the frozen `kv-core-data-04` Korean/English KOSIS national CPI pair as a bounded
+   draft-only slice, using only the existing committed `kosis-cpi-snapshot-20260717` evidence,
+   whose use in KOR-RTD is owner-approved (ADR 0007). Do not fetch a source or touch another
+   matrix slot.
+2. Keep both new records at `status=draft` pending a separate named human review. Do not approve
+   them, move them into `core/`, or raise the approved count above 10/40 in the authoring change.
 3. Preserve the frozen matrix, approved core, source, rights, schema, trace, and runtime boundaries;
    do not begin provider/live-model integration, paid work, probes, or the deferred bounded loop.
 
@@ -1267,6 +1317,7 @@ complete.
 | 2026-08-19 | Bilingual ECOS GDP draft pair | $0.00 | Exactly two draft records from the existing ECOS snapshot whose KOR-RTD use is owner-approved, focused tests, and full fresh-OS-basetemp validation only; no network, provider/live-model call, source or rights change, GPU, or paid call; repository `.pytest_tmp` ACL untouched |
 | 2026-08-20 | Owner approval of the bilingual ECOS GDP pair | $0.00 | Named reviewer metadata, lifecycle move to `core-batch-003`, focused/full offline validation, and governance update only; no matrix, source, rights, schema, trace, runtime, network, provider/live-model, GPU, or paid change; repository `.pytest_tmp` ACL untouched |
 | 2026-08-20 | Bilingual ECOS current-account draft pair | $0.00 | Exactly two draft records from the existing ECOS snapshot whose KOR-RTD use is owner-approved, focused tests, and full fresh-OS-basetemp validation only; no matrix, approved-core, source, rights, schema, trace, runtime, network, provider/live-model, GPU, or paid change; repository `.pytest_tmp` ACL untouched |
+| 2026-08-21 | Owner approval of the bilingual ECOS current-account pair | $0.00 | Named reviewer metadata, lifecycle move to `core-batch-004`, focused/full offline validation, and governance update only; no matrix, source, rights, schema, trace, runtime, network, provider/live-model, GPU, or paid change |
 
 **Cumulative external spend: $0.23584524099715054 / $100.00**
 
@@ -1322,15 +1373,15 @@ Read in this order, in full, before changing anything:
 23. `data/benchmark/core/core-batch-003.jsonl` and
     `tests/benchmark/test_ecos_gdp_core.py` — the approved two-record ECOS GDP core batch and its
     focused frozen-allocation, evidence, cutoff, bilingual-parity, and approval-lifecycle checks.
-24. `data/benchmark/drafts/core-draft-004.jsonl` and
-    `tests/benchmark/test_ecos_current_account_draft.py` — the pending two-record ECOS current-
-    account draft pair and its frozen-allocation, evidence, cutoff, bilingual-parity, draft-
-    lifecycle, and no-future-leak checks.
+24. `data/benchmark/core/core-batch-004.jsonl` and
+    `tests/benchmark/test_ecos_current_account_core.py` — the approved two-record ECOS current-
+    account core batch and its focused frozen-allocation, evidence, cutoff, bilingual-parity, and
+    approval-lifecycle checks.
 
-Then follow "Immediate next action" item 1: review only the two `kv-core-data-03` drafts. The
-structural matrix and first eight records are owner-approved; the other 32 slots remain unapproved,
-with two pending drafts and 30 unauthored slots. No later pair or implementation slice has been
-selected.
+Then follow "Immediate next action" item 1: author only the two `kv-core-data-04` drafts. The
+structural matrix and first ten records are owner-approved; no draft is pending, and the other 30
+slots are neither authored nor approved. The owner-directed next outcome is only the bounded
+draft-only `kv-core-data-04` authoring slice.
 The synthetic retrieval baseline and first real bilingual document manifests are complete. ADR
 0009 resolves those
 manifests to `allowed`, but full PDFs and extracted full text remain outside Git by current
