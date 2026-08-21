@@ -1,4 +1,4 @@
-"""Contract and evidence checks for the draft kv-core-data-03 pair."""
+"""Contract and evidence checks for the approved kv-core-data-03 pair."""
 
 from datetime import date, timedelta
 from decimal import Decimal
@@ -35,6 +35,7 @@ from sovereignlab.snapshots import (
 ROOT = Path(__file__).resolve().parents[2]
 MATRIX_PATH = ROOT / "data" / "benchmark" / "core-authoring-matrix-v1.json"
 CORE_DIRECTORY = ROOT / "data" / "benchmark" / "core"
+BATCH_PATH = CORE_DIRECTORY / "core-batch-004.jsonl"
 DRAFT_PATH = ROOT / "data" / "benchmark" / "drafts" / "core-draft-004.jsonl"
 SOURCE_ID = "ecos-301y017-sa000-20260717t115242998550z"
 SOURCE_SHA256 = "8f71259c202ed7cc4d6b2eebea5123215547b6ffd3f653ef734fdd8564bd9389"
@@ -69,8 +70,8 @@ def _records(path: Path) -> tuple[BenchmarkRecord, ...]:
     )
 
 
-def _draft_records() -> tuple[BenchmarkRecord, ...]:
-    return _records(DRAFT_PATH)
+def _core_records() -> tuple[BenchmarkRecord, ...]:
+    return _records(BATCH_PATH)
 
 
 def _fact_map(record: BenchmarkRecord) -> dict[str, str]:
@@ -91,11 +92,12 @@ def _call(record: BenchmarkRecord, *, as_of: date | None = None) -> SnapshotAsOf
     )
 
 
-def test_draft_pair_matches_the_frozen_allocation_and_has_no_review_metadata() -> None:
+def test_approved_pair_matches_the_frozen_allocation_and_review_metadata() -> None:
     matrix = CoreAuthoringMatrix.model_validate_json(MATRIX_PATH.read_text(encoding="utf-8"))
     pair = next(item for item in matrix.pairs if item.pair_id == "kv-core-data-03")
-    records = _draft_records()
+    records = _core_records()
 
+    assert not DRAFT_PATH.exists()
     assert tuple(record.record_id for record in records) == (
         pair.ko_record_id,
         pair.en_record_id,
@@ -111,41 +113,40 @@ def test_draft_pair_matches_the_frozen_allocation_and_has_no_review_metadata() -
     assert all(record.parallel_group_id == pair.pair_id for record in records)
     assert all(record.document_evidence == () for record in records)
     assert all(len(record.tool_expectations) == 1 for record in records)
-    assert all(record.annotation.status is AnnotationStatus.DRAFT for record in records)
+    assert all(record.annotation.status is AnnotationStatus.APPROVED for record in records)
     assert all(record.annotation.annotated_by == "Codex AI draft" for record in records)
-    assert all(record.annotation.reviewed_by is None for record in records)
-    assert all(record.annotation.reviewed_at is None for record in records)
-    annotation_times = {record.annotation.annotated_at for record in records}
-    assert len(annotation_times) == 1
-    assert next(iter(annotation_times)).utcoffset() == timedelta(0)
+    assert all(record.annotation.reviewed_by == "Hyungbae Cho" for record in records)
+    review_times = {record.annotation.reviewed_at for record in records}
+    assert None not in review_times
+    assert len(review_times) == 1
+    reviewed_at = next(iter(review_times))
+    assert reviewed_at is not None
+    assert reviewed_at.utcoffset() == timedelta(0)
+    assert all(record.annotation.annotated_at <= reviewed_at for record in records)
     expected_tags = (
         "core",
         "temporal",
         "vintage",
         "ecos-current-account",
-        "draft-004",
+        "batch-004",
     )
     assert all(record.tags == expected_tags for record in records)
 
 
-def test_approved_core_remains_eight_and_drafts_are_separate() -> None:
-    matrix = CoreAuthoringMatrix.model_validate_json(MATRIX_PATH.read_text(encoding="utf-8"))
+def test_approved_core_contains_ten_records_and_the_new_pair() -> None:
     approved = tuple(
         record for path in sorted(CORE_DIRECTORY.glob("*.jsonl")) for record in _records(path)
     )
-    drafts = _draft_records()
-    approved_ids = {record.record_id for record in approved}
-    draft_ids = {record.record_id for record in drafts}
+    records = _core_records()
 
-    assert len(approved) == 8
+    assert len(approved) == 10
     assert all(record.annotation.status is AnnotationStatus.APPROVED for record in approved)
-    assert len(drafts) == 2
-    assert all(record.annotation.status is AnnotationStatus.DRAFT for record in drafts)
-    assert approved_ids.isdisjoint(draft_ids)
-    assert matrix.target_record_count - len(approved) - len(drafts) == 30
+    assert {record.record_id for record in records} <= {record.record_id for record in approved}
+    assert len(records) == 2
+    assert all(record.annotation.status is AnnotationStatus.APPROVED for record in records)
 
 
-def test_draft_pair_forms_a_real_bundle_with_the_approved_snapshot_rights() -> None:
+def test_approved_pair_forms_a_real_bundle_with_the_approved_snapshot_rights() -> None:
     manifest = SourceManifest.model_validate_json(
         (ROOT / "data" / "manifests" / f"{SOURCE_ID}.json").read_text(encoding="utf-8")
     )
@@ -155,7 +156,7 @@ def test_draft_pair_forms_a_real_bundle_with_the_approved_snapshot_rights() -> N
 
     BenchmarkBundle(
         sources=(manifest,),
-        records=_draft_records(),
+        records=_core_records(),
         rights_catalogs=(catalog,),
     )
 
@@ -174,7 +175,7 @@ def test_real_snapshot_reader_reproduces_every_declared_gold_fact() -> None:
     registry = load_committed_snapshot_registry(ROOT)
     payloads = []
 
-    for record in _draft_records():
+    for record in _core_records():
         expectation = record.tool_expectations[0]
         facts = _fact_map(record)
         result = read_snapshot_as_of(call=_call(record), registry=registry)
@@ -216,7 +217,7 @@ def test_real_snapshot_reader_reproduces_every_declared_gold_fact() -> None:
 
 
 def test_normalization_precision_bilingual_claims_and_attribution_are_exact() -> None:
-    korean, english = _draft_records()
+    korean, english = _core_records()
     facts = _fact_map(korean)
     rule = normalization_rule(SourceSystem.ECOS, "301Y017", "SA000")
     normalized = normalize_source_value(rule, facts["raw_value"])
@@ -254,7 +255,7 @@ def test_normalization_precision_bilingual_claims_and_attribution_are_exact() ->
 
 
 def test_day_before_capture_abstains_without_future_value_or_source() -> None:
-    record = _draft_records()[0]
+    record = _core_records()[0]
     result = read_snapshot_as_of(
         call=_call(record, as_of=date(2026, 7, 16)),
         registry=load_committed_snapshot_registry(ROOT),
