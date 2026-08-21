@@ -246,12 +246,15 @@ def test_normalization_precision_bilingual_claims_and_attribution_are_exact() ->
     assert "June 2026" in english.reference_answer
     assert "(2020=100)" in english.question
     assert "119.99 (2020=100)" in english.reference_answer
-    assert "original producer: 국가데이터처" in english.reference_answer
+    assert "original producer: Ministry of Data and Statistics" in english.reference_answer
     assert "Consumer price index (all items, nationwide)" in english.reference_answer
     assert "retrieved July 17, 2026" in english.reference_answer
     assert "structures the capture as vintage data" in english.reference_answer
     for record in (korean, english):
-        assert "국가데이터처" in record.reference_answer
+        assert (
+            "Ministry of Data and Statistics" in record.reference_answer
+            or "국가데이터처" in record.reference_answer
+        )
         assert SOURCE_URL in record.reference_answer
         assert record.as_of == AS_OF
         assert _fact_map(record) == facts
