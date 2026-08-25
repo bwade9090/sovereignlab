@@ -1,8 +1,8 @@
 # K-VINTAGE human-reviewed core authoring matrix 1.0.0
 
-- Status: structural allocation frozen; first ten records owner-approved; `kv-core-data-04`
-  drafted and pending named human review
-- Date: 2026-08-21
+- Status: structural allocation frozen; first twelve records owner-approved; owner-directed next
+  slice is the `kv-core-abstain-02` draft pair
+- Date: 2026-08-25
 - Scope authority: charter v2.5 §5 and M2 continuation order
 - Canonical matrix: `data/benchmark/core-authoring-matrix-v1.json`
 - Public schema: `data/schemas/core-authoring-matrix-v1.schema.json`
@@ -66,9 +66,8 @@ the AI author and record the named human reviewer and aware review timestamp. Th
 changed from `draft-002` to `batch-002` when the file moved into `core/`.
 
 At the 2026-07-29 checkpoint, these two records brought the approved human-reviewed core to 6/40.
-The later ECOS GDP and ECOS current-account approvals described below bring the current total to
-10/40. The KOSIS CPI draft described after them accounts for two of the 30 unapproved records; the
-other 28 remain unauthored and unapproved.
+The later ECOS GDP, ECOS current-account, and KOSIS CPI approvals described below bring the
+current total to 12/40; the other 28 records remain unauthored and unapproved.
 
 ## 4. Approved ECOS GDP pair
 
@@ -128,18 +127,22 @@ That approval brought the approved core to 10/40, leaving no draft review candid
 committed tree at that checkpoint. The owner-directed next slice was a bounded draft-only
 authoring pass for the frozen `kv-core-data-04` pair (KOSIS national CPI) using only the existing
 committed `kosis-cpi-snapshot-20260717` evidence, whose use in KOR-RTD is owner-approved
-(ADR 0007); the resulting drafts are described below and stay `annotation.status=draft` pending a
-separate named human review.
+(ADR 0007); the resulting pair is described below and completed named human review on 2026-08-25.
 
-## 6. Draft KOSIS CPI pair
+## 6. Approved KOSIS CPI pair
 
-Feature commit `5e0da06` adds exactly the frozen `kv-core-data-04` Korean/English pair to
-`data/benchmark/drafts/core-draft-005.jsonl` at `annotation.status=draft`. Both records use the
-`data` route, `dev` split, `eg-data-kosis-cpi-20260717` evidence group, and `kv-core-data-04`
-parallel group. Their only data-unit binding is the existing `kosis-cpi-snapshot-20260717`
-evidence whose use in KOR-RTD is owner-approved under ADR 0007. This is the first authored pair on
-the KOSIS CPI snapshot and the first `dev`-split data pair, and it completes authored coverage of
-all three frozen `read_snapshot_as_of` bindings (ECOS GDP, ECOS current account, KOSIS CPI).
+The frozen `kv-core-data-04` Korean/English pair was completed as
+`data/benchmark/drafts/core-draft-005.jsonl` on 2026-08-21 in feature commit `5e0da06`. Hyungbae
+Cho approved both records on 2026-08-25 with review timestamp `2026-08-25T07:10:15Z`; approval
+feature commit `95c5e61` moved the pair to `data/benchmark/core/core-batch-005.jsonl`. Both
+records use the `data` route, `dev` split, `eg-data-kosis-cpi-20260717` evidence group, and
+`kv-core-data-04` parallel group. Their only data-unit binding remains the existing
+`kosis-cpi-snapshot-20260717` evidence whose use in KOR-RTD is owner-approved under ADR 0007.
+This is the first approved pair on the KOSIS CPI snapshot and the first `dev`-split data pair; it
+completes approved coverage of all three frozen `read_snapshot_as_of` bindings (ECOS GDP, ECOS
+current account, KOSIS CPI) and the data route's four authorable pairs
+(`kv-core-data-01`..`kv-core-data-04`), while the fifth data pair `kv-core-data-05` stays
+reserved on the deliberately unauthored test-split unit.
 
 Both questions ask for Korea's June 2026 national all-items consumer price index (2020=100) as
 available at the inclusive end of 2026-07-17 in Asia/Seoul, read from the committed July 2026
@@ -147,20 +150,27 @@ KOSIS forward snapshot `kosis-101-dt-1j22003-t-t10-20260717t115242998550z` (KOSI
 `DT_1J22003`, item `T/T10`). The reference answers and typed tool expectations reproduce raw and
 normalized value `119.99`, canonical unit `index_2020_100`, two-decimal display, normalization
 rule `kosis-101-dt-1j22003-t-t10-index-v1`, the committed snapshot checksum, rights catalog,
-rights decision, and 국가데이터처 producer attribution. Their annotations preserve
-`annotated_by="Claude AI draft"` at `2026-08-21T07:17:23Z`, contain no reviewer metadata, and use
-only the `draft-005` lifecycle tag.
+rights decision, and 국가데이터처 producer attribution. The approved records preserve the original AI
+author, add the named reviewer and aware review timestamp, record `annotation.status=approved`,
+and use the `batch-005` lifecycle tag. The questions, answers, cutoff, route, split, evidence
+group, data-unit binding, record IDs, tool expectations, attribution, and normalization did not
+change during review.
 
-The pair-specific focused test passes six tests, the combined focused benchmark suite passes 39,
-and the full suite passes 1,147 tests at 100% SovereignLab statement/branch coverage (4,679
-statements, 1,568 branches) across 74 Ruff-formatted Python files using a fresh OS `--basetemp`.
-The 13 public schemas regenerate deterministically, the five committed traces remain unchanged,
-the working tree diff is clean, and the slice cost $0.00. The frozen matrix, approved core, source
-bundle, rights decisions, source package, and execution runtime did not change.
+The focused benchmark acceptance suite passes 39 tests across the five files listed in the
+reproduction commands, and the full suite passes 1,147 tests at 100% SovereignLab statement/branch
+coverage (4,679 statements, 1,568 branches) across 74 Ruff-formatted Python files using a fresh OS
+`--basetemp`. The 13 public schemas regenerate deterministically, the five committed traces remain
+unchanged, the working tree diff is clean, and the slice cost $0.00. The record substance, frozen
+matrix, source bundle, rights decisions, source package, and execution runtime did not change.
 
-The approved core remains 10/40. These two drafts and the 28 unauthored slots comprise the other
-30 unapproved records. The exact next action is named human review of only `kv-core-data-04-ko`
-and `kv-core-data-04-en`; do not pre-approve them or select another pair.
+The approved core is now 12/40 and no draft review candidate remains in the committed tree; the
+other 28 records remain unauthored and unapproved. The owner-directed next slice is a bounded
+draft-only authoring pass for the frozen `kv-core-abstain-02` pair, a `train`-split abstention
+pair whose question asks for a neighboring OECD observation scope (Korea's normalised CLI) that
+has no owner-approved raw-data decision, so the gold behavior is abstention. Abstain pairs bind
+no source units, so the slice uses no new evidence and relies only on the committed rights
+catalog as the fail-closed basis. The new drafts must stay `annotation.status=draft` pending a
+separate named human review.
 
 ## 7. Approval records
 
@@ -190,6 +200,12 @@ feature commit `db6700e` records reviewer `Hyungbae Cho`, review timestamp `2026
 `annotation.status=approved`, the `batch-004` lifecycle tag, and the move from
 `drafts/core-draft-004.jsonl` to `core/core-batch-004.jsonl`.
 
+On 2026-08-25, Hyungbae Cho explicitly approved both records in the `kv-core-data-04` KOSIS CPI
+pair. The substantive record fields and frozen matrix remain unchanged; approval feature commit
+`95c5e61` records reviewer `Hyungbae Cho`, review timestamp `2026-08-25T07:10:15Z`,
+`annotation.status=approved`, the `batch-005` lifecycle tag, and the move from
+`drafts/core-draft-005.jsonl` to `core/core-batch-005.jsonl`.
+
 ## 8. Human-review checklist
 
 For each bilingual pair, the reviewer must verify:
@@ -214,7 +230,7 @@ python -m pytest tests/benchmark/test_core_batch.py
 python -m pytest tests/benchmark/test_bok_outlook_core.py
 python -m pytest tests/benchmark/test_ecos_gdp_core.py
 python -m pytest tests/benchmark/test_ecos_current_account_core.py
-python -m pytest tests/benchmark/test_kosis_cpi_draft.py
+python -m pytest tests/benchmark/test_kosis_cpi_core.py
 python -m ruff check .
 python -m ruff format --check .
 ```
@@ -225,20 +241,20 @@ normalization 1.0.0, and checks the earlier-cutoff abstention.
 
 The documentary-core test validates both records against their strict manifests and the frozen
 matrix, enforces language-specific publication cutoffs and split-group integrity, verifies the
-named reviewer metadata, and confirms the current approved count is ten.
+named reviewer metadata, and confirms the current approved count is twelve.
 
 The ECOS GDP core test validates both approved records and named-review metadata against the frozen
 matrix, existing snapshot, manifest, checksum, rights decision, and normalization rule. At its
 approval checkpoint, the first three focused benchmark files passed 27 tests; the approved count it
-verifies is now ten.
+verifies is now twelve.
 
 The ECOS current-account core test validates both approved records and named-review metadata
 against the frozen allocation, existing snapshot, manifest, checksum, rights decision, exact
 `202605` observation, normalization rule, attribution, and prior-day abstention. At its approval
-checkpoint, the first four focused benchmark files passed 33 tests while the approved count is
-ten.
+checkpoint, the first four focused benchmark files passed 33 tests; the approved count it verifies
+is now twelve.
 
-The KOSIS CPI draft test validates the two unapproved records against the frozen allocation,
-existing snapshot, manifest, checksum, rights decision, exact `202606` observation, normalization
-rule, attribution, and prior-day abstention. It adds six tests, bringing the current focused
-benchmark suite to 39 while the approved count remains ten.
+The KOSIS CPI core test validates both approved records and named-review metadata against the
+frozen allocation, existing snapshot, manifest, checksum, rights decision, exact `202606`
+observation, normalization rule, attribution, and prior-day abstention. Across the five focused
+benchmark files above, 39 tests pass while the approved count is twelve.

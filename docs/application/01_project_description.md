@@ -1,7 +1,7 @@
 # SovereignLab application project description
 
 - Status: application-ready wording for the current M2 midpoint
-- Last updated: 2026-08-21
+- Last updated: 2026-08-25
 - Disclosure level: verified implementation, compatibility, and deterministic offline replay
   results only; no provider/live, model-quality, or briefing-performance claim
 
@@ -36,14 +36,15 @@ milestone. Its evidence, benchmark, core-authoring-matrix, availability-ledger, 
 execution contracts are published as 13 synchronized deterministic JSON Schemas; the offline
 resolver and GitHub Actions harvester are operational; and 1,147 tests pass with 100% statement
 and branch coverage (4,679 statements, 1,568 branches) across 74 formatted Python files. The
-40-question human-reviewed bilingual core is frozen as an allocation, and 10 of 40 records —
+40-question human-reviewed bilingual core is frozen as an allocation, and 12 of 40 records —
 initially AI-authored, then approved under
 named human review —
 are complete: a Korean/English data pair resolving the OECD CLI vintage available on 2026-07-09, an
 abstention pair for an earlier cutoff where no edition is provably available, and a documentary
 pair grounded in the Bank of Korea's May 2026 Economic Outlook and its independently dated official
 English translation, plus Korean/English data pairs over the 2026-07-17 ECOS GDP and
-current-account snapshots. Offline
+current-account snapshots and a Korean/English data pair over the 2026-07-17 KOSIS national CPI
+snapshot. Offline
 bilingual temporal document retrieval is implemented over a committed
 synthetic Korean/English corpus — the real Bank of Korea report bodies are manifest-bound but not
 yet committed as searchable text — with publication-date filtering before scoring; regression
@@ -71,16 +72,19 @@ approved core to 10 of 40 records. At that approval checkpoint the focused bench
 33 tests across four files and the full baseline passed 1,141 tests across 73 formatted Python
 files.
 
-Feature commit `5e0da06` adds the Korean/English `kv-core-data-04` pair as two AI-authored drafts
-in `data/benchmark/drafts/core-draft-005.jsonl`. They read the June 2026 national all-items
-consumer price index of 119.99 (2020=100) from the existing committed 2026-07-17 KOSIS snapshot
-whose use in KOR-RTD is owner-approved under ADR 0007 — the first authored pair on that snapshot
-and the first dev-split data pair, completing coverage of all three frozen `read_snapshot_as_of`
-bindings. Six pair-specific tests and 39 focused benchmark tests pass; the pair remains pending
-named human review, so the approved count stays 10/40. Of the 30 unapproved records, these two
-are drafted and the other 28 remain unauthored. The frozen matrix, approved core, source bundle,
-rights decisions, 13 public schemas, five committed traces, source package, and execution runtime
-are unchanged.
+The `kv-core-data-04` pair was completed as two AI-authored drafts in feature commit `5e0da06`
+and approved without a substantive change by Hyungbae Cho on 2026-08-25. It reads the June 2026
+national all-items consumer price index of 119.99 (2020=100) from the existing committed
+2026-07-17 KOSIS snapshot whose use in KOR-RTD is owner-approved under ADR 0007. The records now
+live in `data/benchmark/core/core-batch-005.jsonl`, with only the annotation status, reviewer
+fields, and lifecycle tag changed; the frozen matrix, source bundle, rights decisions, 13 public
+schemas, five committed traces, source package, and execution runtime are unchanged. The approved
+core is now 12 of 40 records, no benchmark draft is pending, and the other 28 matrix slots remain
+unauthored and unapproved. This approval completes the data route's four authorable pairs
+(`kv-core-data-01` through `kv-core-data-04`); the fifth data pair `kv-core-data-05` stays
+reserved on the deliberately unauthored test-split unit. At this approval checkpoint the focused
+benchmark suite passes 39 tests across five files and the full baseline passes 1,147 tests across
+74 formatted Python files.
 
 On the execution side, the project has shipped `typed function calling with committed traces`.
 A strict typed execution-and-trace contract freezes the bilingual request, four-route plan, exactly
@@ -100,10 +104,14 @@ language-model-only LoRA boundaries, finite gradients, a changed adapter tensor,
 output. This is deliberately reported as a training-path compatibility result, not as evidence of
 improved model quality.
 
-The exact next action is named human review of only the two `kv-core-data-04` drafts. They must
-not be pre-approved, and no later pair should be selected within that review gate. Later M2 work
-authors the remaining core records plus a separately reported set of 200–300 deterministic
-revision probes and runs the four-variant baseline suite comparing
+The exact next action, directed by the owner, is a bounded draft-only authoring slice for the
+frozen `kv-core-abstain-02` pair — a train-split abstention pair whose question asks for a
+neighboring OECD observation scope (Korea's normalised CLI) that has no owner-approved raw-data
+decision, so the gold behavior is abstention. Abstain pairs bind no source units, so the slice
+uses no new evidence, only the committed rights catalog as the fail-closed basis. The new drafts
+must stay `annotation.status=draft` pending a separate named human review. Later M2 work authors
+the remaining core records plus a separately reported set of 200–300 deterministic revision
+probes and runs the four-variant baseline suite comparing
 closed-book generation, temporal RAG, RAG plus deterministic tools, and a QLoRA-tuned evidence
 router. Temporal-leakage rate—whether a system uses information that did not exist at the
 question's `as_of` date—is the headline metric; all performance claims will be derived only from
@@ -125,7 +133,7 @@ offline executor. Five real-digest offline replays now provide `typed function c
 committed traces`, covering all routes and tools, Korean and English, explicit and implicit cutoffs,
 complete execution, and terminal planned/tool abstention without partial evidence. The repository
 passes 1,147 tests with 100% statement and branch coverage (4,679 statements, 1,568 branches)
-across 74 formatted Python files. The frozen 40-record bilingual K-VINTAGE core has its first 10
+across 74 formatted Python files. The frozen 40-record bilingual K-VINTAGE core has its first 12
 records reviewed and approved, including a
 Korean/English documentary pair over the Bank of Korea's May 2026 Economic Outlook and its later
 official English translation. A further Korean/English `kv-core-data-02` pair over the 2026-07-17
@@ -133,21 +141,27 @@ ECOS GDP snapshot was approved by Hyungbae Cho on 2026-08-20, with the focused b
 27 passing tests at that checkpoint. The `kv-core-data-03` current-account pair, drafted over the
 existing ECOS snapshot whose use in KOR-RTD is owner-approved, was approved by Hyungbae Cho on
 2026-08-21, with the focused benchmark suite at 33 passing tests at that checkpoint, bringing the
-approved count to 10/40. Feature commit `5e0da06` subsequently added two `kv-core-data-04` KOSIS
-CPI drafts over the existing committed `kosis-cpi-snapshot-20260717` whose use in KOR-RTD is
-owner-approved (ADR 0007); current focused validation is 39 tests, but named human review is
-pending, so the approved count remains 10/40 and the other 28 slots remain unauthored. I also
+approved count to 10/40. The `kv-core-data-04` KOSIS CPI pair, drafted in feature commit
+`5e0da06` over the existing committed `kosis-cpi-snapshot-20260717` whose use in KOR-RTD is
+owner-approved (ADR 0007), was approved by Hyungbae Cho on 2026-08-25, with the focused benchmark
+suite at 39 passing tests; the approved count is now 12/40, no benchmark draft is pending, and
+the other 28 slots remain unauthored and unapproved. I also
 verified the pinned Ministral 3 3B NF4/QLoRA training path on a disposable A40/CUDA 13 GPU without
-claiming model-quality gains. Next is named human review of only those two drafts; later work
-covers the remaining core, separately reported deterministic revision probes, and the four-variant
-baseline suite, with temporal leakage as the headline metric.
+claiming model-quality gains. Next, under owner direction, is a bounded draft-only authoring
+slice for the frozen `kv-core-abstain-02` train-split abstention pair, whose question asks for a
+neighboring OECD observation scope (Korea's normalised CLI) with no owner-approved raw-data
+decision, so the gold behavior is abstention; the pair binds no source units and the slice uses
+no new evidence, only the committed rights catalog as the fail-closed basis, with the new records
+held at draft status pending separate named human review; later work covers the remaining core,
+separately reported deterministic revision probes, and the four-variant baseline suite, with
+temporal leakage as the headline metric.
 
 ## Usage guardrails
 
 - Keep “In Progress” while the M2 benchmark and baseline work remains incomplete; deterministic
   offline replay does not imply benchmark completion.
 - Describe the A40 result as QLoRA *compatibility*, not fine-tuning or model improvement.
-- Do not cite core-benchmark progress beyond the approved 10/40 records, and always report the
+- Do not cite core-benchmark progress beyond the approved 12/40 records, and always report the
   human-reviewed core separately from the machine-generated probes.
 - Do not add leakage rates, quality improvements, or cost/latency figures until committed
   evaluation artifacts reproduce them.

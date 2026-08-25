@@ -3,14 +3,10 @@
 > What did the data say *then*? Vintage-conditioned evaluation and auditable briefings for Korean/English economic research.
 
 **Status:** M1b verification and vintage-contract groundwork are complete; M2 benchmark and
-baseline development is in progress with a frozen 40-record core matrix and 10/40 records
-owner-approved. Hyungbae Cho approved the Korean/English `kv-core-data-03` pair on 2026-08-21; the
-two records now live in `data/benchmark/core/core-batch-004.jsonl`. Feature commit `5e0da06` adds
-the Korean/English `kv-core-data-04` pair as two drafts in
-`data/benchmark/drafts/core-draft-005.jsonl` over the existing KOSIS CPI snapshot whose use in
-KOR-RTD is owner-approved under ADR 0007. They remain pending named human review and do not
-increase the approved count; of the 30 unapproved slots, these two are drafted and the other 28
-remain unauthored. The
+baseline development is in progress with a frozen 40-record core matrix and 12/40 records
+owner-approved. Hyungbae Cho approved the Korean/English `kv-core-data-04` pair on 2026-08-25; the
+two records now live in `data/benchmark/core/core-batch-005.jsonl`. No draft review candidate is
+pending, and the other 28 matrix slots remain unauthored and unapproved. The
 first nine ADR 0008 slices and work unit C are complete: five machine-readable real-digest traces
 were generated through the actual private offline executor, `ScriptedPlanner`, and committed
 registries and corpora in feature commit `883815b`. The trace set covers all four
@@ -117,9 +113,18 @@ baseline passed 1,141 tests across 73 formatted Python files. Later on 2026-08-2
 the existing committed `kosis-cpi-snapshot-20260717` evidence, whose use in KOR-RTD is
 owner-approved (ADR 0007). The pair reads the June 2026 national all-items CPI (2020=100) as
 `119.99` `index_2020_100` and completes coverage of all three frozen `read_snapshot_as_of`
-bindings. Current validation is 39 focused benchmark tests and 1,147 full-suite tests across 74
-formatted Python files. The approved count remains 10/40, and the exact next action is named human
-review of only these two drafts; do not pre-approve them or select another pair.
+bindings. On 2026-08-25, Hyungbae Cho approved both records without a substantive change; feature
+commit `95c5e61` records the named-review metadata, `batch-005` lifecycle tag, move to
+`data/benchmark/core/core-batch-005.jsonl`, and focused-test transition. The approval completes
+the data route's four authorable pairs (`kv-core-data-01`..`kv-core-data-04`); the fifth data pair
+`kv-core-data-05` stays reserved on the deliberately unauthored test-split unit. The approved
+count is now 12/40, and current validation is 39 focused benchmark tests and 1,147 full-suite
+tests across 74 formatted Python files. The exact next outcome is an owner-directed draft-only
+authoring slice for the frozen `kv-core-abstain-02` pair — an abstention pair (`train` split)
+whose question asks for a neighboring OECD observation scope (Korea's normalised CLI) that has no
+owner-approved raw-data decision, so the gold behavior is abstention. Abstain pairs bind no source
+units, so the slice uses no new evidence, only the committed rights catalog as the fail-closed
+basis; the new drafts must remain `annotation.status=draft` pending a separate named human review.
 Charter v2.5 and
 [ADR 0009](docs/decisions/0009-bok-economic-outlook-public-data-rights.md) additionally record the
 owner-approved `allowed` public-data ruling for official Bank of Korea Economic Outlook
