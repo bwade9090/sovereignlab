@@ -23,8 +23,7 @@ core records. `core/core-batch-003.jsonl` contains the two approved ECOS GDP rec
 `core/core-batch-004.jsonl` contains the two approved ECOS current-account records, and
 `core/core-batch-005.jsonl` contains the two approved KOSIS CPI records. Their annotations
 preserve the AI author and name the human reviewer and review timestamp. Together they
-total 12/40 approved records; the other 28 matrix slots remain unauthored and unapproved, and no
-draft review candidate remains.
+total 12/40 approved records.
 
 The Korean/English `kv-core-data-03` pair was completed as
 `drafts/core-draft-004.jsonl` on 2026-08-20 in feature commit `50c4d9c`. Hyungbae Cho approved both
@@ -56,16 +55,35 @@ decisions, public schemas, and execution runtime were not changed.
 The approval renamed `tests/benchmark/test_kosis_cpi_draft.py` to
 `tests/benchmark/test_kosis_cpi_core.py` with approved expectations and raised the approved-count
 assertions in `test_bok_outlook_core.py`, `test_ecos_gdp_core.py`, and
-`test_ecos_current_account_core.py` from 10 to 12. The focused benchmark acceptance suite passes
-39 tests across five files and confirms the approved count is 12/40, and the full suite passes
-1,147 at 100% SovereignLab statement/branch coverage across 74 Ruff-formatted Python files. The 13
-public schemas and five committed traces are unchanged. The exact next outcome is an owner-directed
-draft-only authoring slice for the frozen `kv-core-abstain-02` pair — an abstention pair (`train`
-split) whose question asks for a neighboring OECD observation scope (Korea's normalised CLI) that
-has no owner-approved raw-data decision, so the gold behavior is abstention. Abstain pairs bind no
-source units, so the slice uses no new evidence, only the committed rights catalog as the
-fail-closed basis; the new drafts must remain `annotation.status=draft` pending a separate named
-human review.
+`test_ecos_current_account_core.py` from 10 to 12.
+
+Feature commit `c20619d` adds exactly `kv-core-abstain-02-ko` and `kv-core-abstain-02-en` at
+`annotation.status=draft` in `drafts/core-draft-006.jsonl`. Both records use the frozen `abstain`
+route, `train` split, `eg-abstain-unapproved-neighboring-oecd-scope` evidence group, and parallel
+group `kv-core-abstain-02`. The pair binds no document or data units and carries no tool
+expectations and no reference answer — only a language-matched `abstention_reason`. Both questions
+ask for Korea's OECD normalised CLI value for May 2026 using only the vintage available as of
+2026-07-09. The normalised CLI is a neighboring measure outside the sole owner-approved OECD
+raw-data scope — Korea's monthly amplitude-adjusted CLI (`KOR.M.LI_AA.IX._T`, ADR 0007) — so the
+gold behavior is abstention on the missing rights basis: the abstention reasons name the approved
+scope, forbid substituting the approved series or exposing an unapproved observation, and leak no
+observation value. The cutoff is deliberately one where the approved amplitude-adjusted scope does
+resolve (edition `202607`, value `102.66`), so the drafted abstention is rights-driven, not
+availability-driven. This is the second abstain pair (after `kv-core-abstain-01`) and the first
+authored pair whose fail-closed basis is a rights boundary rather than the availability ledger.
+The matrix, source bundle, rights decisions, public schemas, and execution runtime were not
+changed. These two records remain pending named human review and do not count toward the approved
+core: 12/40 records are approved, two of the other 28 are drafts, and 26 remain unauthored and
+unapproved.
+
+The preceding approval checkpoint passed 39 focused benchmark tests and 1,147 full-suite tests
+across 74 formatted Python files. The current draft checkpoint adds six focused tests:
+`tests/benchmark/test_oecd_scope_abstain_draft.py` passes all six and asserts the serialized
+records contain neither `102.66` nor the CLI source or ledger identifiers, the combined focused
+benchmark suite passes 45 across six files, and the full suite passes 1,153 at 100% SovereignLab
+statement/branch coverage across 75 Ruff-formatted Python files. The 13 public schemas and five
+committed traces are unchanged. The exact next action is named human review of only these two
+drafts; do not pre-approve them or select another pair.
 
 The matrix assigns every planned documentary or data source unit to one dataset split. Do not
 replace a reserved unit or move a pair between splits without a versioned matrix change, tests, and

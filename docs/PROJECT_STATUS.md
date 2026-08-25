@@ -21,8 +21,10 @@
   first Korean/English documentary pair, the `kv-core-data-02` Korean/English ECOS GDP pair in
   `data/benchmark/core/core-batch-003.jsonl`, the `kv-core-data-03` Korean/English ECOS
   current-account pair in `data/benchmark/core/core-batch-004.jsonl`, and the `kv-core-data-04`
-  Korean/English KOSIS CPI pair now in `data/benchmark/core/core-batch-005.jsonl`. No draft is
-  pending, and the other 28 matrix slots are not yet authored or approved. The offline bilingual
+  Korean/English KOSIS CPI pair now in `data/benchmark/core/core-batch-005.jsonl`. The
+  `kv-core-abstain-02` Korean/English OECD scope abstention pair is complete at `status=draft` in
+  `data/benchmark/drafts/core-draft-006.jsonl` and awaits named human review. The other 28 matrix
+  slots remain unapproved: two are the pending drafts and 26 are unauthored. The offline bilingual
   temporal document retriever is now
   implemented with manifest-bound chunks and publication-date filtering before scoring; only
   synthetic fixtures were used. The first real bilingual document-manifest unit is also complete:
@@ -528,15 +530,38 @@
   aware review timestamp `2026-08-25T07:10:15Z`, changes only the lifecycle tag from `draft-005`
   to `batch-005`, renames the focused draft tests to `test_kosis_cpi_core.py` with approved
   expectations, and raises the approved-count assertions in `test_bok_outlook_core.py`,
-  `test_ecos_gdp_core.py`, and `test_ecos_current_account_core.py` from 10 to 12. The approved
-  human-reviewed core is now 12/40 across `core-batch-001.jsonl` (4 records),
+  `test_ecos_gdp_core.py`, and `test_ecos_current_account_core.py` from 10 to 12. At that
+  approval checkpoint, the approved core was 12/40 across `core-batch-001.jsonl` (4 records),
   `core-batch-002.jsonl` (2), `core-batch-003.jsonl` (2), `core-batch-004.jsonl` (2), and
-  `core-batch-005.jsonl` (2); the remaining 28 matrix slots are unauthored and unapproved, and no
-  draft is pending. This approval completes the data route's four authorable pairs
+  `core-batch-005.jsonl` (2); the remaining 28 matrix slots were unauthored and unapproved, and
+  no draft was pending. This approval completes the data route's four authorable pairs
   (`kv-core-data-01`–`kv-core-data-04`); the fifth data pair `kv-core-data-05` stays reserved on
   the deliberately unauthored test-split unit. The frozen matrix, source bundle, rights
   decisions, normalization contract, 13 public schemas, five committed traces, and runtime source
   are unchanged.
+
+- **Bilingual OECD scope abstention draft pair (2026-08-25):** functional commit `c20619d` adds
+  exactly `kv-core-abstain-02-ko` and `kv-core-abstain-02-en` at `status=draft` in
+  `data/benchmark/drafts/core-draft-006.jsonl`, plus focused contract tests. Both records
+  preserve the frozen `train` / `abstain` allocation, the
+  `eg-abstain-unapproved-neighboring-oecd-scope` evidence group, and parallel group
+  `kv-core-abstain-02`; they bind no document or data units and carry no tool expectations and no
+  reference answer — only a language-matched abstention reason. Both questions ask for Korea's
+  OECD normalised CLI value for May 2026 using only the vintage available as of 2026-07-09. The
+  normalised CLI is a neighboring measure outside the sole owner-approved OECD raw-data scope —
+  Korea's monthly amplitude-adjusted CLI, `KOR.M.LI_AA.IX._T` (ADR 0007) — so the gold behavior
+  is abstention on the missing rights basis: the abstention reasons name the approved scope,
+  forbid substituting the approved series or exposing an unapproved observation, and leak no
+  observation value (the focused tests assert the serialized records contain neither `102.66`
+  nor the CLI source/ledger IDs). The 2026-07-09 cutoff is deliberately one where the approved
+  amplitude-adjusted scope does resolve (edition `202607`, value `102.66`), so a focused contrast
+  test proves the drafted abstention is rights-driven, not availability-driven. This is the
+  second abstain pair (after `kv-core-abstain-01`) and the first authored pair whose fail-closed
+  basis is a rights boundary rather than the availability ledger. The approved human-reviewed
+  core remains 12/40; of the other 28 unapproved matrix slots, these two are pending drafts and
+  26 remain unauthored. The frozen matrix, approved core, source bundle, rights decisions,
+  normalization contract, 13 public schemas, five committed traces, and runtime source are
+  unchanged.
 
 ## Current validation evidence
 
@@ -927,6 +952,18 @@ the five committed replay traces remained unchanged, and the git diff was clean.
 commit `95c5e61` contains only the two-record lifecycle transition and focused test updates; the
 frozen matrix, source, rights, schema, trace, and runtime boundaries did not change. The work was
 entirely offline and cost $0.00.
+
+Validated 2026-08-25 on Windows after the bilingual OECD scope abstention draft slice: all six new
+focused tests passed, the six focused benchmark files (`test_core_batch.py`,
+`test_bok_outlook_core.py`, `test_ecos_gdp_core.py`, `test_ecos_current_account_core.py`,
+`test_kosis_cpi_core.py`, and `test_oecd_scope_abstain_draft.py`) passed all 45 tests, and the
+full suite passed all 1,153 tests with 100% SovereignLab statement/branch coverage (4,679
+statements, 1,568 branches) under a fresh OS `--basetemp`. Ruff check and format check passed
+across 75 Python files. All 13 public schemas regenerated deterministically and the git diff was
+clean. Functional commit `c20619d` contains exactly the two draft records and their six focused
+tests (175 insertions, nothing else changed); the frozen matrix, approved core, source, rights,
+schema, trace, and runtime boundaries did not change. The work was entirely offline and cost
+$0.00.
 
 ## M1b verification spike record (2026-07-15)
 
@@ -1337,15 +1374,51 @@ response bodies.
   uses no new evidence, only the committed rights catalog as the fail-closed basis. The new
   drafts must stay `status=draft` pending a separate named human review.
 
-## Immediate next action (M2 — draft-only authoring of the `kv-core-abstain-02` pair)
+## Session-close snapshot (2026-08-25, twenty-fourth close: OECD scope abstention bilingual drafts complete)
 
-1. Author only the frozen `kv-core-abstain-02` Korean/English abstention pair (`train` split) as
-   a bounded draft-only slice. Its question asks for a neighboring OECD observation scope —
-   Korea's normalised CLI — that has no owner-approved raw-data decision, so the gold behavior is
-   abstention. Abstain pairs bind no source units; use no new evidence, only the committed rights
-   catalog as the fail-closed basis. Do not fetch a source or touch another matrix slot.
-2. Keep both new records at `status=draft` pending a separate named human review. Do not approve
-   them, move them into `core/`, or raise the approved count above 12/40 in the authoring change.
+- Functional commit `c20619d` adds exactly `kv-core-abstain-02-ko` and `kv-core-abstain-02-en` to
+  `data/benchmark/drafts/core-draft-006.jsonl` at `status=draft`, together with six focused tests
+  in `tests/benchmark/test_oecd_scope_abstain_draft.py` — 175 insertions and nothing else. No
+  approved benchmark record or frozen matrix row changed.
+- Both drafts preserve the frozen `train` / `abstain` allocation, the
+  `eg-abstain-unapproved-neighboring-oecd-scope` evidence group, and parallel group
+  `kv-core-abstain-02`. They bind no document or data units and carry no tool expectations and no
+  reference answer — only a language-matched abstention reason. Both questions ask for Korea's
+  OECD normalised CLI value for May 2026 using only the vintage available as of 2026-07-09; the
+  normalised CLI is a neighboring measure outside the sole owner-approved OECD raw-data scope —
+  Korea's monthly amplitude-adjusted CLI, `KOR.M.LI_AA.IX._T` (ADR 0007) — so the gold behavior
+  is abstention on the missing rights basis. The abstention reasons name the approved scope,
+  forbid substituting the approved series or exposing an unapproved observation, and leak no
+  observation value; the focused tests assert the serialized records contain neither `102.66` nor
+  the CLI source/ledger IDs. Their annotations record `Claude AI draft` at `2026-08-25T07:14:19Z`
+  with no reviewer metadata.
+- The 2026-07-09 cutoff is deliberately one where the approved amplitude-adjusted scope does
+  resolve (edition `202607`, value `102.66`); a focused contrast test proves the drafted
+  abstention is rights-driven, not availability-driven. This is the second abstain pair (after
+  `kv-core-abstain-01`) and the first authored pair whose fail-closed basis is a rights boundary
+  rather than the availability ledger.
+- M2 remains active with exactly 12/40 owner-approved core records. The other 28 matrix slots
+  remain unapproved: these two records are pending drafts and 26 slots remain unauthored. No
+  subsequent pair or implementation slice is selected.
+- Python 3.12.13 validation is green: six new focused tests; 45 focused benchmark tests across
+  six files; 1,153 full-suite tests at 100% SovereignLab statement/branch coverage (4,679
+  statements, 1,568 branches) with a fresh OS `--basetemp`; Ruff checking and format checking
+  across 75 Python files; deterministic regeneration of all 13 public schemas; and a clean git
+  diff. The committed trace count remains five, and this draft slice cost $0.00.
+- The exact next action is only named human review of these two drafts. Do not pre-approve them,
+  move them into `core/`, raise the approved count, select another pair, or change the source,
+  rights, matrix, schema, trace, runtime, provider/live-model, GPU, paid, or deferred-loop scope.
+
+## Immediate next action (M2 — named human review of `kv-core-abstain-02` only)
+
+1. Review only `kv-core-abstain-02-ko` and `kv-core-abstain-02-en` in
+   `data/benchmark/drafts/core-draft-006.jsonl` against the frozen matrix and the committed
+   rights catalog: bilingual wording, `as_of`, route, split, evidence group, parallel group, the
+   absence of bound units, tool expectations, and reference answers, and the language-matched
+   abstention reasons' rights basis and no-observation-leak boundary.
+2. Do not mark either record approved, move it into `core/`, or raise the approved count above
+   12/40 without an explicit named human decision. Stop after recording that decision and a green
+   full baseline; do not select or author another pair.
 3. Preserve the frozen matrix, approved core, source, rights, schema, trace, and runtime boundaries;
    do not begin provider/live-model integration, paid work, probes, or the deferred bounded loop.
 
@@ -1448,6 +1521,7 @@ complete.
 | 2026-08-21 | Owner approval of the bilingual ECOS current-account pair | $0.00 | Named reviewer metadata, lifecycle move to `core-batch-004`, focused/full offline validation, and governance update only; no matrix, source, rights, schema, trace, runtime, network, provider/live-model, GPU, or paid change |
 | 2026-08-21 | Bilingual KOSIS CPI draft pair | $0.00 | Exactly two draft records from the existing KOSIS snapshot whose KOR-RTD use is owner-approved, focused tests, and full fresh-OS-basetemp validation only; no matrix, approved-core, source, rights, schema, trace, runtime, network, provider/live-model, GPU, or paid change |
 | 2026-08-25 | Owner approval of the bilingual KOSIS CPI pair | $0.00 | Named reviewer metadata, lifecycle move to `core-batch-005`, focused/full offline validation, and governance update only; no matrix, source, rights, schema, trace, runtime, network, provider/live-model, GPU, or paid change |
+| 2026-08-25 | Bilingual OECD scope abstention draft pair | $0.00 | Exactly two draft records binding no source units, using only the committed rights catalog as the fail-closed basis, focused tests, and full fresh-OS-basetemp validation only; no matrix, approved-core, source, rights, schema, trace, runtime, network, provider/live-model, GPU, or paid change |
 
 **Cumulative external spend: $0.23584524099715054 / $100.00**
 
@@ -1511,11 +1585,15 @@ Read in this order, in full, before changing anything:
     `tests/benchmark/test_kosis_cpi_core.py` — the approved two-record KOSIS CPI core batch and
     its focused frozen-allocation, evidence, cutoff, bilingual-parity, and approval-lifecycle
     checks.
+26. `data/benchmark/drafts/core-draft-006.jsonl` and
+    `tests/benchmark/test_oecd_scope_abstain_draft.py` — the pending two-record OECD scope
+    abstention draft pair and its frozen-allocation, no-bound-unit, rights-basis,
+    bilingual-parity, draft-lifecycle, and no-observation-leak checks.
 
-Then follow "Immediate next action" item 1: author only the two `kv-core-abstain-02` drafts. The
-structural matrix and first twelve records are owner-approved; no draft is pending, and the other
-28 slots are neither authored nor approved. The owner-directed next outcome is only the bounded
-draft-only `kv-core-abstain-02` authoring slice.
+Then follow "Immediate next action" item 1: review only the two `kv-core-abstain-02` drafts. The
+structural matrix and first twelve records are owner-approved; the other 28 slots remain
+unapproved, with two pending drafts and 26 unauthored slots. No later pair or implementation
+slice has been selected.
 The synthetic retrieval baseline and first real bilingual document manifests are complete. ADR
 0009 resolves those
 manifests to `allowed`, but full PDFs and extracted full text remain outside Git by current

@@ -34,8 +34,8 @@ large-number presentation, rounding, and grading tolerances are also frozen and 
 The project passed its first milestone gate and is midway through the benchmark-and-baselines
 milestone. Its evidence, benchmark, core-authoring-matrix, availability-ledger, rights, and
 execution contracts are published as 13 synchronized deterministic JSON Schemas; the offline
-resolver and GitHub Actions harvester are operational; and 1,147 tests pass with 100% statement
-and branch coverage (4,679 statements, 1,568 branches) across 74 formatted Python files. The
+resolver and GitHub Actions harvester are operational; and 1,153 tests pass with 100% statement
+and branch coverage (4,679 statements, 1,568 branches) across 75 formatted Python files. The
 40-question human-reviewed bilingual core is frozen as an allocation, and 12 of 40 records —
 initially AI-authored, then approved under
 named human review —
@@ -78,13 +78,30 @@ national all-items consumer price index of 119.99 (2020=100) from the existing c
 2026-07-17 KOSIS snapshot whose use in KOR-RTD is owner-approved under ADR 0007. The records now
 live in `data/benchmark/core/core-batch-005.jsonl`, with only the annotation status, reviewer
 fields, and lifecycle tag changed; the frozen matrix, source bundle, rights decisions, 13 public
-schemas, five committed traces, source package, and execution runtime are unchanged. The approved
-core is now 12 of 40 records, no benchmark draft is pending, and the other 28 matrix slots remain
-unauthored and unapproved. This approval completes the data route's four authorable pairs
-(`kv-core-data-01` through `kv-core-data-04`); the fifth data pair `kv-core-data-05` stays
-reserved on the deliberately unauthored test-split unit. At this approval checkpoint the focused
-benchmark suite passes 39 tests across five files and the full baseline passes 1,147 tests across
-74 formatted Python files.
+schemas, five committed traces, source package, and execution runtime are unchanged. That
+approval brought the approved core to 12 of 40 records and completed the data route's four
+authorable pairs (`kv-core-data-01` through `kv-core-data-04`); the fifth data pair
+`kv-core-data-05` stays reserved on the deliberately unauthored test-split unit. At that approval
+checkpoint the focused benchmark suite passed 39 tests across five files and the full baseline
+passed 1,147 tests across 74 formatted Python files.
+
+Feature commit `c20619d` adds the Korean/English `kv-core-abstain-02` pair as two AI-authored
+drafts in `data/benchmark/drafts/core-draft-006.jsonl`. Both questions ask for Korea's OECD
+normalised composite leading indicator value for May 2026 using only the vintage available as of
+2026-07-09 — a neighboring measure outside the sole owner-approved OECD raw-data scope, Korea's
+monthly amplitude-adjusted CLI (`KOR.M.LI_AA.IX._T`, ADR 0007) — so the drafted gold behavior is
+abstention on the missing rights basis. The pair binds no document or data units and carries no
+tool expectations and no reference answer, only a language-matched abstention reason that names
+the approved scope, forbids substituting the approved series or exposing an unapproved
+observation, and leaks no observation value. The cutoff is deliberately one where the approved
+amplitude-adjusted scope does resolve (edition 202607, value 102.66), and a focused contrast test
+proves the drafted abstention is rights-driven, not availability-driven — this is the second
+abstention pair after `kv-core-abstain-01` and the first authored pair whose fail-closed basis is
+a rights boundary rather than the availability ledger. Six pair-specific tests and 45 focused
+benchmark tests pass; the pair remains pending named human review, so the approved count stays
+12/40. Of the 28 unapproved records, these two are drafted and the other 26 remain unauthored.
+The frozen matrix, approved core, source bundle, rights decisions, 13 public schemas, five
+committed traces, source package, and execution runtime are unchanged.
 
 On the execution side, the project has shipped `typed function calling with committed traces`.
 A strict typed execution-and-trace contract freezes the bilingual request, four-route plan, exactly
@@ -104,14 +121,10 @@ language-model-only LoRA boundaries, finite gradients, a changed adapter tensor,
 output. This is deliberately reported as a training-path compatibility result, not as evidence of
 improved model quality.
 
-The exact next action, directed by the owner, is a bounded draft-only authoring slice for the
-frozen `kv-core-abstain-02` pair — a train-split abstention pair whose question asks for a
-neighboring OECD observation scope (Korea's normalised CLI) that has no owner-approved raw-data
-decision, so the gold behavior is abstention. Abstain pairs bind no source units, so the slice
-uses no new evidence, only the committed rights catalog as the fail-closed basis. The new drafts
-must stay `annotation.status=draft` pending a separate named human review. Later M2 work authors
-the remaining core records plus a separately reported set of 200–300 deterministic revision
-probes and runs the four-variant baseline suite comparing
+The exact next action is named human review of only the two `kv-core-abstain-02` drafts. They
+must not be pre-approved, and no later pair should be selected within that review gate. Later M2
+work authors the remaining core records plus a separately reported set of 200–300 deterministic
+revision probes and runs the four-variant baseline suite comparing
 closed-book generation, temporal RAG, RAG plus deterministic tools, and a QLoRA-tuned evidence
 router. Temporal-leakage rate—whether a system uses information that did not exist at the
 question's `as_of` date—is the headline metric; all performance claims will be derived only from
@@ -132,8 +145,8 @@ boundary, an internal deterministic evidence-packet assembler, and a private pro
 offline executor. Five real-digest offline replays now provide `typed function calling with
 committed traces`, covering all routes and tools, Korean and English, explicit and implicit cutoffs,
 complete execution, and terminal planned/tool abstention without partial evidence. The repository
-passes 1,147 tests with 100% statement and branch coverage (4,679 statements, 1,568 branches)
-across 74 formatted Python files. The frozen 40-record bilingual K-VINTAGE core has its first 12
+passes 1,153 tests with 100% statement and branch coverage (4,679 statements, 1,568 branches)
+across 75 formatted Python files. The frozen 40-record bilingual K-VINTAGE core has its first 12
 records reviewed and approved, including a
 Korean/English documentary pair over the Bank of Korea's May 2026 Economic Outlook and its later
 official English translation. A further Korean/English `kv-core-data-02` pair over the 2026-07-17
@@ -144,17 +157,17 @@ existing ECOS snapshot whose use in KOR-RTD is owner-approved, was approved by H
 approved count to 10/40. The `kv-core-data-04` KOSIS CPI pair, drafted in feature commit
 `5e0da06` over the existing committed `kosis-cpi-snapshot-20260717` whose use in KOR-RTD is
 owner-approved (ADR 0007), was approved by Hyungbae Cho on 2026-08-25, with the focused benchmark
-suite at 39 passing tests; the approved count is now 12/40, no benchmark draft is pending, and
-the other 28 slots remain unauthored and unapproved. I also
+suite at 39 passing tests at that checkpoint, bringing the approved count to 12/40. Feature
+commit `c20619d` subsequently added two `kv-core-abstain-02` drafts — a train-split abstention
+pair whose questions ask for Korea's OECD normalised CLI, a neighboring measure outside the sole
+owner-approved raw-data scope (`KOR.M.LI_AA.IX._T`, ADR 0007), so the drafted gold behavior is a
+rights-based abstention that binds no source units and leaks no observation value; current
+focused validation is 45 tests, but named human review is pending, so the approved count remains
+12/40 and the other 26 slots remain unauthored. I also
 verified the pinned Ministral 3 3B NF4/QLoRA training path on a disposable A40/CUDA 13 GPU without
-claiming model-quality gains. Next, under owner direction, is a bounded draft-only authoring
-slice for the frozen `kv-core-abstain-02` train-split abstention pair, whose question asks for a
-neighboring OECD observation scope (Korea's normalised CLI) with no owner-approved raw-data
-decision, so the gold behavior is abstention; the pair binds no source units and the slice uses
-no new evidence, only the committed rights catalog as the fail-closed basis, with the new records
-held at draft status pending separate named human review; later work covers the remaining core,
-separately reported deterministic revision probes, and the four-variant baseline suite, with
-temporal leakage as the headline metric.
+claiming model-quality gains. Next is named human review of only those two drafts; later work
+covers the remaining core, separately reported deterministic revision probes, and the
+four-variant baseline suite, with temporal leakage as the headline metric.
 
 ## Usage guardrails
 

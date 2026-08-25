@@ -125,12 +125,25 @@ the 13 public schemas, and the five committed replay traces remain unchanged. Th
 completes the data route's four authorable pairs (`kv-core-data-01`..`kv-core-data-04`); the
 fifth data pair `kv-core-data-05` stays reserved on the deliberately unauthored test-split unit.
 
-No benchmark draft is pending and 28 matrix slots remain unauthored and unapproved. The
-owner-directed next outcome is a bounded draft-only authoring slice for the frozen
-`kv-core-abstain-02` pair: an abstention pair on the train split whose question asks for a
-neighboring OECD observation scope (Korea's normalised CLI) that has no owner-approved raw-data
-decision, so the gold behavior is abstention. Abstain pairs bind no source units, so the slice
-uses no new evidence, only the committed rights catalog as the fail-closed basis. The new drafts
-must stay `annotation.status=draft` pending a separate named human review. Provider or live-model
-integration remains absent, and the bounded tool loop deferred by ADR 0008 remains outside the
-completed approval slice.
+The next bounded authoring slice completed on 2026-08-25 at feature commit `c20619d`. It added
+exactly the two draft-only `kv-core-abstain-02` Korean/English records in
+`data/benchmark/drafts/core-draft-006.jsonl`: an abstention pair on the train split whose
+questions ask for Korea's OECD normalised CLI value for May 2026 using only the vintage available
+as of 2026-07-09. That neighboring measure sits outside the sole owner-approved OECD raw-data
+scope (Korea's monthly amplitude-adjusted CLI, `KOR.M.LI_AA.IX._T`, ADR 0007), so the drafted
+gold behavior is abstention on the missing rights basis: the pair binds no document or data units
+and uses no new evidence, only the committed rights catalog as the fail-closed basis, and its
+language-matched abstention reasons name the approved scope, forbid substituting the approved
+series or exposing an unapproved observation, and leak no observation value. The cutoff is
+deliberately one where the approved scope does resolve, so the abstention is rights-driven, not
+availability-driven. This is the second abstain pair, after `kv-core-abstain-01`, and the first
+authored pair whose fail-closed basis is a rights boundary rather than the availability ledger.
+Neither record has named review metadata or enters `core/`, so the approved core remains 12/40:
+two draft records are pending review and 26 matrix slots remain unauthored and unapproved.
+
+The frozen matrix, execution contracts and runtime, source bytes and manifests, rights decisions,
+normalization rules, approved core, 13 public schemas, and five committed traces are unchanged.
+The exact next independent slice is only named human review of those two drafts. Do not pre-approve
+or move them into `core/`, increase the approved count, or select or author a later pair before
+that decision. Provider or live-model integration remains absent, and the bounded tool loop
+deferred by ADR 0008 remains outside this authoring slice.

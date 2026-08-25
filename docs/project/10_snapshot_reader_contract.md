@@ -221,11 +221,20 @@ questions, answers, cutoff, tool expectations, the frozen matrix, execution cont
 runtime, source bytes and manifests, rights decisions, normalization, the 13 public schemas, and
 the five committed traces remain unchanged.
 
-No benchmark draft is pending. The exact next slice, directed by the owner, is a bounded
-draft-only authoring slice for the frozen `kv-core-abstain-02` pair: an abstention pair on the
-train split whose question asks for a neighboring OECD observation scope (Korea's normalised
-CLI) that has no owner-approved raw-data decision, so the gold behavior is abstention. Abstain
-pairs bind no source units, so the slice uses no new evidence, only the committed rights catalog
-as the fail-closed basis. Those new drafts must stay `annotation.status=draft` pending a separate
-named human review. Provider or live-model integration remains absent, and the bounded tool loop
-deferred by ADR 0008 remains outside the completed approval slice.
+The next bounded authoring slice completed on 2026-08-25 at feature commit `c20619d`. It added
+exactly the two draft-only `kv-core-abstain-02` Korean/English records in
+`data/benchmark/drafts/core-draft-006.jsonl`. The abstain pair binds no document or data units and
+carries no tool expectations or reference answer, only a language-matched abstention reason: both
+questions ask for Korea's OECD normalised CLI value for May 2026 as of 2026-07-09, a neighboring
+measure outside the sole owner-approved OECD raw-data scope (Korea's monthly amplitude-adjusted
+CLI, `KOR.M.LI_AA.IX._T`, ADR 0007), so the gold behavior is abstention on the missing rights
+basis even though the approved scope itself resolves at that cutoff. Neither record has named
+review metadata or enters `core/`, so the approved core remains 12/40: two draft records are
+pending review and 26 matrix slots remain unauthored and unapproved.
+
+The frozen matrix, execution contracts and runtime, source bytes and manifests, rights decisions,
+normalization rules, approved core, 13 public schemas, and five committed traces are unchanged.
+The exact next independent slice is only named human review of those two drafts. Do not pre-approve
+or move them into `core/`, increase the approved count, or select or author a later pair before
+that decision. Provider or live-model integration remains absent, and the bounded tool loop
+deferred by ADR 0008 remains outside this authoring slice.

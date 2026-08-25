@@ -5,8 +5,13 @@
 **Status:** M1b verification and vintage-contract groundwork are complete; M2 benchmark and
 baseline development is in progress with a frozen 40-record core matrix and 12/40 records
 owner-approved. Hyungbae Cho approved the Korean/English `kv-core-data-04` pair on 2026-08-25; the
-two records now live in `data/benchmark/core/core-batch-005.jsonl`. No draft review candidate is
-pending, and the other 28 matrix slots remain unauthored and unapproved. The
+two records now live in `data/benchmark/core/core-batch-005.jsonl`. Feature commit `c20619d` adds
+the Korean/English `kv-core-abstain-02` pair as two drafts in
+`data/benchmark/drafts/core-draft-006.jsonl`; the abstention pair binds no source units, and its
+gold behavior is abstention because Korea's OECD normalised CLI lies outside the sole
+owner-approved OECD raw-data scope (ADR 0007). They remain pending named human review and do not
+increase the approved count; of the 28 unapproved slots, these two are drafted and the other 26
+remain unauthored. The
 first nine ADR 0008 slices and work unit C are complete: five machine-readable real-digest traces
 were generated through the actual private offline executor, `ScriptedPlanner`, and committed
 registries and corpora in feature commit `883815b`. The trace set covers all four
@@ -16,9 +21,9 @@ source package is unchanged, the public surface remains 13 deterministic JSON Sc
 executor descriptor still pins 32 source entries and digest
 `08f45dab6a36a49cb7d0b588a69236942cd61534540bd4de0772010402dada64`.
 The focused executor/replay-trace acceptance run passes 80 tests at 100% coverage over 326
-statements and 98 branches, and the focused benchmark acceptance run passes 39 tests. The full
-offline baseline is 1,147 tests at 100% statement/branch coverage (4,679 statements, 1,568
-branches) across 74 Ruff-formatted Python files. The shipped
+statements and 98 branches, and the focused benchmark acceptance run passes 45 tests. The full
+offline baseline is 1,153 tests at 100% statement/branch coverage (4,679 statements, 1,568
+branches) across 75 Ruff-formatted Python files. The shipped
 minimal reference path is described only as `typed function calling with committed traces`. These
 are deterministic offline replays, not provider or live outputs; no provider/live integration or
 bounded tool loop exists, and no model-quality or briefing-performance claim is made. Searchable
@@ -117,14 +122,20 @@ bindings. On 2026-08-25, Hyungbae Cho approved both records without a substantiv
 commit `95c5e61` records the named-review metadata, `batch-005` lifecycle tag, move to
 `data/benchmark/core/core-batch-005.jsonl`, and focused-test transition. The approval completes
 the data route's four authorable pairs (`kv-core-data-01`..`kv-core-data-04`); the fifth data pair
-`kv-core-data-05` stays reserved on the deliberately unauthored test-split unit. The approved
-count is now 12/40, and current validation is 39 focused benchmark tests and 1,147 full-suite
-tests across 74 formatted Python files. The exact next outcome is an owner-directed draft-only
-authoring slice for the frozen `kv-core-abstain-02` pair — an abstention pair (`train` split)
-whose question asks for a neighboring OECD observation scope (Korea's normalised CLI) that has no
-owner-approved raw-data decision, so the gold behavior is abstention. Abstain pairs bind no source
-units, so the slice uses no new evidence, only the committed rights catalog as the fail-closed
-basis; the new drafts must remain `annotation.status=draft` pending a separate named human review.
+`kv-core-data-05` stays reserved on the deliberately unauthored test-split unit. At that approval
+checkpoint, the focused benchmark suite passed 39 tests and the full baseline passed 1,147 tests
+across 74 formatted Python files. Later on 2026-08-25, feature commit `c20619d` added only the
+draft Korean/English `kv-core-abstain-02` pair and six focused tests. The abstention pair
+(`train` split) binds no document or data units, carries no tool expectations and no reference
+answer, and asks for Korea's OECD normalised CLI value for May 2026 using only the vintage
+available as of 2026-07-09 — a neighboring measure outside the sole owner-approved OECD raw-data
+scope, Korea's monthly amplitude-adjusted CLI (`KOR.M.LI_AA.IX._T`, ADR 0007) — so each record
+carries only a language-matched abstention reason on the missing rights basis and leaks no
+observation value. The approved scope deliberately does resolve at that cutoff, so the drafted
+abstention is rights-driven, not availability-driven. Current validation is 45 focused benchmark
+tests and 1,153 full-suite tests across 75 formatted Python files. The approved count remains
+12/40, and the exact next action is named human review of only these two drafts; do not
+pre-approve them or select another pair.
 Charter v2.5 and
 [ADR 0009](docs/decisions/0009-bok-economic-outlook-public-data-rights.md) additionally record the
 owner-approved `allowed` public-data ruling for official Bank of Korea Economic Outlook
