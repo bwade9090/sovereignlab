@@ -1,4 +1,4 @@
-"""Contract and evidence checks for the draft kv-core-abstain-03 pair."""
+"""Contract and evidence checks for the approved kv-core-abstain-03 pair."""
 
 from datetime import date, timedelta
 from pathlib import Path
@@ -19,6 +19,7 @@ from sovereignlab.schemas import (
 ROOT = Path(__file__).resolve().parents[2]
 MATRIX_PATH = ROOT / "data" / "benchmark" / "core-authoring-matrix-v1.json"
 CORE_DIRECTORY = ROOT / "data" / "benchmark" / "core"
+BATCH_PATH = CORE_DIRECTORY / "core-batch-007.jsonl"
 DRAFT_PATH = ROOT / "data" / "benchmark" / "drafts" / "core-draft-007.jsonl"
 RIGHTS_CATALOG_ID = "kor-rtd-rights-2026-07-17"
 APPROVED_OECD_ITEM_ID = "KOR.M.LI_AA.IX._T"
@@ -34,8 +35,8 @@ def _records(path: Path) -> tuple[BenchmarkRecord, ...]:
     )
 
 
-def _draft_records() -> tuple[BenchmarkRecord, ...]:
-    return _records(DRAFT_PATH)
+def _core_records() -> tuple[BenchmarkRecord, ...]:
+    return _records(BATCH_PATH)
 
 
 def _catalog() -> RightsCatalog:
@@ -44,11 +45,12 @@ def _catalog() -> RightsCatalog:
     )
 
 
-def test_draft_pair_matches_the_frozen_allocation_and_has_no_review_metadata() -> None:
+def test_approved_pair_matches_the_frozen_allocation_and_review_metadata() -> None:
     matrix = CoreAuthoringMatrix.model_validate_json(MATRIX_PATH.read_text(encoding="utf-8"))
     pair = next(item for item in matrix.pairs if item.pair_id == "kv-core-abstain-03")
-    records = _draft_records()
+    records = _core_records()
 
+    assert not DRAFT_PATH.exists()
     assert tuple(record.record_id for record in records) == (
         pair.ko_record_id,
         pair.en_record_id,
@@ -67,39 +69,38 @@ def test_draft_pair_matches_the_frozen_allocation_and_has_no_review_metadata() -
     assert all(record.reference_answer is None for record in records)
     assert all(record.abstention_reason for record in records)
     assert all(record.as_of == AS_OF for record in records)
-    assert all(record.annotation.status is AnnotationStatus.DRAFT for record in records)
+    assert all(record.annotation.status is AnnotationStatus.APPROVED for record in records)
     assert all(record.annotation.annotated_by == "Claude AI draft" for record in records)
-    assert all(record.annotation.reviewed_by is None for record in records)
-    assert all(record.annotation.reviewed_at is None for record in records)
-    annotation_times = {record.annotation.annotated_at for record in records}
-    assert len(annotation_times) == 1
-    assert next(iter(annotation_times)).utcoffset() == timedelta(0)
+    assert all(record.annotation.reviewed_by == "Hyungbae Cho" for record in records)
+    review_times = {record.annotation.reviewed_at for record in records}
+    assert None not in review_times
+    assert len(review_times) == 1
+    reviewed_at = next(iter(review_times))
+    assert reviewed_at is not None
+    assert reviewed_at.utcoffset() == timedelta(0)
+    assert all(record.annotation.annotated_at <= reviewed_at for record in records)
     expected_tags = (
         "core",
         "temporal",
         "vintage",
         "abstention",
         "false-premise",
-        "draft-007",
+        "batch-007",
     )
     assert all(record.tags == expected_tags for record in records)
 
 
-def test_approved_core_remains_fourteen_and_drafts_are_separate() -> None:
-    matrix = CoreAuthoringMatrix.model_validate_json(MATRIX_PATH.read_text(encoding="utf-8"))
+def test_approved_core_contains_sixteen_records_and_the_new_pair() -> None:
     approved = tuple(
         record for path in sorted(CORE_DIRECTORY.glob("*.jsonl")) for record in _records(path)
     )
-    drafts = _draft_records()
-    approved_ids = {record.record_id for record in approved}
-    draft_ids = {record.record_id for record in drafts}
+    records = _core_records()
 
-    assert len(approved) == 14
+    assert len(approved) == 16
     assert all(record.annotation.status is AnnotationStatus.APPROVED for record in approved)
-    assert len(drafts) == 2
-    assert all(record.annotation.status is AnnotationStatus.DRAFT for record in drafts)
-    assert approved_ids.isdisjoint(draft_ids)
-    assert matrix.target_record_count - len(approved) - len(drafts) == 24
+    assert {record.record_id for record in records} <= {record.record_id for record in approved}
+    assert len(records) == 2
+    assert all(record.annotation.status is AnnotationStatus.APPROVED for record in records)
 
 
 def test_rights_catalog_approves_no_oecd_cpi_revision_scope() -> None:
@@ -109,20 +110,20 @@ def test_rights_catalog_approves_no_oecd_cpi_revision_scope() -> None:
     }
 
     assert oecd_items == {APPROVED_OECD_ITEM_ID}
-    for record in _draft_records():
+    for record in _core_records():
         assert APPROVED_OECD_ITEM_ID in record.abstention_reason
 
 
-def test_draft_pair_forms_a_bundle_without_evidence_sources() -> None:
+def test_approved_pair_forms_a_bundle_without_evidence_sources() -> None:
     BenchmarkBundle(
         sources=(),
-        records=_draft_records(),
+        records=_core_records(),
         rights_catalogs=(_catalog(),),
     )
 
 
 def test_bilingual_claims_are_parallel_and_leak_no_observation_value() -> None:
-    korean, english = _draft_records()
+    korean, english = _core_records()
 
     assert "에디션" in korean.question
     assert "2019년 11월" in korean.question

@@ -68,7 +68,7 @@ def test_document_core_pair_matches_frozen_matrix_and_is_approved() -> None:
     assert all("batch-002" in record.tags for record in records)
     assert all("draft-002" not in record.tags for record in records)
 
-    assert len(approved) == 14
+    assert len(approved) == 16
     assert all(record.annotation.status is AnnotationStatus.APPROVED for record in approved)
 
 
