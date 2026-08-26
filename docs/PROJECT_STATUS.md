@@ -24,8 +24,10 @@
   Korean/English KOSIS CPI pair in `data/benchmark/core/core-batch-005.jsonl`, the
   `kv-core-abstain-02` Korean/English OECD scope abstention pair in
   `data/benchmark/core/core-batch-006.jsonl`, and the `kv-core-abstain-03` Korean/English CPI
-  revision false-premise abstention pair now in `data/benchmark/core/core-batch-007.jsonl`. No
-  draft is pending, and the other 24 matrix slots are not yet authored or approved. The offline
+  revision false-premise abstention pair now in `data/benchmark/core/core-batch-007.jsonl`. The
+  `kv-core-abstain-04` Korean/English missing-as-of abstention pair is complete at `status=draft`
+  in `data/benchmark/drafts/core-draft-008.jsonl` and awaits named human review. The other 24
+  matrix slots remain unapproved: two are the pending drafts and 22 are unauthored. The offline
   bilingual temporal document retriever is now
   implemented with manifest-bound chunks and publication-date filtering before scoring; only
   synthetic fixtures were used. The first real bilingual document-manifest unit is also complete:
@@ -616,15 +618,41 @@
   `test_cpi_revision_abstain_core.py` with approved expectations, and raises the approved-count
   assertions in `test_bok_outlook_core.py`, `test_ecos_gdp_core.py`,
   `test_ecos_current_account_core.py`, `test_kosis_cpi_core.py`, and
-  `test_oecd_scope_abstain_core.py` from 14 to 16. The approved human-reviewed core is now 16/40
-  across `core-batch-001.jsonl` (4 records), `core-batch-002.jsonl` (2), `core-batch-003.jsonl`
-  (2), `core-batch-004.jsonl` (2), `core-batch-005.jsonl` (2), `core-batch-006.jsonl` (2), and
-  `core-batch-007.jsonl` (2); the remaining 24 matrix slots are unauthored and unapproved, and no
-  draft is pending. This is the third approved abstain pair (after the `kv-core-abstain-01`
+  `test_oecd_scope_abstain_core.py` from 14 to 16. At that approval checkpoint, the approved core
+  was 16/40 across `core-batch-001.jsonl` (4 records), `core-batch-002.jsonl` (2),
+  `core-batch-003.jsonl` (2), `core-batch-004.jsonl` (2), `core-batch-005.jsonl` (2),
+  `core-batch-006.jsonl` (2), and `core-batch-007.jsonl` (2); the remaining 24 matrix slots were
+  unauthored and unapproved, and no draft was pending. This is the third approved abstain pair
+  (after the `kv-core-abstain-01`
   availability-frontier and `kv-core-abstain-02` unapproved-neighboring-scope pairs) and the
   first approved false-premise rejection pair. The frozen matrix, source bundle, rights
   decisions, normalization contract, 13 public schemas, five committed traces, and runtime source
   are unchanged.
+
+- **Bilingual missing-as-of abstention draft pair (2026-08-26):** functional commit `fd7640b`
+  adds exactly `kv-core-abstain-04-ko` and `kv-core-abstain-04-en` at `status=draft` in
+  `data/benchmark/drafts/core-draft-008.jsonl`, plus focused contract tests. Both records
+  preserve the frozen `dev` / `abstain` allocation, the `eg-abstain-missing-as-of` evidence
+  group, and parallel group `kv-core-abstain-04`; they bind no document or data units and carry
+  no tool expectations and no reference answer — only a language-matched abstention reason. Both
+  questions ask for Korea's OECD amplitude-adjusted CLI value for May 2026 using the vintage
+  available at the time, while omitting the as-of date the vintage request depends on; the
+  record-level `as_of` field is `2026-07-17`, while the question text supplies no cutoff. The
+  gold behavior is to ask for the missing as-of and abstain: a vintage answer depends on its
+  as-of cutoff, and KOR-RTD's fail-closed contract never executes without an explicit
+  `effective_as_of` and never guesses or defaults the cutoff, because an assumed cutoff can
+  expose the wrong vintage and create temporal leakage. The focused tests additionally prove
+  that the questions contain no as-of phrase while both abstention reasons demand an explicit
+  `effective_as_of`, that the serialized records leak no observation value and no snapshot or
+  ledger identifier, and that the same request resolves once an explicit cutoff of 2026-07-09 is
+  supplied (edition `202607`, value `102.66` from the owner-approved CLI scope) — so the drafted
+  abstention is missing-cutoff driven, not availability- or rights-driven. This is the fourth
+  authored abstain pair (three already approved), the first missing-as-of clarification pair,
+  and the second `dev`-split pair after `kv-core-data-04`. The approved human-reviewed core
+  remains 16/40; of the other 24 unapproved matrix slots, these two are pending drafts and 22
+  remain unauthored. The frozen matrix, approved core, source bundle, rights decisions,
+  normalization contract, 13 public schemas, five committed traces, and runtime source are
+  unchanged.
 
 ## Current validation evidence
 
@@ -1062,6 +1090,18 @@ OS `--basetemp`; and Ruff check plus format check passed across 76 Python files.
 schemas regenerated deterministically, the five committed replay traces remained unchanged, and
 the git diff was clean. Approval feature commit `5e14119` contains only the two-record lifecycle
 transition and focused test updates; the frozen matrix, source, rights, schema, trace, and
+runtime boundaries did not change. The work was entirely offline and cost $0.00.
+
+Validated 2026-08-26 on Windows after the bilingual missing-as-of abstention draft slice: all six
+new focused tests passed, the eight focused benchmark files (`test_core_batch.py`,
+`test_bok_outlook_core.py`, `test_ecos_gdp_core.py`, `test_ecos_current_account_core.py`,
+`test_kosis_cpi_core.py`, `test_oecd_scope_abstain_core.py`, `test_cpi_revision_abstain_core.py`,
+and `test_missing_as_of_abstain_draft.py`) passed all 57 tests, and the full suite passed all
+1,165 tests with 100% SovereignLab statement/branch coverage (4,679 statements, 1,568 branches)
+under a fresh OS `--basetemp`. Ruff check and format check passed across 77 Python files. All 13
+public schemas regenerated deterministically and the git diff was clean. Functional commit
+`fd7640b` contains exactly the two draft records and their six focused tests (175 insertions,
+nothing else changed); the frozen matrix, approved core, source, rights, schema, trace, and
 runtime boundaries did not change. The work was entirely offline and cost $0.00.
 
 ## M1b verification spike record (2026-07-15)
@@ -1615,16 +1655,54 @@ response bodies.
   is fully offline. The new drafts must stay `status=draft` pending a separate named human
   review.
 
-## Immediate next action (M2 — draft-only authoring of the `kv-core-abstain-04` pair)
+## Session-close snapshot (2026-08-26, twenty-eighth close: missing-as-of abstention bilingual drafts complete)
 
-1. Author only the frozen `kv-core-abstain-04` Korean/English abstention pair (`dev` split) as a
-   bounded draft-only slice. Its question asks for a historical-vintage value while omitting its
-   as-of date; the gold behavior is to abstain (or ask for the missing as-of) because the
-   fail-closed contract never executes without an explicit `effective_as_of` and never guesses or
-   defaults the cutoff. The pair binds no source units and stays fully offline; do not fetch a
-   source or touch another matrix slot.
-2. Keep both new records at `status=draft` pending a separate named human review. Do not approve
-   them, move them into `core/`, or raise the approved count above 16/40 in the authoring change.
+- Functional commit `fd7640b` adds exactly `kv-core-abstain-04-ko` and `kv-core-abstain-04-en` to
+  `data/benchmark/drafts/core-draft-008.jsonl` at `status=draft`, together with six focused tests
+  in `tests/benchmark/test_missing_as_of_abstain_draft.py` — 175 insertions and nothing else. No
+  approved benchmark record or frozen matrix row changed.
+- Both drafts preserve the frozen `dev` / `abstain` allocation, the `eg-abstain-missing-as-of`
+  evidence group, and parallel group `kv-core-abstain-04`. They bind no document or data units
+  and carry no tool expectations and no reference answer — only a language-matched abstention
+  reason. Both questions ask for Korea's OECD amplitude-adjusted CLI value for May 2026 using the
+  vintage available at the time, while omitting the as-of date the vintage request depends on;
+  the gold behavior is to ask for the missing as-of and abstain, because a vintage answer depends
+  on its as-of cutoff and KOR-RTD's fail-closed contract never executes without an explicit
+  `effective_as_of` and never guesses or defaults the cutoff — an assumed cutoff can expose the
+  wrong vintage and create temporal leakage. The record-level `as_of` field is `2026-07-17`,
+  while the question text supplies no cutoff. Their annotations record `Claude AI draft` at
+  `2026-08-26T07:36:05Z` with no reviewer metadata.
+- The focused tests additionally prove that the questions contain no as-of phrase while both
+  abstention reasons demand an explicit `effective_as_of`, that the serialized records leak no
+  observation value and no snapshot or ledger identifier, and that a contrast test shows the same
+  request resolves once an explicit cutoff of 2026-07-09 is supplied (edition `202607`, value
+  `102.66` from the owner-approved CLI scope) — so the drafted abstention is missing-cutoff
+  driven, not availability- or rights-driven. This is the fourth authored abstain pair (three
+  already approved), the first missing-as-of clarification pair, and the second `dev`-split pair
+  after `kv-core-data-04`.
+- M2 remains active with exactly 16/40 owner-approved core records. The other 24 matrix slots
+  remain unapproved: these two records are pending drafts and 22 slots remain unauthored. No
+  subsequent pair or implementation slice is selected.
+- Python 3.12.13 validation is green: six new focused tests; 57 focused benchmark tests across
+  eight files; 1,165 full-suite tests at 100% SovereignLab statement/branch coverage (4,679
+  statements, 1,568 branches) with a fresh OS `--basetemp`; Ruff checking and format checking
+  across 77 Python files; deterministic regeneration of all 13 public schemas; and a clean git
+  diff. The committed trace count remains five, and this draft slice cost $0.00.
+- The exact next action is only named human review of these two drafts. Do not pre-approve them,
+  move them into `core/`, raise the approved count, select another pair, or change the source,
+  rights, matrix, schema, trace, runtime, provider/live-model, GPU, paid, or deferred-loop scope.
+
+## Immediate next action (M2 — named human review of `kv-core-abstain-04` only)
+
+1. Review only `kv-core-abstain-04-ko` and `kv-core-abstain-04-en` in
+   `data/benchmark/drafts/core-draft-008.jsonl` against the frozen matrix: bilingual wording, the
+   record-level `as_of`, route, split, evidence group, parallel group, the absence of bound
+   units, tool expectations, and reference answers, and the language-matched abstention reasons'
+   explicit-`effective_as_of` demand, fail-closed no-default-cutoff basis, and
+   no-observation-leak boundary.
+2. Do not mark either record approved, move it into `core/`, or raise the approved count above
+   16/40 without an explicit named human decision. Stop after recording that decision and a green
+   full baseline; do not select or author another pair.
 3. Preserve the frozen matrix, approved core, source, rights, schema, trace, and runtime boundaries;
    do not begin provider/live-model integration, paid work, probes, or the deferred bounded loop.
 
@@ -1731,6 +1809,7 @@ complete.
 | 2026-08-26 | Owner approval of the bilingual OECD scope abstention pair | $0.00 | Named reviewer metadata, lifecycle move to `core-batch-006`, focused/full offline validation, and governance update only; no matrix, source, rights, schema, trace, runtime, network, provider/live-model, GPU, or paid change |
 | 2026-08-26 | Bilingual CPI revision false-premise abstention draft pair | $0.00 | Exactly two draft records binding no source units, using only the committed rights catalog and manifest vintage semantics as the fail-closed basis, focused tests, and full fresh-OS-basetemp validation only; no matrix, approved-core, source, rights, schema, trace, runtime, network, provider/live-model, GPU, or paid change |
 | 2026-08-26 | Owner approval of the bilingual CPI revision false-premise abstention pair | $0.00 | Named reviewer metadata, lifecycle move to `core-batch-007`, focused/full offline validation, and governance update only; no matrix, source, rights, schema, trace, runtime, network, provider/live-model, GPU, or paid change |
+| 2026-08-26 | Bilingual missing-as-of abstention draft pair | $0.00 | Exactly two draft records binding no source units, using only the fail-closed explicit-cutoff contract as the abstention basis, focused tests, and full fresh-OS-basetemp validation only; no matrix, approved-core, source, rights, schema, trace, runtime, network, provider/live-model, GPU, or paid change |
 
 **Cumulative external spend: $0.23584524099715054 / $100.00**
 
@@ -1803,11 +1882,15 @@ Read in this order, in full, before changing anything:
     false-premise abstention core batch and its focused frozen-allocation, no-bound-unit,
     false-premise/rights-basis, bilingual-parity, approval-lifecycle, and no-observation-leak
     checks.
+28. `data/benchmark/drafts/core-draft-008.jsonl` and
+    `tests/benchmark/test_missing_as_of_abstain_draft.py` — the pending two-record missing-as-of
+    abstention draft pair and its frozen-allocation, no-bound-unit, missing-cutoff-basis,
+    bilingual-parity, draft-lifecycle, and no-observation-leak checks.
 
-Then follow "Immediate next action" item 1: author only the two `kv-core-abstain-04` drafts. The
-structural matrix and first sixteen records are owner-approved; no draft is pending, and the
-other 24 slots are neither authored nor approved. The owner-directed next outcome is only the
-bounded draft-only `kv-core-abstain-04` authoring slice.
+Then follow "Immediate next action" item 1: review only the two `kv-core-abstain-04` drafts. The
+structural matrix and first sixteen records are owner-approved; the other 24 slots remain
+unapproved, with two pending drafts and 22 unauthored slots. No later pair or implementation
+slice has been selected.
 The synthetic retrieval baseline and first real bilingual document manifests are complete. ADR
 0009 resolves those
 manifests to `allowed`, but full PDFs and extracted full text remain outside Git by current

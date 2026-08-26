@@ -263,12 +263,31 @@ the 13 public schemas, and the five committed replay traces remain unchanged. Th
 `kv-core-abstain-03` the third approved abstain pair, after `kv-core-abstain-01` and
 `kv-core-abstain-02`, and the first approved false-premise rejection pair.
 
-No benchmark draft is pending and 24 matrix slots remain unauthored and unapproved. The
-owner-directed next outcome is a bounded draft-only authoring slice for the frozen
-`kv-core-abstain-04` pair: an abstention pair on the dev split whose question asks for a
-historical-vintage value while omitting its as-of date; the gold behavior is to abstain (or ask
-for the missing as-of), because the fail-closed contract never executes without an explicit
-`effective_as_of` and never guesses or defaults the cutoff. The pair binds no source units and
-is fully offline. The new drafts must stay `annotation.status=draft` pending a separate named
-human review. Provider or live-model integration remains absent, and the bounded tool loop
-deferred by ADR 0008 remains outside the completed approval slice.
+The next bounded authoring slice completed on 2026-08-26 at feature commit `fd7640b`. It added
+exactly the two draft-only `kv-core-abstain-04` Korean/English records in
+`data/benchmark/drafts/core-draft-008.jsonl` and six focused tests in
+`tests/benchmark/test_missing_as_of_abstain_draft.py`: an abstention pair on the dev split (the
+second dev-split pair, after `kv-core-data-04`) whose questions ask for Korea's OECD
+amplitude-adjusted CLI value for May 2026 using the vintage available at the time, while omitting
+the as-of date the vintage request depends on. The drafted gold behavior is to ask for the
+missing as-of and abstain: a vintage answer depends on its as-of cutoff, and KOR-RTD's
+fail-closed contract never executes without an explicit `effective_as_of` and never guesses or
+defaults the cutoff, because an assumed cutoff can expose the wrong vintage and create temporal
+leakage. The pair binds no document or data units, carries no tool expectations and no reference
+answer, only a language-matched abstention reason; the record-level `as_of` is 2026-07-17. The
+focused tests prove that the questions contain no as-of phrase while both abstention reasons
+demand an explicit `effective_as_of`, that the serialized records leak no observation value and
+no snapshot or ledger identifier, and that the same request resolves once an explicit cutoff of
+2026-07-09 is supplied (edition `202607`, value `102.66` from the owner-approved CLI scope), so
+the drafted abstention is missing-cutoff driven, not availability- or rights-driven. This is the
+fourth authored abstain pair, after `kv-core-abstain-01` through `kv-core-abstain-03`, and the
+first missing-as-of clarification pair. Neither record has named review metadata or enters
+`core/`, so the approved core remains 16/40: two draft records are pending review and 22 matrix
+slots remain unauthored and unapproved.
+
+The frozen matrix, execution contracts and runtime, source bytes and manifests, rights decisions,
+normalization rules, approved core, 13 public schemas, and five committed traces are unchanged.
+The exact next independent slice is only named human review of those two drafts. Do not pre-approve
+or move them into `core/`, increase the approved count, or select or author a later pair before
+that decision. Provider or live-model integration remains absent, and the bounded tool loop
+deferred by ADR 0008 remains outside this authoring slice.

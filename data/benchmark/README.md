@@ -25,8 +25,7 @@ core records. `core/core-batch-003.jsonl` contains the two approved ECOS GDP rec
 `core/core-batch-006.jsonl` contains the two approved OECD scope abstention records, and
 `core/core-batch-007.jsonl` contains the two approved CPI revision false-premise abstention
 records. Their annotations preserve the AI author and name the human reviewer and review
-timestamp. Together they total 16/40 approved records; the other 24 matrix slots remain
-unauthored and unapproved, and no draft review candidate remains.
+timestamp. Together they total 16/40 approved records.
 
 The Korean/English `kv-core-data-03` pair was completed as
 `drafts/core-draft-004.jsonl` on 2026-08-20 in feature commit `50c4d9c`. Hyungbae Cho approved both
@@ -110,16 +109,38 @@ The approval renamed `tests/benchmark/test_cpi_revision_abstain_draft.py` to
 `tests/benchmark/test_cpi_revision_abstain_core.py` with approved expectations and raised the
 approved-count assertions in `test_bok_outlook_core.py`, `test_ecos_gdp_core.py`,
 `test_ecos_current_account_core.py`, `test_kosis_cpi_core.py`, and
-`test_oecd_scope_abstain_core.py` from 14 to 16. The focused benchmark acceptance suite passes 51
-tests across seven files and confirms the approved count is 16/40, and the full suite passes
-1,159 at 100% SovereignLab statement/branch coverage across 76 Ruff-formatted Python files. The
-13 public schemas and five committed traces are unchanged. The exact next outcome is an
-owner-directed draft-only authoring slice for the frozen `kv-core-abstain-04` pair — an
-abstention pair (`dev` split) whose question asks for a historical-vintage value while omitting
-its as-of date, so the gold behavior is to abstain (or ask for the missing as-of) because the
+`test_oecd_scope_abstain_core.py` from 14 to 16.
+
+Feature commit `fd7640b` adds exactly `kv-core-abstain-04-ko` and `kv-core-abstain-04-en` at
+`annotation.status=draft` in `drafts/core-draft-008.jsonl`. Both records use the frozen `abstain`
+route, `dev` split (the second dev-split pair after `kv-core-data-04`), `eg-abstain-missing-as-of`
+evidence group, and parallel group `kv-core-abstain-04`. The pair binds no document or data units
+and carries no tool expectations and no reference answer — only a language-matched
+`abstention_reason`. Both questions ask for Korea's OECD amplitude-adjusted CLI value for May
+2026 using the vintage available at the time, while omitting the as-of date the vintage request
+depends on; the record-level `as_of` field is 2026-07-17. The gold behavior is to ask for the
+missing as-of and abstain: a vintage answer depends on its as-of cutoff, and KOR-RTD's
 fail-closed contract never executes without an explicit `effective_as_of` and never guesses or
-defaults the cutoff. The pair binds no source units and is fully offline; the new drafts must
-remain `annotation.status=draft` pending a separate named human review.
+defaults the cutoff, because an assumed cutoff can expose the wrong vintage and create temporal
+leakage. This is the fourth authored abstain pair (after the approved `kv-core-abstain-01`,
+`kv-core-abstain-02`, and `kv-core-abstain-03`) and the first missing-as-of clarification pair.
+The matrix, source bundle, rights decisions, public schemas, and execution runtime were not
+changed. These two records remain pending named human review and do not count toward the
+approved core: 16/40 records are approved, two of the other 24 are drafts, and 22 remain
+unauthored and unapproved.
+
+The preceding approval checkpoint passed 51 focused benchmark tests and 1,159 full-suite tests
+across 76 formatted Python files. The current draft checkpoint adds six focused tests:
+`tests/benchmark/test_missing_as_of_abstain_draft.py` passes all six and asserts that the
+questions contain no as-of phrase while both abstention reasons demand an explicit
+`effective_as_of`, that the serialized records leak no observation value and no snapshot or
+ledger identifier, and — as a contrast — that the same request resolves once an explicit cutoff
+of 2026-07-09 is supplied (edition `202607`, value `102.66` from the owner-approved CLI scope),
+so the drafted abstention is missing-cutoff driven, not availability- or rights-driven. The
+combined focused benchmark suite passes 57 tests across eight files, and the full suite passes 1,165
+at 100% SovereignLab statement/branch coverage across 77 Ruff-formatted Python files. The 13
+public schemas and five committed traces are unchanged. The exact next action is named human
+review of only these two drafts; do not pre-approve them or select another pair.
 
 The matrix assigns every planned documentary or data source unit to one dataset split. Do not
 replace a reserved unit or move a pair between splits without a versioned matrix change, tests, and
