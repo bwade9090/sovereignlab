@@ -1,9 +1,8 @@
 # SovereignLab CV bullets
 
 - Status: wording bank; use only the section matching the achieved milestone
-- Last updated: 2026-08-26 (M2 mid-window refresh: 14/40 approved core, ADR 0008 slices 1–9 and
-  work unit C complete, two CPI revision false-premise abstention drafts pending review,
-  76-file/1,159-test baseline)
+- Last updated: 2026-08-26 (M2 mid-window refresh: 16/40 approved core, ADR 0008 slices 1–9 and
+  work unit C complete, 76-file/1,159-test baseline)
 - Rule: never replace placeholders with targets or estimates; use measured, reproducible results only
 - Narrative versions: `docs/application/01_project_description.md`
 
@@ -19,18 +18,16 @@
   at the requested cutoff cannot be proven.
 - Building **K-VINTAGE**, a bilingual Korean/English benchmark whose gold answers depend on the
   official-statistics vintage available at each question's `as_of` date: the 40-question
-  human-reviewed core allocation is frozen and 14/40 records are reviewed and approved so far —
+  human-reviewed core allocation is frozen and 16/40 records are reviewed and approved so far —
   four data/abstention records over the OECD Korea CLI revision archive plus a Korean/English
   documentary pair grounded in the Bank of Korea's May 2026 Economic Outlook and its independently
   dated official English translation, Korean/English data pairs over the 2026-07-17 ECOS GDP and
   current-account snapshots, a Korean/English data pair over the 2026-07-17 KOSIS national CPI
-  snapshot, and a Korean/English rights-based abstention pair asking for Korea's OECD normalised
-  CLI, a neighboring measure outside the sole owner-approved OECD raw-data scope. A separate
-  Korean/English abstention pair resting on the false premise that the many archived OECD
-  editions of Korea's consumer price index prove the Korean CPI was revised just as many times —
-  so the drafted gold behavior is to reject the premise and abstain — is complete only as two
-  AI-authored drafts pending named human review and is not included in the 14/40 approved count;
-  machine-generated revision probes will be reported separately.
+  snapshot, a Korean/English rights-based abstention pair asking for Korea's OECD normalised
+  CLI, a neighboring measure outside the sole owner-approved OECD raw-data scope, and a
+  Korean/English false-premise abstention pair that rejects the premise that archived OECD
+  edition counts prove the Korean CPI was revised — with machine-generated revision probes to be
+  reported separately.
 - Shipped `typed function calling with committed traces` for the deterministic offline evidence
   path: bilingual temporal retrieval filters by publication date before scoring over a committed
   synthetic corpus; three digest-linked evidence tools run behind a replay-checked dispatcher; and
@@ -52,21 +49,18 @@
   `as_of` date (prior art: arXiv 2605.23497, the Dallas Fed real-time OECD dataset, and the OECD MEI
   revisions database), built on **KOR-RTD** — a provenance-contracted point-in-time archive of Korean
   macro data with append-only checksummed captures and a fail-closed vintage resolver. Current
-  state: 14/40 reviewed-and-approved bilingual core records, cutoff-filtered bilingual temporal
+  state: 16/40 reviewed-and-approved bilingual core records, cutoff-filtered bilingual temporal
   retrieval over a committed synthetic corpus, a frozen typed execution-and-trace contract within
   the project's 13 public JSON Schemas, three deterministic evidence tools behind a replay-checked
   dispatcher, a private provenance-bound offline executor, and `typed function calling with
   committed traces`: five real-digest offline replays covering all routes and tools, both languages,
   both cutoff modes, complete execution, and planned/tool abstention with terminal stop and no
-  partial evidence. Two additional CPI revision false-premise abstention records remain
-  draft-only pending named human review and are not counted in the 14/40 approved core. The
-  verified Ministral 3 3B NF4/QLoRA compatibility path is retained, and 1,159 tests pass at
-  100% statement/branch coverage; temporal leakage is the planned headline metric and no
-  model-quality or briefing-performance result is claimed yet.
+  partial evidence. The verified Ministral 3 3B NF4/QLoRA compatibility path is retained, and
+  1,159 tests pass at 100% statement/branch coverage; temporal leakage is the planned headline
+  metric and no model-quality or briefing-performance result is claimed yet.
 
 This version distinguishes the deterministic offline replay slice from provider/live integration,
-the two pending draft records, the 24 unauthored core slots, and the not-yet-evaluated model
-variants.
+the 24 unauthored core slots, and the not-yet-evaluated model variants.
 
 ## Version B — use after the Week 2 baseline is reproducible
 
@@ -88,7 +82,7 @@ variants.
 - Keep `(in progress)` while the M2 benchmark and baseline work remains incomplete; the committed
   replay slice does not imply benchmark completion.
 - Do not say `fine-tuned` until an adapter has been trained, loaded, and evaluated.
-- Do not cite benchmark size until each counted test item passes schema and human review; **always report the human-reviewed core and machine-generated probes as separate counts**. The current approved core count is 14/40; of the 26 unapproved slots, two are AI-authored drafts pending named human review and 24 remain unauthored.
+- Do not cite benchmark size until each counted test item passes schema and human review; **always report the human-reviewed core and machine-generated probes as separate counts**. The current approved core count is 16/40; the 24 remaining slots are neither authored nor approved.
 - Core records are initially AI-authored and then human-reviewed; do not claim personal manual
   authorship of individual records. "Reviewed and approved" is the accurate personal-CV verb.
 - Do not cite improvement, cost, latency, leakage, or error-rate figures until the aggregation command reproduces them from committed artifacts.

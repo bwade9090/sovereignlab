@@ -188,12 +188,24 @@ and KOR-RTD holds no owner-approved raw-data decision for the OECD Korea CPI rev
 raw OECD observations outside the sole approved scope (Korea's monthly amplitude-adjusted CLI,
 `KOR.M.LI_AA.IX._T`, ADR 0007) remain metadata-only, so no before-and-after CPI observation can
 be served and the system must not fabricate revision values or expose an unapproved observation.
-Neither record has named review metadata or enters `core/`, so the approved core remains 14/40:
-two draft records are pending review and 24 matrix slots remain unauthored and unapproved.
+At that checkpoint, neither record had named review metadata or entered `core/`, so the approved
+core remained 14/40: two draft records were pending review and 24 matrix slots remained
+unauthored and unapproved.
 
-The frozen matrix, execution contracts and runtime, source bytes and manifests, rights decisions,
-normalization rules, approved core, 13 public schemas, and five committed traces are unchanged.
-The exact next independent slice is only named human review of those two drafts. Do not pre-approve
-or move them into `core/`, increase the approved count, or select or author a later pair before
-that decision. Provider or live-model integration remains absent, and the bounded tool loop
-deferred by ADR 0008 remains outside this authoring slice.
+That review gate completed on 2026-08-26 at approval feature commit `5e14119`. Hyungbae Cho
+approved exactly the two `kv-core-abstain-03` records, which now live in
+`data/benchmark/core/core-batch-007.jsonl`; the approved core is now 16/40 and 24 matrix slots
+remain unauthored and unapproved. This is the third approved abstain pair (availability-frontier,
+unapproved neighboring scope, and now false-premise rejection) and the first approved
+false-premise pair. This was a lifecycle-only transition: questions, abstention reasons, cutoff,
+the frozen matrix, execution contracts and runtime, source bytes and manifests, rights decisions,
+normalization, the 13 public schemas, and the five committed traces remain unchanged.
+
+No benchmark draft is pending. The exact next slice, directed by the owner, is a bounded
+draft-only authoring slice for the frozen `kv-core-abstain-04` pair: a dev-split abstention pair
+whose question asks for a historical-vintage value while omitting its as-of date. The gold
+behavior is to abstain (or ask for the missing as-of) because the fail-closed contract never
+executes without an explicit `effective_as_of` and never guesses or defaults the cutoff. The pair
+binds no source units and is fully offline. Those new drafts must stay `annotation.status=draft`
+pending a separate named human review. Provider or live-model integration remains absent, and the
+bounded tool loop deferred by ADR 0008 remains outside the completed approval slice.
