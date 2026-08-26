@@ -8,11 +8,10 @@ Build **KOR-RTD**, a provenance-contracted point-in-time (vintage) data layer fo
 
 ## Current handoff checkpoint
 
-This repository is between the completed draft-authoring unit and its named human-review gate on
-the Windows workstation.
+This repository is between work units and is ready to continue on the Windows workstation.
 
 - Current milestone: **M2 — benchmark and baselines**.
-- Approved human-reviewed core: **12/40** records. The frozen 40-record matrix must not be edited
+- Approved human-reviewed core: **14/40** records. The frozen 40-record matrix must not be edited
   merely to accelerate authoring.
 - The Korean/English `kv-core-data-02` pair is approved in
   `data/benchmark/core/core-batch-003.jsonl`. Hyungbae Cho approved both records on 2026-08-20;
@@ -25,9 +24,11 @@ the Windows workstation.
   their review timestamp is `2026-08-25T07:10:15Z`. This approval completes the data route's four
   authorable pairs (`kv-core-data-01`..`kv-core-data-04`); the fifth data pair `kv-core-data-05`
   stays reserved on the deliberately unauthored test-split unit.
-- The Korean/English `kv-core-abstain-02` pair is complete at `annotation.status=draft` in
-  `data/benchmark/drafts/core-draft-006.jsonl`. These two records do not increase the approved
-  count and remain pending named human review.
+- The Korean/English `kv-core-abstain-02` pair is approved in
+  `data/benchmark/core/core-batch-006.jsonl`. Hyungbae Cho approved both records on 2026-08-26;
+  their review timestamp is `2026-08-26T01:49:45Z`. No draft review candidate remains. This is
+  the second approved abstain pair after `kv-core-abstain-01` and the first approved pair whose
+  fail-closed basis is a rights boundary rather than the availability ledger.
 - Completed: fail-closed vintage resolver, weekly append-only harvester, approved ECOS/KOSIS/OECD
   captures, number normalization, offline bilingual temporal retrieval, strict Korean/English Bank
   of Korea May-2026 Outlook manifests, the approved `kv-core-doc-01` documentary pair, and strict
@@ -79,10 +80,18 @@ the Windows workstation.
   scope (Korea's monthly amplitude-adjusted CLI, `KOR.M.LI_AA.IX._T`, ADR 0007). The frozen
   matrix, approved core, source bundle, rights decisions, public schemas, traces, source package,
   and execution runtime are unchanged.
-- Exact next outcome: named human review of only the Korean/English `kv-core-abstain-02` drafts.
-- Exact next reviewable slice: the two records in `core-draft-006.jsonl` only. Do not pre-approve
-  them or select another pair; until the named review gate is complete, the approved core count
-  remains 12/40.
+- The 2026-08-26 approval feature commit is `4c29b1d`. It records only the named review decision,
+  approval metadata, lifecycle tag, file move into `core/`, and focused-test transition; the
+  record substance, frozen matrix, source bundle, rights decisions, public schemas, source
+  package, and execution runtime are unchanged.
+- Exact next outcome: an owner-directed draft-only Korean/English `kv-core-abstain-03` pair
+  (train-split abstention) whose question rests on the false premise that archived OECD edition
+  counts prove the Korean CPI was revised; the gold behavior is to reject that premise and
+  abstain, because edition counts measure archive coverage and no owner-approved raw-data
+  decision covers the OECD Korea CPI revision series. Abstain pairs bind no source units; the
+  slice is fully offline and uses no new evidence.
+- Exact next reviewable slice: the two draft records only. Human approval is a later separate
+  gate, so the approved core count remains 14/40.
 - Not implemented yet: a provider or live-model integration or the bounded tool loop. The five
   committed traces are deterministic offline replay artifacts, not provider recordings.
 - The planner boundary exists under `src/sovereignlab/execution/planner.py`; its recording registry
@@ -97,31 +106,29 @@ The authoritative live checkpoint and acceptance criteria are in
 `docs/project/04_macbook_handoff.md`. The filename is retained for history, but the document is now
 the cross-machine Windows continuation handoff.
 
-## Exact next slice — named human review of `kv-core-abstain-02` only
+## Exact next slice — draft `kv-core-abstain-03` Korean/English pair only
 
-The Korean/English pair assigned to `kv-core-abstain-02` in the frozen core-authoring matrix is
-now complete as `data/benchmark/drafts/core-draft-006.jsonl`. Both records ask for Korea's OECD
-normalised CLI value for May 2026 using only the vintage available as of 2026-07-09. The
-normalised CLI is a neighboring measure outside the sole owner-approved OECD raw-data scope
-(Korea's monthly amplitude-adjusted CLI, `KOR.M.LI_AA.IX._T`, ADR 0007), so the gold behavior is
-abstention on the missing rights basis. The pair binds no document or data units and carries no
-tool expectations and no reference answer — only a language-matched abstention reason that names
-the approved scope, forbids substituting the approved series or exposing an unapproved
-observation, and leaks no observation value. The cutoff is deliberately one where the approved
-amplitude-adjusted scope does resolve (edition `202607`, value `102.66`), so a focused contrast
-test proves the drafted abstention is rights-driven, not availability-driven. This is the second
-abstain pair after `kv-core-abstain-01` and the first authored pair whose fail-closed basis is a
-rights boundary rather than the availability ledger. The approved core remains 12/40; these two
-records are drafted and unapproved, while the other 26 slots remain unauthored and unapproved.
+The Korean/English pair assigned to `kv-core-abstain-02` in the frozen core-authoring matrix was
+drafted on 2026-08-25 and approved by Hyungbae Cho on 2026-08-26. It now lives in
+`data/benchmark/core/core-batch-006.jsonl`. The approved core count is 14/40; the other 26 slots
+are unauthored and unapproved. The owner-directed next reviewable outcome is only the draft
+Korean/English pair assigned to `kv-core-abstain-03` (train-split abstention) in the frozen
+matrix. Its question rests on the false premise that archived OECD edition counts prove the
+Korean CPI was revised; the gold behavior is to reject that premise and abstain, because edition
+counts measure archive coverage and no owner-approved raw-data decision covers the OECD Korea CPI
+revision series. Abstain pairs bind no source units, so the slice is fully offline and uses no
+new evidence.
 
-- Review the Korean/English questions, abstention reasons, cutoff, route, split, evidence group,
-  parallel group, record IDs, empty bindings, tags, and lifecycle metadata against the frozen
-  matrix and the committed rights catalog only.
-- Do not mark the records approved, move them into `core/`, or raise the approved count above
-  12/40 without an explicit named human decision.
-- Stop after recording that decision and a green full baseline. Do not choose another pair, add
-  probes, alter the matrix, source, rights decisions, or public schemas, add a provider or
-  live-model call, start the deferred bounded loop, or initiate a paid operation.
+- Preserve the frozen matrix row, route, split, evidence group, data-unit binding, and record IDs;
+  do not edit the matrix to make authoring easier.
+- Bind no source unit and add no evidence. The abstention rationale rests on rejecting the false
+  premise and the absent rights basis; do not add, refresh, or re-fetch a source.
+- Author exactly the two draft records and their focused tests. Keep them at
+  `annotation.status=draft` and do not raise the approved count above 14/40; named human review
+  remains a separate later action.
+- Stop after the draft pair and a green full baseline. Do not add probes, alter the matrix, source,
+  rights decisions, or public schemas, add a provider or live-model call, start the deferred
+  bounded loop, or initiate a paid operation.
 
 ## New-session onboarding procedure
 
@@ -136,9 +143,9 @@ Before editing:
    under "Local setup and required checks."
 4. State back four facts before implementation: current milestone, approved core count, exact next
    work unit, and hard stops.
-5. Start only with named human review of the two `kv-core-abstain-02` records in
-   `data/benchmark/drafts/core-draft-006.jsonl`. Do not pre-approve them, choose another pair, or
-   combine source expansion, probes, provider/live-model work, or a paid operation with review.
+5. Start only with the draft `kv-core-abstain-03` Korean/English pair, which binds no source unit
+   and is fully offline. Do not combine source expansion, human approval, probe generation, a
+   provider or live-model call, or a paid operation with onboarding.
 
 ## Read before changing anything
 
@@ -156,7 +163,7 @@ Before editing:
 5. `docs/discovery/01_concept_upgrade_proposal.md` — background rationale for v2: verified data facts, judged alternatives, risk register.
 6. `docs/project/05_evidence_contract_2_0_migration.md` — implemented evidence/rights contract
    that the execution path must not change.
-7. `docs/project/07_core_authoring_matrix.md` — approved 40-record allocation, 12/40 review state,
+7. `docs/project/07_core_authoring_matrix.md` — approved 40-record allocation, 14/40 review state,
    and frozen human-review boundary.
 8. `docs/project/08_temporal_document_retrieval.md` — implemented cutoff-before-scoring retrieval
    contract.
@@ -180,15 +187,15 @@ Before editing:
     the boundary between public replay artifacts and private recordings.
 18. The closest additional `AGENTS.md`, if a subdirectory adds one later.
 
-For the current draft-review checkpoint, also read `data/benchmark/core-authoring-matrix-v1.json`,
+For the current post-review checkpoint, also read `data/benchmark/core-authoring-matrix-v1.json`,
 `data/benchmark/README.md`, the approved records in
 `data/benchmark/core/core-batch-001.jsonl`, `core-batch-002.jsonl`, `core-batch-003.jsonl`,
-`core-batch-004.jsonl`, and `core-batch-005.jsonl`, the pending records in
-`data/benchmark/drafts/core-draft-006.jsonl`, the benchmark model and normalization code in
+`core-batch-004.jsonl`, `core-batch-005.jsonl`, and `core-batch-006.jsonl`, the benchmark model
+and normalization code in
 `src/sovereignlab/schemas/benchmark.py` and `src/sovereignlab/normalization.py`, and
 `tests/benchmark/test_core_batch.py`, `test_bok_outlook_core.py`,
-`test_ecos_gdp_core.py`, `test_ecos_current_account_core.py`, and `test_kosis_cpi_core.py`, plus
-`test_oecd_scope_abstain_draft.py`. Treat the matrix allocation, approved records, source bundle,
+`test_ecos_gdp_core.py`, `test_ecos_current_account_core.py`, `test_kosis_cpi_core.py`, and
+`test_oecd_scope_abstain_core.py`. Treat the matrix allocation, approved records, source bundle,
 and human-review boundary as frozen.
 
 The charter is the scope authority. Do not expand sources, agents, UI, or infrastructure before the current milestone gate passes.
@@ -309,7 +316,7 @@ commit that machine-specific path. Do not reuse a `.venv` whose interpreter chec
 The Windows requirements include a `win32`-only `tzdata` pin because a standard Windows Python
 installation has no system IANA timezone database.
 
-The 2026-08-25 handoff baseline is 13 deterministic public schemas, 75 formatted Python files,
+The 2026-08-26 handoff baseline is 13 deterministic public schemas, 75 formatted Python files,
 1,153 passing tests, and 100% SovereignLab statement/branch coverage (4,679 statements, 1,568
 branches). The focused benchmark acceptance run is 45 passing tests. A different result is a
 diagnostic signal: stop before implementation and record the discrepancy in

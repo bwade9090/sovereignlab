@@ -3,15 +3,10 @@
 > What did the data say *then*? Vintage-conditioned evaluation and auditable briefings for Korean/English economic research.
 
 **Status:** M1b verification and vintage-contract groundwork are complete; M2 benchmark and
-baseline development is in progress with a frozen 40-record core matrix and 12/40 records
-owner-approved. Hyungbae Cho approved the Korean/English `kv-core-data-04` pair on 2026-08-25; the
-two records now live in `data/benchmark/core/core-batch-005.jsonl`. Feature commit `c20619d` adds
-the Korean/English `kv-core-abstain-02` pair as two drafts in
-`data/benchmark/drafts/core-draft-006.jsonl`; the abstention pair binds no source units, and its
-gold behavior is abstention because Korea's OECD normalised CLI lies outside the sole
-owner-approved OECD raw-data scope (ADR 0007). They remain pending named human review and do not
-increase the approved count; of the 28 unapproved slots, these two are drafted and the other 26
-remain unauthored. The
+baseline development is in progress with a frozen 40-record core matrix and 14/40 records
+owner-approved. Hyungbae Cho approved the Korean/English `kv-core-abstain-02` pair on 2026-08-26;
+the two records now live in `data/benchmark/core/core-batch-006.jsonl`. No draft review candidate
+is pending, and the other 26 matrix slots remain unauthored and unapproved. The
 first nine ADR 0008 slices and work unit C are complete: five machine-readable real-digest traces
 were generated through the actual private offline executor, `ScriptedPlanner`, and committed
 registries and corpora in feature commit `883815b`. The trace set covers all four
@@ -132,10 +127,19 @@ available as of 2026-07-09 — a neighboring measure outside the sole owner-appr
 scope, Korea's monthly amplitude-adjusted CLI (`KOR.M.LI_AA.IX._T`, ADR 0007) — so each record
 carries only a language-matched abstention reason on the missing rights basis and leaks no
 observation value. The approved scope deliberately does resolve at that cutoff, so the drafted
-abstention is rights-driven, not availability-driven. Current validation is 45 focused benchmark
-tests and 1,153 full-suite tests across 75 formatted Python files. The approved count remains
-12/40, and the exact next action is named human review of only these two drafts; do not
-pre-approve them or select another pair.
+abstention is rights-driven, not availability-driven. On 2026-08-26, Hyungbae Cho approved both
+records without a substantive change; feature commit `4c29b1d` records the named-review metadata,
+`batch-006` lifecycle tag, move to `data/benchmark/core/core-batch-006.jsonl`, and focused-test
+transition. This is the second approved abstain pair (after `kv-core-abstain-01`) and the first
+approved pair whose fail-closed basis is a rights boundary rather than the availability ledger.
+The approved count is now 14/40, and current validation is 45 focused benchmark tests and 1,153
+full-suite tests across 75 formatted Python files. The exact next outcome is an owner-directed
+draft-only authoring slice for the frozen `kv-core-abstain-03` pair — an abstention pair (`train`
+split) whose question rests on the false premise that archived OECD edition counts prove the
+Korean CPI was revised, so the gold behavior is to reject that premise and abstain: edition
+counts measure archive coverage, and no owner-approved raw-data decision covers the OECD Korea
+CPI revision series. The pair binds no source units and is fully offline; the new drafts must
+remain `annotation.status=draft` pending a separate named human review.
 Charter v2.5 and
 [ADR 0009](docs/decisions/0009-bok-economic-outlook-public-data-rights.md) additionally record the
 owner-approved `allowed` public-data ruling for official Bank of Korea Economic Outlook

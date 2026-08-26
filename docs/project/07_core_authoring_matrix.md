@@ -1,8 +1,8 @@
 # K-VINTAGE human-reviewed core authoring matrix 1.0.0
 
-- Status: structural allocation frozen; first twelve records owner-approved; `kv-core-abstain-02`
-  drafted and pending named human review
-- Date: 2026-08-25
+- Status: structural allocation frozen; first fourteen records owner-approved; owner-directed next
+  slice is the `kv-core-abstain-03` draft pair
+- Date: 2026-08-26
 - Scope authority: charter v2.5 §5 and M2 continuation order
 - Canonical matrix: `data/benchmark/core-authoring-matrix-v1.json`
 - Public schema: `data/schemas/core-authoring-matrix-v1.schema.json`
@@ -66,9 +66,9 @@ the AI author and record the named human reviewer and aware review timestamp. Th
 changed from `draft-002` to `batch-002` when the file moved into `core/`.
 
 At the 2026-07-29 checkpoint, these two records brought the approved human-reviewed core to 6/40.
-The later ECOS GDP, ECOS current-account, and KOSIS CPI approvals described below bring the
-current total to 12/40. The OECD scope abstention draft described after them accounts for two of
-the 28 unapproved records; the other 26 remain unauthored and unapproved.
+The later ECOS GDP, ECOS current-account, KOSIS CPI, and OECD scope abstention approvals
+described below bring the current total to 14/40; the other 26 records remain unauthored and
+unapproved.
 
 ## 4. Approved ECOS GDP pair
 
@@ -171,18 +171,21 @@ authoring pass for the frozen `kv-core-abstain-02` pair, a `train`-split abstent
 question asks for a neighboring OECD observation scope (Korea's normalised CLI) that has no
 owner-approved raw-data decision, so the gold behavior is abstention. Abstain pairs bind no
 source units, so the slice used no new evidence and relied only on the committed rights catalog
-as the fail-closed basis; the resulting drafts are described below and stay
-`annotation.status=draft` pending a separate named human review.
+as the fail-closed basis; the resulting pair is described below and completed named human review
+on 2026-08-26.
 
-## 7. Draft OECD scope abstention pair
+## 7. Approved OECD scope abstention pair
 
-Feature commit `c20619d` adds exactly the frozen `kv-core-abstain-02` Korean/English pair to
-`data/benchmark/drafts/core-draft-006.jsonl` at `annotation.status=draft`. Both records use the
-`abstain` route, `train` split, `eg-abstain-unapproved-neighboring-oecd-scope` evidence group,
-and `kv-core-abstain-02` parallel group. The pair binds no document or data units and carries no
-tool expectations and no reference answer — only a language-matched `abstention_reason`. This is
-the second abstain pair after `kv-core-abstain-01` and the first authored pair whose fail-closed
-basis is a rights boundary rather than the availability ledger.
+The frozen `kv-core-abstain-02` Korean/English pair was completed as
+`data/benchmark/drafts/core-draft-006.jsonl` on 2026-08-25 in feature commit `c20619d`. Hyungbae
+Cho approved both records on 2026-08-26 with review timestamp `2026-08-26T01:49:45Z`; approval
+feature commit `4c29b1d` moved the pair to `data/benchmark/core/core-batch-006.jsonl`. Both
+records use the `abstain` route, `train` split, `eg-abstain-unapproved-neighboring-oecd-scope`
+evidence group, and `kv-core-abstain-02` parallel group. The pair binds no document or data units
+and carries no tool expectations and no reference answer — only a language-matched
+`abstention_reason`. This is the second approved abstain pair after `kv-core-abstain-01` and the
+first approved pair whose fail-closed basis is a rights boundary rather than the availability
+ledger.
 
 Both questions ask for Korea's OECD normalised CLI value for May 2026 using only the vintage
 available as of 2026-07-09. The normalised CLI is a neighboring measure outside the sole
@@ -191,24 +194,31 @@ owner-approved OECD raw-data scope, Korea's monthly amplitude-adjusted CLI `KOR.
 reasons name the approved scope, forbid substituting the approved series or exposing an
 unapproved observation, and leak no observation value. The cutoff 2026-07-09 is deliberately one
 where the approved amplitude-adjusted scope does resolve (edition `202607`, value `102.66`), so a
-focused contrast test proves the drafted abstention is rights-driven, not availability-driven.
-Their annotations preserve `annotated_by="Claude AI draft"` at `2026-08-25T07:14:19Z`, contain no
-reviewer metadata, and carry the `core`, `temporal`, `vintage`, `abstention`, `unapproved-scope`,
-and `draft-006` tags.
+focused contrast test proves the approved abstention is rights-driven, not availability-driven.
+The approved records preserve the original AI author, add the named reviewer and aware review
+timestamp, record `annotation.status=approved`, and use the `batch-006` lifecycle tag. The
+questions, abstention reasons, cutoff, route, split, evidence group, parallel group, and record
+IDs did not change during review.
 
-The pair-specific focused test file `tests/benchmark/test_oecd_scope_abstain_draft.py` passes six
-tests, including assertions that the serialized records contain neither the `102.66` observation
-nor the CLI source or ledger identifiers; the combined focused benchmark suite passes 45 tests
+The pair-specific focused test file was renamed to
+`tests/benchmark/test_oecd_scope_abstain_core.py` with approved expectations, keeping the
+assertions that the serialized records contain neither the `102.66` observation nor the CLI
+source or ledger identifiers; the combined focused benchmark acceptance suite passes 45 tests
 across the six files listed in the reproduction commands. The full suite passes 1,153 tests at
 100% SovereignLab statement/branch coverage (4,679 statements, 1,568 branches) across 75
 Ruff-formatted Python files using a fresh OS `--basetemp`. The 13 public schemas regenerate
 deterministically, the five committed traces remain unchanged, the working tree diff is clean,
-and the slice cost $0.00. The frozen matrix, approved core, source bundle, rights decisions,
+and the slice cost $0.00. The record substance, frozen matrix, source bundle, rights decisions,
 source package, and execution runtime did not change.
 
-The approved core remains 12/40. These two drafts and the 26 unauthored slots comprise the other
-28 unapproved records. The exact next action is named human review of only `kv-core-abstain-02-ko`
-and `kv-core-abstain-02-en`; do not pre-approve them or select another pair.
+The approved core is now 14/40 and no draft review candidate remains in the committed tree; the
+other 26 records remain unauthored and unapproved. The owner-directed next slice is a bounded
+draft-only authoring pass for the frozen `kv-core-abstain-03` pair, a `train`-split abstention
+pair whose question rests on the false premise that archived OECD edition counts prove the Korean
+CPI was revised; the gold behavior is to reject that premise and abstain, because edition counts
+measure archive coverage and no owner-approved raw-data decision covers the OECD Korea CPI
+revision series. The pair binds no source units and is fully offline. The new drafts must stay
+`annotation.status=draft` pending a separate named human review.
 
 ## 8. Approval records
 
@@ -244,6 +254,12 @@ pair. The substantive record fields and frozen matrix remain unchanged; approval
 `annotation.status=approved`, the `batch-005` lifecycle tag, and the move from
 `drafts/core-draft-005.jsonl` to `core/core-batch-005.jsonl`.
 
+On 2026-08-26, Hyungbae Cho explicitly approved both records in the `kv-core-abstain-02` OECD
+scope abstention pair. The substantive record fields and frozen matrix remain unchanged; approval
+feature commit `4c29b1d` records reviewer `Hyungbae Cho`, review timestamp `2026-08-26T01:49:45Z`,
+`annotation.status=approved`, the `batch-006` lifecycle tag, and the move from
+`drafts/core-draft-006.jsonl` to `core/core-batch-006.jsonl`.
+
 ## 9. Human-review checklist
 
 For each bilingual pair, the reviewer must verify:
@@ -269,7 +285,7 @@ python -m pytest tests/benchmark/test_bok_outlook_core.py
 python -m pytest tests/benchmark/test_ecos_gdp_core.py
 python -m pytest tests/benchmark/test_ecos_current_account_core.py
 python -m pytest tests/benchmark/test_kosis_cpi_core.py
-python -m pytest tests/benchmark/test_oecd_scope_abstain_draft.py
+python -m pytest tests/benchmark/test_oecd_scope_abstain_core.py
 python -m ruff check .
 python -m ruff format --check .
 ```
@@ -280,29 +296,29 @@ normalization 1.0.0, and checks the earlier-cutoff abstention.
 
 The documentary-core test validates both records against their strict manifests and the frozen
 matrix, enforces language-specific publication cutoffs and split-group integrity, verifies the
-named reviewer metadata, and confirms the current approved count is twelve.
+named reviewer metadata, and confirms the current approved count is fourteen.
 
 The ECOS GDP core test validates both approved records and named-review metadata against the frozen
 matrix, existing snapshot, manifest, checksum, rights decision, and normalization rule. At its
 approval checkpoint, the first three focused benchmark files passed 27 tests; the approved count it
-verifies is now twelve.
+verifies is now fourteen.
 
 The ECOS current-account core test validates both approved records and named-review metadata
 against the frozen allocation, existing snapshot, manifest, checksum, rights decision, exact
 `202605` observation, normalization rule, attribution, and prior-day abstention. At its approval
 checkpoint, the first four focused benchmark files passed 33 tests; the approved count it verifies
-is now twelve.
+is now fourteen.
 
 The KOSIS CPI core test validates both approved records and named-review metadata against the
 frozen allocation, existing snapshot, manifest, checksum, rights decision, exact `202606`
 observation, normalization rule, attribution, and prior-day abstention. At its approval
-checkpoint, the first five focused benchmark files passed 39 tests while the approved count is
-twelve.
+checkpoint, the first five focused benchmark files passed 39 tests; the approved count it verifies
+is now fourteen.
 
-The OECD scope abstention draft test validates the two unapproved records against the frozen
-allocation and the committed rights decisions, confirms they bind no source units and carry no
-tool expectations or reference answers, proves through the approved-scope contrast that the
-abstention is rights-driven rather than availability-driven, and asserts the serialized records
-contain neither the `102.66` observation nor the CLI source or ledger identifiers. It adds six
-tests, bringing the current focused benchmark suite to 45 while the approved count remains
-twelve.
+The OECD scope abstention core test validates both approved records and named-review metadata
+against the frozen allocation and the committed rights decisions, confirms they bind no source
+units and carry no tool expectations or reference answers, proves through the approved-scope
+contrast that the abstention is rights-driven rather than availability-driven, and asserts the
+serialized records contain neither the `102.66` observation nor the CLI source or ledger
+identifiers. Across the six focused benchmark files above, 45 tests pass while the approved
+count is fourteen.
