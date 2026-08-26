@@ -5,8 +5,13 @@
 **Status:** M1b verification and vintage-contract groundwork are complete; M2 benchmark and
 baseline development is in progress with a frozen 40-record core matrix and 14/40 records
 owner-approved. Hyungbae Cho approved the Korean/English `kv-core-abstain-02` pair on 2026-08-26;
-the two records now live in `data/benchmark/core/core-batch-006.jsonl`. No draft review candidate
-is pending, and the other 26 matrix slots remain unauthored and unapproved. The
+the two records now live in `data/benchmark/core/core-batch-006.jsonl`. Feature commit `77d247d`
+adds the Korean/English `kv-core-abstain-03` pair as two drafts in
+`data/benchmark/drafts/core-draft-007.jsonl`; the abstention pair binds no source units, and its
+gold behavior is to reject the false premise that archived OECD edition counts prove the Korean
+CPI was revised and then abstain, because no owner-approved raw-data decision covers the OECD
+Korea CPI revision series. They remain pending named human review and do not increase the approved
+count; of the 26 unapproved slots, these two are drafted and the other 24 remain unauthored. The
 first nine ADR 0008 slices and work unit C are complete: five machine-readable real-digest traces
 were generated through the actual private offline executor, `ScriptedPlanner`, and committed
 registries and corpora in feature commit `883815b`. The trace set covers all four
@@ -16,9 +21,9 @@ source package is unchanged, the public surface remains 13 deterministic JSON Sc
 executor descriptor still pins 32 source entries and digest
 `08f45dab6a36a49cb7d0b588a69236942cd61534540bd4de0772010402dada64`.
 The focused executor/replay-trace acceptance run passes 80 tests at 100% coverage over 326
-statements and 98 branches, and the focused benchmark acceptance run passes 45 tests. The full
-offline baseline is 1,153 tests at 100% statement/branch coverage (4,679 statements, 1,568
-branches) across 75 Ruff-formatted Python files. The shipped
+statements and 98 branches, and the focused benchmark acceptance run passes 51 tests. The full
+offline baseline is 1,159 tests at 100% statement/branch coverage (4,679 statements, 1,568
+branches) across 76 Ruff-formatted Python files. The shipped
 minimal reference path is described only as `typed function calling with committed traces`. These
 are deterministic offline replays, not provider or live outputs; no provider/live integration or
 bounded tool loop exists, and no model-quality or briefing-performance claim is made. Searchable
@@ -132,14 +137,23 @@ records without a substantive change; feature commit `4c29b1d` records the named
 `batch-006` lifecycle tag, move to `data/benchmark/core/core-batch-006.jsonl`, and focused-test
 transition. This is the second approved abstain pair (after `kv-core-abstain-01`) and the first
 approved pair whose fail-closed basis is a rights boundary rather than the availability ledger.
-The approved count is now 14/40, and current validation is 45 focused benchmark tests and 1,153
-full-suite tests across 75 formatted Python files. The exact next outcome is an owner-directed
-draft-only authoring slice for the frozen `kv-core-abstain-03` pair — an abstention pair (`train`
-split) whose question rests on the false premise that archived OECD edition counts prove the
-Korean CPI was revised, so the gold behavior is to reject that premise and abstain: edition
-counts measure archive coverage, and no owner-approved raw-data decision covers the OECD Korea
-CPI revision series. The pair binds no source units and is fully offline; the new drafts must
-remain `annotation.status=draft` pending a separate named human review.
+At that approval checkpoint, the focused benchmark suite passed 45 tests and the full baseline
+passed 1,153 tests across 75 formatted Python files. Later on 2026-08-26, feature commit `77d247d`
+added only the draft Korean/English `kv-core-abstain-03` pair and six focused tests. The
+abstention pair (`train` split) binds no document or data units, carries no tool expectations and
+no reference answer, and rests on the false premise that the many archived OECD editions of
+Korea's consumer price index prove the Korean CPI was revised just as many times; both questions
+ask for before-and-after November 2019 CPI values using only the vintage available as of
+2026-07-17. The gold behavior is to reject the premise and abstain: archived edition counts
+measure archive coverage, not actual revisions, and KOR-RTD holds no owner-approved raw-data
+decision for the OECD Korea CPI revision series — raw OECD observations outside the sole approved
+Korea monthly amplitude-adjusted CLI scope (`KOR.M.LI_AA.IX._T`) remain metadata-only — so each
+record carries only a language-matched abstention reason, and the system must not fabricate
+revision values or expose an unapproved observation. This is the third authored abstain pair and
+the first false-premise rejection pair. Current validation is 51 focused benchmark tests and
+1,159 full-suite tests across 76 formatted Python files. The approved count remains 14/40, and
+the exact next action is named human review of only these two drafts; do not pre-approve them or
+select another pair.
 Charter v2.5 and
 [ADR 0009](docs/decisions/0009-bok-economic-outlook-public-data-rights.md) additionally record the
 owner-approved `allowed` public-data ruling for official Bank of Korea Economic Outlook

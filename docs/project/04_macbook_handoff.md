@@ -1,9 +1,9 @@
 # Cross-machine continuation handoff
 
 - Legacy filename: retained so existing links and onboarding instructions do not break.
-- Prepared: 2026-07-16; refreshed 2026-08-26 after the bilingual OECD scope abstention
-  owner-approval transition (twenty-fifth refresh: sixth core batch approved, owner-directed
-  draft slice next)
+- Prepared: 2026-07-16; refreshed 2026-08-26 after the bilingual CPI revision false-premise
+  abstention draft slice (twenty-sixth refresh: two review candidates complete, named human
+  review next)
 - Target continuation machine: Windows workstation
 - Authority: charter v2.5; accepted ADRs 0001–0009
 - Branch to continue: `main` from `origin`
@@ -12,9 +12,10 @@
   three deterministic runtime adapters, the explicit dispatcher, offline planner boundary, private
   deterministic evidence-packet assembler, private offline executor, and five committed real-
   digest replay traces are complete; Hyungbae Cho approved the unchanged `kv-core-abstain-02`
-  Korean/English pair, so the core is now 14/40 with no pending draft; the owner directed a
-  bounded draft-only authoring slice for the frozen `kv-core-abstain-03` pair as the exact next
-  outcome
+  Korean/English pair, so the core remains 14/40; the `kv-core-abstain-03` Korean/English pair is
+  now complete at `status=draft` and awaits named human review, while no later pair or slice is
+  selected
+- Completed CPI revision false-premise abstention draft functional checkpoint: `77d247d` (`feat: add CPI revision false-premise abstention drafts`).
 - Completed OECD scope abstention approval feature checkpoint: `4c29b1d` (`feat: approve OECD scope abstention bilingual pair`).
 - Completed OECD scope abstention draft functional checkpoint: `c20619d` (`feat: add OECD scope abstention bilingual drafts`).
 - Completed KOSIS CPI approval feature checkpoint: `95c5e61` (`feat: approve KOSIS CPI bilingual pair`).
@@ -45,8 +46,8 @@ state from the Mac. At the beginning of the Windows session:
 3. Create or verify the Windows-local `.venv` and run the PowerShell baseline in section 2 before
    changing files.
 4. State back the current milestone, approved core count, exact next work unit, and hard stops.
-5. Start only with section 5's owner-directed draft-only authoring slice for the frozen
-   `kv-core-abstain-03` pair; do not pre-approve its new drafts or select another pair.
+5. Do not start a new work unit. Section 5 names only the pending human review of the
+   `kv-core-abstain-03` Korean/English drafts; do not pre-approve them or select another pair.
 
 If the worktree is dirty, preserve the existing changes and determine their owner before editing.
 If local `main` has diverged from `origin/main`, stop rather than rewriting history.
@@ -335,6 +336,16 @@ If local `main` has diverged from `origin/main`, stop rather than rewriting hist
   the two-record approval lifecycle transition and focused test updates only; the matrix, source,
   rights, schema, and runtime boundaries are unchanged. No network, provider/live-model call, GPU
   operation, or paid operation occurred; cost was $0.00.
+- CPI revision false-premise abstention draft slice validated 2026-08-26 on Windows/Python
+  3.12.13: all six new focused tests passed, the seven focused benchmark files passed all 51
+  tests, and the full suite passed all 1,159 tests with 100% SovereignLab statement/branch
+  coverage (4,679 statements, 1,568 branches) under a fresh OS `--basetemp`. Ruff check plus
+  format check passed across 76 Python files. All 13 public schemas regenerated deterministically
+  and all five committed replay traces remained unchanged. The repository `.pytest_tmp` directory
+  and ACL were not touched. Functional commit `77d247d` contains exactly the two drafts and
+  focused tests; the matrix, approved core, source, rights, schema, trace, and runtime boundaries
+  are unchanged. No network, provider/live-model call, GPU operation, or paid operation occurred;
+  cost was $0.00.
 
 ## 2. Set up and validate the Windows machine
 
@@ -362,8 +373,8 @@ $venvPython = (Resolve-Path .\.venv\Scripts\python.exe).Path
 git diff --exit-code
 ```
 
-Expected handoff baseline: Python 3.12, 13 deterministic public schemas, 75 formatted Python
-files, 1,153 passing tests, 100% SovereignLab statement/branch coverage (4,679 statements, 1,568
+Expected handoff baseline: Python 3.12, 13 deterministic public schemas, 76 formatted Python
+files, 1,159 passing tests, 100% SovereignLab statement/branch coverage (4,679 statements, 1,568
 branches), and no unexpected Git diff.
 On this workstation, the ignored repository-root `.pytest_tmp` can retain an access-denying ACL
 and make the canonical pytest command report only tmp-path setup errors. Do not treat that known
@@ -436,11 +447,16 @@ do not remove it merely because another operating system supplies an IANA timezo
     `tests/benchmark/test_oecd_scope_abstain_core.py` — the approved two-record OECD scope
     abstention core batch and its focused frozen-allocation, abstention-reason, bilingual-parity,
     approval-lifecycle, no-value-leak, and rights-versus-availability contrast checks.
+26. `data/benchmark/drafts/core-draft-007.jsonl` and
+    `tests/benchmark/test_cpi_revision_abstain_draft.py` — the pending two-record CPI revision
+    false-premise abstention draft pair and its focused frozen-allocation, abstention-reason,
+    bilingual-parity, draft-lifecycle, no-value/no-snapshot-leak, sole-approved-OECD-scope, and
+    latest-only vintage-semantics checks.
 
 Only when changing source/resolver/harvester behavior, also read
 `docs/discovery/03_week1_verification_log.md` and the relevant resolver, retrieval, registry,
-adapter, or harvester source/tests. They are not prerequisites for the owner-directed draft-only
-authoring slice.
+adapter, or harvester source/tests. They are not prerequisites for the current named human-review
+gate.
 
 ## 4. External state for the new session
 
@@ -453,8 +469,8 @@ authoring slice.
   a remaining balance of USD `19.7641547592`. Do not start another paid Pod without a new explicit
   authorization and cost estimate.
 - Do not assume the Mac's RunPod CLI, SSH key, GitHub CLI login, local `.env`, or virtual
-  environment exists on Windows. They are machine-local and are not needed for the next offline
-  draft-only work unit.
+  environment exists on Windows. They are machine-local and are not needed for the pending
+  offline human-review gate.
 - No model weights or adapter were copied from RunPod. The repository contains only the harness,
   synthetic fixture, and recorded compatibility evidence.
 - The application-ready detailed and brief English descriptions are in
@@ -465,8 +481,10 @@ authoring slice.
   `data/benchmark/core/core-batch-003.jsonl`, the two records in
   `data/benchmark/core/core-batch-004.jsonl`, the two records in
   `data/benchmark/core/core-batch-005.jsonl`, and the two records in
-  `data/benchmark/core/core-batch-006.jsonl` are approved. No draft is pending; the remaining 26
-  matrix slots are neither authored nor approved.
+  `data/benchmark/core/core-batch-006.jsonl` are approved. The two `kv-core-abstain-03` records
+  in `data/benchmark/drafts/core-draft-007.jsonl` are pending named human review and do not
+  increase the approved count. The other 26 matrix slots remain unapproved: two are drafts and 24
+  are unauthored.
 - The field names and allocation in the approved matrix and six core batches are intentionally
   unchanged. Do not rename them or alter the frozen allocation.
 - Two real BOK document manifests are committed, but no provider report body or extracted provider
@@ -719,29 +737,50 @@ On 2026-08-26, Hyungbae Cho approved the unchanged Korean/English pair. Approval
 `Hyungbae Cho` and aware review timestamp `2026-08-26T01:49:45Z`, and replaces only the lifecycle
 tag `draft-006` with `batch-006`. The questions, abstention reasons, cutoff, route, split,
 evidence group, and parallel-group binding are unchanged from `c20619d`, and the annotations
-preserve the AI author `Claude AI draft`. The approved core is now 14/40, the remaining 26 slots
-are unauthored and unapproved, and no draft is pending. This approval makes `kv-core-abstain-02`
-the second approved abstain pair after `kv-core-abstain-01` and the first approved pair whose
-fail-closed basis is a rights boundary rather than the availability ledger. The matrix, source
-bundle, rights decisions, 13 public schemas, five committed traces, and runtime source remain
-unchanged.
+preserve the AI author `Claude AI draft`. At that approval checkpoint, the approved core was
+14/40, the remaining 26 slots were unauthored and unapproved, and no draft was pending. This
+approval makes `kv-core-abstain-02` the second approved abstain pair after `kv-core-abstain-01`
+and the first approved pair whose fail-closed basis is a rights boundary rather than the
+availability ledger. The matrix, source bundle, rights decisions, 13 public schemas, five
+committed traces, and runtime source remained unchanged.
 
 The approval transition passed 45 focused benchmark tests across six files and the full
 1,153-test suite with 100% SovereignLab statement/branch coverage (4,679 statements, 1,568
 branches) under a fresh OS `--basetemp`; Ruff check and format check passed across 75 Python
 files. The repository `.pytest_tmp` directory and ACL were untouched, and the slice cost $0.00.
 
-The owner directed the next bounded outcome. The exact continuation order is therefore:
+### Completed `kv-core-abstain-03` draft slice — named human review only
 
-1. Author only the frozen `kv-core-abstain-03` pair as a bounded draft-only slice. It is an
-   abstention pair on the `train` split whose question rests on the false premise that archived
-   OECD edition counts prove the Korean CPI was revised; the gold behavior is to reject that
-   premise and abstain, because edition counts measure archive coverage and no owner-approved
-   raw-data decision covers the OECD Korea CPI revision series. The pair binds no source units
-   and is fully offline.
-2. Keep both new records at `annotation.status=draft`; they await a separate named human review
-   and do not raise the approved count. Stop after the draft slice and a green full baseline; do
-   not select or author another pair.
+Functional commit `77d247d` adds exactly `kv-core-abstain-03-ko` and `kv-core-abstain-03-en` at
+`status=draft` in `data/benchmark/drafts/core-draft-007.jsonl`, together with six focused tests.
+Both records preserve the frozen `train` / `abstain` allocation, the
+`eg-abstain-korean-cpi-revision-false-premise` evidence group, and the `kv-core-abstain-03`
+parallel group. The pair binds no document or data units and carries no tool expectations and no
+reference answer — only a language-matched abstention reason. Both questions rest on the false
+premise that the many archived OECD editions of Korea's consumer price index prove the Korean CPI
+was revised just as many times, and ask for before-and-after November 2019 CPI values using only
+the vintage available as of 2026-07-17. The gold behavior is to reject the premise and abstain:
+archived edition counts measure archive coverage, not actual revisions, and KOR-RTD holds no
+owner-approved raw-data decision for the OECD Korea CPI revision series — raw OECD observations
+outside the sole approved Korea monthly amplitude-adjusted CLI scope (`KOR.M.LI_AA.IX._T`) remain
+metadata-only — so no before-and-after CPI observation can be served, and the system must not
+fabricate revision values or expose an unapproved observation. The focused tests additionally
+prove that the rights catalog's only OECD decision is the approved CLI scope, that the serialized
+records leak no observation value and no snapshot identifier, and that the only approved CPI
+evidence in KOR-RTD (the KOSIS latest-only snapshot) carries `vintage_semantics=latest_only`, so
+committed evidence cannot serve any CPI revision by construction. This is the third authored
+abstain pair after `kv-core-abstain-01` and `kv-core-abstain-02` and the first false-premise
+rejection pair. The matrix, approved core, source bundle, rights decisions, 13 public schemas,
+five committed traces, and runtime source are unchanged. The approved count remains 14/40; of the
+other 26 unapproved slots, these two are pending drafts and 24 remain unauthored.
+
+The exact continuation order is therefore:
+
+1. Review only `kv-core-abstain-03-ko` and `kv-core-abstain-03-en` against the frozen matrix and
+   the committed rights catalog.
+2. Do not mark either record approved, move it into `core/`, or raise the approved count without
+   an explicit named human decision. Stop after recording that decision and a green full baseline;
+   do not select or author another pair.
 3. Preserve the frozen matrix, approved core, source, rights, schema, trace, and runtime boundaries;
    do not begin provider/live-model integration, probes, paid work, or the deferred bounded loop.
 
@@ -755,6 +794,8 @@ the configured secrets.
   two-record documentary batch, the approved two-record ECOS GDP third batch, the approved
   two-record ECOS current-account fourth batch, the approved two-record KOSIS CPI fifth batch, or
   the approved two-record OECD scope abstention sixth batch.
+- Do not re-author or pre-approve the two `kv-core-abstain-03` CPI revision false-premise
+  abstention drafts, or select a later pair before their separate named human review is complete.
 - Do not re-author or re-review the approved `kv-core-abstain-02` OECD scope abstention pair; its
   separate named human review is complete.
 - Do not redo the first real BOK document manifests, revert their ADR 0009 `allowed` conclusion, or

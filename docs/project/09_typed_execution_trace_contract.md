@@ -258,20 +258,32 @@ draft records were pending review and 26 matrix slots remained unauthored and un
 
 That review gate completed on 2026-08-26 at approval feature commit `4c29b1d`. Hyungbae Cho
 approved exactly the two `kv-core-abstain-02` records, which now live in
-`data/benchmark/core/core-batch-006.jsonl`; the approved core is now 14/40 and 26 matrix slots
-remain unauthored and unapproved. This is the second approved abstain pair (after
+`data/benchmark/core/core-batch-006.jsonl`; the approved core is now 14/40, and at that
+checkpoint 26 matrix slots remained unauthored and unapproved. This is the second approved abstain pair (after
 `kv-core-abstain-01`) and the first approved pair whose fail-closed basis is a rights boundary
 rather than the availability ledger. This was a lifecycle-only transition: questions, abstention
 reasons, cutoff, the frozen matrix, execution contracts and runtime, source bytes and manifests,
 rights decisions, normalization, the 13 public schemas, and the five committed traces remain
 unchanged.
 
-No benchmark draft is pending. The exact next slice, directed by the owner, is a bounded
-draft-only authoring slice for the frozen `kv-core-abstain-03` pair: a train-split abstention
-pair whose question rests on the false premise that archived OECD edition counts prove the
-Korean CPI was revised. The gold behavior is to reject that premise and abstain: edition counts
-measure archive coverage, and no owner-approved raw-data decision covers the OECD Korea CPI
-revision series. The pair binds no source units and is fully offline. Those new drafts must stay
-`annotation.status=draft` pending a separate named human review. Provider or live-model
-integration remains absent, and the bounded tool loop deferred by ADR 0008 remains outside the
-completed approval slice.
+The next bounded authoring slice completed on 2026-08-26 at feature commit `77d247d`. It added
+exactly the two draft-only `kv-core-abstain-03` Korean/English records in
+`data/benchmark/drafts/core-draft-007.jsonl`. The abstain pair binds no document or data units and
+carries no tool expectations or reference answer, only a language-matched abstention reason: both
+questions rest on the false premise that the many archived OECD editions of Korea's consumer price
+index prove the Korean CPI was revised just as many times, and ask for before-and-after November
+2019 CPI values using only the vintage available as of 2026-07-17. The gold behavior is to reject
+that premise and abstain: archived edition counts measure archive coverage, not actual revisions,
+and KOR-RTD holds no owner-approved raw-data decision for the OECD Korea CPI revision series;
+raw OECD observations outside the sole approved scope (Korea's monthly amplitude-adjusted CLI,
+`KOR.M.LI_AA.IX._T`, ADR 0007) remain metadata-only, so no before-and-after CPI observation can
+be served and the system must not fabricate revision values or expose an unapproved observation.
+Neither record has named review metadata or enters `core/`, so the approved core remains 14/40:
+two draft records are pending review and 24 matrix slots remain unauthored and unapproved.
+
+The frozen matrix, execution contracts and runtime, source bytes and manifests, rights decisions,
+normalization rules, approved core, 13 public schemas, and five committed traces are unchanged.
+The exact next independent slice is only named human review of those two drafts. Do not pre-approve
+or move them into `core/`, increase the approved count, or select or author a later pair before
+that decision. Provider or live-model integration remains absent, and the bounded tool loop
+deferred by ADR 0008 remains outside this authoring slice.

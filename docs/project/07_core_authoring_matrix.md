@@ -1,7 +1,7 @@
 # K-VINTAGE human-reviewed core authoring matrix 1.0.0
 
-- Status: structural allocation frozen; first fourteen records owner-approved; owner-directed next
-  slice is the `kv-core-abstain-03` draft pair
+- Status: structural allocation frozen; first fourteen records owner-approved; `kv-core-abstain-03`
+  drafted and pending named human review
 - Date: 2026-08-26
 - Scope authority: charter v2.5 §5 and M2 continuation order
 - Canonical matrix: `data/benchmark/core-authoring-matrix-v1.json`
@@ -67,8 +67,9 @@ changed from `draft-002` to `batch-002` when the file moved into `core/`.
 
 At the 2026-07-29 checkpoint, these two records brought the approved human-reviewed core to 6/40.
 The later ECOS GDP, ECOS current-account, KOSIS CPI, and OECD scope abstention approvals
-described below bring the current total to 14/40; the other 26 records remain unauthored and
-unapproved.
+described below bring the current total to 14/40. The CPI revision false-premise abstention
+draft described after them accounts for two of the 26 unapproved records; the other 24 remain
+unauthored and unapproved.
 
 ## 4. Approved ECOS GDP pair
 
@@ -203,24 +204,64 @@ IDs did not change during review.
 The pair-specific focused test file was renamed to
 `tests/benchmark/test_oecd_scope_abstain_core.py` with approved expectations, keeping the
 assertions that the serialized records contain neither the `102.66` observation nor the CLI
-source or ledger identifiers; the combined focused benchmark acceptance suite passes 45 tests
-across the six files listed in the reproduction commands. The full suite passes 1,153 tests at
-100% SovereignLab statement/branch coverage (4,679 statements, 1,568 branches) across 75
-Ruff-formatted Python files using a fresh OS `--basetemp`. The 13 public schemas regenerate
-deterministically, the five committed traces remain unchanged, the working tree diff is clean,
-and the slice cost $0.00. The record substance, frozen matrix, source bundle, rights decisions,
+source or ledger identifiers; at that approval checkpoint the combined focused benchmark
+acceptance suite passed 45 tests across the first six files listed in the reproduction commands,
+and the full suite passed 1,153 tests at 100% SovereignLab statement/branch coverage (4,679
+statements, 1,568 branches) across 75 Ruff-formatted Python files using a fresh OS `--basetemp`.
+The 13 public schemas regenerated deterministically, the five committed traces remained
+unchanged, the working tree diff was clean, and the slice cost $0.00. The record substance, frozen matrix, source bundle, rights decisions,
 source package, and execution runtime did not change.
 
-The approved core is now 14/40 and no draft review candidate remains in the committed tree; the
-other 26 records remain unauthored and unapproved. The owner-directed next slice is a bounded
-draft-only authoring pass for the frozen `kv-core-abstain-03` pair, a `train`-split abstention
-pair whose question rests on the false premise that archived OECD edition counts prove the Korean
-CPI was revised; the gold behavior is to reject that premise and abstain, because edition counts
-measure archive coverage and no owner-approved raw-data decision covers the OECD Korea CPI
-revision series. The pair binds no source units and is fully offline. The new drafts must stay
-`annotation.status=draft` pending a separate named human review.
+That approval brought the approved core to 14/40, leaving no draft review candidate in the
+committed tree at that checkpoint. The owner-directed next slice was a bounded draft-only
+authoring pass for the frozen `kv-core-abstain-03` pair, a `train`-split abstention pair whose
+question rests on the false premise that archived OECD edition counts prove the Korean CPI was
+revised; the gold behavior is to reject that premise and abstain, because edition counts measure
+archive coverage and no owner-approved raw-data decision covers the OECD Korea CPI revision
+series. The pair binds no source units and is fully offline; the resulting drafts are described
+below and stay `annotation.status=draft` pending a separate named human review.
 
-## 8. Approval records
+## 8. Draft CPI revision false-premise abstention pair
+
+Feature commit `77d247d` adds exactly the frozen `kv-core-abstain-03` Korean/English pair to
+`data/benchmark/drafts/core-draft-007.jsonl` at `annotation.status=draft`. Both records use the
+`abstain` route, `train` split, `eg-abstain-korean-cpi-revision-false-premise` evidence group,
+and `kv-core-abstain-03` parallel group. The pair binds no document or data units and carries no
+tool expectations and no reference answer — only a language-matched `abstention_reason`. This is
+the third authored abstain pair after the approved availability-frontier `kv-core-abstain-01`
+and unapproved-neighboring-scope `kv-core-abstain-02` pairs, and the first false-premise
+rejection pair.
+
+Both questions rest on the false premise that the many archived OECD editions of Korea's consumer
+price index prove the Korean CPI was revised just as many times, and ask for before-and-after
+November 2019 CPI values using only the vintage available as of 2026-07-17. The gold behavior is
+to reject the premise and abstain: archived edition counts measure archive coverage, not actual
+revisions, and KOR-RTD holds no owner-approved raw-data decision for the OECD Korea CPI revision
+series — raw OECD observations outside the sole approved Korea monthly amplitude-adjusted CLI
+scope `KOR.M.LI_AA.IX._T` remain metadata-only — so no before-and-after CPI observation can be
+served, and the system must not fabricate revision values or expose an unapproved observation.
+Their annotations preserve `annotated_by="Claude AI draft"` at `2026-08-26T01:51:11Z`, contain no
+reviewer metadata, and carry the `core`, `temporal`, `vintage`, `abstention`, `false-premise`,
+and `draft-007` tags.
+
+The pair-specific focused test file `tests/benchmark/test_cpi_revision_abstain_draft.py` passes
+six tests, including assertions that the rights catalog's only OECD decision is the approved CLI
+scope, that the serialized records leak no observation value and no snapshot identifier, and that
+the only approved CPI evidence in KOR-RTD — the KOSIS latest-only snapshot — has
+`vintage_semantics=latest_only`, so committed evidence cannot serve any CPI revision by
+construction. The combined focused benchmark suite passes 51 tests across the seven files listed
+in the reproduction commands. The full suite passes 1,159 tests at 100% SovereignLab
+statement/branch coverage (4,679 statements, 1,568 branches) across 76 Ruff-formatted Python
+files using a fresh OS `--basetemp`. The 13 public schemas regenerate deterministically, the five
+committed traces remain unchanged, the working tree diff is clean, and the slice cost $0.00. The
+frozen matrix, approved core, source bundle, rights decisions, source package, and execution
+runtime did not change.
+
+The approved core remains 14/40. These two drafts and the 24 unauthored slots comprise the other
+26 unapproved records. The exact next action is named human review of only `kv-core-abstain-03-ko`
+and `kv-core-abstain-03-en`; do not pre-approve them or select another pair.
+
+## 9. Approval records
 
 On 2026-07-25, Hyungbae Cho explicitly approved:
 
@@ -260,7 +301,7 @@ feature commit `4c29b1d` records reviewer `Hyungbae Cho`, review timestamp `2026
 `annotation.status=approved`, the `batch-006` lifecycle tag, and the move from
 `drafts/core-draft-006.jsonl` to `core/core-batch-006.jsonl`.
 
-## 9. Human-review checklist
+## 10. Human-review checklist
 
 For each bilingual pair, the reviewer must verify:
 
@@ -276,7 +317,7 @@ Future corrections remain in their draft batch until review is complete. An appr
 reviewer and review timestamp in each `BenchmarkRecord`; it does not rewrite the frozen matrix
 allocation.
 
-## 10. Reproduction
+## 11. Reproduction
 
 ```bash
 python scripts/export_json_schemas.py
@@ -286,6 +327,7 @@ python -m pytest tests/benchmark/test_ecos_gdp_core.py
 python -m pytest tests/benchmark/test_ecos_current_account_core.py
 python -m pytest tests/benchmark/test_kosis_cpi_core.py
 python -m pytest tests/benchmark/test_oecd_scope_abstain_core.py
+python -m pytest tests/benchmark/test_cpi_revision_abstain_draft.py
 python -m ruff check .
 python -m ruff format --check .
 ```
@@ -320,5 +362,14 @@ against the frozen allocation and the committed rights decisions, confirms they 
 units and carry no tool expectations or reference answers, proves through the approved-scope
 contrast that the abstention is rights-driven rather than availability-driven, and asserts the
 serialized records contain neither the `102.66` observation nor the CLI source or ledger
-identifiers. Across the six focused benchmark files above, 45 tests pass while the approved
-count is fourteen.
+identifiers. At its approval checkpoint, the first six focused benchmark files passed 45 tests
+while the approved count is fourteen.
+
+The CPI revision abstention draft test validates the two unapproved records against the frozen
+allocation and the committed rights decisions, confirms they bind no source units and carry no
+tool expectations or reference answers, proves the rights catalog's only OECD decision is the
+approved CLI scope, asserts the serialized records leak no observation value and no snapshot
+identifier, and proves the only approved CPI evidence in KOR-RTD — the KOSIS latest-only
+snapshot — carries `vintage_semantics=latest_only`, so committed evidence cannot serve any CPI
+revision by construction. It adds six tests, bringing the current focused benchmark suite to 51
+while the approved count remains fourteen.
