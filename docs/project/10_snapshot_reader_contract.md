@@ -285,7 +285,7 @@ unauthored and unapproved.
 
 That review gate completed on 2026-08-27 at approval feature commit `dfcd191`. Hyungbae Cho
 approved exactly the two `kv-core-abstain-04` records, which now live in
-`data/benchmark/core/core-batch-008.jsonl`; the approved core is now 18/40, and at that
+`data/benchmark/core/core-batch-008.jsonl`; the approved core was then 18/40, and at that
 checkpoint 22 matrix slots remained unauthored and unapproved. This is the fourth approved abstain pair (availability-frontier,
 unapproved neighboring scope, false-premise rejection, and now missing-as-of clarification) and
 the first approved dev-split abstain pair. This was a lifecycle-only transition: the questions
@@ -307,18 +307,31 @@ fail-closed resolver must not infer editions beyond the frontier or expose a val
 abstention is frontier-driven, not rights- or premise-driven: focused tests show the ledger's
 cutoff for 2026-08-15 exceeding `complete_through`, a pre-frontier 2026-07-09 cutoff still
 selecting edition `202607`, and the serialized records leaking no edition code, observation
-value, or snapshot or ledger identifier. This fifth authored abstain pair completes authoring of
-all five abstain pairs (four already approved), is the first authored test-split pair, and is
-the last matrix slot authorable without a new capture or an owner decision: after its review,
-every remaining slot (`kv-core-doc-02`..`05`, `kv-core-both-01`..`05`, and the reserved
-`kv-core-data-05`) needs either the Bank of Korea outlook PDF bodies re-fetched, a new manifest
-capture, or the reserved future release. Neither record has named review metadata or enters
-`core/`, so the approved core remains 18/40: two draft records are pending review and 20 matrix
-slots remain unauthored and unapproved.
+value, or snapshot or ledger identifier. This fifth authored abstain pair completed authoring of
+all five abstain pairs (four then approved), was the first authored test-split pair, and was the
+last matrix slot authorable without a new capture or an owner decision: after its review, every
+remaining slot (`kv-core-doc-02`..`05`, `kv-core-both-01`..`05`, and the reserved
+`kv-core-data-05`) would need either the Bank of Korea outlook PDF bodies re-fetched, a new
+manifest capture, or the reserved future release. At that checkpoint, neither record had named
+review metadata or entered `core/`, so the approved core remained 18/40: two draft records were
+pending review and 20 matrix slots remained unauthored and unapproved.
 
-The frozen matrix, execution contracts and runtime, source bytes and manifests, rights decisions,
-normalization rules, approved core, 13 public schemas, and five committed traces are unchanged.
-The exact next independent slice is only named human review of those two drafts. Do not pre-approve
-or move them into `core/`, increase the approved count, or select or author a later pair before
-that decision. Provider or live-model integration remains absent, and the bounded tool loop
-deferred by ADR 0008 remains outside this authoring slice.
+That review gate completed on 2026-08-27 at approval feature commit `16d3dfd`. Hyungbae Cho
+approved exactly the two `kv-core-abstain-05` records, which now live in
+`data/benchmark/core/core-batch-009.jsonl`; the approved core is now 20/40 (the halfway mark of
+the frozen 40-record matrix) and 20 matrix slots remain unauthored and unapproved. This is the
+fifth approved abstain pair (availability-frontier, unapproved neighboring scope, false-premise
+rejection, missing-as-of clarification, and now the ledger completeness frontier) and the first
+approved test-split pair; the abstain route's five pairs are now all approved. This was a
+lifecycle-only transition: the questions, abstention reasons, the frozen matrix, execution
+contracts and runtime, source bytes and manifests, rights decisions, normalization, the 13
+public schemas, and the five committed traces remain unchanged.
+
+No benchmark draft is pending. The exact next slice, directed by the owner, is a bounded
+draft-only authoring slice for the frozen `kv-core-both-01` pair: the first `documents_and_data`
+pair (train split), combining one May 2026 outlook narrative with the demonstrably available
+July 2026 Korea CLI vintage. The pair uses only the existing committed evidence units, document
+unit `bok-outlook-release-2026-05` and data unit `oecd-stes-edition-202607`. Those new drafts
+must stay `annotation.status=draft` pending a separate named human review. Provider or
+live-model integration remains absent, and the bounded tool loop deferred by ADR 0008 remains
+outside the completed approval slice.

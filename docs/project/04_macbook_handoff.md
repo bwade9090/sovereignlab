@@ -1,8 +1,9 @@
 # Cross-machine continuation handoff
 
 - Legacy filename: retained so existing links and onboarding instructions do not break.
-- Prepared: 2026-07-16; refreshed 2026-08-27 after the bilingual ledger frontier abstention draft
-  slice (thirtieth refresh: two review candidates complete, named human review next)
+- Prepared: 2026-07-16; refreshed 2026-08-27 after the bilingual ledger frontier abstention
+  owner-approval transition (thirty-first refresh: ninth core batch approved, owner-directed
+  draft slice next)
 - Target continuation machine: Windows workstation
 - Authority: charter v2.5; accepted ADRs 0001–0009
 - Branch to continue: `main` from `origin`
@@ -10,10 +11,11 @@
 - Session state: work unit C and its first nine ADR 0008 slices are complete and reviewable; all
   three deterministic runtime adapters, the explicit dispatcher, offline planner boundary, private
   deterministic evidence-packet assembler, private offline executor, and five committed real-
-  digest replay traces are complete; Hyungbae Cho approved the unchanged `kv-core-abstain-04`
-  Korean/English pair, so the core remains 18/40; the `kv-core-abstain-05` Korean/English pair is
-  now complete at `status=draft` and awaits named human review, while no later pair or slice is
-  selected
+  digest replay traces are complete; Hyungbae Cho approved the unchanged `kv-core-abstain-05`
+  Korean/English pair, so the core is now 20/40 with no pending draft; the owner directed a
+  bounded draft-only authoring slice for the frozen `kv-core-both-01` pair as the exact next
+  outcome
+- Completed ledger frontier abstention approval feature checkpoint: `16d3dfd` (`feat: approve ledger frontier abstention bilingual pair`).
 - Completed ledger frontier abstention draft functional checkpoint: `d1eb5ea` (`feat: add ledger frontier abstention bilingual drafts`).
 - Completed missing-as-of abstention approval feature checkpoint: `dfcd191` (`feat: approve missing-as-of abstention bilingual pair`).
 - Completed missing-as-of abstention draft functional checkpoint: `fd7640b` (`feat: add missing-as-of abstention bilingual drafts`).
@@ -49,8 +51,8 @@ state from the Mac. At the beginning of the Windows session:
 3. Create or verify the Windows-local `.venv` and run the PowerShell baseline in section 2 before
    changing files.
 4. State back the current milestone, approved core count, exact next work unit, and hard stops.
-5. Do not start a new work unit. Section 5 names only the pending human review of the
-   `kv-core-abstain-05` Korean/English drafts; do not pre-approve them or select another pair.
+5. Start only with section 5's owner-directed draft-only authoring slice for the frozen
+   `kv-core-both-01` pair; do not pre-approve its new drafts or select another pair.
 
 If the worktree is dirty, preserve the existing changes and determine their owner before editing.
 If local `main` has diverged from `origin/main`, stop rather than rewriting history.
@@ -131,7 +133,7 @@ If local `main` has diverged from `origin/main`, stop rather than rewriting hist
   temporary directory, matched the committed byte sizes and hashes, and had both evidence pages
   rendered and visually inspected before all temporary files were deleted. Bundle tests enforce
   language matching, publication cutoffs, frozen allocation, split-group integrity, and the
-  current 18/40 approved-core count.
+  current 20/40 approved-core count.
 - **Execution-contract adjustment (2026-07-28, ADR 0008 / charter v2.4, documentation only):**
   after a four-lens review with adversarial verification, the owner approved implementing the
   minimal question-to-evidence-packet path as a typed function-calling artifact (model-emitted
@@ -385,6 +387,15 @@ If local `main` has diverged from `origin/main`, stop rather than rewriting hist
   not touched. Functional commit `d1eb5ea` contains exactly the two drafts and focused tests; the
   matrix, approved core, source, rights, schema, trace, and runtime boundaries are unchanged. No
   network, provider/live-model call, GPU operation, or paid operation occurred; cost was $0.00.
+- Ledger frontier abstention approval transition validated 2026-08-27 on Windows/Python 3.12.13:
+  the nine focused benchmark files passed all 63 tests; the full suite passed all 1,171 tests
+  with 100% SovereignLab statement/branch coverage (4,679 statements, 1,568 branches) under a
+  fresh OS `--basetemp`; and Ruff check plus format check passed across 78 Python files. The 13
+  public schemas regenerated deterministically and the five committed traces remained unchanged.
+  The repository `.pytest_tmp` directory and ACL were not touched. Feature commit `16d3dfd`
+  contains the two-record approval lifecycle transition and focused test updates only; the
+  matrix, source, rights, schema, and runtime boundaries are unchanged. No network,
+  provider/live-model call, GPU operation, or paid operation occurred; cost was $0.00.
 
 ## 2. Set up and validate the Windows machine
 
@@ -439,8 +450,8 @@ do not remove it merely because another operating system supplies an IANA timezo
    behind the v2 direction.
 6. `docs/project/05_evidence_contract_2_0_migration.md` — the implemented contract surface the
    next work units build on.
-7. `docs/project/07_core_authoring_matrix.md` — the approved 40-record allocation, first eight
-   approved batches (18/40), and human-review boundary.
+7. `docs/project/07_core_authoring_matrix.md` — the approved 40-record allocation, first nine
+   approved batches (20/40), and human-review boundary.
 8. `docs/project/08_temporal_document_retrieval.md` — the implemented document cutoff and
    filter-before-scoring contract.
 9. `docs/project/09_typed_execution_trace_contract.md` — the frozen execution/trace contract.
@@ -496,16 +507,16 @@ do not remove it merely because another operating system supplies an IANA timezo
     abstention core batch and its focused frozen-allocation, no-as-of-phrase,
     explicit-cutoff-demand, bilingual-parity, approval-lifecycle,
     no-value/no-snapshot-or-ledger-leak, and explicit-cutoff-contrast checks.
-28. `data/benchmark/drafts/core-draft-009.jsonl` and
-    `tests/benchmark/test_ledger_frontier_abstain_draft.py` — the pending two-record ledger
-    frontier abstention draft pair and its focused frozen-allocation, abstention-reason,
-    bilingual-parity, draft-lifecycle, no-edition/no-value/no-snapshot-or-ledger-leak, and
+28. `data/benchmark/core/core-batch-009.jsonl` and
+    `tests/benchmark/test_ledger_frontier_abstain_core.py` — the approved two-record ledger
+    frontier abstention core batch and its focused frozen-allocation, abstention-reason,
+    bilingual-parity, approval-lifecycle, no-edition/no-value/no-snapshot-or-ledger-leak, and
     pre-frontier contrast checks.
 
 Only when changing source/resolver/harvester behavior, also read
 `docs/discovery/03_week1_verification_log.md` and the relevant resolver, retrieval, registry,
-adapter, or harvester source/tests. They are not prerequisites for the current named human-review
-gate.
+adapter, or harvester source/tests. They are not prerequisites for the owner-directed draft-only
+authoring slice.
 
 ## 4. External state for the new session
 
@@ -518,30 +529,35 @@ gate.
   a remaining balance of USD `19.7641547592`. Do not start another paid Pod without a new explicit
   authorization and cost estimate.
 - Do not assume the Mac's RunPod CLI, SSH key, GitHub CLI login, local `.env`, or virtual
-  environment exists on Windows. They are machine-local and are not needed for the pending
-  offline human-review gate.
+  environment exists on Windows. They are machine-local and are not needed for the next offline
+  draft-only work unit.
 - No model weights or adapter were copied from RunPod. The repository contains only the harness,
   synthetic fixture, and recorded compatibility evidence.
 - The application-ready detailed and brief English descriptions are in
   `docs/application/01_project_description.md`. They intentionally make no model-performance claim.
-- The approved core count is exactly 18/40. The four records in
+- The approved core count is exactly 20/40. The four records in
   `data/benchmark/core/core-batch-001.jsonl`, the two records in
   `data/benchmark/core/core-batch-002.jsonl`, the two records in
   `data/benchmark/core/core-batch-003.jsonl`, the two records in
   `data/benchmark/core/core-batch-004.jsonl`, the two records in
   `data/benchmark/core/core-batch-005.jsonl`, the two records in
   `data/benchmark/core/core-batch-006.jsonl`, the two records in
-  `data/benchmark/core/core-batch-007.jsonl`, and the two records in
-  `data/benchmark/core/core-batch-008.jsonl` are approved. The two `kv-core-abstain-05` records
-  in `data/benchmark/drafts/core-draft-009.jsonl` are pending named human review and do not
-  increase the approved count. The other 22 matrix slots remain unapproved: two are drafts and 20
-  are unauthored.
-- The field names and allocation in the approved matrix and eight core batches are intentionally
+  `data/benchmark/core/core-batch-007.jsonl`, the two records in
+  `data/benchmark/core/core-batch-008.jsonl`, and the two records in
+  `data/benchmark/core/core-batch-009.jsonl` are approved. No draft is pending; the remaining 20
+  matrix slots are neither authored nor approved.
+- The field names and allocation in the approved matrix and nine core batches are intentionally
   unchanged. Do not rename them or alter the frozen allocation.
 - Two real BOK document manifests are committed, but no provider report body or extracted provider
   text has been added. ADR 0009 classifies the manifests as `allowed`; their absence is a
   repository-scope choice, and the committed searchable retrieval corpus remains entirely
   synthetic.
+- With explicit owner approval, the two official Bank of Korea May 2026 Economic Outlook PDF
+  bodies were re-fetched from their committed canonical BOK URLs into the Git-ignored `data/raw/`
+  directory on this workstation and verified byte-for-byte against the committed manifests
+  (Korean 10,711,393 bytes, English 3,711,417 bytes, exact SHA-256 matches). No PDF body or
+  extracted text enters Git; the local verified copies exist to author page-anchored document
+  evidence, and the re-fetch cost USD 0.00.
 
 ## 5. Exact continuation order
 
@@ -886,7 +902,7 @@ The approval transition passed 57 focused benchmark tests across eight files and
 branches) under a fresh OS `--basetemp`; Ruff check and format check passed across 77 Python
 files. The repository `.pytest_tmp` directory and ACL were untouched, and the slice cost $0.00.
 
-### Completed `kv-core-abstain-05` draft slice — named human review only
+### Completed `kv-core-abstain-05` draft and owner-approval slices
 
 Functional commit `d1eb5ea` adds exactly `kv-core-abstain-05-ko` and `kv-core-abstain-05-en` at
 `status=draft` in `data/benchmark/drafts/core-draft-009.jsonl`, together with six focused tests.
@@ -908,21 +924,43 @@ with a `2026-07-09` cutoff still selects edition `202607` — so the drafted abs
 frontier-driven, not rights- or premise-driven. This is the fifth authored abstain pair after the
 approved `kv-core-abstain-01`, `kv-core-abstain-02`, `kv-core-abstain-03`, and
 `kv-core-abstain-04` — completing authoring of all five abstain pairs — and the first authored
-test-split pair. It is the last matrix slot authorable without a new capture or an owner
+test-split pair. It was the last matrix slot authorable without a new capture or an owner
 decision: after its review, every remaining slot (`kv-core-doc-02`–`kv-core-doc-05`,
-`kv-core-both-01`–`kv-core-both-05`, and the reserved `kv-core-data-05`) needs either the Bank of
-Korea outlook PDF bodies re-fetched, a new manifest capture, or the reserved future release. The
-matrix, approved core, source bundle, rights decisions, 13 public schemas, five committed traces,
-and runtime source are unchanged. The approved count remains 18/40; of the other 22 unapproved
-slots, these two are pending drafts and 20 remain unauthored.
+`kv-core-both-01`–`kv-core-both-05`, and the reserved `kv-core-data-05`) needed either the Bank
+of Korea outlook PDF bodies re-fetched, a new manifest capture, or the reserved future release.
+The matrix, approved core, source bundle, rights decisions, 13 public schemas, five committed
+traces, and runtime source are unchanged. At that checkpoint, the approved count remained 18/40;
+of the other 22 unapproved slots, these two were pending drafts and 20 remained unauthored.
 
-The exact continuation order is therefore:
+On 2026-08-27, Hyungbae Cho approved the unchanged Korean/English pair. Approval feature commit
+`16d3dfd` moves the two records to `data/benchmark/core/core-batch-009.jsonl`, records reviewer
+`Hyungbae Cho` and aware review timestamp `2026-08-27T07:51:13Z`, and replaces only the lifecycle
+tag `draft-009` with `batch-009`. The questions, abstention reasons, record-level `as_of`, route,
+split, evidence group, and parallel-group binding are unchanged from `d1eb5ea`, and the
+annotations preserve the AI author `Claude AI draft`. At that approval checkpoint, the approved
+core was 20/40 — the halfway mark of the frozen 40-record matrix — the remaining 20 slots were
+unauthored and unapproved, and no draft was pending. This approval makes `kv-core-abstain-05` the
+fifth approved abstain pair after `kv-core-abstain-01`, `kv-core-abstain-02`,
+`kv-core-abstain-03`, and `kv-core-abstain-04` — completing approval of the abstain route's five
+pairs — and the first approved `test`-split pair. The matrix, source bundle, rights decisions, 13
+public schemas, five committed traces, and runtime source remained unchanged.
 
-1. Review only `kv-core-abstain-05-ko` and `kv-core-abstain-05-en` against the frozen matrix and
-   the fail-closed edition-availability ledger contract.
-2. Do not mark either record approved, move it into `core/`, or raise the approved count without
-   an explicit named human decision. Stop after recording that decision and a green full baseline;
-   do not select or author another pair.
+The approval transition passed 63 focused benchmark tests across nine files and the full
+1,171-test suite with 100% SovereignLab statement/branch coverage (4,679 statements, 1,568
+branches) under a fresh OS `--basetemp`; Ruff check and format check passed across 78 Python
+files. The repository `.pytest_tmp` directory and ACL were untouched, and the slice cost $0.00.
+
+The owner directed the next bounded outcome. The exact continuation order is therefore:
+
+1. Author only the frozen `kv-core-both-01` pair as a bounded draft-only slice. It is the first
+   `documents_and_data` pair, on the `train` split, combining one May 2026 Bank of Korea outlook
+   narrative with the demonstrably available July 2026 Korea CLI vintage. It uses only the
+   existing committed evidence units — document unit `bok-outlook-release-2026-05` and data unit
+   `oecd-stes-edition-202607` — plus the locally re-fetched, hash-verified outlook PDF bodies in
+   the Git-ignored `data/raw/` directory for page-anchored locators.
+2. Keep both new records at `annotation.status=draft`; they await a separate named human review
+   and do not raise the approved count. Stop after the draft slice and a green full baseline; do
+   not select or author another pair.
 3. Preserve the frozen matrix, approved core, source, rights, schema, trace, and runtime boundaries;
    do not begin provider/live-model integration, probes, paid work, or the deferred bounded loop.
 
@@ -936,11 +974,9 @@ the configured secrets.
   two-record documentary batch, the approved two-record ECOS GDP third batch, the approved
   two-record ECOS current-account fourth batch, the approved two-record KOSIS CPI fifth batch, the
   approved two-record OECD scope abstention sixth batch, the approved two-record CPI revision
-  false-premise abstention seventh batch, or the approved two-record missing-as-of abstention
-  eighth batch.
-- Do not re-author or pre-approve the two `kv-core-abstain-05` ledger frontier abstention drafts,
-  or select a later pair before their separate named human review is complete.
-- Do not re-author or re-review the approved `kv-core-abstain-04` missing-as-of abstention pair;
+  false-premise abstention seventh batch, the approved two-record missing-as-of abstention eighth
+  batch, or the approved two-record ledger frontier abstention ninth batch.
+- Do not re-author or re-review the approved `kv-core-abstain-05` ledger frontier abstention pair;
   its separate named human review is complete.
 - Do not redo the first real BOK document manifests, revert their ADR 0009 `allowed` conclusion, or
   merge full-document/corpus ingestion into the completed GDP authoring or approval units.

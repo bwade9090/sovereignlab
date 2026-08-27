@@ -3,17 +3,11 @@
 > What did the data say *then*? Vintage-conditioned evaluation and auditable briefings for Korean/English economic research.
 
 **Status:** M1b verification and vintage-contract groundwork are complete; M2 benchmark and
-baseline development is in progress with a frozen 40-record core matrix and 18/40 records
-owner-approved. Hyungbae Cho approved the Korean/English `kv-core-abstain-04` pair on 2026-08-27;
-the two records now live in `data/benchmark/core/core-batch-008.jsonl`. Feature commit `d1eb5ea`
-adds the Korean/English `kv-core-abstain-05` pair as two drafts in
-`data/benchmark/drafts/core-draft-009.jsonl`; the abstention pair binds no source units, and its
-gold behavior is abstention with `cutoff_beyond_complete_through`, because its 2026-08-15 as-of
-cutoff lies beyond the committed edition-availability ledger's completeness frontier
-(`complete_through`, the 2026-07-17 capture instant) and past the frontier the ledger cannot
-certify which editions had become available or when. They remain pending named human review and
-do not increase the approved count; of the 22 unapproved slots, these two are drafted and the
-other 20 remain unauthored. The
+baseline development is in progress with a frozen 40-record core matrix and 20/40 records
+owner-approved — the halfway mark. Hyungbae Cho approved the Korean/English `kv-core-abstain-05`
+pair on 2026-08-27; the two records now live in `data/benchmark/core/core-batch-009.jsonl`, and
+the abstain route's five pairs are now all approved. No draft review candidate is pending, and
+the other 20 matrix slots remain unauthored and unapproved. The
 first nine ADR 0008 slices and work unit C are complete: five machine-readable real-digest traces
 were generated through the actual private offline executor, `ScriptedPlanner`, and committed
 registries and corpora in feature commit `883815b`. The trace set covers all four
@@ -188,12 +182,22 @@ instant). The gold behavior is abstention with `cutoff_beyond_complete_through`:
 frontier the ledger cannot certify which editions had become available or when, and the
 fail-closed resolver must not infer editions beyond the frontier or expose a value. A focused
 contrast test shows a pre-frontier cutoff of 2026-07-09 still selects edition `202607`, so the
-drafted abstention is frontier-driven, not rights- or premise-driven. This is the fifth authored
-abstain pair (four already approved), completing authoring of all five abstain pairs, and the
-first authored test-split pair; it is the last matrix slot authorable without a new capture or
-an owner decision. Current validation is 63 focused benchmark tests and 1,171 full-suite tests
-across 78 formatted Python files. The approved count remains 18/40, and the exact next action is
-named human review of only these two drafts; do not pre-approve them or select another pair.
+drafted abstention is frontier-driven, not rights- or premise-driven. On 2026-08-27, Hyungbae
+Cho approved both records without a substantive change; feature commit `16d3dfd` records the
+named-review metadata, `batch-009` lifecycle tag, move to
+`data/benchmark/core/core-batch-009.jsonl`, and focused-test transition. This is the fifth
+approved abstain pair (the availability-frontier `kv-core-abstain-01`, the
+unapproved-neighboring-scope `kv-core-abstain-02`, the false-premise-rejection
+`kv-core-abstain-03`, the missing-as-of `kv-core-abstain-04`, and now this ledger-frontier
+pair), completing approval of all five abstain-route pairs, and the first approved test-split
+pair. The approved count is now 20/40 — the halfway mark of the frozen matrix — and current
+validation is 63 focused benchmark tests and 1,171 full-suite tests across 78 formatted Python
+files. The exact next outcome is an owner-directed, bounded draft-only authoring slice for the
+frozen `kv-core-both-01` pair — the first `documents_and_data` pair (`train` split), combining
+one May 2026 outlook narrative with the demonstrably available July 2026 Korea CLI vintage. It
+uses only the existing committed evidence units (document unit `bok-outlook-release-2026-05` and
+data unit `oecd-stes-edition-202607`), and the new drafts must remain `annotation.status=draft`
+pending a separate named human review.
 Charter v2.5 and
 [ADR 0009](docs/decisions/0009-bok-economic-outlook-public-data-rights.md) additionally record the
 owner-approved `allowed` public-data ruling for official Bank of Korea Economic Outlook
