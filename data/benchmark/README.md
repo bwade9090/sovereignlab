@@ -27,9 +27,7 @@ core records. `core/core-batch-003.jsonl` contains the two approved ECOS GDP rec
 records, `core/core-batch-008.jsonl` contains the two approved missing-as-of abstention
 records, and `core/core-batch-009.jsonl` contains the two approved ledger frontier abstention
 records. Their annotations preserve the AI author and name the human reviewer and review
-timestamp. Together they total 20/40 approved records — the halfway mark of the frozen matrix;
-the other 20 matrix slots remain unauthored and unapproved, and no draft review candidate
-remains.
+timestamp. Together they total 20/40 approved records — the halfway mark of the frozen matrix.
 
 The Korean/English `kv-core-data-03` pair was completed as
 `drafts/core-draft-004.jsonl` on 2026-08-20 in feature commit `50c4d9c`. Hyungbae Cho approved both
@@ -170,16 +168,46 @@ The approval renamed `tests/benchmark/test_ledger_frontier_abstain_draft.py` to
 `tests/benchmark/test_ledger_frontier_abstain_core.py` with approved expectations and raised the
 approved-count assertions in `test_bok_outlook_core.py`, `test_ecos_gdp_core.py`,
 `test_ecos_current_account_core.py`, `test_kosis_cpi_core.py`, `test_oecd_scope_abstain_core.py`,
-`test_cpi_revision_abstain_core.py`, and `test_missing_as_of_abstain_core.py` from 18 to 20. The
-focused benchmark acceptance suite passes 63 tests across nine files and confirms the approved
-count is 20/40, and the full suite passes 1,171 at 100% SovereignLab statement/branch coverage
-across 78 Ruff-formatted Python files. The 13 public schemas and five committed traces are
-unchanged. The exact next outcome is an owner-directed, bounded draft-only authoring slice for
-the frozen `kv-core-both-01` pair — the first `documents_and_data` pair (`train` split),
-combining one May 2026 outlook narrative with the demonstrably available July 2026 Korea CLI
-vintage. It uses only the existing committed evidence units (document unit
-`bok-outlook-release-2026-05` and data unit `oecd-stes-edition-202607`), and the new drafts must
-remain `annotation.status=draft` pending a separate named human review.
+`test_cpi_revision_abstain_core.py`, and `test_missing_as_of_abstain_core.py` from 18 to 20.
+
+Feature commit `933c0e9` adds exactly `kv-core-both-01-ko` and `kv-core-both-01-en` at
+`annotation.status=draft` in `drafts/core-draft-010.jsonl`. Both records use the frozen
+`documents_and_data` route — the first combined pair authored in the core — `train` split,
+`eg-both-outlook-2026-05-cli-202607` evidence group, parallel group `kv-core-both-01`, document
+unit `bok-outlook-release-2026-05`, and data unit `oecd-stes-edition-202607`, exactly as the
+frozen matrix allocates. Each record carries exactly one page-anchored document evidence entry
+and one `resolve_stes_as_of` tool expectation. Both records share `as_of` 2026-07-09: both
+document publications precede that cutoff (the Korean report published 2026-05-28, the official
+English full translation 2026-06-30), and the committed edition-availability ledger proves CLI
+edition `202607` was demonstrably available by it. The document claim is the report's 2026 GDP
+growth projection of 2.6%, well above the February forecast of 2.0%, anchored to the Korean
+summary page 8 (요약 2/10 — 경제전망 요약) and the official English executive summary page 6,
+located in the owner-approved, hash-verified local PDF bodies re-fetched earlier into the
+Git-ignored `data/raw/`; the reference answers disclose summarization/paraphrase and attribute
+the Bank of Korea. The tool expectation mirrors the approved `kv-core-data-01` convention: CLI
+source `oecd-stes-cli-kor-li-aa-20260717t115302688498z` with vintage ledger
+`oecd-stes-ledger-20260717t115242998550z`, selected edition `202607`, raw and normalized value
+`102.66`, canonical unit `oecd_amplitude_adjusted_index`, two display places, and normalization
+rule `oecd-stes-kor-li-aa-index-v1`. The matrix, source bundle, rights decisions, public
+schemas, and execution runtime were not changed, and no PDF body or extracted text entered Git.
+These two records remain pending named human review and do not count toward the approved core:
+20/40 records are approved, two of the other 20 are drafts, and 18 remain unauthored and
+unapproved.
+
+The preceding approval checkpoint passed 63 focused benchmark tests and 1,171 full-suite tests
+across 78 formatted Python files. The current draft checkpoint adds seven focused tests:
+`tests/benchmark/test_bok_cli_both_draft.py` passes all seven and asserts the frozen-allocation
+and no-review-metadata invariants, that the approved core remains twenty records with the drafts
+kept separate, that a real `BenchmarkBundle` validates over both document manifests, the CLI
+manifest, the two constraint captures, the availability ledger, and the rights catalog, that the
+declared CLI gold is reproduced through the real fail-closed resolver, that both records carry
+the bilingual document-plus-data claims, that — as a negative test — the English record fails
+closed before its 2026-06-30 release date, and that — as a ledger check — a pre-availability
+cutoff of 2026-06-30 still abstains. The combined focused benchmark suite passes 70 tests across
+ten files, and the full suite passes 1,178 at 100% SovereignLab statement/branch coverage across
+79 Ruff-formatted Python files. The 13 public schemas and five committed traces are unchanged.
+The exact next action is named human review of only these two drafts; do not pre-approve them or
+select another pair.
 
 The matrix assigns every planned documentary or data source unit to one dataset split. Do not
 replace a reserved unit or move a pair between splits without a versioned matrix change, tests, and

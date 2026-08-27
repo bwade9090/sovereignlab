@@ -89,7 +89,7 @@ source set, rights decisions, 13 public schemas, and frozen execution runtime re
 
 That review gate completed on 2026-08-20 at approval feature commit `473a733`. Hyungbae Cho
 approved exactly the two `kv-core-data-02` records, which now live in
-`data/benchmark/core/core-batch-003.jsonl`; the approved core is now 8/40. This was a
+`data/benchmark/core/core-batch-003.jsonl`; the approved core was then 8/40. This was a
 lifecycle-only transition: questions, answers, cutoff, tool expectations, the frozen matrix,
 execution contracts and runtime, source bytes and manifests, rights decisions, normalization,
 and the 13 public schemas remain unchanged.
@@ -103,7 +103,7 @@ two draft records were pending review and 30 matrix slots remained unauthored an
 
 That review gate completed on 2026-08-21 at approval feature commit `db6700e`. Hyungbae Cho
 approved exactly the two `kv-core-data-03` records, which now live in
-`data/benchmark/core/core-batch-004.jsonl`; the approved core is now 10/40. This was a
+`data/benchmark/core/core-batch-004.jsonl`; the approved core was then 10/40. This was a
 lifecycle-only transition: questions, answers, cutoff, tool expectations, the frozen matrix,
 execution contracts and runtime, source bytes and manifests, rights decisions, normalization,
 the 13 public schemas, and the five committed replay traces remain unchanged.
@@ -118,7 +118,7 @@ unapproved.
 
 That review gate completed on 2026-08-25 at approval feature commit `95c5e61`. Hyungbae Cho
 approved exactly the two `kv-core-data-04` records, which now live in
-`data/benchmark/core/core-batch-005.jsonl`; the approved core is now 12/40. This was a
+`data/benchmark/core/core-batch-005.jsonl`; the approved core was then 12/40. This was a
 lifecycle-only transition: questions, answers, cutoff, tool expectations, the frozen matrix,
 execution contracts and runtime, source bytes and manifests, rights decisions, normalization,
 the 13 public schemas, and the five committed replay traces remain unchanged. This approval
@@ -144,7 +144,7 @@ unauthored and unapproved.
 
 That review gate completed on 2026-08-26 at approval feature commit `4c29b1d`. Hyungbae Cho
 approved exactly the two `kv-core-abstain-02` records, which now live in
-`data/benchmark/core/core-batch-006.jsonl`; the approved core is now 14/40. This was a
+`data/benchmark/core/core-batch-006.jsonl`; the approved core was then 14/40. This was a
 lifecycle-only transition: questions, answers, cutoff, tool expectations, the frozen matrix,
 execution contracts and runtime, source bytes and manifests, rights decisions, normalization,
 the 13 public schemas, and the five committed replay traces remain unchanged. This approval makes
@@ -176,7 +176,7 @@ draft records were pending review and 24 matrix slots remained unauthored and un
 
 That review gate completed on 2026-08-26 at approval feature commit `5e14119`. Hyungbae Cho
 approved exactly the two `kv-core-abstain-03` records, which now live in
-`data/benchmark/core/core-batch-007.jsonl`; the approved core is now 16/40. This was a
+`data/benchmark/core/core-batch-007.jsonl`; the approved core was then 16/40. This was a
 lifecycle-only transition: questions, answers, cutoff, tool expectations, the frozen matrix,
 execution contracts and runtime, source bytes and manifests, rights decisions, normalization,
 the 13 public schemas, and the five committed replay traces remain unchanged. This approval makes
@@ -243,20 +243,47 @@ unauthored and unapproved.
 
 That review gate completed on 2026-08-27 at approval feature commit `16d3dfd`. Hyungbae Cho
 approved exactly the two `kv-core-abstain-05` records, which now live in
-`data/benchmark/core/core-batch-009.jsonl`; the approved core is now 20/40, the halfway mark of
+`data/benchmark/core/core-batch-009.jsonl`; the approved core was then 20/40, the halfway mark of
 the frozen 40-record matrix. This was a lifecycle-only transition: questions, answers, cutoff,
 tool expectations, the frozen matrix, execution contracts and runtime, source bytes and
 manifests, rights decisions, normalization, the 13 public schemas, and the five committed replay
 traces remain unchanged. This approval makes `kv-core-abstain-05` the fifth approved abstain
 pair, completing approval of all five abstain pairs, and the first approved test-split pair.
 
-No benchmark draft is pending and 20 matrix slots remain unauthored and unapproved. The
-owner-directed next outcome is a bounded draft-only authoring slice for the frozen
-`kv-core-both-01` pair: the first `documents_and_data` pair, on the train split, combining one
-May 2026 outlook narrative with the demonstrably available July 2026 Korea CLI vintage, the
-edition a pre-frontier cutoff still selects inside the ledger's completeness frontier. It binds
-only the existing committed evidence units (document unit `bok-outlook-release-2026-05` and data
-unit `oecd-stes-edition-202607`) with page-anchored locators into the outlook document. The new
-drafts must stay `annotation.status=draft` pending a separate named human review. Provider or
+The next bounded authoring slice completed on 2026-08-27 at feature commit `933c0e9`. It added
+exactly the two draft-only `kv-core-both-01` Korean/English records in
+`data/benchmark/drafts/core-draft-010.jsonl` and seven focused tests in
+`tests/benchmark/test_bok_cli_both_draft.py`: the first combined `documents_and_data` pair
+authored in the core, on the train split, in evidence group `eg-both-outlook-2026-05-cli-202607`,
+binding document unit `bok-outlook-release-2026-05` and data unit `oecd-stes-edition-202607`
+exactly as the frozen matrix allocates. Each record carries exactly one page-anchored document
+evidence entry and one `resolve_stes_as_of` tool expectation. Both records share `as_of`
+2026-07-09: both document publications precede that cutoff (the Korean report published
+2026-05-28, the official English full translation 2026-06-30), and the committed
+edition-availability ledger proves CLI edition `202607` was demonstrably available by it. The
+document claim is the report's 2026 GDP growth projection of 2.6%, well above the February
+forecast of 2.0%, anchored to the Korean summary page 8 and the official English executive
+summary page 6, located in the owner-approved, hash-verified local PDF bodies re-fetched earlier
+into the Git-ignored `data/raw/`; the reference answers disclose summarization/paraphrase and
+attribute the Bank of Korea. The data gold mirrors the approved `kv-core-data-01` convention:
+CLI source `oecd-stes-cli-kor-li-aa-20260717t115302688498z` with vintage ledger
+`oecd-stes-ledger-20260717t115242998550z`, selected edition `202607`, raw and normalized value
+`102.66`, canonical unit `oecd_amplitude_adjusted_index`, two display places, and normalization
+rule `oecd-stes-kor-li-aa-index-v1`. The seven focused tests prove the frozen matrix allocation
+and the absence of review metadata, that the approved core remains twenty records with the
+drafts kept separate, that a real `BenchmarkBundle` builds over both document manifests, the CLI
+manifest, the two constraint captures, the availability ledger, and the rights catalog, that the
+declared CLI gold reproduces through the real fail-closed resolver, that both records make the
+bilingual document-plus-data claims, that the English record fails closed before its official
+2026-06-30 release date, and that a pre-availability cutoff of 2026-06-30 still abstains under
+the ledger. Both records are annotated by "Claude AI draft"; neither has named review metadata
+or enters `core/`, so the approved core remains 20/40: two draft records are pending named human
+review and 18 matrix slots remain unauthored and unapproved.
+
+The frozen matrix, execution contracts and runtime, source bytes and manifests, rights
+decisions, normalization rules, approved core, 13 public schemas, and five committed traces are
+unchanged, and no PDF body or extracted text entered Git. The exact next independent slice is
+only named human review of those two drafts. Do not pre-approve or move them into `core/`,
+increase the approved count, or select or author a later pair before that decision. Provider or
 live-model integration remains absent, and the bounded tool loop deferred by ADR 0008 remains
-outside the completed approval slice.
+outside this authoring slice.

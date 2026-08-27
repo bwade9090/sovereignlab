@@ -6,8 +6,16 @@
 baseline development is in progress with a frozen 40-record core matrix and 20/40 records
 owner-approved — the halfway mark. Hyungbae Cho approved the Korean/English `kv-core-abstain-05`
 pair on 2026-08-27; the two records now live in `data/benchmark/core/core-batch-009.jsonl`, and
-the abstain route's five pairs are now all approved. No draft review candidate is pending, and
-the other 20 matrix slots remain unauthored and unapproved. The
+the abstain route's five pairs are now all approved. Feature commit `933c0e9` adds the
+Korean/English `kv-core-both-01` pair as two drafts in
+`data/benchmark/drafts/core-draft-010.jsonl`; the first combined `documents_and_data` pair
+(`train` split) binds the existing committed document unit `bok-outlook-release-2026-05` and data
+unit `oecd-stes-edition-202607`, and each record pairs one page-anchored document evidence entry
+with one `resolve_stes_as_of` tool expectation at the shared `as_of` cutoff 2026-07-09, at which
+both document publications had been released and the committed edition-availability ledger proves
+CLI edition `202607` was demonstrably available. They remain pending named human review and do
+not increase the approved count; of the 20 unapproved slots, these two are drafted and the other
+18 remain unauthored. The
 first nine ADR 0008 slices and work unit C are complete: five machine-readable real-digest traces
 were generated through the actual private offline executor, `ScriptedPlanner`, and committed
 registries and corpora in feature commit `883815b`. The trace set covers all four
@@ -17,9 +25,9 @@ source package is unchanged, the public surface remains 13 deterministic JSON Sc
 executor descriptor still pins 32 source entries and digest
 `08f45dab6a36a49cb7d0b588a69236942cd61534540bd4de0772010402dada64`.
 The focused executor/replay-trace acceptance run passes 80 tests at 100% coverage over 326
-statements and 98 branches, and the focused benchmark acceptance run passes 63 tests. The full
-offline baseline is 1,171 tests at 100% statement/branch coverage (4,679 statements, 1,568
-branches) across 78 Ruff-formatted Python files. The shipped
+statements and 98 branches, and the focused benchmark acceptance run passes 70 tests. The full
+offline baseline is 1,178 tests at 100% statement/branch coverage (4,679 statements, 1,568
+branches) across 79 Ruff-formatted Python files. The shipped
 minimal reference path is described only as `typed function calling with committed traces`. These
 are deterministic offline replays, not provider or live outputs; no provider/live integration or
 bounded tool loop exists, and no model-quality or briefing-performance claim is made. Searchable
@@ -190,14 +198,29 @@ approved abstain pair (the availability-frontier `kv-core-abstain-01`, the
 unapproved-neighboring-scope `kv-core-abstain-02`, the false-premise-rejection
 `kv-core-abstain-03`, the missing-as-of `kv-core-abstain-04`, and now this ledger-frontier
 pair), completing approval of all five abstain-route pairs, and the first approved test-split
-pair. The approved count is now 20/40 — the halfway mark of the frozen matrix — and current
-validation is 63 focused benchmark tests and 1,171 full-suite tests across 78 formatted Python
-files. The exact next outcome is an owner-directed, bounded draft-only authoring slice for the
-frozen `kv-core-both-01` pair — the first `documents_and_data` pair (`train` split), combining
-one May 2026 outlook narrative with the demonstrably available July 2026 Korea CLI vintage. It
-uses only the existing committed evidence units (document unit `bok-outlook-release-2026-05` and
-data unit `oecd-stes-edition-202607`), and the new drafts must remain `annotation.status=draft`
-pending a separate named human review.
+pair. The approval brought the approved count to 20/40 — the halfway mark of the frozen matrix.
+At that approval checkpoint, the focused benchmark suite passed 63 tests and the full baseline
+passed 1,171 tests across 78 formatted Python files. Later on 2026-08-27, feature commit
+`933c0e9` added only the draft Korean/English `kv-core-both-01` pair and seven focused tests.
+The combined pair (`documents_and_data` route, `train` split) is the first combined pair
+authored in the core; it uses the `eg-both-outlook-2026-05-cli-202607` evidence group and only
+the existing committed evidence units — document unit `bok-outlook-release-2026-05` and data
+unit `oecd-stes-edition-202607` — exactly as the frozen matrix allocates. Each record carries
+exactly one page-anchored document evidence entry and one `resolve_stes_as_of` tool expectation,
+and both records share `as_of` 2026-07-09: both document publications precede that cutoff (the
+Korean report published 2026-05-28, the official English full translation 2026-06-30), and the
+committed edition-availability ledger proves CLI edition `202607` was demonstrably available by
+it. The document claim is the report's 2026 GDP growth projection of 2.6%, well above the
+February forecast of 2.0%, anchored to the Korean summary page 8 and the official English
+executive summary page 6 in the owner-approved, hash-verified local PDF bodies re-fetched
+earlier into the Git-ignored `data/raw/` — no PDF body or extracted text entered Git; the
+reference answers disclose summarization/paraphrase and attribute the Bank of Korea. The tool
+expectation mirrors the approved `kv-core-data-01` convention and resolves edition `202607`
+with raw and normalized value `102.66`, and focused tests prove the English record fails closed
+before its 2026-06-30 release date and that a pre-availability cutoff of 2026-06-30 still
+abstains. Current validation is 70 focused benchmark tests and 1,178 full-suite tests across 79
+formatted Python files. The approved count remains 20/40, and the exact next action is named
+human review of only these two drafts; do not pre-approve them or select another pair.
 Charter v2.5 and
 [ADR 0009](docs/decisions/0009-bok-economic-outlook-public-data-rights.md) additionally record the
 owner-approved `allowed` public-data ruling for official Bank of Korea Economic Outlook

@@ -34,8 +34,8 @@ large-number presentation, rounding, and grading tolerances are also frozen and 
 The project passed its first milestone gate and is midway through the benchmark-and-baselines
 milestone. Its evidence, benchmark, core-authoring-matrix, availability-ledger, rights, and
 execution contracts are published as 13 synchronized deterministic JSON Schemas; the offline
-resolver and GitHub Actions harvester are operational; and 1,171 tests pass with 100% statement
-and branch coverage (4,679 statements, 1,568 branches) across 78 formatted Python files. The
+resolver and GitHub Actions harvester are operational; and 1,178 tests pass with 100% statement
+and branch coverage (4,679 statements, 1,568 branches) across 79 formatted Python files. The
 40-question human-reviewed bilingual core is frozen as an allocation, and 20 of 40 records —
 initially AI-authored, then approved under
 named human review —
@@ -179,15 +179,47 @@ frontier-driven, not rights- or premise-driven — and that the serialized recor
 code, no observation value, and no snapshot or ledger identifier. This is the fifth approved
 abstention pair after the availability-frontier `kv-core-abstain-01`, neighboring-scope
 `kv-core-abstain-02`, false-premise `kv-core-abstain-03`, and missing-as-of
-`kv-core-abstain-04` pairs — the abstention route's five pairs are now all approved — and the
+`kv-core-abstain-04` pairs — completing approval of the abstention route's five pairs — and the
 first approved test-split pair. The records now live in
 `data/benchmark/core/core-batch-009.jsonl`, with only the annotation status, reviewer fields,
 and lifecycle tag changed; the frozen matrix, source bundle, rights decisions, 13 public
-schemas, five committed traces, source package, and execution runtime are unchanged. The
-approved core is now 20 of 40 records — the halfway mark of the frozen 40-record matrix — no
-benchmark draft is pending, and the other 20 matrix slots remain unauthored and unapproved. At
-this approval checkpoint the focused benchmark suite passes 63 tests across nine files and the
-full baseline passes 1,171 tests across 78 formatted Python files.
+schemas, five committed traces, source package, and execution runtime are unchanged. That
+approval brought the approved core to 20 of 40 records — the halfway mark of the frozen
+40-record matrix. At that approval checkpoint the focused benchmark suite passed 63 tests
+across nine files and the full baseline passed 1,171 tests across 78 formatted Python files.
+
+Feature commit `933c0e9` adds the Korean/English `kv-core-both-01` pair as two AI-authored
+drafts in `data/benchmark/drafts/core-draft-010.jsonl` — the first combined
+`documents_and_data` pair authored in the core, a train-split pair on evidence group
+`eg-both-outlook-2026-05-cli-202607` binding the `bok-outlook-release-2026-05` document unit
+and the `oecd-stes-edition-202607` data unit exactly as the frozen matrix allocates. Each
+record carries exactly one page-anchored document evidence entry and one `resolve_stes_as_of`
+tool expectation, and both records share the 2026-07-09 `as_of`: both document publications
+precede that cutoff — the Korean report was published 2026-05-28 and its official English full
+translation on 2026-06-30 — and the committed edition-availability ledger proves CLI edition
+202607 was demonstrably available by it. The document claim reads the report's 2026 GDP growth
+projection of 2.6%, well above the February forecast of 2.0%, anchored to the Korean summary
+page 8 (요약 2/10 — 경제전망 요약) and the official English executive summary page 6, located
+in the owner-approved, hash-verified local PDF bodies re-fetched earlier into the Git-ignored
+`data/raw/`; the reference answers disclose summarization/paraphrase and attribute the Bank of
+Korea. The data gold mirrors the approved `kv-core-data-01` convention — CLI source
+`oecd-stes-cli-kor-li-aa-20260717t115302688498z` with vintage ledger
+`oecd-stes-ledger-20260717t115242998550z`, selected edition 202607, raw and normalized value
+102.66, canonical unit `oecd_amplitude_adjusted_index`, two display places, and normalization
+rule `oecd-stes-kor-li-aa-index-v1`. Both drafts are annotated by "Claude AI draft" with
+`annotation.status=draft` and no reviewer metadata. The commit adds only these two records and
+seven focused tests in `tests/benchmark/test_bok_cli_both_draft.py`: frozen-allocation and
+no-review-metadata checks; a check that the approved core remains twenty records with the
+drafts kept separate; a real `BenchmarkBundle` over both document manifests, the CLI manifest,
+the two constraint captures, the availability ledger, and the rights catalog; reproduction of
+the declared CLI gold through the real fail-closed resolver; bilingual document-plus-data claim
+checks; a negative test proving the English record fails closed before its 2026-06-30 release
+date; and a ledger check that a pre-availability cutoff (2026-06-30) still abstains. Those
+seven tests and the wider focused benchmark suite — 70 tests across ten files — pass; the pair
+remains pending named human review, so the approved count stays 20/40. Of the 20 unapproved
+records, these two are drafted and the other 18 remain unauthored. The frozen matrix, approved
+core, source bundle, rights decisions, 13 public schemas, five committed traces, source
+package, and execution runtime are unchanged, and no PDF body or extracted text entered Git.
 
 On the execution side, the project has shipped `typed function calling with committed traces`.
 A strict typed execution-and-trace contract freezes the bilingual request, four-route plan, exactly
@@ -207,13 +239,10 @@ language-model-only LoRA boundaries, finite gradients, a changed adapter tensor,
 output. This is deliberately reported as a training-path compatibility result, not as evidence of
 improved model quality.
 
-The exact next action, directed by the owner, is a bounded draft-only authoring slice for the
-frozen `kv-core-both-01` pair — the first `documents_and_data` pair, a train-split pair that
-combines one May 2026 outlook narrative with the demonstrably available July 2026 Korea CLI
-vintage and binds only existing committed evidence units. The new drafts must stay
-`annotation.status=draft` pending a separate named human review. Later M2 work authors the
-remaining core records plus a separately reported set of 200–300 deterministic revision probes
-and runs the four-variant baseline suite comparing
+The exact next action is named human review of only the two `kv-core-both-01` drafts. They must
+not be pre-approved, and no later pair should be selected within that review gate. Later M2
+work authors the remaining core records plus a separately reported set of 200–300 deterministic
+revision probes and runs the four-variant baseline suite comparing
 closed-book generation, temporal RAG, RAG plus deterministic tools, and a QLoRA-tuned evidence
 router. Temporal-leakage rate—whether a system uses information that did not exist at the
 question's `as_of` date—is the headline metric; all performance claims will be derived only from
@@ -234,8 +263,8 @@ boundary, an internal deterministic evidence-packet assembler, and a private pro
 offline executor. Five real-digest offline replays now provide `typed function calling with
 committed traces`, covering all routes and tools, Korean and English, explicit and implicit cutoffs,
 complete execution, and terminal planned/tool abstention without partial evidence. The repository
-passes 1,171 tests with 100% statement and branch coverage (4,679 statements, 1,568 branches)
-across 78 formatted Python files. The frozen 40-record bilingual K-VINTAGE core has its first 20
+passes 1,178 tests with 100% statement and branch coverage (4,679 statements, 1,568 branches)
+across 79 formatted Python files. The frozen 40-record bilingual K-VINTAGE core has its first 20
 records reviewed and approved, including a
 Korean/English documentary pair over the Bank of Korea's May 2026 Economic Outlook and its later
 official English translation. A further Korean/English `kv-core-data-02` pair over the 2026-07-17
@@ -278,18 +307,22 @@ ledger cannot certify which editions had become available, with the pair binding
 units, a contrast test showing a pre-frontier 2026-07-09 cutoff still selects edition 202607,
 so the abstention is frontier-driven, and its serialized records leaking no edition code, no
 observation value, and no snapshot or ledger identifier — was approved by Hyungbae Cho on
-2026-08-27, with the focused benchmark suite at 63 passing tests; the approved count is now
-20/40 — the halfway mark of the frozen core, with the abstention route's five pairs all
-approved — no benchmark draft is pending, and the other 20 slots remain unauthored and
-unapproved. I also
+2026-08-27, with the focused benchmark suite at 63 passing tests at that checkpoint, bringing
+the approved count to 20/40 — the halfway mark of the frozen core, with the abstention route's
+five pairs all approved. Feature commit `933c0e9` subsequently added two `kv-core-both-01`
+drafts — the first combined `documents_and_data` pair, a train-split pair whose records each
+carry one page-anchored document evidence entry reading the Bank of Korea May 2026 outlook's
+2026 GDP growth projection of 2.6%, well above the February forecast of 2.0%, and one
+`resolve_stes_as_of` tool expectation reproducing CLI edition 202607, value 102.66, through the
+real fail-closed resolver at a shared 2026-07-09 as-of that the committed availability ledger
+demonstrably covers; a negative test proves the English record fails closed before its
+2026-06-30 release date, and a ledger check proves a pre-availability cutoff still abstains;
+current focused validation is 70 tests across ten files, but named human review is pending, so
+the approved count remains 20/40 and the other 18 slots remain unauthored. I also
 verified the pinned Ministral 3 3B NF4/QLoRA training path on a disposable A40/CUDA 13 GPU without
-claiming model-quality gains. Next, under owner direction, is a bounded draft-only authoring
-slice for the frozen `kv-core-both-01` pair — the first `documents_and_data` pair, a
-train-split pair combining one May 2026 outlook narrative with the demonstrably available
-July 2026 Korea CLI vintage, binding only existing committed evidence units, with its records
-held at draft status pending separate named human review; later work covers the remaining
-core, separately reported deterministic revision probes, and the four-variant baseline suite,
-with temporal leakage as the headline metric.
+claiming model-quality gains. Next is named human review of only those two drafts; later work
+covers the remaining core, separately reported deterministic revision probes, and the
+four-variant baseline suite, with temporal leakage as the headline metric.
 
 ## Usage guardrails
 
