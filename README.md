@@ -5,8 +5,15 @@
 **Status:** M1b verification and vintage-contract groundwork are complete; M2 benchmark and
 baseline development is in progress with a frozen 40-record core matrix and 18/40 records
 owner-approved. Hyungbae Cho approved the Korean/English `kv-core-abstain-04` pair on 2026-08-27;
-the two records now live in `data/benchmark/core/core-batch-008.jsonl`. No draft review candidate
-is pending, and the other 22 matrix slots remain unauthored and unapproved. The
+the two records now live in `data/benchmark/core/core-batch-008.jsonl`. Feature commit `d1eb5ea`
+adds the Korean/English `kv-core-abstain-05` pair as two drafts in
+`data/benchmark/drafts/core-draft-009.jsonl`; the abstention pair binds no source units, and its
+gold behavior is abstention with `cutoff_beyond_complete_through`, because its 2026-08-15 as-of
+cutoff lies beyond the committed edition-availability ledger's completeness frontier
+(`complete_through`, the 2026-07-17 capture instant) and past the frontier the ledger cannot
+certify which editions had become available or when. They remain pending named human review and
+do not increase the approved count; of the 22 unapproved slots, these two are drafted and the
+other 20 remain unauthored. The
 first nine ADR 0008 slices and work unit C are complete: five machine-readable real-digest traces
 were generated through the actual private offline executor, `ScriptedPlanner`, and committed
 registries and corpora in feature commit `883815b`. The trace set covers all four
@@ -16,9 +23,9 @@ source package is unchanged, the public surface remains 13 deterministic JSON Sc
 executor descriptor still pins 32 source entries and digest
 `08f45dab6a36a49cb7d0b588a69236942cd61534540bd4de0772010402dada64`.
 The focused executor/replay-trace acceptance run passes 80 tests at 100% coverage over 326
-statements and 98 branches, and the focused benchmark acceptance run passes 57 tests. The full
-offline baseline is 1,165 tests at 100% statement/branch coverage (4,679 statements, 1,568
-branches) across 77 Ruff-formatted Python files. The shipped
+statements and 98 branches, and the focused benchmark acceptance run passes 63 tests. The full
+offline baseline is 1,171 tests at 100% statement/branch coverage (4,679 statements, 1,568
+branches) across 78 Ruff-formatted Python files. The shipped
 minimal reference path is described only as `typed function calling with committed traces`. These
 are deterministic offline replays, not provider or live outputs; no provider/live integration or
 bounded tool loop exists, and no model-quality or briefing-performance claim is made. Searchable
@@ -169,17 +176,24 @@ On 2026-08-27, Hyungbae Cho approved both records without a substantive change; 
 approved abstain pair (the availability-frontier `kv-core-abstain-01`, the
 unapproved-neighboring-scope `kv-core-abstain-02`, the false-premise-rejection
 `kv-core-abstain-03`, and now this missing-as-of clarification pair) and the first approved
-dev-split abstain pair. The approved count is now 18/40, and current validation is 57 focused
-benchmark tests and 1,165 full-suite tests across 77 formatted Python files. The exact next
-outcome is an owner-directed draft-only authoring slice for the frozen `kv-core-abstain-05`
-pair — an abstention pair (`test` split) whose question asks for Korea's OECD amplitude-adjusted
-CLI value for May 2026 as of August 15, 2026, a cutoff later than the committed
+dev-split abstain pair. At that approval checkpoint, the focused benchmark suite passed 57 tests
+and the full baseline passed 1,165 tests across 77 formatted Python files. Later on 2026-08-27,
+feature commit `d1eb5ea` added only the draft Korean/English `kv-core-abstain-05` pair and six
+focused tests. The abstention pair (`test` split) binds no document or data units, carries no
+tool expectations and no reference answer — only a language-matched abstention reason. Both
+questions ask for Korea's OECD amplitude-adjusted CLI value for May 2026 using only the vintage
+available as of August 15, 2026 (record-level `as_of` 2026-08-15), a cutoff beyond the committed
 edition-availability ledger's completeness frontier (`complete_through`, the 2026-07-17 capture
-instant), so the gold behavior is abstention with `cutoff_beyond_complete_through` because past
-the frontier the ledger cannot certify which editions had become available. The pair binds no
-source units and is fully offline; it is the last matrix slot authorable without a new capture
-or an owner decision, and the new drafts must remain `annotation.status=draft` pending a
-separate named human review.
+instant). The gold behavior is abstention with `cutoff_beyond_complete_through`: past the
+frontier the ledger cannot certify which editions had become available or when, and the
+fail-closed resolver must not infer editions beyond the frontier or expose a value. A focused
+contrast test shows a pre-frontier cutoff of 2026-07-09 still selects edition `202607`, so the
+drafted abstention is frontier-driven, not rights- or premise-driven. This is the fifth authored
+abstain pair (four already approved), completing authoring of all five abstain pairs, and the
+first authored test-split pair; it is the last matrix slot authorable without a new capture or
+an owner decision. Current validation is 63 focused benchmark tests and 1,171 full-suite tests
+across 78 formatted Python files. The approved count remains 18/40, and the exact next action is
+named human review of only these two drafts; do not pre-approve them or select another pair.
 Charter v2.5 and
 [ADR 0009](docs/decisions/0009-bok-economic-outlook-public-data-rights.md) additionally record the
 owner-approved `allowed` public-data ruling for official Bank of Korea Economic Outlook

@@ -34,8 +34,8 @@ large-number presentation, rounding, and grading tolerances are also frozen and 
 The project passed its first milestone gate and is midway through the benchmark-and-baselines
 milestone. Its evidence, benchmark, core-authoring-matrix, availability-ledger, rights, and
 execution contracts are published as 13 synchronized deterministic JSON Schemas; the offline
-resolver and GitHub Actions harvester are operational; and 1,165 tests pass with 100% statement
-and branch coverage (4,679 statements, 1,568 branches) across 77 formatted Python files. The
+resolver and GitHub Actions harvester are operational; and 1,171 tests pass with 100% statement
+and branch coverage (4,679 statements, 1,568 branches) across 78 formatted Python files. The
 40-question human-reviewed bilingual core is frozen as an allocation, and 18 of 40 records —
 initially AI-authored, then approved under
 named human review —
@@ -155,11 +155,37 @@ approved abstention pair after the availability-frontier `kv-core-abstain-01`, n
 missing-as-of clarification pair and first approved dev-split abstention pair. The records now
 live in `data/benchmark/core/core-batch-008.jsonl`, with only the annotation status, reviewer
 fields, and lifecycle tag changed; the frozen matrix, source bundle, rights decisions, 13 public
-schemas, five committed traces, source package, and execution runtime are unchanged. The
-approved core is now 18 of 40 records, no benchmark draft is pending, and the other 22 matrix
-slots remain unauthored and unapproved. At this approval checkpoint the focused benchmark suite
-passes 57 tests across eight files and the full baseline passes 1,165 tests across 77 formatted
-Python files.
+schemas, five committed traces, source package, and execution runtime are unchanged. That
+approval brought the approved core to 18 of 40 records. At that approval checkpoint the focused
+benchmark suite passed 57 tests across eight files and the full baseline passed 1,165 tests
+across 77 formatted Python files.
+
+Feature commit `d1eb5ea` adds the Korean/English `kv-core-abstain-05` pair as two AI-authored
+drafts in `data/benchmark/drafts/core-draft-009.jsonl` — a test-split abstention pair, the first
+test-split pair authored in the core. Both questions ask for Korea's OECD amplitude-adjusted CLI
+value for May 2026 using only the vintage available as of August 15, 2026 — a cutoff beyond the
+committed edition-availability ledger's completeness frontier (`complete_through`, the
+2026-07-17 capture instant) — so the drafted gold behavior is abstention with
+`cutoff_beyond_complete_through`: past the frontier the ledger cannot certify which editions had
+become available or when, and the fail-closed resolver must not infer editions beyond the
+frontier or expose a value. The pair binds no document or data units and carries no tool
+expectations and no reference answer, only a language-matched abstention reason. Focused tests
+additionally prove that the ledger's cutoff for 2026-08-15 exceeds `complete_through` and
+`select_edition` abstains with `cutoff_beyond_complete_through`, that a pre-frontier cutoff of
+2026-07-09 still selects edition 202607 — so the drafted abstention is frontier-driven, not
+rights- or premise-driven — and that the serialized records leak no edition code, no observation
+value, and no snapshot or ledger identifier. This is the fifth authored abstention pair,
+completing authoring of all five abstention pairs after the approved availability-frontier
+`kv-core-abstain-01`, neighboring-scope `kv-core-abstain-02`, false-premise
+`kv-core-abstain-03`, and missing-as-of `kv-core-abstain-04` pairs, and the last matrix slot
+authorable without a new capture or an owner decision: after its review, every remaining slot
+(`kv-core-doc-02` through `kv-core-doc-05`, `kv-core-both-01` through `kv-core-both-05`, and
+the reserved `kv-core-data-05`) needs the Bank of Korea outlook PDF bodies re-fetched, a new
+manifest capture, or the reserved future release. Six pair-specific tests and 63 focused
+benchmark tests pass; the pair remains pending named human review, so the approved count stays
+18/40. Of the 22 unapproved records, these two are drafted and the other 20 remain unauthored.
+The frozen matrix, approved core, source bundle, rights decisions, 13 public schemas, five
+committed traces, source package, and execution runtime are unchanged.
 
 On the execution side, the project has shipped `typed function calling with committed traces`.
 A strict typed execution-and-trace contract freezes the bilingual request, four-route plan, exactly
@@ -179,17 +205,10 @@ language-model-only LoRA boundaries, finite gradients, a changed adapter tensor,
 output. This is deliberately reported as a training-path compatibility result, not as evidence of
 improved model quality.
 
-The exact next action, directed by the owner, is a bounded draft-only authoring slice for the
-frozen `kv-core-abstain-05` pair — the test-split abstention pair whose question asks for
-Korea's OECD amplitude-adjusted CLI for May 2026 as of August 15, 2026, a cutoff later than the
-committed edition-availability ledger's completeness frontier (`complete_through`, the
-2026-07-17 capture instant); the gold behavior is abstention with
-`cutoff_beyond_complete_through`, because past the frontier the ledger cannot certify which
-editions had become available. The pair binds no source units and is fully offline; it is the
-last matrix slot authorable without a new capture or an owner decision. The new drafts must stay
-`annotation.status=draft` pending a separate named human review. Later M2 work authors the
-remaining core records plus a separately reported set of 200–300 deterministic revision probes
-and runs the four-variant baseline suite comparing
+The exact next action is named human review of only the two `kv-core-abstain-05` drafts. They
+must not be pre-approved, and no later pair should be selected within that review gate. Later M2
+work authors the remaining core records plus a separately reported set of 200–300 deterministic
+revision probes and runs the four-variant baseline suite comparing
 closed-book generation, temporal RAG, RAG plus deterministic tools, and a QLoRA-tuned evidence
 router. Temporal-leakage rate—whether a system uses information that did not exist at the
 question's `as_of` date—is the headline metric; all performance claims will be derived only from
@@ -210,8 +229,8 @@ boundary, an internal deterministic evidence-packet assembler, and a private pro
 offline executor. Five real-digest offline replays now provide `typed function calling with
 committed traces`, covering all routes and tools, Korean and English, explicit and implicit cutoffs,
 complete execution, and terminal planned/tool abstention without partial evidence. The repository
-passes 1,165 tests with 100% statement and branch coverage (4,679 statements, 1,568 branches)
-across 77 formatted Python files. The frozen 40-record bilingual K-VINTAGE core has its first 18
+passes 1,171 tests with 100% statement and branch coverage (4,679 statements, 1,568 branches)
+across 78 formatted Python files. The frozen 40-record bilingual K-VINTAGE core has its first 18
 records reviewed and approved, including a
 Korean/English documentary pair over the Bank of Korea's May 2026 Economic Outlook and its later
 official English translation. A further Korean/English `kv-core-data-02` pair over the 2026-07-17
@@ -244,17 +263,20 @@ missing as-of and abstain, since the fail-closed contract never executes without
 `effective_as_of` and never guesses or defaults the cutoff, with the pair binding no source
 units and its serialized records leaking no observation value and no snapshot or ledger
 identifier — was approved by Hyungbae Cho on 2026-08-27, with the focused benchmark suite at 57
-passing tests; the approved count is now 18/40, no benchmark draft is pending, and the other 22
-slots remain unauthored and unapproved. I also
+passing tests at that checkpoint, bringing the approved count to 18/40. Feature commit `d1eb5ea`
+subsequently added two `kv-core-abstain-05` drafts — a test-split abstention pair, the first
+authored for the test split, whose questions ask for Korea's OECD amplitude-adjusted CLI for
+May 2026 using only the vintage available as of August 15, 2026, a cutoff beyond the committed
+availability ledger's `complete_through` frontier, the 2026-07-17 capture instant, so the
+drafted gold behavior is abstention with `cutoff_beyond_complete_through`, since past that
+frontier the ledger cannot certify which editions had become available; the pair binds no
+source units, a contrast test shows a pre-frontier 2026-07-09 cutoff still selects edition
+202607, so the abstention is frontier-driven, and its serialized records leak no edition code,
+no observation value, and no snapshot or ledger identifier; current focused validation is 63
+tests, but named human review is pending, so the approved count remains 18/40 and the other 20
+slots remain unauthored. I also
 verified the pinned Ministral 3 3B NF4/QLoRA training path on a disposable A40/CUDA 13 GPU without
-claiming model-quality gains. Next, under owner direction, is a bounded draft-only authoring
-slice for the frozen `kv-core-abstain-05` test-split abstention pair, whose question asks for
-Korea's OECD amplitude-adjusted CLI for May 2026 as of August 15, 2026 — a cutoff past the
-committed availability ledger's `complete_through` frontier, the 2026-07-17 capture instant, so
-the gold behavior is abstention with `cutoff_beyond_complete_through`, since past that frontier
-the ledger cannot certify which editions had become available — with the pair binding no source
-units, fully offline, the last matrix slot authorable without a new capture or an owner
-decision, and its records held at draft status pending separate named human review; later work
+claiming model-quality gains. Next is named human review of only those two drafts; later work
 covers the remaining core, separately reported deterministic revision probes, and the
 four-variant baseline suite, with temporal leakage as the headline metric.
 

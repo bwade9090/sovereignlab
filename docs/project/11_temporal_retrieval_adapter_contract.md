@@ -219,8 +219,8 @@ unauthored and unapproved.
 
 That review gate completed on 2026-08-27 at approval feature commit `dfcd191`. Hyungbae Cho
 approved exactly the two `kv-core-abstain-04` records, which now live in
-`data/benchmark/core/core-batch-008.jsonl`; the approved core is now 18/40 and 22 matrix slots
-remain unauthored and unapproved. This is the fourth approved abstain pair (availability-frontier,
+`data/benchmark/core/core-batch-008.jsonl`; the approved core is now 18/40, and at that
+checkpoint 22 matrix slots remained unauthored and unapproved. This is the fourth approved abstain pair (availability-frontier,
 unapproved neighboring scope, false-premise rejection, and now missing-as-of clarification) and
 the first approved dev-split abstain pair. This was a lifecycle-only transition: the questions
 (each still omitting its as-of date), abstention reasons, the record-level `as_of` of
@@ -228,14 +228,31 @@ the first approved dev-split abstain pair. This was a lifecycle-only transition:
 rights decisions, normalization, the 13 public schemas, and the five committed traces remain
 unchanged.
 
-No benchmark draft is pending. The exact next slice, directed by the owner, is a bounded
-draft-only authoring slice for the frozen `kv-core-abstain-05` pair: the test-split abstention
-pair whose question asks for Korea's OECD amplitude-adjusted CLI for May 2026 as of 2026-08-15,
-a cutoff later than the committed edition-availability ledger's completeness frontier
-(`complete_through`, the 2026-07-17 capture instant). The gold behavior is abstention with
-`cutoff_beyond_complete_through`, because past the frontier the ledger cannot certify which
-editions had become available. The pair binds no source units and is fully offline; it is the
-last matrix slot authorable without a new capture or an owner decision. Those new drafts must
-stay `annotation.status=draft` pending a separate named human review. Provider or live-model
-integration remains absent, and the bounded tool loop deferred by ADR 0008 remains outside the
-completed approval slice.
+The next bounded authoring slice completed on 2026-08-27 at feature commit `d1eb5ea`. It added
+exactly the two draft-only `kv-core-abstain-05` Korean/English records in
+`data/benchmark/drafts/core-draft-009.jsonl`. The test-split abstain pair binds no document or
+data units and carries no tool expectations or reference answer, only a language-matched
+abstention reason: both questions ask for Korea's OECD amplitude-adjusted CLI value for May 2026
+using only the vintage available as of 2026-08-15. That cutoff lies beyond the committed
+edition-availability ledger's completeness frontier (`complete_through`, the 2026-07-17 capture
+instant), so the gold behavior is abstention with `cutoff_beyond_complete_through`: past the
+frontier the ledger cannot certify which editions had become available or when, and the
+fail-closed resolver must not infer editions beyond the frontier or expose a value. The drafted
+abstention is frontier-driven, not rights- or premise-driven: focused tests show the ledger's
+cutoff for 2026-08-15 exceeding `complete_through`, a pre-frontier 2026-07-09 cutoff still
+selecting edition `202607`, and the serialized records leaking no edition code, observation
+value, or snapshot or ledger identifier. This fifth authored abstain pair completes authoring of
+all five abstain pairs (four already approved), is the first authored test-split pair, and is
+the last matrix slot authorable without a new capture or an owner decision: after its review,
+every remaining slot (`kv-core-doc-02`..`05`, `kv-core-both-01`..`05`, and the reserved
+`kv-core-data-05`) needs either the Bank of Korea outlook PDF bodies re-fetched, a new manifest
+capture, or the reserved future release. Neither record has named review metadata or enters
+`core/`, so the approved core remains 18/40: two draft records are pending review and 20 matrix
+slots remain unauthored and unapproved.
+
+The frozen matrix, execution contracts and runtime, source bytes and manifests, rights decisions,
+normalization rules, approved core, 13 public schemas, and five committed traces are unchanged.
+The exact next independent slice is only named human review of those two drafts. Do not pre-approve
+or move them into `core/`, increase the approved count, or select or author a later pair before
+that decision. Provider or live-model integration remains absent, and the bounded tool loop
+deferred by ADR 0008 remains outside this authoring slice.
