@@ -1,8 +1,8 @@
 # K-VINTAGE human-reviewed core authoring matrix 1.0.0
 
-- Status: structural allocation frozen; first sixteen records owner-approved; `kv-core-abstain-04`
-  drafted and pending named human review
-- Date: 2026-08-26
+- Status: structural allocation frozen; first eighteen records owner-approved; owner-directed next
+  slice is the `kv-core-abstain-05` draft pair
+- Date: 2026-08-27
 - Scope authority: charter v2.5 §5 and M2 continuation order
 - Canonical matrix: `data/benchmark/core-authoring-matrix-v1.json`
 - Public schema: `data/schemas/core-authoring-matrix-v1.schema.json`
@@ -66,10 +66,9 @@ the AI author and record the named human reviewer and aware review timestamp. Th
 changed from `draft-002` to `batch-002` when the file moved into `core/`.
 
 At the 2026-07-29 checkpoint, these two records brought the approved human-reviewed core to 6/40.
-The later ECOS GDP, ECOS current-account, KOSIS CPI, OECD scope abstention, and CPI revision
-false-premise abstention approvals described below bring the current total to 16/40. The
-missing-as-of abstention draft described after them accounts for two of the 24 unapproved
-records; the other 22 remain unauthored and unapproved.
+The later ECOS GDP, ECOS current-account, KOSIS CPI, OECD scope abstention, CPI revision
+false-premise abstention, and missing-as-of abstention approvals described below bring the
+current total to 18/40; the other 22 records remain unauthored and unapproved.
 
 ## 4. Approved ECOS GDP pair
 
@@ -267,47 +266,59 @@ authoring pass for the frozen `kv-core-abstain-04` pair, a `dev`-split abstentio
 question asks for a historical-vintage value while omitting its as-of date; the gold behavior is
 to abstain (or ask for the missing as-of) because the fail-closed contract never executes without
 an explicit `effective_as_of` and never guesses or defaults the cutoff. The pair binds no source
-units and is fully offline; the resulting drafts are described below and stay
-`annotation.status=draft` pending a separate named human review.
+units and is fully offline; the resulting pair is described below and completed named human
+review on 2026-08-27.
 
-## 9. Draft missing-as-of abstention pair
+## 9. Approved missing-as-of abstention pair
 
-Feature commit `fd7640b` adds exactly the frozen `kv-core-abstain-04` Korean/English pair to
-`data/benchmark/drafts/core-draft-008.jsonl` at `annotation.status=draft`. Both records use the
-`abstain` route, `dev` split, `eg-abstain-missing-as-of` evidence group, and `kv-core-abstain-04`
-parallel group — the second `dev`-split pair after `kv-core-data-04`. The pair binds no document
-or data units and carries no tool expectations and no reference answer — only a language-matched
-`abstention_reason`. This is the fourth authored abstain pair after the three approved
-`kv-core-abstain-01`..`kv-core-abstain-03` pairs and the first missing-as-of clarification pair.
+The frozen `kv-core-abstain-04` Korean/English pair was completed as
+`data/benchmark/drafts/core-draft-008.jsonl` on 2026-08-26 in feature commit `fd7640b`. Hyungbae
+Cho approved both records on 2026-08-27 with review timestamp `2026-08-27T06:37:54Z`; approval
+feature commit `dfcd191` moved the pair to `data/benchmark/core/core-batch-008.jsonl`. Both
+records use the `abstain` route, `dev` split, `eg-abstain-missing-as-of` evidence group, and
+`kv-core-abstain-04` parallel group — the second `dev`-split pair after `kv-core-data-04`. The
+pair binds no document or data units and carries no tool expectations and no reference answer —
+only a language-matched `abstention_reason`. This is the fourth approved abstain pair after the
+availability-frontier `kv-core-abstain-01`, unapproved-neighboring-scope `kv-core-abstain-02`,
+and false-premise-rejection `kv-core-abstain-03` pairs, and both the first approved
+missing-as-of clarification pair and the first approved `dev`-split abstain pair.
 
 Both questions ask for Korea's OECD amplitude-adjusted CLI value for May 2026 using the vintage
 available at the time, while omitting the as-of date the vintage request depends on. The gold
 behavior is to ask for the missing as-of and abstain: a vintage answer depends on its as-of
 cutoff, and KOR-RTD's fail-closed contract never executes without an explicit `effective_as_of`
 and never guesses or defaults the cutoff, because an assumed cutoff can expose the wrong vintage
-and create temporal leakage. The record-level `as_of` field is 2026-07-17. Their annotations
-preserve `annotated_by="Claude AI draft"` at `2026-08-26T07:36:05Z`, contain no reviewer
-metadata, and carry the `core`, `temporal`, `vintage`, `abstention`, `missing-as-of`, and
-`draft-008` tags.
+and create temporal leakage. The record-level `as_of` field is 2026-07-17. The approved records
+preserve the original AI author, add the named reviewer and aware review timestamp, record
+`annotation.status=approved`, and use the `batch-008` lifecycle tag. The questions, abstention
+reasons, record-level `as_of`, route, split, evidence group, parallel group, and record IDs did
+not change during review.
 
-The pair-specific focused test file `tests/benchmark/test_missing_as_of_abstain_draft.py` passes
-six tests, including assertions that the questions contain no as-of phrase while both abstention
-reasons demand an explicit `effective_as_of`, that the serialized records leak no observation
-value and no snapshot or ledger identifier, and that the same request resolves once an explicit
-2026-07-09 cutoff is supplied (edition `202607`, value `102.66` from the owner-approved CLI
-scope), so the drafted abstention is missing-cutoff driven, not availability- or rights-driven.
-The combined focused benchmark suite passes 57 tests across the eight files listed in the
+The pair-specific focused test file was renamed to
+`tests/benchmark/test_missing_as_of_abstain_core.py` with approved expectations, keeping the
+assertions that the questions contain no as-of phrase while both abstention reasons demand an
+explicit `effective_as_of`, that the serialized records leak no observation value and no
+snapshot or ledger identifier, and that the same request resolves once an explicit 2026-07-09
+cutoff is supplied (edition `202607`, value `102.66` from the owner-approved CLI scope), so the
+approved abstention is missing-cutoff driven, not availability- or rights-driven. The combined
+focused benchmark acceptance suite passes 57 tests across the eight files listed in the
 reproduction commands. The full suite passes 1,165 tests at 100% SovereignLab statement/branch
 coverage (4,679 statements, 1,568 branches) across 77 Ruff-formatted Python files using a fresh
 OS `--basetemp`. The 13 public schemas regenerate deterministically, the five committed traces
-remain unchanged, the working tree diff is clean, and the slice cost $0.00. The frozen matrix,
-approved core, source bundle, rights decisions, source package, and execution runtime did not
-change.
+remain unchanged, the working tree diff is clean, and the slice cost $0.00. The record
+substance, frozen matrix, source bundle, rights decisions, source package, and execution runtime
+did not change.
 
-The approved core remains 16/40. These two drafts and the 22 unauthored slots comprise the other
-24 unapproved records. The exact next action is named human review of only
-`kv-core-abstain-04-ko` and `kv-core-abstain-04-en`; do not pre-approve them or select another
-pair.
+The approved core is now 18/40 and no draft review candidate remains in the committed tree; the
+other 22 records remain unauthored and unapproved. The owner-directed next slice is a bounded
+draft-only authoring pass for the frozen `kv-core-abstain-05` pair, a `test`-split abstention
+pair whose question asks for Korea's OECD amplitude-adjusted CLI for May 2026 as of 2026-08-15,
+a cutoff later than the committed edition-availability ledger's completeness frontier
+(`complete_through`, the 2026-07-17 capture instant); the gold behavior is abstention with
+`cutoff_beyond_complete_through` because past the frontier the ledger cannot certify which
+editions had become available. The pair binds no source units and is fully offline; it is the
+last matrix slot authorable without a new capture or an owner decision. The new drafts must stay
+`annotation.status=draft` pending a separate named human review.
 
 ## 10. Approval records
 
@@ -355,6 +366,12 @@ unchanged; approval feature commit `5e14119` records reviewer `Hyungbae Cho`, re
 `2026-08-26T07:34:50Z`, `annotation.status=approved`, the `batch-007` lifecycle tag, and the move
 from `drafts/core-draft-007.jsonl` to `core/core-batch-007.jsonl`.
 
+On 2026-08-27, Hyungbae Cho explicitly approved both records in the `kv-core-abstain-04`
+missing-as-of abstention pair. The substantive record fields and frozen matrix remain unchanged;
+approval feature commit `dfcd191` records reviewer `Hyungbae Cho`, review timestamp
+`2026-08-27T06:37:54Z`, `annotation.status=approved`, the `batch-008` lifecycle tag, and the move
+from `drafts/core-draft-008.jsonl` to `core/core-batch-008.jsonl`.
+
 ## 11. Human-review checklist
 
 For each bilingual pair, the reviewer must verify:
@@ -382,7 +399,7 @@ python -m pytest tests/benchmark/test_ecos_current_account_core.py
 python -m pytest tests/benchmark/test_kosis_cpi_core.py
 python -m pytest tests/benchmark/test_oecd_scope_abstain_core.py
 python -m pytest tests/benchmark/test_cpi_revision_abstain_core.py
-python -m pytest tests/benchmark/test_missing_as_of_abstain_draft.py
+python -m pytest tests/benchmark/test_missing_as_of_abstain_core.py
 python -m ruff check .
 python -m ruff format --check .
 ```
@@ -393,24 +410,24 @@ normalization 1.0.0, and checks the earlier-cutoff abstention.
 
 The documentary-core test validates both records against their strict manifests and the frozen
 matrix, enforces language-specific publication cutoffs and split-group integrity, verifies the
-named reviewer metadata, and confirms the current approved count is sixteen.
+named reviewer metadata, and confirms the current approved count is eighteen.
 
 The ECOS GDP core test validates both approved records and named-review metadata against the frozen
 matrix, existing snapshot, manifest, checksum, rights decision, and normalization rule. At its
 approval checkpoint, the first three focused benchmark files passed 27 tests; the approved count it
-verifies is now sixteen.
+verifies is now eighteen.
 
 The ECOS current-account core test validates both approved records and named-review metadata
 against the frozen allocation, existing snapshot, manifest, checksum, rights decision, exact
 `202605` observation, normalization rule, attribution, and prior-day abstention. At its approval
 checkpoint, the first four focused benchmark files passed 33 tests; the approved count it verifies
-is now sixteen.
+is now eighteen.
 
 The KOSIS CPI core test validates both approved records and named-review metadata against the
 frozen allocation, existing snapshot, manifest, checksum, rights decision, exact `202606`
 observation, normalization rule, attribution, and prior-day abstention. At its approval
 checkpoint, the first five focused benchmark files passed 39 tests; the approved count it verifies
-is now sixteen.
+is now eighteen.
 
 The OECD scope abstention core test validates both approved records and named-review metadata
 against the frozen allocation and the committed rights decisions, confirms they bind no source
@@ -418,7 +435,7 @@ units and carry no tool expectations or reference answers, proves through the ap
 contrast that the abstention is rights-driven rather than availability-driven, and asserts the
 serialized records contain neither the `102.66` observation nor the CLI source or ledger
 identifiers. At its approval checkpoint, the first six focused benchmark files passed 45 tests;
-the approved count it verifies is now sixteen.
+the approved count it verifies is now eighteen.
 
 The CPI revision abstention core test validates both approved records and named-review metadata
 against the frozen allocation and the committed rights decisions, confirms they bind no source
@@ -427,14 +444,14 @@ decision is the approved CLI scope, asserts the serialized records leak no obser
 no snapshot identifier, and proves the only approved CPI evidence in KOR-RTD — the KOSIS
 latest-only snapshot — carries `vintage_semantics=latest_only`, so committed evidence cannot
 serve any CPI revision by construction. At its approval checkpoint, the first seven focused
-benchmark files passed 51 tests while the approved count is sixteen.
+benchmark files passed 51 tests; the approved count it verifies is now eighteen.
 
-The missing-as-of abstention draft test validates the two unapproved records against the frozen
-allocation, confirms they bind no source units and carry no tool expectations or reference
-answers, asserts the questions contain no as-of phrase while both abstention reasons demand an
-explicit `effective_as_of`, asserts the serialized records leak no observation value and no
-snapshot or ledger identifier, and proves through an explicit-cutoff contrast that the same
-request resolves once a 2026-07-09 cutoff is supplied (edition `202607`, value `102.66` from the
-owner-approved CLI scope), so the drafted abstention is missing-cutoff driven rather than
-availability- or rights-driven. It adds six tests, bringing the current focused benchmark suite
-to 57 while the approved count remains sixteen.
+The missing-as-of abstention core test validates both approved records and named-review metadata
+against the frozen allocation, confirms they bind no source units and carry no tool expectations
+or reference answers, asserts the questions contain no as-of phrase while both abstention
+reasons demand an explicit `effective_as_of`, asserts the serialized records leak no observation
+value and no snapshot or ledger identifier, and proves through an explicit-cutoff contrast that
+the same request resolves once a 2026-07-09 cutoff is supplied (edition `202607`, value `102.66`
+from the owner-approved CLI scope), so the approved abstention is missing-cutoff driven rather
+than availability- or rights-driven. Across the eight focused benchmark files above, 57 tests
+pass while the approved count is eighteen.

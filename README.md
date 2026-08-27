@@ -3,16 +3,10 @@
 > What did the data say *then*? Vintage-conditioned evaluation and auditable briefings for Korean/English economic research.
 
 **Status:** M1b verification and vintage-contract groundwork are complete; M2 benchmark and
-baseline development is in progress with a frozen 40-record core matrix and 16/40 records
-owner-approved. Hyungbae Cho approved the Korean/English `kv-core-abstain-03` pair on 2026-08-26;
-the two records now live in `data/benchmark/core/core-batch-007.jsonl`. Feature commit `fd7640b`
-adds the Korean/English `kv-core-abstain-04` pair as two drafts in
-`data/benchmark/drafts/core-draft-008.jsonl`; the abstention pair binds no source units, and its
-gold behavior is to ask for the missing as-of date and abstain, because a vintage answer depends
-on its as-of cutoff and the fail-closed contract never executes without an explicit
-`effective_as_of` and never guesses or defaults the cutoff. They remain pending named human
-review and do not increase the approved count; of the 24 unapproved slots, these two are drafted
-and the other 22 remain unauthored. The
+baseline development is in progress with a frozen 40-record core matrix and 18/40 records
+owner-approved. Hyungbae Cho approved the Korean/English `kv-core-abstain-04` pair on 2026-08-27;
+the two records now live in `data/benchmark/core/core-batch-008.jsonl`. No draft review candidate
+is pending, and the other 22 matrix slots remain unauthored and unapproved. The
 first nine ADR 0008 slices and work unit C are complete: five machine-readable real-digest traces
 were generated through the actual private offline executor, `ScriptedPlanner`, and committed
 registries and corpora in feature commit `883815b`. The trace set covers all four
@@ -169,10 +163,23 @@ the wrong vintage and create temporal leakage — so each record carries only a 
 abstention reason. A focused contrast test shows the same request resolves once an explicit
 cutoff of 2026-07-09 is supplied (edition `202607`, value `102.66` from the owner-approved CLI
 scope), so the drafted abstention is missing-cutoff driven, not availability- or rights-driven.
-This is the fourth authored abstain pair (three already approved) and the first missing-as-of
-clarification pair. Current validation is 57 focused benchmark tests and 1,165 full-suite tests
-across 77 formatted Python files. The approved count remains 16/40, and the exact next action is
-named human review of only these two drafts; do not pre-approve them or select another pair.
+On 2026-08-27, Hyungbae Cho approved both records without a substantive change; feature commit
+`dfcd191` records the named-review metadata, `batch-008` lifecycle tag, move to
+`data/benchmark/core/core-batch-008.jsonl`, and focused-test transition. This is the fourth
+approved abstain pair (the availability-frontier `kv-core-abstain-01`, the
+unapproved-neighboring-scope `kv-core-abstain-02`, the false-premise-rejection
+`kv-core-abstain-03`, and now this missing-as-of clarification pair) and the first approved
+dev-split abstain pair. The approved count is now 18/40, and current validation is 57 focused
+benchmark tests and 1,165 full-suite tests across 77 formatted Python files. The exact next
+outcome is an owner-directed draft-only authoring slice for the frozen `kv-core-abstain-05`
+pair — an abstention pair (`test` split) whose question asks for Korea's OECD amplitude-adjusted
+CLI value for May 2026 as of August 15, 2026, a cutoff later than the committed
+edition-availability ledger's completeness frontier (`complete_through`, the 2026-07-17 capture
+instant), so the gold behavior is abstention with `cutoff_beyond_complete_through` because past
+the frontier the ledger cannot certify which editions had become available. The pair binds no
+source units and is fully offline; it is the last matrix slot authorable without a new capture
+or an owner decision, and the new drafts must remain `annotation.status=draft` pending a
+separate named human review.
 Charter v2.5 and
 [ADR 0009](docs/decisions/0009-bok-economic-outlook-public-data-rights.md) additionally record the
 owner-approved `allowed` public-data ruling for official Bank of Korea Economic Outlook
