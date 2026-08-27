@@ -90,13 +90,13 @@ def test_approved_pair_matches_the_frozen_allocation_and_review_metadata() -> No
     assert all(record.tags == expected_tags for record in records)
 
 
-def test_approved_core_contains_eighteen_records_and_the_new_pair() -> None:
+def test_approved_core_contains_twenty_records_and_the_new_pair() -> None:
     approved = tuple(
         record for path in sorted(CORE_DIRECTORY.glob("*.jsonl")) for record in _records(path)
     )
     records = _core_records()
 
-    assert len(approved) == 18
+    assert len(approved) == 20
     assert all(record.annotation.status is AnnotationStatus.APPROVED for record in approved)
     assert {record.record_id for record in records} <= {record.record_id for record in approved}
     assert len(records) == 2
