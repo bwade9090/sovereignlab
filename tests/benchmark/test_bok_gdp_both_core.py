@@ -1,4 +1,4 @@
-"""Contract and evidence checks for the draft kv-core-both-02 pair."""
+"""Contract and evidence checks for the approved kv-core-both-02 pair."""
 
 from datetime import date, timedelta
 from pathlib import Path
@@ -26,6 +26,7 @@ from sovereignlab.snapshots import (
 ROOT = Path(__file__).resolve().parents[2]
 MATRIX_PATH = ROOT / "data" / "benchmark" / "core-authoring-matrix-v1.json"
 CORE_DIRECTORY = ROOT / "data" / "benchmark" / "core"
+BATCH_PATH = CORE_DIRECTORY / "core-batch-012.jsonl"
 DRAFT_PATH = ROOT / "data" / "benchmark" / "drafts" / "core-draft-012.jsonl"
 DOC_SOURCE_IDS = ("bok-outlook-2025-11-ko", "bok-outlook-2025-11-en")
 SNAPSHOT_SOURCE_ID = "ecos-200y108-10601-20260717t115242998550z"
@@ -45,8 +46,8 @@ def _records(path: Path) -> tuple[BenchmarkRecord, ...]:
     )
 
 
-def _draft_records() -> tuple[BenchmarkRecord, ...]:
-    return _records(DRAFT_PATH)
+def _core_records() -> tuple[BenchmarkRecord, ...]:
+    return _records(BATCH_PATH)
 
 
 def _manifest(source_id: str) -> SourceManifest:
@@ -72,11 +73,12 @@ def _call(record: BenchmarkRecord, *, as_of: date | None = None) -> SnapshotAsOf
     )
 
 
-def test_draft_pair_matches_the_frozen_allocation_and_has_no_review_metadata() -> None:
+def test_approved_pair_matches_the_frozen_allocation_and_review_metadata() -> None:
     matrix = CoreAuthoringMatrix.model_validate_json(MATRIX_PATH.read_text(encoding="utf-8"))
     pair = next(item for item in matrix.pairs if item.pair_id == "kv-core-both-02")
-    records = _draft_records()
+    records = _core_records()
 
+    assert not DRAFT_PATH.exists()
     assert tuple(record.record_id for record in records) == (
         pair.ko_record_id,
         pair.en_record_id,
@@ -94,41 +96,41 @@ def test_draft_pair_matches_the_frozen_allocation_and_has_no_review_metadata() -
     assert all(len(record.document_evidence) == 1 for record in records)
     assert all(len(record.tool_expectations) == 1 for record in records)
     assert all(record.as_of == AS_OF for record in records)
-    assert all(record.annotation.status is AnnotationStatus.DRAFT for record in records)
+    assert all(record.annotation.status is AnnotationStatus.APPROVED for record in records)
     assert all(record.annotation.annotated_by == "Claude AI draft" for record in records)
-    assert all(record.annotation.reviewed_by is None for record in records)
-    assert all(record.annotation.reviewed_at is None for record in records)
-    annotation_times = {record.annotation.annotated_at for record in records}
-    assert len(annotation_times) == 1
-    assert next(iter(annotation_times)).utcoffset() == timedelta(0)
+    assert all(record.annotation.reviewed_by == "Hyungbae Cho" for record in records)
+    review_times = {record.annotation.reviewed_at for record in records}
+    assert None not in review_times
+    assert len(review_times) == 1
+    reviewed_at = next(iter(review_times))
+    assert reviewed_at is not None
+    assert reviewed_at.utcoffset() == timedelta(0)
+    assert all(record.annotation.annotated_at <= reviewed_at for record in records)
     expected_tags = (
         "core",
         "temporal",
         "documents",
         "vintage",
         "bok-outlook-ecos-gdp",
-        "draft-012",
+        "batch-012",
     )
     assert all(record.tags == expected_tags for record in records)
 
 
-def test_approved_core_remains_twenty_four_and_drafts_are_separate() -> None:
-    matrix = CoreAuthoringMatrix.model_validate_json(MATRIX_PATH.read_text(encoding="utf-8"))
+def test_approved_core_contains_twenty_six_records_and_the_new_pair() -> None:
     approved = tuple(
         record for path in sorted(CORE_DIRECTORY.glob("*.jsonl")) for record in _records(path)
     )
-    drafts = _draft_records()
+    records = _core_records()
 
-    assert len(approved) == 24
+    assert len(approved) == 26
     assert all(record.annotation.status is AnnotationStatus.APPROVED for record in approved)
-    assert len(drafts) == 2
-    assert {record.record_id for record in approved}.isdisjoint(
-        {record.record_id for record in drafts}
-    )
-    assert matrix.target_record_count - len(approved) - len(drafts) == 14
+    assert {record.record_id for record in records} <= {record.record_id for record in approved}
+    assert len(records) == 2
+    assert all(record.annotation.status is AnnotationStatus.APPROVED for record in records)
 
 
-def test_draft_pair_forms_a_real_bundle_with_documents_snapshot_and_rights() -> None:
+def test_approved_pair_forms_a_real_bundle_with_documents_snapshot_and_rights() -> None:
     catalog = RightsCatalog.model_validate_json(
         (ROOT / "data" / "rights" / f"{RIGHTS_CATALOG_ID}.json").read_text(encoding="utf-8")
     )
@@ -138,7 +140,7 @@ def test_draft_pair_forms_a_real_bundle_with_documents_snapshot_and_rights() -> 
             _manifest(DOC_SOURCE_IDS[1]),
             _manifest(SNAPSHOT_SOURCE_ID),
         ),
-        records=_draft_records(),
+        records=_core_records(),
         rights_catalogs=(catalog,),
     )
 
@@ -153,7 +155,7 @@ def test_draft_pair_forms_a_real_bundle_with_documents_snapshot_and_rights() -> 
         assert manifest.publisher == "Bank of Korea"
         assert manifest.published_on <= AS_OF
         record = next(
-            item for item in _draft_records() if item.document_evidence[0].source_id == source_id
+            item for item in _core_records() if item.document_evidence[0].source_id == source_id
         )
         assert record.document_evidence[0].locator.page == page
         assert record.document_evidence[0].locator.section == section
@@ -163,7 +165,7 @@ def test_real_snapshot_reader_reproduces_the_declared_gdp_gold() -> None:
     registry = load_committed_snapshot_registry(ROOT)
     payloads = []
 
-    for record in _draft_records():
+    for record in _core_records():
         expectation = record.tool_expectations[0]
         facts = _fact_map(record)
         result = read_snapshot_as_of(call=_call(record), registry=registry)
@@ -193,7 +195,7 @@ def test_real_snapshot_reader_reproduces_the_declared_gdp_gold() -> None:
 
 
 def test_bilingual_claims_combine_the_document_and_data_facts() -> None:
-    korean, english = _draft_records()
+    korean, english = _core_records()
 
     assert "2026년 7월 17일" in korean.question
     assert "「경제전망보고서(2025년 11월)」" in korean.question
@@ -219,7 +221,7 @@ def test_bilingual_claims_combine_the_document_and_data_facts() -> None:
 
 
 def test_day_before_capture_abstains_without_future_value_or_source() -> None:
-    record = _draft_records()[0]
+    record = _core_records()[0]
     result = read_snapshot_as_of(
         call=_call(record, as_of=AS_OF - timedelta(days=1)),
         registry=load_committed_snapshot_registry(ROOT),
