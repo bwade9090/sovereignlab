@@ -294,7 +294,7 @@ its former suffix `Economic outlook summary` does not appear on page 6 of the of
 translation. The owner-approved re-fetch of both official PDFs matched the committed manifests
 byte-for-byte, and both anchored pages contain the claimed projection and comparison. The records
 now live in `data/benchmark/core/core-batch-010.jsonl`, the focused module is
-`tests/benchmark/test_bok_cli_both_core.py`, and the approved core is 22/40 with 18 matrix slots
+`tests/benchmark/test_bok_cli_both_core.py`, and the approved core was 22/40 with 18 matrix slots
 unauthored and unapproved. This is the first approved combined `documents_and_data` pair. Apart
 from that label, the questions, answers, cutoff, tool expectations, frozen matrix, execution
 contracts and runtime, source bytes and manifests, rights decisions, normalization, 13 public
@@ -324,24 +324,33 @@ named human review, and 16 matrix slots remained unauthored.
 That review gate completed on 2026-11-02 at approval feature commit `6cdd13d`. Hyungbae Cho
 approved exactly the two `kv-core-doc-02` records without a substantive change. They now live in
 `data/benchmark/core/core-batch-011.jsonl`, the focused module is
-`tests/benchmark/test_bok_outlook_2025_11_core.py`, and the approved core is 24/40 with 16 matrix
+`tests/benchmark/test_bok_outlook_2025_11_core.py`, and the approved core was 24/40 with 16 matrix
 slots unauthored. This was a lifecycle-only transition: the questions, answers, cutoffs, evidence,
 frozen matrix, execution contracts and runtime, source bytes and manifests, rights decisions, 13
 public schemas, and five committed traces remain unchanged.
 
 At that checkpoint no draft review candidate remained.
 
-The owner then selected `kv-core-both-02`. Feature commit `c795aab` adds exactly the two
+The owner then selected `kv-core-both-02`. Feature commit `c795aab` added exactly the two
 draft-only Korean/English records in `data/benchmark/drafts/core-draft-012.jsonl`, binding
 document unit `bok-outlook-release-2025-11` and data unit `ecos-200y108-snapshot-20260717` in
 evidence group `eg-both-outlook-2025-11-ecos-gdp-20260717` (`train` split). Each record combines
 the November 2025 outlook's 2025 GDP growth forecast of 1.0%, above the August projection of
 0.9%, with one `read_snapshot_as_of` expectation. That expectation is 2025Q4 seasonally adjusted
 real GDP of 585,964.0 billion won in the approved July 2026 ECOS snapshot. Both records share
-`as_of` 2026-07-17. The approved core remains 24/40; two draft records are pending named human
-review, and 14 matrix slots remain unauthored.
+`as_of` 2026-07-17. At that checkpoint the approved core remained 24/40; two draft records were
+pending named human review, and 14 matrix slots remained unauthored.
 
-The exact next independent slice is only named human review of those two drafts. Do not
-pre-approve or move them into `core/`, increase the approved count, or select or author another
-pair before that decision. Provider or live-model integration remains absent, and the bounded tool
-loop deferred by ADR 0008 remains outside the authoring slices.
+That review gate completed on 2026-11-02 at approval feature commit `6ecc946`. Hyungbae Cho
+approved exactly the two `kv-core-both-02` records without a substantive change. They now live in
+`data/benchmark/core/core-batch-012.jsonl`, the focused module is
+`tests/benchmark/test_bok_gdp_both_core.py`, and the approved core is 26/40 with 14 matrix slots
+unauthored. This was a lifecycle-only transition: the questions, answers, cutoff, evidence, tool
+expectations, frozen matrix, execution contracts and runtime, source bytes and manifests, rights
+decisions, 13 public schemas, and five committed traces remain unchanged.
+
+No draft review candidate remains, and no later pair or slice is selected; choosing the next one
+is an owner decision. Every remaining slot needs new official outlook manifests (the 2025-05,
+2024-11, or 2024-05 releases) or the reserved future data release. Provider or live-model
+integration remains absent, and the bounded tool loop deferred by ADR 0008 remains outside the
+authoring slices.

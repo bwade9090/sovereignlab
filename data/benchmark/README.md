@@ -30,7 +30,8 @@ records, `core/core-batch-009.jsonl` contains the two approved ledger frontier a
 records, and `core/core-batch-010.jsonl` contains the two approved BOK outlook CLI combined
 records. Their annotations preserve the AI author and name the human reviewer and review
 timestamp. `core/core-batch-011.jsonl` contains the two approved November 2025 outlook inflation
-records. Together they total 24/40 approved records.
+records, and `core/core-batch-012.jsonl` contains the two approved November 2025 outlook ECOS
+GDP combined records. Together they total 26/40 approved records.
 
 The Korean/English `kv-core-data-03` pair was completed as
 `drafts/core-draft-004.jsonl` on 2026-08-20 in feature commit `50c4d9c`. Hyungbae Cho approved both
@@ -227,10 +228,10 @@ files.
 Hyungbae Cho approved both records on 2026-11-02 without a substantive change, with review
 timestamp `2026-11-02T13:44:04Z`. Approval feature commit `6cdd13d` moved them to
 `core/core-batch-011.jsonl` and renamed the focused module to
-`tests/benchmark/test_bok_outlook_2025_11_core.py`. The approved count is now 24/40, no draft
-was pending, and 16 records remained unauthored.
+`tests/benchmark/test_bok_outlook_2025_11_core.py`. That approval brought the approved count to
+24/40 with no draft pending and 16 records unauthored.
 
-Feature commit `c795aab` adds exactly `kv-core-both-02-ko` and `kv-core-both-02-en` at
+Feature commit `c795aab` added exactly `kv-core-both-02-ko` and `kv-core-both-02-en` at
 `annotation.status=draft` in `drafts/core-draft-012.jsonl`. Both use the frozen
 `documents_and_data` route, `train` split, `eg-both-outlook-2025-11-ecos-gdp-20260717` evidence
 group, parallel group `kv-core-both-02`, document unit `bok-outlook-release-2025-11`, and data
@@ -238,10 +239,15 @@ unit `ecos-200y108-snapshot-20260717`. Each record combines the November 2025 ou
 growth forecast of 1.0%, above the August 0.9%, with a `read_snapshot_as_of` expectation for
 2025Q4 seasonally adjusted real GDP of 585,964.0 billion won in the approved July 2026 ECOS
 snapshot, at a shared `as_of` of 2026-07-17. Six focused tests in
-`tests/benchmark/test_bok_gdp_both_draft.py` bring the focused benchmark suite to 82 tests
-across 12 files. The approved count remains 24/40: two of the other 16 records are drafts and 14
-remain unauthored. The exact next action is named human review of only these two drafts; do
-not pre-approve them or select another pair.
+`tests/benchmark/test_bok_gdp_both_draft.py` brought the focused benchmark suite to 82 tests
+across 12 files.
+
+Hyungbae Cho approved both records on 2026-11-02 without a substantive change, with review
+timestamp `2026-11-02T14:16:07Z`. Approval feature commit `6ecc946` moved them to
+`core/core-batch-012.jsonl` and renamed the focused module to
+`tests/benchmark/test_bok_gdp_both_core.py`. The approved count is now 26/40, no draft is
+pending, and 14 records remain unauthored. The next slice is the owner's choice; every
+remaining slot needs new official outlook manifests or the reserved future data release.
 
 The matrix assigns every planned documentary or data source unit to one dataset split. Do not
 replace a reserved unit or move a pair between splits without a versioned matrix change, tests, and

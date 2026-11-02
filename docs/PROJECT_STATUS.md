@@ -20,8 +20,8 @@
   committed the first weekly capture, `20261102t101403605391z`, in `fe4f9a9`. The weeks in between
   are a permanent, disclosed gap. Number-normalization 1.0.0, the zero-cost QLoRA preflight, and the paid A40/CUDA 13
   one-step compatibility run are complete. The M1b week-1 gate passed on 2026-07-18. In M2, the
-  40-record core authoring allocation and the first eleven core batch files are owner-approved.
-  The approved human-reviewed core count is 24/40: the first four data/abstention records, the
+  40-record core authoring allocation and the first twelve core batch files are owner-approved.
+  The approved human-reviewed core count is 26/40: the first four data/abstention records, the
   first Korean/English documentary pair, the `kv-core-data-02` Korean/English ECOS GDP pair in
   `data/benchmark/core/core-batch-003.jsonl`, the `kv-core-data-03` Korean/English ECOS
   current-account pair in `data/benchmark/core/core-batch-004.jsonl`, the `kv-core-data-04`
@@ -37,9 +37,9 @@
   one owner-directed English section-label correction. The `kv-core-doc-02` Korean/English pair
   over the November 2025 outlook's inflation rationale is approved in
   `data/benchmark/core/core-batch-011.jsonl`. The owner-selected `kv-core-both-02`
-  Korean/English pair is complete at `status=draft` in
-  `data/benchmark/drafts/core-draft-012.jsonl` and awaits named human review; the other 14 matrix
-  slots are unauthored. The offline
+  Korean/English pair, which combines that outlook's 2025 growth forecast with 2025Q4 real GDP
+  from the approved ECOS snapshot, is approved in `data/benchmark/core/core-batch-012.jsonl`;
+  no draft is pending, and the other 14 matrix slots are unauthored. The offline
   bilingual temporal document retriever is now
   implemented with manifest-bound chunks and publication-date filtering before scoring; only
   synthetic fixtures were used. The first real bilingual document-manifest unit is also complete:
@@ -323,6 +323,12 @@
   November 2025 outlook's 2025 GDP growth forecast of 1.0% (above the August 0.9%) with a
   `read_snapshot_as_of` expectation for 2025Q4 seasonally adjusted real GDP (585,964.0 billion
   won) in the approved July 2026 ECOS snapshot, at a shared `as_of` of 2026-07-17.
+
+- **Owner approval of the November 2025 outlook ECOS GDP combined pair (2026-11-02):** approval
+  feature commit `6ecc946` records Hyungbae Cho's named decision on the unchanged
+  `kv-core-both-02` pair (review timestamp `2026-11-02T14:16:07Z`), moves it to
+  `data/benchmark/core/core-batch-012.jsonl`, renames the focused tests to
+  `test_bok_gdp_both_core.py`, and raises the approved-count assertions from 24 to 26.
 
 - **BOK Economic Outlook public-data rights correction — ADR 0009 / charter v2.5 (2026-07-28):**
   the owner confirmed that the official Korean Economic Outlook publication family and official
@@ -835,8 +841,8 @@
   `batch-010` lifecycle tag. It moves the pair to `data/benchmark/core/core-batch-010.jsonl` and
   renames the focused tests to `test_bok_cli_both_core.py`, which now pin both literal section
   labels. It also raises the approved-count assertions in the other eight focused benchmark files
-  from 20 to 22. The approved core is now 22/40 across ten batch files, with no draft pending and
-  18 slots unauthored. This is the first approved combined `documents_and_data` pair. The frozen
+  from 20 to 22. The approved core was then 22/40 across ten batch files, with no draft pending
+  and 18 slots unauthored. This is the first approved combined `documents_and_data` pair. The frozen
   matrix, source bundle, rights decisions, normalization contract, 13 public schemas, five
   committed traces, and runtime source are unchanged.
 
@@ -1388,6 +1394,15 @@ tier defined in `AGENTS.md`. `python -m pytest tests/benchmark -p no:cacheprovid
 --collect-only -q` reports 1,199 tests. The change touches only benchmark records and
 `tests/benchmark/`, so the full baseline was not rerun. It last passed at `6cdd13d` with 100%
 coverage, and source coverage cannot change without a source edit. The work cost $0.00.
+
+Validated 2026-11-02 on macOS (Python 3.12.14) after approval feature commit `6ecc946`. The
+`kv-core-both-02` records changed only in their lifecycle fields (status, reviewer, review
+timestamp, and tag), and all 82 tests in the 12 focused benchmark files passed. Because this
+approval closes the round, the full baseline ran as well: the suite passed all 1,199 tests with
+100% SovereignLab statement/branch coverage (4,679 statements, 1,568 branches), Ruff check and
+format check passed across 83 Python files, and all 13 public schemas regenerated without
+drift. The frozen matrix, source, rights, schema, trace, and runtime boundaries did not change,
+and the approval cost $0.00.
 
 ## M1b verification spike record (2026-07-15)
 
@@ -2306,9 +2321,9 @@ response bodies.
   full-suite tests at 100% SovereignLab statement/branch coverage (4,679 statements, 1,568
   branches); Ruff checking and format checking across 82 Python files; deterministic
   regeneration of all 13 public schemas without drift. The approval cost $0.00.
-- M2 now has 24/40 owner-approved core records. No draft is pending, and 16 records are
-  unauthored. `kv-core-both-02` can be authored from the committed November 2025 manifests and
-  the existing ECOS GDP snapshot. The other slots need the 2025-05, 2024-11, or 2024-05 outlook
+- At that checkpoint M2 had 24/40 owner-approved core records, no draft was pending, and 16
+  records were unauthored. `kv-core-both-02` could be authored from the committed November 2025
+  manifests and the existing ECOS GDP snapshot. The other slots need the 2025-05, 2024-11, or 2024-05 outlook
   manifests, and the `test` slots also need the reserved future data release.
 - On the owner's request, `AGENTS.md` now defines validation tiers. Documentation-only commits
   need `git diff --check`. Benchmark-only commits need `pytest tests/benchmark` plus Ruff. Data
@@ -2333,20 +2348,37 @@ response bodies.
   (2026-03-31 Korean, 2026-01-22 English) and is the snapshot's capture date.
 - Validation used the new benchmark tier: 82 focused benchmark tests and Ruff across 83 files
   passed, and the suite now collects 1,199 tests. The work cost $0.00.
-- M2 has 24/40 approved records; two drafts await named human review, and 14 slots are
-  unauthored.
+- At that checkpoint M2 had 24/40 approved records, two drafts awaited named human review, and
+  14 slots were unauthored.
 
-## Immediate next action (M2 — named human review of `kv-core-both-02` only)
+## Session-close snapshot (2026-11-02, thirty-ninth close: kv-core-both-02 pair approved)
 
-1. Review only `kv-core-both-02-ko` and `kv-core-both-02-en` in
-   `data/benchmark/drafts/core-draft-012.jsonl` against the frozen matrix. Check the bilingual
-   wording, the shared `as_of` of 2026-07-17, route, split, evidence group, parallel group, and
-   both bound units. Check the page-anchored evidence (Korean summary page 7, English executive
-   summary page 8) against the hash-matched local PDFs, and the `read_snapshot_as_of`
-   expectation (2025Q4, raw `585964`, display `585964.0`) and attribution.
-2. Do not mark either record approved, move it into `core/`, or raise the approved count above
-   24/40 without an explicit named human decision. Stop after recording that decision and the
-   checks its validation tier requires; do not select or author another pair.
+- Approval feature commit `6ecc946` records Hyungbae Cho's named decision on the unchanged
+  `kv-core-both-02` pair: reviewer `Hyungbae Cho`, review timestamp `2026-11-02T14:16:07Z`,
+  `annotation.status=approved`, and the `batch-012` tag. It moves the pair from
+  `drafts/core-draft-012.jsonl` to `core/core-batch-012.jsonl`. The focused module is renamed to
+  `tests/benchmark/test_bok_gdp_both_core.py` with approved expectations, and ten other
+  focused benchmark files raise their approved-count assertions from 24 to 26.
+- The questions, answers, cutoff, evidence, tool expectations, frozen matrix, source bundle,
+  rights decisions, public schemas, traces, and runtime source are unchanged.
+- Python 3.12.14 validation is green: all 82 tests in the 12 focused benchmark files; 1,199
+  full-suite tests at 100% SovereignLab statement/branch coverage (4,679 statements, 1,568
+  branches); Ruff checking and format checking across 83 Python files; deterministic
+  regeneration of all 13 public schemas without drift. The approval cost $0.00.
+- M2 now has 26/40 owner-approved core records, including two combined `documents_and_data`
+  pairs. No draft is pending, and 14 records are unauthored. `kv-core-doc-03`..`kv-core-doc-05`
+  and `kv-core-both-03`..`kv-core-both-04` need the 2025-05, 2024-11, or 2024-05 outlook
+  manifests, and `kv-core-both-05` and `kv-core-data-05` need the reserved future data
+  release.
+
+## Immediate next action (M2 — owner selects the next slice)
+
+1. Ask the owner which pair or slice comes next. Every remaining documentary slot first needs
+   new official outlook manifests (the 2025-05, 2024-11, or 2024-05 releases) under ADR 0009 and
+   dated under ADR 0011, as their own reviewable unit, and `kv-core-both-05` and
+   `kv-core-data-05` stay reserved for the future data release.
+2. Do not select, draft, or approve another pair before that decision, and keep the approved count
+   at 26/40.
 3. Preserve the frozen matrix, approved core, source, rights, schema, trace, and runtime boundaries;
    do not begin provider/live-model integration, paid work, probes, or the deferred bounded loop.
 
@@ -2473,6 +2505,7 @@ complete.
 | 2026-11-02 | Bilingual November 2025 outlook inflation-rationale draft pair | $0.00 | Exactly two draft records over the committed November 2025 manifests, anchors verified in the hash-matched local PDFs, six focused tests, and full offline validation; no matrix, approved-core, source, rights, schema, trace, runtime, provider/live-model, GPU, or paid change |
 | 2026-11-02 | Owner approval of the November 2025 outlook inflation pair | $0.00 | Named reviewer metadata, lifecycle move to `core-batch-011`, focused-test transition, and offline validation only; no matrix, source, rights, schema, trace, runtime, provider/live-model, GPU, or paid change |
 | 2026-11-02 | Bilingual November 2025 outlook ECOS GDP combined draft pair | $0.00 | Exactly two draft records over the committed November 2025 manifests and the approved ECOS GDP snapshot, anchors verified in the hash-matched local PDFs, gold reproduced through the real snapshot reader, six focused tests, and benchmark-tier validation; no matrix, approved-core, source, rights, schema, trace, runtime, provider/live-model, GPU, or paid change |
+| 2026-11-02 | Owner approval of the November 2025 outlook ECOS GDP combined pair | $0.00 | Named reviewer metadata, lifecycle move to `core-batch-012`, focused-test transition, and benchmark-tier plus full offline validation only; no matrix, source, rights, schema, trace, runtime, provider/live-model, GPU, or paid change |
 
 **Cumulative external spend: $0.23584524099715054 / $100.00**
 
@@ -2570,15 +2603,14 @@ Read in this order, in full, before changing anything:
     `tests/benchmark/test_bok_outlook_2025_11_core.py` — the approved two-record November 2025
     outlook inflation-rationale core batch and its frozen-allocation, review-metadata, ADR 0011
     cutoff, day-before fail-closed, and literal-locator checks.
-33. `data/benchmark/drafts/core-draft-012.jsonl` and `tests/benchmark/test_bok_gdp_both_draft.py`
-    — the pending two-record November 2025 outlook ECOS GDP combined draft pair and its
-    frozen-allocation, no-review-metadata, real-bundle, snapshot-gold-reproduction, bilingual
+33. `data/benchmark/core/core-batch-012.jsonl` and `tests/benchmark/test_bok_gdp_both_core.py` —
+    the approved two-record November 2025 outlook ECOS GDP combined core batch and its
+    frozen-allocation, review-metadata, real-bundle, snapshot-gold-reproduction, bilingual
     claim, and day-before abstention checks.
 
-Then follow "Immediate next action" item 1: review only the two `kv-core-both-02` drafts. The
-structural matrix and first twenty-four records are owner-approved; the other 16 slots remain
-unapproved, with two pending drafts and 14 unauthored slots. No later pair or implementation
-slice has been selected.
+Then follow "Immediate next action" item 1: ask the owner which pair or slice comes next. The
+structural matrix and first twenty-six records are owner-approved; the other 14 slots are
+unauthored, no draft is pending, and no later pair or implementation slice has been selected.
 The synthetic retrieval baseline and first real bilingual document manifests are complete. ADR
 0009 resolves those
 manifests to `allowed`, but full PDFs and extracted full text remain outside Git by current

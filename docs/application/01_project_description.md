@@ -39,7 +39,7 @@ resolver is operational; the GitHub Actions harvester committed its first weekly
 2026-11-02 after a registry-admission repair, so weekly capture coverage has a disclosed gap from
 2026-07-20; and 1,199 tests pass with 100% statement and branch coverage (4,679 statements, 1,568
 branches) across 83 formatted Python files. The
-40-question human-reviewed bilingual core is frozen as an allocation, and 24 of 40 records —
+40-question human-reviewed bilingual core is frozen as an allocation, and 26 of 40 records —
 initially AI-authored, then approved under
 named human review —
 are complete: a Korean/English data pair resolving the OECD CLI vintage available on 2026-07-09, an
@@ -57,7 +57,9 @@ pair whose August 15, 2026 cutoff lies beyond the committed availability ledger'
 completeness frontier, and the first Korean/English combined document-plus-data pair, which
 pairs the Bank of Korea May 2026 outlook's 2026 growth projection with the demonstrably
 available July 2026 CLI vintage, and a second Korean/English documentary pair that recovers the
-November 2025 outlook's inflation rationale at each edition's own cutoff. Offline
+November 2025 outlook's inflation rationale at each edition's own cutoff, and a second combined
+pair that pairs that outlook's 2025 growth forecast with 2025Q4 real GDP from the approved
+2026-07-17 ECOS snapshot. Offline
 bilingual temporal document retrieval is implemented over a committed
 synthetic Korean/English corpus — the real Bank of Korea report bodies are manifest-bound but not
 yet committed as searchable text — with publication-date filtering before scoring; regression
@@ -276,7 +278,7 @@ offline executor. Five real-digest offline replays now provide `typed function c
 committed traces`, covering all routes and tools, Korean and English, explicit and implicit cutoffs,
 complete execution, and terminal planned/tool abstention without partial evidence. The repository
 passes 1,199 tests with 100% statement and branch coverage (4,679 statements, 1,568 branches)
-across 83 formatted Python files. The frozen 40-record bilingual K-VINTAGE core has its first 24
+across 83 formatted Python files. The frozen 40-record bilingual K-VINTAGE core has its first 26
 records reviewed and approved, including a
 Korean/English documentary pair over the Bank of Korea's May 2026 Economic Outlook and its later
 official English translation. A further Korean/English `kv-core-data-02` pair over the 2026-07-17
@@ -336,11 +338,11 @@ so ADR 0011 dates every document manifest no earlier than its exact bytes. The d
 moved to the corrected cutoffs and was re-approved. A second documentary pair over the November
 2025 outlook's inflation rationale was then drafted and approved, bringing the approved core to
 24/40. A second combined pair over the November 2025 outlook and the approved ECOS GDP snapshot
-is now drafted and awaits named human review, and 14 slots remain unauthored; focused validation
-is 82 tests across 12 files. I also
+was then drafted and approved, bringing the approved core to 26/40 with 14 slots unauthored;
+focused validation is 82 tests across 12 files. I also
 verified the pinned Ministral 3 3B NF4/QLoRA training path on a disposable A40/CUDA 13 GPU without
-claiming model-quality gains. Next is named human review of those two drafts; later work covers
-the remaining core, separately reported deterministic revision probes, and the four-variant baseline
+claiming model-quality gains. The next pair or slice is the owner's choice; later work covers the
+remaining core, separately reported deterministic revision probes, and the four-variant baseline
 suite, with temporal leakage as the headline metric.
 
 ## Usage guardrails
@@ -348,7 +350,7 @@ suite, with temporal leakage as the headline metric.
 - Keep “In Progress” while the M2 benchmark and baseline work remains incomplete; deterministic
   offline replay does not imply benchmark completion.
 - Describe the A40 result as QLoRA *compatibility*, not fine-tuning or model improvement.
-- Do not cite core-benchmark progress beyond the approved 24/40 records, and always report the
+- Do not cite core-benchmark progress beyond the approved 26/40 records, and always report the
   human-reviewed core separately from the machine-generated probes.
 - Do not add leakage rates, quality improvements, or cost/latency figures until committed
   evaluation artifacts reproduce them.
