@@ -7,6 +7,10 @@ from pathlib import Path
 
 import httpx
 
+# Hosted runners occasionally time out while connecting to the official API hosts. Retrying only
+# connection establishment never resends a request that a provider already received.
+CONNECT_RETRIES = 2
+
 
 def main() -> None:
     parser = argparse.ArgumentParser()
@@ -20,7 +24,8 @@ def main() -> None:
 
     settings = Settings()
     rights_catalog = load_rights_catalog(repository_root)
-    with httpx.Client(follow_redirects=True, timeout=60.0) as client:
+    transport = httpx.HTTPTransport(retries=CONNECT_RETRIES)
+    with httpx.Client(transport=transport, follow_redirects=True, timeout=60.0) as client:
         summary = run_weekly_capture(
             repository_root,
             client=client,
