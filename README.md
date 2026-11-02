@@ -3,19 +3,17 @@
 > What did the data say *then*? Vintage-conditioned evaluation and auditable briefings for Korean/English economic research.
 
 **Status:** M1b verification and vintage-contract groundwork are complete; M2 benchmark and
-baseline development is in progress with a frozen 40-record core matrix and 20/40 records
-owner-approved — the halfway mark. Hyungbae Cho approved the Korean/English `kv-core-abstain-05`
-pair on 2026-08-27; the two records now live in `data/benchmark/core/core-batch-009.jsonl`, and
-the abstain route's five pairs are now all approved. Feature commit `933c0e9` adds the
-Korean/English `kv-core-both-01` pair as two drafts in
-`data/benchmark/drafts/core-draft-010.jsonl`; the first combined `documents_and_data` pair
-(`train` split) binds the existing committed document unit `bok-outlook-release-2026-05` and data
-unit `oecd-stes-edition-202607`, and each record pairs one page-anchored document evidence entry
-with one `resolve_stes_as_of` tool expectation at the shared `as_of` cutoff 2026-07-09, at which
-both document publications had been released and the committed edition-availability ledger proves
-CLI edition `202607` was demonstrably available. They remain pending named human review and do
-not increase the approved count; of the 20 unapproved slots, these two are drafted and the other
-18 remain unauthored. The
+baseline development is in progress with a frozen 40-record core matrix and 22/40 records
+owner-approved. Hyungbae Cho approved the Korean/English `kv-core-both-01` pair on 2026-11-02,
+after one owner-directed correction of the English evidence section label. The two records now
+live in `data/benchmark/core/core-batch-010.jsonl` as the first approved combined
+`documents_and_data` pair (`train` split). It binds the committed document unit
+`bok-outlook-release-2026-05` and data unit `oecd-stes-edition-202607`, and each record pairs one
+page-anchored document evidence entry with one `resolve_stes_as_of` tool expectation at the
+shared `as_of` cutoff 2026-07-09. By that cutoff both document publications had been released,
+and the committed edition-availability ledger proves CLI edition `202607` was demonstrably
+available. No draft is pending review, the other 18 slots are unauthored, and no next pair is
+selected. The
 first nine ADR 0008 slices and work unit C are complete: five machine-readable real-digest traces
 were generated through the actual private offline executor, `ScriptedPlanner`, and committed
 registries and corpora in feature commit `883815b`. The trace set covers all four
@@ -223,9 +221,13 @@ reference answers disclose summarization/paraphrase and attribute the Bank of Ko
 expectation mirrors the approved `kv-core-data-01` convention and resolves edition `202607`
 with raw and normalized value `102.66`, and focused tests prove the English record fails closed
 before its 2026-06-30 release date and that a pre-availability cutoff of 2026-06-30 still
-abstains. Current validation is 70 focused benchmark tests and 1,184 full-suite tests across 80
-formatted Python files. The approved count remains 20/40, and the exact next action is named
-human review of only these two drafts; do not pre-approve them or select another pair.
+abstains. On 2026-11-02 Hyungbae Cho approved both records. The review re-fetched the official
+PDFs with owner approval and confirmed the anchored pages and figures. It also corrected the
+English locator section to the literal `Executive Summary ii` in `4365096`, because its former
+suffix did not appear on the page. Approval feature commit `8bc88a1` moved the pair to
+`data/benchmark/core/core-batch-010.jsonl`. Current validation is 70 focused benchmark tests and
+1,184 full-suite tests across 80 formatted Python files. The approved count is 22/40, and choosing
+the next pair or slice is an owner decision.
 Charter v2.5 and
 [ADR 0009](docs/decisions/0009-bok-economic-outlook-public-data-rights.md) additionally record the
 owner-approved `allowed` public-data ruling for official Bank of Korea Economic Outlook

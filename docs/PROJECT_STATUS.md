@@ -20,8 +20,8 @@
   committed the first weekly capture, `20261102t101403605391z`, in `fe4f9a9`. The weeks in between
   are a permanent, disclosed gap. Number-normalization 1.0.0, the zero-cost QLoRA preflight, and the paid A40/CUDA 13
   one-step compatibility run are complete. The M1b week-1 gate passed on 2026-07-18. In M2, the
-  40-record core authoring allocation and the first nine core batch files are owner-approved.
-  The approved human-reviewed core count is 20/40: the first four data/abstention records, the
+  40-record core authoring allocation and the first ten core batch files are owner-approved.
+  The approved human-reviewed core count is 22/40: the first four data/abstention records, the
   first Korean/English documentary pair, the `kv-core-data-02` Korean/English ECOS GDP pair in
   `data/benchmark/core/core-batch-003.jsonl`, the `kv-core-data-03` Korean/English ECOS
   current-account pair in `data/benchmark/core/core-batch-004.jsonl`, the `kv-core-data-04`
@@ -30,12 +30,12 @@
   `data/benchmark/core/core-batch-006.jsonl`, the `kv-core-abstain-03` Korean/English CPI
   revision false-premise abstention pair in `data/benchmark/core/core-batch-007.jsonl`, the
   `kv-core-abstain-04` Korean/English missing-as-of abstention pair in
-  `data/benchmark/core/core-batch-008.jsonl`, and the `kv-core-abstain-05` Korean/English
-  ledger frontier abstention pair now in `data/benchmark/core/core-batch-009.jsonl`. The
-  `kv-core-both-01` Korean/English pair — the first combined `documents_and_data` pair — is
-  complete at `status=draft` in `data/benchmark/drafts/core-draft-010.jsonl` and awaits named
-  human review. The other 20 matrix slots remain unapproved: two are the pending drafts and 18
-  are unauthored. The offline
+  `data/benchmark/core/core-batch-008.jsonl`, the `kv-core-abstain-05` Korean/English ledger
+  frontier abstention pair in `data/benchmark/core/core-batch-009.jsonl`, and the
+  `kv-core-both-01` Korean/English pair, the first combined `documents_and_data` pair, now in
+  `data/benchmark/core/core-batch-010.jsonl`. Hyungbae Cho approved that pair on 2026-11-02 after
+  one owner-directed English section-label correction. The other 18 matrix slots are unauthored,
+  no draft is pending review, and no next pair is selected. The offline
   bilingual temporal document retriever is now
   implemented with manifest-bound chunks and publication-date filtering before scoring; only
   synthetic fixtures were used. The first real bilingual document-manifest unit is also complete:
@@ -763,11 +763,27 @@
   reproduction of the declared CLI gold through the real fail-closed resolver; bilingual
   document-plus-data claim checks; a negative test proving the English record fails closed
   before its 2026-06-30 release date; and a ledger check that a pre-availability cutoff
-  (2026-06-30) still abstains. The approved human-reviewed core remains 20/40; of the other 20
-  unapproved matrix slots, these two are pending drafts and 18 remain unauthored. The frozen
-  matrix, approved core, source bundle, rights decisions, normalization contract, 13 public
-  schemas, five committed traces, and runtime source are unchanged; no PDF body or extracted
-  text entered Git.
+  (2026-06-30) still abstains. At that draft checkpoint, the approved human-reviewed core
+  remained 20/40; of the other 20 unapproved matrix slots, these two were pending drafts and 18
+  remained unauthored. The frozen matrix, approved core, source bundle, rights decisions,
+  normalization contract, 13 public schemas, five committed traces, and runtime source were
+  unchanged; no PDF body or extracted text entered Git.
+
+- **Owner approval of the BOK outlook CLI combined pair (2026-11-02):** with owner approval, the
+  review re-fetched both official May 2026 outlook PDFs into the Git-ignored `data/raw/` on
+  macOS. Both matched their manifests byte-for-byte, and both anchored pages carry the claimed
+  projection, February forecast, and comparison wording. The review found that the English
+  locator section's suffix `Economic outlook summary` does not appear on page 6. On the owner's
+  "fix, then approve" decision, commit `4365096` corrected only that label to the literal
+  `Executive Summary ii`. Approval feature commit `8bc88a1` then records reviewer
+  `Hyungbae Cho`, review timestamp `2026-11-02T11:04:32Z`, `annotation.status=approved`, and the
+  `batch-010` lifecycle tag. It moves the pair to `data/benchmark/core/core-batch-010.jsonl` and
+  renames the focused tests to `test_bok_cli_both_core.py`, which now pin both literal section
+  labels. It also raises the approved-count assertions in the other eight focused benchmark files
+  from 20 to 22. The approved core is now 22/40 across ten batch files, with no draft pending and
+  18 slots unauthored. This is the first approved combined `documents_and_data` pair. The frozen
+  matrix, source bundle, rights decisions, normalization contract, 13 public schemas, five
+  committed traces, and runtime source are unchanged.
 
 ## Current validation evidence
 
@@ -1282,6 +1298,15 @@ full baseline passed again with identical counts and coverage. Fix commits `a306
 change only tests, `tests/conftest.py`, the capture script, and the workflow. The source package,
 executor digest, 13 public schemas, and five replay traces did not change, and the work cost
 $0.00.
+
+Validated 2026-11-02 on macOS (Python 3.12.14) after the owner approval of the
+`kv-core-both-01` pair. Both re-fetched official PDFs matched their manifests' byte sizes and
+SHA-256 values. After the label correction `4365096`, the seven focused tests passed. After the
+approval transition `8bc88a1`, the ten focused benchmark files passed all 70 tests, and the full
+suite passed all 1,184 tests with 100% SovereignLab statement/branch coverage (4,679 statements,
+1,568 branches). Ruff check and format check passed across 80 Python files, and all 13 public
+schemas regenerated without drift. The frozen matrix, source, rights, schema, trace, and runtime
+boundaries did not change, no PDF body or extracted text entered Git, and the review cost $0.00.
 
 ## M1b verification spike record (2026-07-15)
 
@@ -2087,22 +2112,50 @@ response bodies.
   SHA-256 values, and the ECOS and KOSIS URLs carry only the `{api-key}` placeholder.
 - The capture gap from 2026-07-20 to this first committed capture is permanent and must not be
   backfilled. Later captures stay archive-only until a separate owner decision admits them into a
-  superseding registry version. M2 remains at 20/40 approved, and the exact next action is still
-  named human review of only the two `kv-core-both-01` drafts.
+  superseding registry version. At that checkpoint M2 remained at 20/40 approved, and the exact
+  next action was still named human review of only the two `kv-core-both-01` drafts.
 
-## Immediate next action (M2 — named human review of `kv-core-both-01` only)
+## Session-close snapshot (2026-11-02, thirty-fourth close: BOK outlook CLI combined pair approved)
 
-1. Review only `kv-core-both-01-ko` and `kv-core-both-01-en` in
-   `data/benchmark/drafts/core-draft-010.jsonl` against the frozen matrix: bilingual wording,
-   the shared record-level `as_of` of `2026-07-09`, route, split, evidence group, parallel
-   group, the bound document and data units, the page-anchored document evidence (Korean
-   summary page 8, official English executive summary page 6) against the hash-verified local
-   PDF bodies, the `resolve_stes_as_of` tool expectation (edition `202607`, value `102.66`,
-   normalization rule `oecd-stes-kor-li-aa-index-v1`), and the reference answers' Bank of Korea
-   attribution and summarization/paraphrase disclosure.
-2. Do not mark either record approved, move it into `core/`, or raise the approved count above
-   20/40 without an explicit named human decision. Stop after recording that decision and a green
-   full baseline; do not select or author another pair.
+- With owner approval, both official May 2026 Bank of Korea outlook PDFs were re-fetched from
+  their committed canonical URLs into the Git-ignored `data/raw/` on macOS. They matched the
+  committed manifests byte-for-byte (Korean 10,711,393 bytes, English 3,711,417 bytes, exact
+  SHA-256). The Korean physical page 8 (printed page 6, `요약 2/10`, `경제전망 요약`) and the English
+  physical page 6 (printed `ii`, `Executive Summary`) both carry the 2026 projection of 2.6%, the
+  February forecast of 2.0%, and the comparison wording. The English cover title
+  `Korea Economic Outlook` matches the manifest. No PDF body or extracted text entered Git.
+- The review found one label defect. The English locator section
+  `Executive Summary ii — Economic outlook summary` had a suffix that translated the Korean
+  heading and does not appear on page 6. The approved `kv-core-doc-01-en` locator uses a heading
+  that appears on its page. On the owner's "fix, then approve" decision, commit `4365096`
+  corrected only that label to `Executive Summary ii` while the records were still drafts.
+- Approval feature commit `8bc88a1` records Hyungbae Cho's named decision: reviewer
+  `Hyungbae Cho`, review timestamp `2026-11-02T11:04:32Z`, `annotation.status=approved`, and the
+  `batch-010` tag. It moves the pair from `drafts/core-draft-010.jsonl` to
+  `core/core-batch-010.jsonl` and renames the focused module to `test_bok_cli_both_core.py`, which
+  now pins both literal section labels. It also raises the other eight focused benchmark files'
+  approved-count assertions from 20 to 22. The frozen matrix, source bundle, rights decisions,
+  normalization contract, 13 public schemas, five committed traces, and runtime source are
+  unchanged.
+- M2 now has 22/40 owner-approved core records, including the first approved combined
+  `documents_and_data` pair. No draft is pending, and 18 records are unauthored:
+  `kv-core-doc-02`..`kv-core-doc-05` and `kv-core-both-02`..`kv-core-both-05` need earlier Bank
+  of Korea outlook releases whose manifests are not committed, and `kv-core-both-05` and
+  `kv-core-data-05` also need the reserved future data release.
+- Python 3.12.14 validation is green: all 70 focused benchmark tests across ten files; 1,184
+  full-suite tests at 100% SovereignLab statement/branch coverage (4,679 statements, 1,568
+  branches); Ruff checking and format checking across 80 Python files; deterministic
+  regeneration of all 13 public schemas without drift. The PDF re-fetch and review cost $0.00.
+- No later pair or slice is selected. The next step is the owner's choice of pair or slice.
+
+## Immediate next action (M2 — owner selects the next slice)
+
+1. Ask the owner which pair or slice comes next. Every remaining documentary slot first needs new
+   official Bank of Korea outlook manifests under the ADR 0009 family ruling, as their own
+   reviewable unit, and `kv-core-both-05` and `kv-core-data-05` stay reserved for the future
+   data release.
+2. Do not select, draft, or approve another pair before that decision, and keep the approved count
+   at 22/40.
 3. Preserve the frozen matrix, approved core, source, rights, schema, trace, and runtime boundaries;
    do not begin provider/live-model integration, paid work, probes, or the deferred bounded loop.
 
@@ -2223,6 +2276,7 @@ complete.
 | 2026-08-27 | Owner approval of the bilingual ledger frontier abstention pair | $0.00 | Named reviewer metadata, lifecycle move to `core-batch-009`, focused/full offline validation, and governance update only; no matrix, source, rights, schema, trace, runtime, network, provider/live-model, GPU, or paid change |
 | 2026-08-27 | Bilingual BOK outlook CLI combined draft pair | $0.00 | Exactly two draft records combining the committed BOK outlook document unit with the demonstrably available CLI edition `202607` data unit, page-anchored evidence located in the owner-approved hash-verified local PDF bodies, focused tests, and full fresh-OS-basetemp validation only; no matrix, approved-core, source, rights, schema, trace, runtime, network, provider/live-model, GPU, or paid change |
 | 2026-11-02 | Weekly harvester diagnosis, ADR 0010 repair, and first committed weekly capture | $0.00 | GitHub Actions history/log reads, offline tests and a local fresh-capture rehearsal, and one owner-authorized dispatched capture (run `41427071224`) using the free official APIs on a public-repository runner; no source package, registry, schema, trace, matrix, benchmark-record, model, GPU, or paid change |
+| 2026-11-02 | Owner approval of the BOK outlook CLI combined pair | $0.00 | Owner-approved free re-fetch of the two official BOK PDFs into the ignored `data/raw/` with byte-for-byte manifest verification, one owner-directed English section-label correction, named reviewer metadata, lifecycle move to `core-batch-010`, and focused/full offline validation; no matrix, source, rights, schema, trace, runtime, provider/live-model, GPU, or paid change |
 
 **Cumulative external spend: $0.23584524099715054 / $100.00**
 
@@ -2305,16 +2359,15 @@ Read in this order, in full, before changing anything:
     frontier abstention core batch and its focused frozen-allocation, no-bound-unit,
     completeness-frontier-basis, bilingual-parity, approval-lifecycle, and no-observation-leak
     checks.
-30. `data/benchmark/drafts/core-draft-010.jsonl` and
-    `tests/benchmark/test_bok_cli_both_draft.py` — the pending two-record BOK outlook CLI
-    combined draft pair and its frozen-allocation, no-review-metadata, real-bundle,
-    CLI-gold-reproduction, bilingual document-plus-data claim, pre-release fail-closed, and
-    pre-availability abstention checks.
+30. `data/benchmark/core/core-batch-010.jsonl` and
+    `tests/benchmark/test_bok_cli_both_core.py` — the approved two-record BOK outlook CLI
+    combined core batch and its frozen-allocation, review-metadata, literal-section-label,
+    real-bundle, CLI-gold-reproduction, bilingual document-plus-data claim, pre-release
+    fail-closed, and pre-availability abstention checks.
 
-Then follow "Immediate next action" item 1: review only the two `kv-core-both-01` drafts. The
-structural matrix and first twenty records are owner-approved; the other 20 slots remain
-unapproved, with two pending drafts and 18 unauthored slots. No later pair or implementation
-slice has been selected.
+Then follow "Immediate next action" item 1: ask the owner which pair or slice comes next. The
+structural matrix and first twenty-two records are owner-approved; the other 18 slots are
+unauthored, no draft is pending, and no later pair or implementation slice has been selected.
 The synthetic retrieval baseline and first real bilingual document manifests are complete. ADR
 0009 resolves those
 manifests to `allowed`, but full PDFs and extracted full text remain outside Git by current

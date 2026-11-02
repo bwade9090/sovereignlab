@@ -25,9 +25,10 @@ core records. `core/core-batch-003.jsonl` contains the two approved ECOS GDP rec
 `core/core-batch-006.jsonl` contains the two approved OECD scope abstention records,
 `core/core-batch-007.jsonl` contains the two approved CPI revision false-premise abstention
 records, `core/core-batch-008.jsonl` contains the two approved missing-as-of abstention
-records, and `core/core-batch-009.jsonl` contains the two approved ledger frontier abstention
+records, `core/core-batch-009.jsonl` contains the two approved ledger frontier abstention
+records, and `core/core-batch-010.jsonl` contains the two approved BOK outlook CLI combined
 records. Their annotations preserve the AI author and name the human reviewer and review
-timestamp. Together they total 20/40 approved records — the halfway mark of the frozen matrix.
+timestamp. Together they total 22/40 approved records.
 
 The Korean/English `kv-core-data-03` pair was completed as
 `drafts/core-draft-004.jsonl` on 2026-08-20 in feature commit `50c4d9c`. Hyungbae Cho approved both
@@ -170,7 +171,7 @@ approved-count assertions in `test_bok_outlook_core.py`, `test_ecos_gdp_core.py`
 `test_ecos_current_account_core.py`, `test_kosis_cpi_core.py`, `test_oecd_scope_abstain_core.py`,
 `test_cpi_revision_abstain_core.py`, and `test_missing_as_of_abstain_core.py` from 18 to 20.
 
-Feature commit `933c0e9` adds exactly `kv-core-both-01-ko` and `kv-core-both-01-en` at
+Feature commit `933c0e9` added exactly `kv-core-both-01-ko` and `kv-core-both-01-en` at
 `annotation.status=draft` in `drafts/core-draft-010.jsonl`. Both records use the frozen
 `documents_and_data` route — the first combined pair authored in the core — `train` split,
 `eg-both-outlook-2026-05-cli-202607` evidence group, parallel group `kv-core-both-01`, document
@@ -190,24 +191,24 @@ source `oecd-stes-cli-kor-li-aa-20260717t115302688498z` with vintage ledger
 `102.66`, canonical unit `oecd_amplitude_adjusted_index`, two display places, and normalization
 rule `oecd-stes-kor-li-aa-index-v1`. The matrix, source bundle, rights decisions, public
 schemas, and execution runtime were not changed, and no PDF body or extracted text entered Git.
-These two records remain pending named human review and do not count toward the approved core:
-20/40 records are approved, two of the other 20 are drafts, and 18 remain unauthored and
-unapproved.
 
-The preceding approval checkpoint passed 63 focused benchmark tests and 1,171 full-suite tests
-across 78 formatted Python files. The current draft checkpoint adds seven focused tests:
-`tests/benchmark/test_bok_cli_both_draft.py` passes all seven and asserts the frozen-allocation
-and no-review-metadata invariants, that the approved core remains twenty records with the drafts
-kept separate, that a real `BenchmarkBundle` validates over both document manifests, the CLI
-manifest, the two constraint captures, the availability ledger, and the rights catalog, that the
-declared CLI gold is reproduced through the real fail-closed resolver, that both records carry
-the bilingual document-plus-data claims, that — as a negative test — the English record fails
-closed before its 2026-06-30 release date, and that — as a ledger check — a pre-availability
-cutoff of 2026-06-30 still abstains. The combined focused benchmark suite passes 70 tests across
-ten files, and the full suite passes 1,184 at 100% SovereignLab statement/branch coverage across
-80 Ruff-formatted Python files. The 13 public schemas and five committed traces are unchanged.
-The exact next action is named human review of only these two drafts; do not pre-approve them or
-select another pair.
+Hyungbae Cho approved both records on 2026-11-02 with review timestamp `2026-11-02T11:04:32Z`.
+The review re-fetched both official PDFs with owner approval into the Git-ignored `data/raw/`,
+confirmed both match their manifests byte-for-byte, and found the claimed projection, February
+forecast, and comparison wording on both anchored pages. It found one label defect. The English
+locator section's suffix `Economic outlook summary` translated the Korean heading and does not
+appear on page 6, so commit `4365096` corrected the section to the literal `Executive Summary ii`
+before approval. Approval feature commit `8bc88a1` then added the reviewer metadata and the
+`batch-010` lifecycle tag and moved the pair to `core/core-batch-010.jsonl`. No other field
+changed. The focused module is now `tests/benchmark/test_bok_cli_both_core.py`; it pins both
+literal section labels and raises the approved-count assertions in the other focused benchmark
+files from 20 to 22.
+
+At this approval checkpoint, the combined focused benchmark suite passes 70 tests across ten
+files, and the full suite passes 1,184 at 100% SovereignLab statement/branch coverage across 80
+Ruff-formatted Python files. The 13 public schemas and five committed traces are unchanged. With
+22/40 records approved, no draft review candidate remains, and 18 records are unauthored. No
+later pair or slice is selected; choosing the next one is an owner decision.
 
 The matrix assigns every planned documentary or data source unit to one dataset split. Do not
 replace a reserved unit or move a pair between splits without a versioned matrix change, tests, and

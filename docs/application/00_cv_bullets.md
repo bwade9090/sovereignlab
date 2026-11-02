@@ -1,8 +1,8 @@
 # SovereignLab CV bullets
 
 - Status: wording bank; use only the section matching the achieved milestone
-- Last updated: 2026-11-02 (M2 mid-window refresh: 20/40 approved core, ADR 0008 slices 1–9 and
-  work unit C complete, two combined document-plus-data drafts pending review, weekly harvester
+- Last updated: 2026-11-02 (M2 mid-window refresh: 22/40 approved core including the first
+  combined document-plus-data pair, ADR 0008 slices 1–9 and work unit C complete, weekly harvester
   repaired under ADR 0010, 80-file/1,184-test baseline)
 - Rule: never replace placeholders with targets or estimates; use measured, reproducible results only
 - Narrative versions: `docs/application/01_project_description.md`
@@ -19,7 +19,7 @@
   at the requested cutoff cannot be proven.
 - Building **K-VINTAGE**, a bilingual Korean/English benchmark whose gold answers depend on the
   official-statistics vintage available at each question's `as_of` date: the 40-question
-  human-reviewed core allocation is frozen and 20/40 records are reviewed and approved so far —
+  human-reviewed core allocation is frozen and 22/40 records are reviewed and approved so far —
   four data/abstention records over the OECD Korea CLI revision archive plus a Korean/English
   documentary pair grounded in the Bank of Korea's May 2026 Economic Outlook and its independently
   dated official English translation, Korean/English data pairs over the 2026-07-17 ECOS GDP and
@@ -35,14 +35,12 @@
   vintage available as of August 15, 2026 — a cutoff beyond the committed availability ledger's
   completeness frontier (`complete_through`, the 2026-07-17 capture instant), so the approved
   gold behavior is abstention with `cutoff_beyond_complete_through` — completing approval of
-  the abstention route's five pairs. A separate Korean/English combined pair — the first
-  `documents_and_data` pair, a train-split pair whose records each combine one page-anchored
-  document claim over the Bank of Korea May 2026 outlook's 2026 GDP growth projection of 2.6%,
-  well above the February forecast of 2.0%, with one fail-closed resolution of the demonstrably
-  available July 2026 OECD Korea CLI edition 202607, value 102.66, at a shared 2026-07-09
-  as-of — is complete only as two AI-authored drafts pending named human review and is not
-  included in the 20/40 approved count; machine-generated revision probes will be reported
-  separately.
+  the abstention route's five pairs, and the first approved combined `documents_and_data` pair.
+  That train-split pair's records each combine one page-anchored document claim over the Bank of
+  Korea May 2026 outlook's 2026 GDP growth projection of 2.6%, well above the February forecast
+  of 2.0%, with one fail-closed resolution of the demonstrably available July 2026 OECD Korea CLI
+  edition 202607, value 102.66, at a shared 2026-07-09 as-of. Machine-generated revision probes
+  will be reported separately.
 - Shipped `typed function calling with committed traces` for the deterministic offline evidence
   path: bilingual temporal retrieval filters by publication date before scoring over a committed
   synthetic corpus; three digest-linked evidence tools run behind a replay-checked dispatcher; and
@@ -64,21 +62,20 @@
   `as_of` date (prior art: arXiv 2605.23497, the Dallas Fed real-time OECD dataset, and the OECD MEI
   revisions database), built on **KOR-RTD** — a provenance-contracted point-in-time archive of Korean
   macro data with append-only checksummed captures and a fail-closed vintage resolver. Current
-  state: 20/40 reviewed-and-approved bilingual core records, cutoff-filtered bilingual temporal
+  state: 22/40 reviewed-and-approved bilingual core records, cutoff-filtered bilingual temporal
   retrieval over a committed synthetic corpus, a frozen typed execution-and-trace contract within
   the project's 13 public JSON Schemas, three deterministic evidence tools behind a replay-checked
   dispatcher, a private provenance-bound offline executor, and `typed function calling with
   committed traces`: five real-digest offline replays covering all routes and tools, both languages,
   both cutoff modes, complete execution, and planned/tool abstention with terminal stop and no
-  partial evidence. Two additional combined document-plus-data records (`kv-core-both-01`) remain
-  draft-only pending named human review and are not counted in the 20/40 approved core. The
+  partial evidence. The approved core includes the first combined document-plus-data pair
+  (`kv-core-both-01`). The
   verified Ministral 3 3B NF4/QLoRA compatibility path is retained, and 1,184 tests pass at 100%
   statement/branch coverage; temporal leakage is the planned headline metric and no model-quality
   or briefing-performance result is claimed yet.
 
 This version distinguishes the deterministic offline replay slice from provider/live integration,
-the two pending draft records, the 18 unauthored core slots, and the not-yet-evaluated model
-variants.
+the 18 unauthored core slots, and the not-yet-evaluated model variants.
 
 ## Version B — use after the Week 2 baseline is reproducible
 

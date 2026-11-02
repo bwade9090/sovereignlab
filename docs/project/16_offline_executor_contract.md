@@ -387,14 +387,23 @@ manifest, the two constraint captures, the availability ledger, and the rights c
 declared CLI gold reproduces through the real fail-closed resolver, that both records make the
 bilingual document-plus-data claims, that the English record fails closed before its official
 2026-06-30 release date, and that a pre-availability cutoff of 2026-06-30 still abstains under
-the ledger. Both records are annotated by "Claude AI draft"; neither has named review metadata
-or enters `core/`, so the approved core remains 20/40: two draft records are pending named human
-review and 18 matrix slots remain unauthored and unapproved.
+the ledger. Both records were annotated by "Claude AI draft"; at that checkpoint, neither had
+named review metadata or entered `core/`, so the approved core remained 20/40: two draft records
+were pending named human review and 18 matrix slots remained unauthored and unapproved.
 
-The frozen matrix, execution contracts and runtime, source bytes and manifests, rights
-decisions, normalization rules, approved core, 13 public schemas, and five committed traces are
-unchanged, and no PDF body or extracted text entered Git. The exact next independent slice is
-only named human review of those two drafts. Do not pre-approve or move them into `core/`,
-increase the approved count, or select or author a later pair before that decision. Provider or
-live-model integration remains absent, and the bounded tool loop deferred by ADR 0008 remains
-outside this authoring slice.
+That review gate completed on 2026-11-02 at approval feature commit `8bc88a1`. Hyungbae Cho
+approved exactly the two `kv-core-both-01` records after one owner-directed correction at commit
+`4365096`. The English evidence section label became the literal `Executive Summary ii`, because
+its former suffix `Economic outlook summary` does not appear on page 6 of the official English
+translation. The owner-approved re-fetch of both official PDFs matched the committed manifests
+byte-for-byte, and both anchored pages contain the claimed projection and comparison. The records
+now live in `data/benchmark/core/core-batch-010.jsonl`, the focused module is
+`tests/benchmark/test_bok_cli_both_core.py`, and the approved core is 22/40 with 18 matrix slots
+unauthored and unapproved. This is the first approved combined `documents_and_data` pair. Apart
+from that label, the questions, answers, cutoff, tool expectations, frozen matrix, execution
+contracts and runtime, source bytes and manifests, rights decisions, normalization, 13 public
+schemas, and five committed traces remain unchanged.
+
+No draft review candidate remains, and no later pair or slice is selected; choosing the next one
+is an owner decision. Provider or live-model integration remains absent, and the bounded tool loop
+deferred by ADR 0008 remains outside the authoring slices.
