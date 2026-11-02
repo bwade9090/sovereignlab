@@ -49,6 +49,15 @@ the Windows workstation.
 - The Korean/English `kv-core-both-01` pair is complete at `annotation.status=draft` in
   `data/benchmark/drafts/core-draft-010.jsonl`. These two records do not increase the approved
   count and remain pending named human review.
+- The 2026-11-02 weekly harvester repair is complete (ADR 0010). None of the 16 scheduled runs
+  from 2026-07-20 had committed a capture. Frozen-registry completeness tests rejected every fresh
+  capture, three runs timed out connecting to KOSIS or ECOS, and GitHub then disabled the schedule
+  for inactivity. Commits `a3067f5`, `d4a8c22`, and `20733a8` keep post-v1 captures archive-only,
+  retry connection establishment in `scripts/harvest_weekly.py`, pin the runner, and record the
+  decision. An owner-authorized dispatch then committed the first weekly capture,
+  `20261102t101403605391z`, as `fe4f9a9`. The source package, executor digest, trusted registries,
+  public schemas, traces, matrix, and benchmark records are unchanged. The gap from 2026-07-20 is
+  permanent and must not be backfilled.
 - Completed: fail-closed vintage resolver, weekly append-only harvester, approved ECOS/KOSIS/OECD
   captures, number normalization, offline bilingual temporal retrieval, strict Korean/English Bank
   of Korea May-2026 Outlook manifests, the approved `kv-core-doc-01` documentary pair, and strict
@@ -242,7 +251,8 @@ Before editing:
    fail-closed edition-availability contract; ADR 0006 records the owner's employer-risk review;
    ADR 0007 records the v2.3 exact KOSIS CPI and OECD CLI rights amendment; ADR 0008 records the
    v2.4 typed function-calling execution contract and the v1.1 deferral of the bounded tool
-   loop; ADR 0009 records the v2.5 Bank of Korea Economic Outlook public-data rights amendment).
+   loop; ADR 0009 records the v2.5 Bank of Korea Economic Outlook public-data rights amendment;
+   ADR 0010 keeps weekly captures archive-only until a superseding trusted registry admits them).
 4. `docs/project/04_macbook_handoff.md` — cross-machine Windows setup, exact continuation order,
    and next-unit acceptance criteria (legacy filename; skip files it lists that you already read
    this session).
@@ -307,6 +317,8 @@ The charter is the scope authority. Do not expand sources, agents, UI, or infras
 - Keep Korean and English results separately reportable.
 - Never let an `as_of` evidence packet include a source published after its cutoff — nor a data vintage/edition that did not exist at the cutoff.
 - Harvester outputs are append-only: never rewrite, backdate, or backfill a committed snapshot; public commit history is the proof of capture dates.
+- Captures after a trusted registry's admission frontier stay archive-only until a superseding
+  registry version admits them; admission is a separate owner decision (ADR 0010).
 - Never commit raw ECOS/KOSIS observations unless the exact series has an owner-approved
   source-specific classification and attribution ruling. Bank of Korea-produced ECOS statistics
   and in-scope KOSIS domestic macro statistics may be `allowed` under their official use guides;
@@ -405,8 +417,8 @@ commit that machine-specific path. Do not reuse a `.venv` whose interpreter chec
 The Windows requirements include a `win32`-only `tzdata` pin because a standard Windows Python
 installation has no system IANA timezone database.
 
-The 2026-08-27 handoff baseline is 13 deterministic public schemas, 79 formatted Python files,
-1,178 passing tests, and 100% SovereignLab statement/branch coverage (4,679 statements, 1,568
+The 2026-11-02 handoff baseline is 13 deterministic public schemas, 80 formatted Python files,
+1,184 passing tests, and 100% SovereignLab statement/branch coverage (4,679 statements, 1,568
 branches). The focused benchmark acceptance run is 70 passing tests. A different result is a
 diagnostic signal: stop before implementation and record the discrepancy in
 `docs/PROJECT_STATUS.md`.

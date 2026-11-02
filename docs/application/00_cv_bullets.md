@@ -1,9 +1,9 @@
 # SovereignLab CV bullets
 
 - Status: wording bank; use only the section matching the achieved milestone
-- Last updated: 2026-08-27 (M2 mid-window refresh: 20/40 approved core, ADR 0008 slices 1–9 and
-  work unit C complete, two combined document-plus-data drafts pending review, 79-file/1,178-test
-  baseline)
+- Last updated: 2026-11-02 (M2 mid-window refresh: 20/40 approved core, ADR 0008 slices 1–9 and
+  work unit C complete, two combined document-plus-data drafts pending review, weekly harvester
+  repaired under ADR 0010, 80-file/1,184-test baseline)
 - Rule: never replace placeholders with targets or estimates; use measured, reproducible results only
 - Narrative versions: `docs/application/01_project_description.md`
 
@@ -53,8 +53,8 @@
   public JSON Schemas remain unchanged. These are deterministic offline replay artifacts, not
   provider or live outputs, and no briefing-quality result is claimed.
 - Verified the pinned Ministral 3 3B NF4/QLoRA compatibility path on a disposable A40/CUDA 13 GPU
-  and maintain 1,178 tests at 100% statement/branch coverage (4,679 statements, 1,568 branches)
-  across 79 formatted Python files; temporal leakage remains the planned headline metric, and no
+  and maintain 1,184 tests at 100% statement/branch coverage (4,679 statements, 1,568 branches)
+  across 80 formatted Python files; temporal leakage remains the planned headline metric, and no
   model-quality result is claimed yet.
 
 ### Short form (single bullet)
@@ -72,7 +72,7 @@
   both cutoff modes, complete execution, and planned/tool abstention with terminal stop and no
   partial evidence. Two additional combined document-plus-data records (`kv-core-both-01`) remain
   draft-only pending named human review and are not counted in the 20/40 approved core. The
-  verified Ministral 3 3B NF4/QLoRA compatibility path is retained, and 1,178 tests pass at 100%
+  verified Ministral 3 3B NF4/QLoRA compatibility path is retained, and 1,184 tests pass at 100%
   statement/branch coverage; temporal leakage is the planned headline metric and no model-quality
   or briefing-performance result is claimed yet.
 

@@ -1,6 +1,6 @@
 # SovereignLab project status
 
-- Last updated: 2026-08-27
+- Last updated: 2026-11-02
 - Owner: Hyungbae Cho (`bwade9090`)
 - Delivery window: four weeks, approximately 80 hours
 - Current milestone: M2 — week-2 benchmark and baselines (charter v2.5 §7, Week 2)
@@ -11,10 +11,14 @@
   manifest-rights link — plus the offline fail-closed as-of resolver and weekly append-only
   harvester implementation are complete. Real append-only ECOS/KOSIS forward snapshots and the
   one-time OECD Korea CLI revision archive now validate against their manifests and rights
-  decisions. The harvester is on the default branch, so the key-free OECD metadata schedule is
-  active. Repository `ECOS_API_KEY` and `KOSIS_API_KEY` Actions secrets are configured; the first
-  manually dispatched secret-backed run remains an optional separately authorized operational
-  check. Number-normalization 1.0.0, the zero-cost QLoRA preflight, and the paid A40/CUDA 13
+  decisions. The harvester is on the default branch with repository `ECOS_API_KEY` and
+  `KOSIS_API_KEY` Actions secrets, but none of its 16 scheduled runs from 2026-07-20 to 2026-11-02
+  committed a capture. Frozen-registry completeness tests rejected every fresh capture, three runs
+  timed out connecting to KOSIS or ECOS, and GitHub then disabled the schedule for inactivity.
+  ADR 0010 keeps post-v1 captures archive-only until a superseding registry admits them, retries
+  connection establishment, and re-enabled the schedule. An owner-authorized dispatch then
+  committed the first weekly capture, `20261102t101403605391z`, in `fe4f9a9`. The weeks in between
+  are a permanent, disclosed gap. Number-normalization 1.0.0, the zero-cost QLoRA preflight, and the paid A40/CUDA 13
   one-step compatibility run are complete. The M1b week-1 gate passed on 2026-07-18. In M2, the
   40-record core authoring allocation and the first nine core batch files are owner-approved.
   The approved human-reviewed core count is 20/40: the first four data/abstention records, the
@@ -1267,6 +1271,18 @@ exactly the two draft records and their seven focused tests (267 insertions, not
 changed); the frozen matrix, approved core, source, rights, schema, trace, and runtime boundaries
 did not change. The work was entirely offline and cost $0.00.
 
+Validated 2026-11-02 on macOS (Python 3.12.14) after the ADR 0010 weekly harvester repair. The
+eight new frontier-bound completeness tests passed. The full suite passed all 1,184 tests with 100%
+SovereignLab statement/branch coverage (4,679 statements, 1,568 branches). Ruff check and format
+check passed across 80 Python files, all 13 public schemas regenerated without drift, and
+`git diff --check` was clean. A rehearsal copy holding an injected fresh capture with three new
+editions also passed all 1,184 tests. The owner-authorized dispatched run `41427071224` passed all
+1,184 tests on `ubuntu-24.04` and committed `fe4f9a9`. After fast-forwarding to that commit, the
+full baseline passed again with identical counts and coverage. Fix commits `a3067f5` and `d4a8c22`
+change only tests, `tests/conftest.py`, the capture script, and the workflow. The source package,
+executor digest, 13 public schemas, and five replay traces did not change, and the work cost
+$0.00.
+
 ## M1b verification spike record (2026-07-15)
 
 All network work below was read-only, key-free, and free of charge. Raw responses were written only
@@ -2026,6 +2042,54 @@ response bodies.
   move them into `core/`, raise the approved count, select another pair, or change the source,
   rights, matrix, schema, trace, runtime, provider/live-model, GPU, paid, or deferred-loop scope.
 
+## Session-close snapshot (2026-11-02, thirty-third close: weekly harvester repaired under ADR 0010)
+
+- On 2026-11-02 GitHub reported that the `Weekly KOR-RTD capture` workflow had been disabled after
+  60 days without repository activity and that its latest scheduled run had failed. The Actions
+  history showed that all 16 scheduled runs from 2026-07-20 through 2026-11-02 had failed and that
+  no capture had ever been committed. Ten runs failed only the two explicit-location completeness
+  tests, because every fresh capture was absent from the frozen v1 registries. Three runs hit
+  `httpcore.ConnectTimeout` while connecting to KOSIS (twice) or ECOS (once). The other three
+  have expired logs. The last commit before the repair was `4115e3e` on 2026-08-27.
+- ADR 0010 separates archival from admission. Fix commit `a3067f5` replaces the two completeness
+  tests with frontier-bound checks. Captures at or before each v1 registry's newest admitted
+  capture must be registered, and later harvester captures stay archive-only. Backdated captures,
+  later STES data archives, orphan archives, and new rights catalogs still fail. A shared offline
+  fixture in `tests/conftest.py` replays the newest archived provider bytes through the real
+  harvester one week after the newest capture, and proves that both registry descriptors stay
+  unchanged. Fix commit `d4a8c22` makes `scripts/harvest_weekly.py` retry connection
+  establishment twice, pins the workflow to `ubuntu-24.04` with a 30-minute job timeout, and moves
+  to `actions/checkout@v5` and `actions/setup-python@v6`. Docs commit `20733a8` records ADR 0010
+  and amends contracts 10 and 12 and the data README.
+- The source package, executor digest, trusted registries and descriptors, 13 public schemas, five
+  replay traces, frozen matrix, and every benchmark record are unchanged.
+- With owner authorization in this session, the workflow was re-enabled and dispatched once
+  (run `41427071224`). The real OECD, ECOS, and KOSIS fetches succeeded and the unchanged
+  validation step passed all 1,184 tests on the runner. `github-actions[bot]` then committed
+  `fe4f9a9` (`data: capture weekly KOR-RTD snapshot`, 2026-11-02T10:16:16Z) with capture token
+  `20261102t101403605391z`: five manifests, five archives, and one ledger. The ECOS snapshots
+  hold 267 quarterly GDP rows (`1960Q1`–`2026Q3`) and 560 monthly current-account rows
+  (`198001`–`202608`). The KOSIS snapshot holds 741 monthly CPI rows (`196501`–`202609`).
+- The new archive-only ledger supersedes `oecd-stes-ledger-20260717t115242998550z` and lists 333
+  edition codes. The three newly observed editions, `202608`–`202610`, resolve with
+  `available_by=2026-10-08T11:56:51Z` (the content constraint's `validFrom`) and
+  `last_absent_at` set to the 2026-07-17 capture. Once a later registry admits this ledger,
+  cutoffs between those two instants stay unresolved for those editions and the resolver abstains.
+  That is the concrete cost of the outage.
+- Validation on macOS/Python 3.12.14 is green. Before the commits, the full suite passed 1,184
+  tests at 100% SovereignLab statement/branch coverage (4,679 statements, 1,568 branches). Ruff
+  checking and format checking passed across 80 Python files, all 13 public schemas regenerated
+  without drift, and `git diff --check` was clean. A local rehearsal copy with an injected fresh
+  capture that observed three new editions also passed all 1,184 tests. After fast-forwarding to
+  `fe4f9a9`, the same full baseline passed again with identical counts and coverage. A trace
+  check confirmed that the capture script's client makes three connect attempts on
+  `ConnectTimeout`. All five committed capture archives match their manifests' byte sizes and
+  SHA-256 values, and the ECOS and KOSIS URLs carry only the `{api-key}` placeholder.
+- The capture gap from 2026-07-20 to this first committed capture is permanent and must not be
+  backfilled. Later captures stay archive-only until a separate owner decision admits them into a
+  superseding registry version. M2 remains at 20/40 approved, and the exact next action is still
+  named human review of only the two `kv-core-both-01` drafts.
+
 ## Immediate next action (M2 — named human review of `kv-core-both-01` only)
 
 1. Review only `kv-core-both-01-ko` and `kv-core-both-01-en` in
@@ -2042,9 +2106,10 @@ response bodies.
 3. Preserve the frozen matrix, approved core, source, rights, schema, trace, and runtime boundaries;
    do not begin provider/live-model integration, paid work, probes, or the deferred bounded loop.
 
-Open operational check, not an M2 blocker: manually dispatch one secret-backed append-only
-harvester run only with separate owner authorization; otherwise the next weekly schedule will use
-the configured Actions secrets normally.
+Operational note, not an M2 blocker: the weekly schedule is active again under ADR 0010 and
+committed its first capture in `fe4f9a9`. If a later scheduled run fails, diagnose it before the
+following Monday and never backfill a missed week. Further manual dispatches still need separate
+owner authorization.
 
 Week-1 gate (charter v2.3 §7): **passed 2026-07-18**. Endpoint/range spikes, exact source-rights
 policy and four approved series decisions, strict catalogs, availability design, owner
@@ -2084,14 +2149,21 @@ complete.
 - Vintage semantics: OECD monthly `EDITION` codes do not encode availability dates. The
   `EditionAvailabilityLedger`, fail-closed selection, and selected-row resolver are implemented;
   unknown editions abstain mechanically. The first real ledger resolves only `202607`; all 329
-  older codes remain unknown until acceptable historical evidence exists.
+  older codes remain unknown until acceptable historical evidence exists. The archive-only
+  2026-11-02 ledger additionally resolves `202608`–`202610`, with `available_by` at the
+  2026-10-08 content-constraint `validFrom` and `last_absent_at` at the 2026-07-17 capture; the
+  trusted v1 registry still selects the 2026-07-17 ledger.
+- Weekly capture gap (ADR 0010): no scheduled capture committed between the 2026-07-17 captures
+  and `fe4f9a9` on 2026-11-02. The missed weeks cannot be backfilled, and every capture after a
+  registry's admission frontier stays archive-only until a separate owner decision admits it.
 - macOS laptop note: `python@3.12` was installed via Homebrew on 2026-07-17 and is the interpreter
   for the machine-local `.venv` (project standard per ADR 0001).
 - GitHub CLI is authenticated as `bwade9090` on the Mac only; the Windows workstation must use its
   own Git/GitHub authentication. `main` tracks `origin/main`.
 - `main` tracks `origin/main`; the validated `codex/m1b-harvester` work was fast-forwarded to the
-  default branch. The weekly workflow is active there; the remote feature branch is retained as
-  non-authoritative review history and may be removed later by the owner.
+  default branch. The weekly workflow is active there again after the 2026-11-02 ADR 0010 repair;
+  the remote feature branch is retained as non-authoritative review history and may be removed
+  later by the owner.
 - Live-event calendar: primary = the next observed OECD edition rollover (the exact date is not yet
   verified; append-only polling must detect it); fallback = the July-vs-June edition diff, subject to
   availability provenance; stretch = Korea Q2-2026 advance GDP release (~2026-07-23/24, tight — see
@@ -2150,6 +2222,7 @@ complete.
 | 2026-08-27 | Bilingual ledger frontier abstention draft pair | $0.00 | Exactly two draft records binding no source units, using only the committed availability ledger's completeness frontier as the fail-closed basis, focused tests, and full fresh-OS-basetemp validation only; no matrix, approved-core, source, rights, schema, trace, runtime, network, provider/live-model, GPU, or paid change |
 | 2026-08-27 | Owner approval of the bilingual ledger frontier abstention pair | $0.00 | Named reviewer metadata, lifecycle move to `core-batch-009`, focused/full offline validation, and governance update only; no matrix, source, rights, schema, trace, runtime, network, provider/live-model, GPU, or paid change |
 | 2026-08-27 | Bilingual BOK outlook CLI combined draft pair | $0.00 | Exactly two draft records combining the committed BOK outlook document unit with the demonstrably available CLI edition `202607` data unit, page-anchored evidence located in the owner-approved hash-verified local PDF bodies, focused tests, and full fresh-OS-basetemp validation only; no matrix, approved-core, source, rights, schema, trace, runtime, network, provider/live-model, GPU, or paid change |
+| 2026-11-02 | Weekly harvester diagnosis, ADR 0010 repair, and first committed weekly capture | $0.00 | GitHub Actions history/log reads, offline tests and a local fresh-capture rehearsal, and one owner-authorized dispatched capture (run `41427071224`) using the free official APIs on a public-repository runner; no source package, registry, schema, trace, matrix, benchmark-record, model, GPU, or paid change |
 
 **Cumulative external spend: $0.23584524099715054 / $100.00**
 
@@ -2160,9 +2233,10 @@ Read in this order, in full, before changing anything:
 1. `AGENTS.md` — working protocol, evidence rules, setup, repository map.
 2. `docs/project/01_project_charter.md` — the v2.5 scope authority.
 3. This file — current milestone, next action, gates, blockers.
-4. Accepted ADRs 0001–0009 in `docs/decisions/` (ADR 0008 fixes the join unit's typed
+4. Accepted ADRs 0001–0010 in `docs/decisions/` (ADR 0008 fixes the join unit's typed
    function-calling execution contract and defers the bounded tool loop to v1.1; ADR 0009 records
-   the BOK Economic Outlook public-data family ruling).
+   the BOK Economic Outlook public-data family ruling; ADR 0010 keeps weekly captures archive-only
+   until a superseding trusted registry admits them).
 5. `docs/project/04_macbook_handoff.md` — cross-machine Windows setup, exact continuation order,
    and acceptance criteria (legacy filename retained for stable links).
 6. `docs/discovery/01_concept_upgrade_proposal.md` — background: why v2 exists, verified data facts,

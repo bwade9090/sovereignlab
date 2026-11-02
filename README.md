@@ -26,8 +26,8 @@ executor descriptor still pins 32 source entries and digest
 `08f45dab6a36a49cb7d0b588a69236942cd61534540bd4de0772010402dada64`.
 The focused executor/replay-trace acceptance run passes 80 tests at 100% coverage over 326
 statements and 98 branches, and the focused benchmark acceptance run passes 70 tests. The full
-offline baseline is 1,178 tests at 100% statement/branch coverage (4,679 statements, 1,568
-branches) across 79 Ruff-formatted Python files. The shipped
+offline baseline is 1,184 tests at 100% statement/branch coverage (4,679 statements, 1,568
+branches) across 80 Ruff-formatted Python files. The shipped
 minimal reference path is described only as `typed function calling with committed traces`. These
 are deterministic offline replays, not provider or live outputs; no provider/live integration or
 bounded tool loop exists, and no model-quality or briefing-performance claim is made. Searchable
@@ -88,9 +88,14 @@ as-of resolver and weekly append-only harvester are implemented. The first real,
 availability capture mechanically records all 330 current edition codes while resolving only
 `202607`. ADR 0007 and the current rights catalog additionally authorize only the national KOSIS
 total CPI (`101/DT_1J22003/T/T10`) and OECD Korea monthly amplitude-adjusted CLI revision series;
-all neighboring scopes remain blocked. The default-branch weekly workflow is active; repository
-ECOS/KOSIS Actions secrets are configured; the first manual secret-backed harvester run remains an
-optional separately authorized operational check. The paid QLoRA compatibility step passed on a
+all neighboring scopes remain blocked. Repository ECOS/KOSIS Actions secrets are configured, but
+the default-branch weekly workflow committed no capture from 2026-07-20 to 2026-11-02. The
+frozen-registry completeness tests rejected every fresh capture, and GitHub then disabled the
+schedule for inactivity.
+[ADR 0010](docs/decisions/0010-weekly-capture-archive-admission.md) keeps post-v1 captures
+archive-only until a superseding registry admits them, adds connection retries, and restored the
+schedule. Its first committed weekly capture is `fe4f9a9` (2026-11-02); the missed weeks are a
+permanent, disclosed gap. The paid QLoRA compatibility step passed on a
 RunPod A40/CUDA 13 host, closing the M1b gate. The exact `Decimal` unit, variant, rounding, and
 grading rules are frozen in the
 [number-normalization specification](docs/project/06_number_normalization_spec.md). Charter v2.4
@@ -218,7 +223,7 @@ reference answers disclose summarization/paraphrase and attribute the Bank of Ko
 expectation mirrors the approved `kv-core-data-01` convention and resolves edition `202607`
 with raw and normalized value `102.66`, and focused tests prove the English record fails closed
 before its 2026-06-30 release date and that a pre-availability cutoff of 2026-06-30 still
-abstains. Current validation is 70 focused benchmark tests and 1,178 full-suite tests across 79
+abstains. Current validation is 70 focused benchmark tests and 1,184 full-suite tests across 80
 formatted Python files. The approved count remains 20/40, and the exact next action is named
 human review of only these two drafts; do not pre-approve them or select another pair.
 Charter v2.5 and

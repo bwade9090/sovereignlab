@@ -204,8 +204,8 @@ declared CLI gold is reproduced through the real fail-closed resolver, that both
 the bilingual document-plus-data claims, that — as a negative test — the English record fails
 closed before its 2026-06-30 release date, and that — as a ledger check — a pre-availability
 cutoff of 2026-06-30 still abstains. The combined focused benchmark suite passes 70 tests across
-ten files, and the full suite passes 1,178 at 100% SovereignLab statement/branch coverage across
-79 Ruff-formatted Python files. The 13 public schemas and five committed traces are unchanged.
+ten files, and the full suite passes 1,184 at 100% SovereignLab statement/branch coverage across
+80 Ruff-formatted Python files. The 13 public schemas and five committed traces are unchanged.
 The exact next action is named human review of only these two drafts; do not pre-approve them or
 select another pair.
 

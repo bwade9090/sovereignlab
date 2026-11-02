@@ -1,10 +1,11 @@
 # Cross-machine continuation handoff
 
 - Legacy filename: retained so existing links and onboarding instructions do not break.
-- Prepared: 2026-07-16; refreshed 2026-08-27 after the bilingual BOK outlook CLI combined draft
-  slice (thirty-second refresh: two review candidates complete, named human review next)
+- Prepared: 2026-07-16; refreshed 2026-11-02 after the ADR 0010 weekly harvester repair
+  (thirty-third refresh: weekly captures commit again and stay archive-only; named human review of
+  the two `kv-core-both-01` drafts is still next)
 - Target continuation machine: Windows workstation
-- Authority: charter v2.5; accepted ADRs 0001–0009
+- Authority: charter v2.5; accepted ADRs 0001–0010
 - Branch to continue: `main` from `origin`
 - Current milestone: M2
 - Session state: work unit C and its first nine ADR 0008 slices are complete and reviewable; all
@@ -14,6 +15,7 @@
   Korean/English pair, so the core remains 20/40; the `kv-core-both-01` Korean/English pair is
   now complete at `status=draft` and awaits named human review, while no later pair or slice is
   selected
+- Completed weekly harvester repair checkpoints: `a3067f5` (`fix: keep post-v1 weekly captures archive-only in registry tests`), `d4a8c22` (`fix: retry harvester connects and pin the capture runner`), and `20733a8` (`docs: record ADR 0010 weekly capture admission`); first committed weekly capture `fe4f9a9` (`data: capture weekly KOR-RTD snapshot`).
 - Completed BOK outlook CLI combined draft functional checkpoint: `933c0e9` (`feat: add BOK outlook CLI combined bilingual drafts`).
 - Completed ledger frontier abstention approval feature checkpoint: `16d3dfd` (`feat: approve ledger frontier abstention bilingual pair`).
 - Completed ledger frontier abstention draft functional checkpoint: `d1eb5ea` (`feat: add ledger frontier abstention bilingual drafts`).
@@ -87,9 +89,9 @@ If local `main` has diverged from `origin/main`, stop rather than rewriting hist
   editions remain unresolved. A later local run captured the two exact ECOS series and exact KOSIS
   CPI scope; the separate one-time CLI capture stored 75,060 rows across 239 editions. Local keys
   remain ignored and are absent from publishable files. Repository `ECOS_API_KEY` and
-  `KOSIS_API_KEY` Actions secrets were registered on 2026-07-17 without exposing their values; the
-  first manually dispatched secret-backed workflow run remains an optional separately authorized
-  check.
+  `KOSIS_API_KEY` Actions secrets were registered on 2026-07-17 without exposing their values. No
+  scheduled run committed a capture until the 2026-11-02 ADR 0010 repair; the owner-authorized
+  dispatched run `41427071224` then committed the first weekly capture, `fe4f9a9`.
 - Number-normalization 1.0.0 is frozen in `docs/project/06_number_normalization_spec.md` and
   `sovereignlab.normalization`: exact Decimal rules cover the two ECOS scopes, KOSIS CPI, OECD CLI,
   and the verified OECD GDP XDC-to-billion-KRW transform; Korean unit conversion, presentation
@@ -405,6 +407,16 @@ If local `main` has diverged from `origin/main`, stop rather than rewriting hist
   not touched. Functional commit `933c0e9` contains exactly the two drafts and focused tests; the
   matrix, approved core, source, rights, schema, trace, and runtime boundaries are unchanged. No
   network, provider/live-model call, GPU operation, or paid operation occurred; cost was $0.00.
+- Weekly harvester repair validated 2026-11-02 on macOS/Python 3.12.14. The eight new
+  frontier-bound completeness tests passed, and the full suite passed all 1,184 tests with 100%
+  SovereignLab statement/branch coverage (4,679 statements, 1,568 branches). Ruff check plus format
+  check passed across 80 Python files, and all 13 public schemas regenerated without drift. A
+  rehearsal copy with an injected fresh capture also passed all 1,184 tests. The owner-authorized
+  dispatched run `41427071224` passed the unchanged validation step and committed `fe4f9a9`.
+  After fast-forwarding to that commit, the full baseline passed again with identical counts and
+  coverage. Fix commits `a3067f5` and `d4a8c22` and docs commit `20733a8` leave the source package,
+  executor digest, registries, schemas, traces, matrix, and benchmark records unchanged. The only
+  network use was the authorized capture against free official APIs; cost was $0.00.
 
 ## 2. Set up and validate the Windows machine
 
@@ -432,8 +444,8 @@ $venvPython = (Resolve-Path .\.venv\Scripts\python.exe).Path
 git diff --exit-code
 ```
 
-Expected handoff baseline: Python 3.12, 13 deterministic public schemas, 79 formatted Python
-files, 1,178 passing tests, 100% SovereignLab statement/branch coverage (4,679 statements, 1,568
+Expected handoff baseline: Python 3.12, 13 deterministic public schemas, 80 formatted Python
+files, 1,184 passing tests, 100% SovereignLab statement/branch coverage (4,679 statements, 1,568
 branches), and no unexpected Git diff.
 On this workstation, the ignored repository-root `.pytest_tmp` can retain an access-denying ACL
 and make the canonical pytest command report only tmp-path setup errors. Do not treat that known
@@ -453,8 +465,9 @@ do not remove it merely because another operating system supplies an IANA timezo
 1. `AGENTS.md`.
 2. `docs/project/01_project_charter.md`.
 3. `docs/PROJECT_STATUS.md`.
-4. Accepted ADRs 0001–0009 under `docs/decisions/` (ADR 0008 fixes how the join work unit must
-   be implemented; ADR 0009 records the BOK Economic Outlook public-data family ruling).
+4. Accepted ADRs 0001–0010 under `docs/decisions/` (ADR 0008 fixes how the join work unit must
+   be implemented; ADR 0009 records the BOK Economic Outlook public-data family ruling; ADR 0010
+   keeps weekly captures archive-only until a superseding trusted registry admits them).
 5. `docs/discovery/01_concept_upgrade_proposal.md` — the verified background and risk register
    behind the v2 direction.
 6. `docs/project/05_evidence_contract_2_0_migration.md` — the implemented contract surface the
@@ -537,8 +550,11 @@ gate.
 
 - GitHub Actions repository secrets `ECOS_API_KEY` and `KOSIS_API_KEY` are configured. Their
   plaintext cannot be retrieved; another machine still needs its own ignored local `.env`.
-- No secret-backed manual harvester run has been dispatched. Do not trigger one without separate
-  owner authorization; the next weekly schedule can exercise the secrets normally.
+- The weekly workflow is active again after the ADR 0010 repair. GitHub had disabled it on
+  2026-11-02 after 60 days without repository activity. With owner authorization, run
+  `41427071224` was dispatched once and committed the first weekly capture, `fe4f9a9`. Do not
+  trigger another manual run without separate owner authorization; the Monday schedule exercises
+  the secrets normally.
 - RunPod CLI 2.7.2 and its dedicated SSH key are configured on this Mac. The successful smoke and
   every discarded provisioning Pod were deleted; the account reports zero current hourly spend and
   a remaining balance of USD `19.7641547592`. Do not start another paid Pod without a new explicit
@@ -967,6 +983,21 @@ The approval transition passed 63 focused benchmark tests across nine files and 
 branches) under a fresh OS `--basetemp`; Ruff check and format check passed across 78 Python
 files. The repository `.pytest_tmp` directory and ACL were untouched, and the slice cost $0.00.
 
+### Completed weekly harvester repair (ADR 0010) — operational, not an M2 gate
+
+None of the 16 scheduled runs from 2026-07-20 to 2026-11-02 committed a capture. Ten runs failed
+the frozen-registry completeness tests, three timed out connecting to KOSIS or ECOS, and three have
+expired logs. GitHub then disabled the schedule for inactivity. Commits `a3067f5`, `d4a8c22`, and
+`20733a8` bind completeness to each v1 registry's admission frontier, keep later harvester captures
+archive-only, retry connection establishment in `scripts/harvest_weekly.py`, pin the runner to
+`ubuntu-24.04` with the Node 24 action majors, and record ADR 0010. The source package, executor
+digest, registries, schemas, traces, matrix, and benchmark records are unchanged. With owner
+authorization, dispatched run `41427071224` committed the first weekly capture, `fe4f9a9`
+(`20261102t101403605391z`). Its archive-only ledger resolves the newly observed editions
+`202608`–`202610` with `available_by` at the 2026-10-08 content-constraint `validFrom`. The gap
+from 2026-07-20 is permanent; do not backfill it, and do not admit a post-v1 capture without a
+separate owner decision.
+
 ### Completed `kv-core-both-01` draft slice — named human review only
 
 Functional commit `933c0e9` adds exactly `kv-core-both-01-ko` and `kv-core-both-01-en` at
@@ -1011,9 +1042,10 @@ The exact continuation order is therefore:
 3. Preserve the frozen matrix, approved core, source, rights, schema, trace, and runtime boundaries;
    do not begin provider/live-model integration, probes, paid work, or the deferred bounded loop.
 
-Open operational check, not an M2 blocker: manually dispatch one append-only secret-backed
-workflow smoke only after separate owner authorization; otherwise let the weekly schedule exercise
-the configured secrets.
+Operational note, not an M2 blocker: the weekly schedule is active again under ADR 0010 and
+committed its first capture in `fe4f9a9`. If a later scheduled run fails, diagnose it before the
+following Monday and never backfill a missed week. Further manual dispatches still need separate
+owner authorization.
 
 ## 6. What not to redo
 
@@ -1034,12 +1066,15 @@ the configured secrets.
 - Do not rerun the paid QLoRA compatibility spike. It passed, all Pods were deleted, and it is not
   a model-quality result.
 - Do not manually dispatch the secret-backed harvester as part of onboarding.
+- Do not re-diagnose the 2026-07-20 to 2026-11-02 weekly-capture failures, backfill the missed
+  weeks, or admit a post-v1 capture into a trusted registry without a separate owner decision;
+  ADR 0010 records the repair and the permanent gap.
 - Do not revise the now-frozen snapshot gold convention or combine dependent benchmark authoring
   with the runtime-adapter slice.
 - Do not replace the planner, dispatcher, assembler, or executor boundaries; expose their private
   recording, assembly, or execution internals as public wrappers/schemas; or merge provider/live
   integration into an unselected future slice.
-- Do not reopen accepted ADRs 0003–0009 without new evidence that requires a superseding decision.
+- Do not reopen accepted ADRs 0003–0010 without new evidence that requires a superseding decision.
 - Do not implement the bounded multi-step tool loop in-window; ADR 0008 defers it to v1.1. Do
   not re-litigate that deferral — the supporting matrix/schema arithmetic is recorded in the ADR.
 

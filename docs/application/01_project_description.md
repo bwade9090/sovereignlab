@@ -22,7 +22,8 @@ statistical tools.
 
 The implemented KOR-RTD foundation combines OECD revision histories with an append-only weekly
 harvester for exact, rights-approved ECOS and KOSIS series (first captures committed 2026-07-17;
-the weekly GitHub Actions schedule is active). Every committed snapshot is bound to a
+the first weekly GitHub Actions capture committed 2026-11-02, after a repair that left a disclosed
+gap from 2026-07-20). Every committed snapshot is bound to a
 strict source manifest, SHA-256 checksum, capture timestamp, source-specific redistribution
 decision, and attribution rule. The initial archive includes real ECOS GDP and current-account
 captures, KOSIS national CPI, and a 75,060-row OECD Korea composite-leading-indicator archive across
@@ -34,8 +35,10 @@ large-number presentation, rounding, and grading tolerances are also frozen and 
 The project passed its first milestone gate and is midway through the benchmark-and-baselines
 milestone. Its evidence, benchmark, core-authoring-matrix, availability-ledger, rights, and
 execution contracts are published as 13 synchronized deterministic JSON Schemas; the offline
-resolver and GitHub Actions harvester are operational; and 1,178 tests pass with 100% statement
-and branch coverage (4,679 statements, 1,568 branches) across 79 formatted Python files. The
+resolver is operational; the GitHub Actions harvester committed its first weekly capture on
+2026-11-02 after a registry-admission repair, so weekly capture coverage has a disclosed gap from
+2026-07-20; and 1,184 tests pass with 100% statement and branch coverage (4,679 statements, 1,568
+branches) across 80 formatted Python files. The
 40-question human-reviewed bilingual core is frozen as an allocation, and 20 of 40 records —
 initially AI-authored, then approved under
 named human review —
@@ -263,8 +266,8 @@ boundary, an internal deterministic evidence-packet assembler, and a private pro
 offline executor. Five real-digest offline replays now provide `typed function calling with
 committed traces`, covering all routes and tools, Korean and English, explicit and implicit cutoffs,
 complete execution, and terminal planned/tool abstention without partial evidence. The repository
-passes 1,178 tests with 100% statement and branch coverage (4,679 statements, 1,568 branches)
-across 79 formatted Python files. The frozen 40-record bilingual K-VINTAGE core has its first 20
+passes 1,184 tests with 100% statement and branch coverage (4,679 statements, 1,568 branches)
+across 80 formatted Python files. The frozen 40-record bilingual K-VINTAGE core has its first 20
 records reviewed and approved, including a
 Korean/English documentary pair over the Bank of Korea's May 2026 Economic Outlook and its later
 official English translation. A further Korean/English `kv-core-data-02` pair over the 2026-07-17
