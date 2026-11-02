@@ -1,6 +1,7 @@
 # Bank of Korea November 2025 outlook manifest verification
 
-- Status: verified; document manifests recorded as `allowed` under the ADR 0009 family ruling
+- Status: verified; document manifests recorded as `allowed` under the ADR 0009 family ruling,
+  with publication dates set under ADR 0011
 - Date: 2026-11-02
 - Scope: frozen document unit `bok-outlook-release-2025-11` for pairs `kv-core-doc-02` and
   `kv-core-both-02`
@@ -32,6 +33,10 @@ verified May 2026 landing pages and then opened at their canonical `view.do` URL
 - Byte size: `17,435,251`
 - SHA-256: `7f51f0333ac16da57150cb32e05e5aa7dc7530ba96f389b47b604e19a872eb1b`
 - Cover: `경제전망`, `Indigo Book`, `2025년 11월`, ISSN `2288-7083`; 150 pages
+- Embedded PDF dates: created `2025-12-08`, modified `2026-03-31` (KST)
+- Publisher statement: the English edition says the Korean report was published on
+  December 12, 2025
+- `published_on` under ADR 0011: `2026-03-31` (`content_date`), the latest of these dates
 
 ## English publication
 
@@ -48,10 +53,14 @@ verified May 2026 landing pages and then opened at their canonical `view.do` URL
 - Byte size: `7,033,792`
 - SHA-256: `d997c6a1f5853b434449a0322119fe3e9e2a3df3704e909afdfa9504a1e8eb78`
 - 62 pages; ISSN `2983-2373`
+- Embedded PDF dates: created and modified `2026-01-22` (KST); the last page reads
+  "Published on December 12, 2025", which repeats the Korean report's date
+- `published_on` under ADR 0011: `2026-01-22` (`publisher_metadata`)
 
-The English full translation is independently dated almost two months after the Korean
-publication. Its manifest is not backdated to the Korean release label or publication date, so
-English records over this edition need an `as_of` on or after 2026-01-22.
+The landing pages register the Korean report on 2025-11-27 and the English translation on
+2026-01-22, but the hashed Korean bytes were last modified on 2026-03-31. Under ADR 0011 each
+manifest's `published_on` is the latest date its exact bytes can support, so records over this
+edition need an `as_of` on or after 2026-03-31 (Korean) or 2026-01-22 (English).
 
 ## Redistribution conclusion
 

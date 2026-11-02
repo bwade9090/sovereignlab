@@ -34,3 +34,5 @@ Accepted records are not silently rewritten. Supersede them with a new ADR and c
   — **accepted 2026-07-28 (owner-approved publication-family classification; charter v2.5)**
 - [0010 — Keep weekly captures archive-only until a trusted registry admits them](0010-weekly-capture-archive-admission.md)
   — **accepted 2026-11-02 (owner-approved weekly harvester repair)**
+- [0011 — Date document manifests no earlier than their exact attachment bytes](0011-document-publication-dates-follow-exact-bytes.md)
+  — **accepted 2026-11-02 (owner-approved option A; `kv-core-doc-01` re-reviewed)**

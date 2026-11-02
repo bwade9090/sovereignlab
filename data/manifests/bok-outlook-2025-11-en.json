@@ -6,7 +6,7 @@
   "language": "en",
   "media_type": "application/pdf",
   "publication_date_basis": "publisher_metadata",
-  "publication_date_notes": "The official English landing page https://www.bok.or.kr/eng/bbs/B0000358/view.do?menuNo=400413&nttId=10096024 displays registration date 2026-01-22 for this exact attachment; it is not backdated to the Korean release.",
+  "publication_date_notes": "The official English landing page https://www.bok.or.kr/eng/bbs/B0000358/view.do?menuNo=400413&nttId=10096024 displays registration date 2026-01-22 for this exact attachment, and the PDF's embedded creation and modification dates (2026-01-22 KST) agree under ADR 0011; it is not backdated to the Korean release.",
   "published_on": "2026-01-22",
   "publisher": "Bank of Korea",
   "redistribution": {

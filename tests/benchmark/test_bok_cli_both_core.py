@@ -251,7 +251,7 @@ def test_bilingual_claims_combine_the_document_and_data_facts() -> None:
 
 def test_english_document_fails_closed_before_its_release_date() -> None:
     korean, english = _core_records()
-    early_english = english.model_copy(update={"as_of": date(2026, 6, 29)})
+    early_english = english.model_copy(update={"as_of": date(2026, 7, 5)})
 
     with pytest.raises(ValidationError, match="post-cutoff source bok-outlook-2026-05-en"):
         BenchmarkBundle(

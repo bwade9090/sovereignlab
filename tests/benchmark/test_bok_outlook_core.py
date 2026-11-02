@@ -80,6 +80,7 @@ def test_document_core_pair_validates_at_language_specific_cutoffs() -> None:
 
     manifest_by_id = {manifest.source_id: manifest for manifest in manifests}
     assert {record.language.value for record in records} == {"ko", "en"}
+    assert [record.as_of for record in records] == [date(2026, 6, 12), date(2026, 7, 6)]
     for record in records:
         assert len(record.document_evidence) == 1
         evidence = record.document_evidence[0]
@@ -95,7 +96,7 @@ def test_english_translation_fails_closed_before_its_release_date() -> None:
     manifests = _manifests()
 
     BenchmarkBundle(sources=manifests, records=(korean,))
-    early_english = english.model_copy(update={"as_of": date(2026, 6, 29)})
+    early_english = english.model_copy(update={"as_of": date(2026, 7, 5)})
 
     with pytest.raises(ValidationError, match="post-cutoff source bok-outlook-2026-05-en"):
         BenchmarkBundle(sources=manifests, records=(early_english,))

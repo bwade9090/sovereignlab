@@ -12,6 +12,7 @@ from sovereignlab.retrieval import (
 from sovereignlab.schemas import (
     EvidenceLocator,
     LanguageCode,
+    PublicationDateBasis,
     RedistributionStatus,
     SourceKind,
     SourceManifest,
@@ -33,7 +34,8 @@ def test_bok_outlook_manifests_preserve_independent_publication_facts() -> None:
     assert korean.source_id == "bok-outlook-2026-05-ko"
     assert korean.source_kind is SourceKind.DOCUMENT
     assert korean.language is LanguageCode.KOREAN
-    assert korean.published_on == date(2026, 5, 28)
+    assert korean.published_on == date(2026, 6, 12)
+    assert korean.publication_date_basis is PublicationDateBasis.PUBLISHER_METADATA
     assert korean.byte_size == 10_711_393
     assert korean.content_sha256 == (
         "71f78145d30190ea6bb7e2eb3bdb919c1ae4730973d1f63bed641ec12660fd97"
@@ -42,7 +44,8 @@ def test_bok_outlook_manifests_preserve_independent_publication_facts() -> None:
     assert english.source_id == "bok-outlook-2026-05-en"
     assert english.source_kind is SourceKind.DOCUMENT
     assert english.language is LanguageCode.ENGLISH
-    assert english.published_on == date(2026, 6, 30)
+    assert english.published_on == date(2026, 7, 6)
+    assert english.publication_date_basis is PublicationDateBasis.CONTENT_DATE
     assert english.byte_size == 3_711_417
     assert english.content_sha256 == (
         "c30dd8fae88ba62db18b38484985aad457f658a22a899de58918d7581465986d"
@@ -123,7 +126,7 @@ def test_retrieval_uses_each_language_editions_own_publication_date() -> None:
         query=TemporalDocumentQuery(
             question="검증경계표식",
             language=LanguageCode.KOREAN,
-            as_of=date(2026, 5, 28),
+            as_of=date(2026, 6, 12),
         ),
     )
     english_before_release = retrieve_temporal_documents(
@@ -131,7 +134,7 @@ def test_retrieval_uses_each_language_editions_own_publication_date() -> None:
         query=TemporalDocumentQuery(
             question="publication boundary sentinel",
             language=LanguageCode.ENGLISH,
-            as_of=date(2026, 5, 28),
+            as_of=date(2026, 7, 5),
         ),
     )
     english_on_release = retrieve_temporal_documents(
@@ -139,7 +142,7 @@ def test_retrieval_uses_each_language_editions_own_publication_date() -> None:
         query=TemporalDocumentQuery(
             question="publication boundary sentinel",
             language=LanguageCode.ENGLISH,
-            as_of=date(2026, 6, 30),
+            as_of=date(2026, 7, 6),
         ),
     )
 

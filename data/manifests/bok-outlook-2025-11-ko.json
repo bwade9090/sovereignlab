@@ -5,9 +5,9 @@
   "document_family": "bok-economic-outlook",
   "language": "ko",
   "media_type": "application/pdf",
-  "publication_date_basis": "publisher_metadata",
-  "publication_date_notes": "The official Korean landing page https://www.bok.or.kr/portal/bbs/P0002359/view.do?menuNo=200066&nttId=10094817 displays registration date 2025-11-27 for this exact attachment.",
-  "published_on": "2025-11-27",
+  "publication_date_basis": "content_date",
+  "publication_date_notes": "Corrected under ADR 0011. The official Korean landing page https://www.bok.or.kr/portal/bbs/P0002359/view.do?menuNo=200066&nttId=10094817 displays registration date 2025-11-27, which dates the post rather than these bytes. The PDF's embedded creation date is 2025-12-08 and its modification date 2026-03-31 (KST), and the official English edition states that the Korean Korea Economic Outlook was published on December 12, 2025; published_on is the latest of these dates.",
+  "published_on": "2026-03-31",
   "publisher": "Bank of Korea",
   "redistribution": {
     "license_name": "Bank of Korea Copyright Policy (Public Data Act Article 19 public-data branch)",

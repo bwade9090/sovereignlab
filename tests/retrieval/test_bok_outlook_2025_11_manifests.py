@@ -12,6 +12,7 @@ from sovereignlab.retrieval import (
 from sovereignlab.schemas import (
     EvidenceLocator,
     LanguageCode,
+    PublicationDateBasis,
     RedistributionStatus,
     SourceKind,
     SourceManifest,
@@ -38,7 +39,8 @@ def test_november_2025_manifests_preserve_independent_publication_facts() -> Non
     assert korean.source_kind is SourceKind.DOCUMENT
     assert korean.language is LanguageCode.KOREAN
     assert korean.title == "경제전망보고서(2025년 11월)"
-    assert korean.published_on == date(2025, 11, 27)
+    assert korean.published_on == date(2026, 3, 31)
+    assert korean.publication_date_basis is PublicationDateBasis.CONTENT_DATE
     assert korean.byte_size == 17_435_251
     assert korean.content_sha256 == (
         "7f51f0333ac16da57150cb32e05e5aa7dc7530ba96f389b47b604e19a872eb1b"
@@ -49,6 +51,7 @@ def test_november_2025_manifests_preserve_independent_publication_facts() -> Non
     assert english.language is LanguageCode.ENGLISH
     assert english.title == "Korea Economic Outlook (November 2025)"
     assert english.published_on == date(2026, 1, 22)
+    assert english.publication_date_basis is PublicationDateBasis.PUBLISHER_METADATA
     assert english.byte_size == 7_033_792
     assert english.content_sha256 == (
         "d997c6a1f5853b434449a0322119fe3e9e2a3df3704e909afdfa9504a1e8eb78"
@@ -56,7 +59,8 @@ def test_november_2025_manifests_preserve_independent_publication_facts() -> Non
 
     assert korean.canonical_url != english.canonical_url
     assert korean.content_sha256 != english.content_sha256
-    assert korean.published_on < english.published_on
+    # ADR 0011: the hashed Korean bytes were modified after the English translation appeared.
+    assert english.published_on < korean.published_on
 
 
 def test_november_2025_manifests_reuse_the_adr_0009_family_ruling() -> None:
@@ -110,8 +114,8 @@ def test_retrieval_uses_each_november_2025_editions_own_publication_date() -> No
         )
         return [match.source_id for match in result.matches]
 
-    assert matches("검증경계표식", LanguageCode.KOREAN, date(2025, 11, 26)) == []
-    assert matches("검증경계표식", LanguageCode.KOREAN, date(2025, 11, 27)) == [korean.source_id]
+    assert matches("검증경계표식", LanguageCode.KOREAN, date(2026, 3, 30)) == []
+    assert matches("검증경계표식", LanguageCode.KOREAN, date(2026, 3, 31)) == [korean.source_id]
     sentinel = "publication boundary sentinel"
     assert matches(sentinel, LanguageCode.ENGLISH, date(2026, 1, 21)) == []
     assert matches(sentinel, LanguageCode.ENGLISH, date(2026, 1, 22)) == [english.source_id]

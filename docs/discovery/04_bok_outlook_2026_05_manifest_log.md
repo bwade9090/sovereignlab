@@ -1,6 +1,7 @@
 # Bank of Korea May 2026 outlook manifest verification
 
-- Status: verified; document manifests corrected to owner-approved `allowed`
+- Status: verified; document manifests corrected to owner-approved `allowed`; publication dates
+  corrected under ADR 0011 on 2026-11-02
 - Date: 2026-07-28
 - Scope: frozen document unit `bok-outlook-release-2026-05` for pair `kv-core-doc-01`
 - Cost: USD 0; public landing pages and attachments only
@@ -80,3 +81,13 @@ A later integrity check may repeat a direct `curl -fL` capture from each stable 
 URL and compare its byte size and SHA-256 with the manifests. Signed CDN URLs are ephemeral and are
 not persisted. Any content change at the stable URL must create a new manifest rather than rewrite
 these records.
+
+## Correction under ADR 0011 (2026-11-02)
+
+The registration dates above date the landing-page posts, not the hashed attachment bytes. The
+Korean PDF's embedded creation and modification dates are 2026-06-09 (KST), and the official
+English edition states that the Korean report was published on June 12, 2026. The English PDF's
+embedded dates are 2026-07-06 (KST), although its last page reads "Published on June 30, 2026".
+ADR 0011 therefore moves `published_on` to 2026-06-12 for the Korean manifest and 2026-07-06 for
+the English manifest. Bytes, hashes, URLs, and rights are unchanged, and the observations above
+remain the historical record of the 2026-07-28 verification.
