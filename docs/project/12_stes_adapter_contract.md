@@ -64,7 +64,11 @@ offline:
 | content XML, both captures | `40b9f6e25f0187992f679fd5e8ae8215182076d8e280b71ca74b737d204334e6` |
 
 Adding or replacing an admitted artifact requires a new registry ID and descriptor. The v1
-registry must remain reproducible.
+registry must remain reproducible. Under ADR 0010, the weekly harvester's OECD constraint captures
+after the v1 admission frontier (the CLI manifest's `retrieved_at`,
+2026-07-17T11:53:02.688498Z), their XML archives, and the ledgers built from them are archive-only:
+the registry never reads them, and they are the only unregistered STES inputs the explicit-location
+completeness test accepts.
 
 ## Trusted registry boundary
 

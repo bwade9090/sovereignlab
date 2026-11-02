@@ -54,11 +54,15 @@ calculation uses the same path. Mutated timestamps, catalogs, bindings, registry
 decode-overriding byte subclasses, and caller-owned call IDs therefore fail closed rather than
 changing selection or evidence.
 
-The explicit-location completeness test fails if a new approved latest-only manifest or committed
-rights catalog appears without a registry decision. The v1 registry ID is also pinned to one
-descriptor digest. A later admitted capture or superseding catalog must create a new registry ID
-and preserve the v1 definition for replay rather than silently changing the candidate or
-authorization set behind the existing ID.
+The explicit-location completeness test fails if a committed rights catalog, or an approved
+latest-only manifest captured at or before the v1 admission frontier, appears without a registry
+decision. The frontier is the newest `retrieved_at` among the manifests v1 admits,
+2026-07-17T11:52:43.896254Z. Under ADR 0010, approved weekly captures after that frontier are
+archive-only: they remain committed append-only evidence, the registry never reads them, and they
+leave the descriptor unchanged. The v1 registry ID is also pinned to one descriptor digest.
+Admitting a later capture or superseding catalog must create a new registry ID and preserve the v1
+definition for replay rather than silently changing the candidate or authorization set behind the
+existing ID.
 
 ## Digest contract
 

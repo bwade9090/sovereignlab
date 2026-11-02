@@ -57,7 +57,10 @@ Repository layout:
 Run one capture with `python scripts/harvest_weekly.py --repository-root .`. The operation is
 append-only: a reused capture path fails instead of overwriting bytes. The weekly GitHub Actions
 workflow runs the same command, validates the full offline suite, and commits only `archive/`,
-`availability/`, and `manifests/` outputs. Files under `archive/` are marked binary in
+`availability/`, and `manifests/` outputs. Captures after a trusted registry's admission frontier
+stay archive-only until a superseding registry version admits them (ADR 0010); the weekly capture
+record has a permanent gap from 2026-07-20 until the first successful scheduled-pipeline capture,
+because every earlier run failed before committing. Files under `archive/` are marked binary in
 `.gitattributes` so Git cannot change provider line endings and invalidate the manifest hash.
 Public Git history is the capture-date evidence.
 

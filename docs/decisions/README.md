@@ -32,3 +32,5 @@ Accepted records are not silently rewritten. Supersede them with a new ADR and c
   — **accepted 2026-07-28 (owner-approved; charter v2.4)**
 - [0009 — Bank of Korea Economic Outlook public-data rights](0009-bok-economic-outlook-public-data-rights.md)
   — **accepted 2026-07-28 (owner-approved publication-family classification; charter v2.5)**
+- [0010 — Keep weekly captures archive-only until a trusted registry admits them](0010-weekly-capture-archive-admission.md)
+  — **accepted 2026-11-02 (owner-approved weekly harvester repair)**
