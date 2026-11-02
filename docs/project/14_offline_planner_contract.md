@@ -293,6 +293,28 @@ from that label, the questions, answers, cutoff, tool expectations, frozen matri
 contracts and runtime, source bytes and manifests, rights decisions, normalization, 13 public
 schemas, and five committed traces remain unchanged.
 
-No draft review candidate remains, and no later pair or slice is selected; choosing the next one
-is an owner decision. Provider or live-model integration remains absent, and the bounded tool loop
-deferred by ADR 0008 remains outside the authoring slices.
+At that checkpoint no draft review candidate remained.
+
+On 2026-11-02, fix commit `971d1c1` applied ADR 0011. The Bank of Korea document manifests'
+publication dates moved to the dates their exact PDF bytes support: 2026-06-12 for the May 2026
+Korean report, 2026-07-06 for its English translation, and 2026-03-31 for the November 2025 Korean
+report. `kv-core-doc-01` moved its cutoffs and question dates to 2026-06-12 and 2026-07-06, and
+Hyungbae Cho re-approved it after a new named review. `kv-core-both-01`, whose 2026-07-09 cutoff
+follows both corrected dates, is unchanged. The source package, executor digest, 13 public schemas,
+and five committed traces are unchanged.
+
+The next bounded authoring slice, selected by the owner, completed on 2026-11-02 at feature commit
+`5465eca`. It adds exactly the two draft-only `kv-core-doc-02` Korean/English records in
+`data/benchmark/drafts/core-draft-011.jsonl` over document unit `bok-outlook-release-2025-11`
+(`train` split, `documents` route, evidence group `eg-doc-bok-outlook-2025-11`). Both recover the
+November 2025 outlook's inflation rationale: CPI inflation of 2.1% in both 2025 and 2026, as the
+higher exchange rate and easing domestic-demand weakness outweigh lower oil prices. They are
+anchored to the Korean summary page 5 (`요약 1/7`) and the English executive summary page 5
+(`Executive Summary i`), at each edition's corrected cutoff (2026-03-31 Korean, 2026-01-22
+English). The approved core remains 22/40; two draft records are pending named human review, and
+16 matrix slots remain unauthored.
+
+The exact next independent slice is only named human review of those two drafts. Do not
+pre-approve or move them into `core/`, increase the approved count, or select or author another
+pair before that decision. Provider or live-model integration remains absent, and the bounded tool
+loop deferred by ADR 0008 remains outside the authoring slices.

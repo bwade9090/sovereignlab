@@ -1,20 +1,23 @@
 # Cross-machine continuation handoff
 
 - Legacy filename: retained so existing links and onboarding instructions do not break.
-- Prepared: 2026-07-16; refreshed 2026-11-02 after the November 2025 outlook manifest unit
-  (thirty-fifth refresh: `kv-core-doc-02` and `kv-core-both-02` are now authorable, approved core
-  22/40, and the next slice is the owner's choice; the thirty-fourth refresh recorded the
-  `kv-core-both-01` approval and the thirty-third the ADR 0010 weekly harvester repair)
+- Prepared: 2026-07-16; refreshed 2026-11-02 after the ADR 0011 date correction and the
+  `kv-core-doc-02` draft slice (thirty-sixth refresh: two review candidates complete, named human
+  review next; earlier refreshes the same day recorded the November 2025 manifests, the
+  `kv-core-both-01` approval, and the ADR 0010 weekly harvester repair)
 - Target continuation machine: Windows workstation
-- Authority: charter v2.5; accepted ADRs 0001–0010
+- Authority: charter v2.5; accepted ADRs 0001–0011
 - Branch to continue: `main` from `origin`
 - Current milestone: M2
 - Session state: work unit C and its first nine ADR 0008 slices are complete and reviewable; all
   three deterministic runtime adapters, the explicit dispatcher, offline planner boundary, private
   deterministic evidence-packet assembler, private offline executor, and five committed real-
   digest replay traces are complete; Hyungbae Cho approved the `kv-core-both-01` Korean/English
-  pair after one owner-directed English section-label correction, so the core is 22/40; no draft
-  is pending, and no later pair or slice is selected
+  pair, and re-approved `kv-core-doc-01` after its ADR 0011 date correction, so the core is
+  22/40; the `kv-core-doc-02` Korean/English pair is complete at `status=draft` and awaits
+  named human review, while no later pair or slice is selected
+- Completed `kv-core-doc-02` draft functional checkpoint: `5465eca` (`feat: add November 2025 outlook inflation drafts`).
+- Completed ADR 0011 date-correction checkpoint: `971d1c1` (`fix: date BOK document manifests from their exact bytes`).
 - Completed November 2025 outlook manifest checkpoint: `33a687a` (`feat: add November 2025 outlook bilingual manifests`).
 - Completed BOK outlook CLI combined approval checkpoints: `4365096` (`fix: correct kv-core-both-01-en evidence section label`) and `8bc88a1` (`feat: approve BOK outlook CLI combined bilingual pair`).
 - Completed weekly harvester repair checkpoints: `a3067f5` (`fix: keep post-v1 weekly captures archive-only in registry tests`), `d4a8c22` (`fix: retry harvester connects and pin the capture runner`), and `20733a8` (`docs: record ADR 0010 weekly capture admission`); first committed weekly capture `fe4f9a9` (`data: capture weekly KOR-RTD snapshot`).
@@ -55,8 +58,8 @@ state from the Mac. At the beginning of the Windows session:
 3. Create or verify the Windows-local `.venv` and run the PowerShell baseline in section 2 before
    changing files.
 4. State back the current milestone, approved core count, exact next work unit, and hard stops.
-5. Do not start a new work unit. Section 5 records that no next slice is selected; ask the owner
-   which pair or slice comes next, and do not draft or approve another pair before that choice.
+5. Do not start a new work unit. Section 5 names only the pending human review of the
+   `kv-core-doc-02` Korean/English drafts; do not pre-approve them or select another pair.
 
 If the worktree is dirty, preserve the existing changes and determine their owner before editing.
 If local `main` has diverged from `origin/main`, stop rather than rewriting history.
@@ -434,6 +437,14 @@ If local `main` has diverged from `origin/main`, stop rather than rewriting hist
   Ruff check plus format check passed across 81 Python files, and all 13 public schemas
   regenerated without drift. No benchmark record, matrix, rights decision, schema, trace, or
   source module changed, and no PDF body or extracted text entered Git; cost was $0.00.
+- ADR 0011 correction and `kv-core-doc-02` drafts validated 2026-11-02 on macOS/Python 3.12.14.
+  Before fix commit `971d1c1` the full suite passed all 1,187 tests. After feature commit
+  `5465eca`, the 11 focused benchmark files passed all 76 tests, and the full suite passed all
+  1,193 tests with 100% SovereignLab statement/branch coverage (4,679 statements, 1,568
+  branches). Ruff check plus format check passed across 82 Python files, and all 13 public
+  schemas regenerated without drift. The matrix, source package, rights, schema, trace, and
+  runtime boundaries are unchanged, and no PDF body or extracted text entered Git; cost was
+  $0.00.
 
 ## 2. Set up and validate the Windows machine
 
@@ -461,8 +472,8 @@ $venvPython = (Resolve-Path .\.venv\Scripts\python.exe).Path
 git diff --exit-code
 ```
 
-Expected handoff baseline: Python 3.12, 13 deterministic public schemas, 81 formatted Python
-files, 1,187 passing tests, 100% SovereignLab statement/branch coverage (4,679 statements, 1,568
+Expected handoff baseline: Python 3.12, 13 deterministic public schemas, 82 formatted Python
+files, 1,193 passing tests, 100% SovereignLab statement/branch coverage (4,679 statements, 1,568
 branches), and no unexpected Git diff.
 On this workstation, the ignored repository-root `.pytest_tmp` can retain an access-denying ACL
 and make the canonical pytest command report only tmp-path setup errors. Do not treat that known
@@ -482,9 +493,10 @@ do not remove it merely because another operating system supplies an IANA timezo
 1. `AGENTS.md`.
 2. `docs/project/01_project_charter.md`.
 3. `docs/PROJECT_STATUS.md`.
-4. Accepted ADRs 0001–0010 under `docs/decisions/` (ADR 0008 fixes how the join work unit must
+4. Accepted ADRs 0001–0011 under `docs/decisions/` (ADR 0008 fixes how the join work unit must
    be implemented; ADR 0009 records the BOK Economic Outlook public-data family ruling; ADR 0010
-   keeps weekly captures archive-only until a superseding trusted registry admits them).
+   keeps weekly captures archive-only until a superseding trusted registry admits them; ADR 0011
+   dates document manifests no earlier than their exact attachment bytes).
 5. `docs/discovery/01_concept_upgrade_proposal.md` — the verified background and risk register
    behind the v2 direction.
 6. `docs/project/05_evidence_contract_2_0_migration.md` — the implemented contract surface the
@@ -556,6 +568,11 @@ do not remove it merely because another operating system supplies an IANA timezo
     combined core batch and its focused frozen-allocation/review-metadata, literal-section-label,
     real-bundle, resolver gold-reproduction, bilingual document-plus-data claim, pre-release
     fail-closed, and pre-availability ledger-abstention checks.
+30. `data/benchmark/drafts/core-draft-011.jsonl` and
+    `tests/benchmark/test_bok_outlook_2025_11_draft.py` — the pending two-record November 2025
+    outlook inflation-rationale draft pair and its frozen-allocation/no-review-metadata,
+    approved-core-separation, ADR 0011 cutoff, day-before fail-closed, and literal-locator
+    checks.
 
 Only when changing source/resolver/harvester behavior, also read
 `docs/discovery/03_week1_verification_log.md` and the relevant resolver, retrieval, registry,
@@ -592,8 +609,10 @@ gate.
   `data/benchmark/core/core-batch-007.jsonl`, the two records in
   `data/benchmark/core/core-batch-008.jsonl`, the two records in
   `data/benchmark/core/core-batch-009.jsonl`, and the two `kv-core-both-01` records in
-  `data/benchmark/core/core-batch-010.jsonl` are approved. No draft is pending review, and the
-  other 18 matrix slots are unauthored.
+  `data/benchmark/core/core-batch-010.jsonl` are approved. The two `kv-core-doc-02` records in
+  `data/benchmark/drafts/core-draft-011.jsonl` are pending named human review and do not
+  increase the approved count. The other 18 matrix slots remain unapproved: two are drafts and 16
+  are unauthored.
 - The field names and allocation in the approved matrix and ten core batches are intentionally
   unchanged. Do not rename them or alter the frozen allocation.
 - Four real BOK document manifests are committed: the May 2026 and November 2025 editions, each in
@@ -1060,8 +1079,8 @@ approve" decision, commit `4365096` corrected only that label to the literal
 `Executive Summary ii`. Approval feature commit `8bc88a1` then recorded reviewer `Hyungbae Cho`,
 review timestamp `2026-11-02T11:04:32Z`, `status=approved`, and the `batch-010` tag, and moved the
 pair to `data/benchmark/core/core-batch-010.jsonl`. The focused module is now
-`tests/benchmark/test_bok_cli_both_core.py`. The approved core is 22/40, no draft is pending,
-and 18 slots are unauthored.
+`tests/benchmark/test_bok_cli_both_core.py`. At that checkpoint the approved core was 22/40, no
+draft was pending, and 18 slots were unauthored.
 
 ### Completed November 2025 outlook manifest unit
 
@@ -1076,15 +1095,40 @@ focused tests in `tests/retrieval/test_bok_outlook_2025_11_manifests.py` and the
 `docs/discovery/05_bok_outlook_2025_11_manifest_log.md` accompany them. No benchmark record,
 matrix row, rights decision, schema, trace, or source module changed.
 
+### Completed ADR 0011 document-date correction and `kv-core-doc-01` re-review
+
+The embedded PDF dates showed that the Bank of Korea replaced three attachments after
+registering their posts. On the owner's option A, fix commit `971d1c1` records ADR 0011 and
+dates each document manifest no earlier than its exact bytes: May 2026 Korean 2026-06-12, May
+2026 English 2026-07-06, and November 2025 Korean 2026-03-31. The November 2025 English
+translation keeps 2026-01-22. `kv-core-doc-01` moved its cutoffs and question dates to
+2026-06-12 and 2026-07-06, and Hyungbae Cho re-approved it at `2026-11-02T13:35:01Z`.
+`kv-core-both-01` (2026-07-09) is unchanged. Bytes, hashes, URLs, rights, schemas, traces, and
+the source package are unchanged.
+
+### Completed `kv-core-doc-02` draft slice — named human review only
+
+Feature commit `5465eca` adds exactly `kv-core-doc-02-ko` and `kv-core-doc-02-en` at
+`status=draft` in `data/benchmark/drafts/core-draft-011.jsonl`, with six focused tests in
+`tests/benchmark/test_bok_outlook_2025_11_draft.py`. Both preserve the frozen `train` /
+`documents` allocation, evidence group `eg-doc-bok-outlook-2025-11`, and parallel group
+`kv-core-doc-02`, and bind document unit `bok-outlook-release-2025-11`. They recover the
+November 2025 inflation rationale: CPI inflation of 2.1% in both 2025 and 2026, as the higher
+exchange rate and easing domestic-demand weakness outweigh lower oil prices. The anchors are the
+Korean summary page 5 (`요약 1/7`) and the English executive summary page 5
+(`Executive Summary i`), verified in the hash-matched local PDFs. Each `as_of` equals its
+edition's ADR 0011 date (2026-03-31 Korean, 2026-01-22 English), and both questions name the
+November 2025 edition explicitly. The approved count remains 22/40; of the other 18 unapproved
+slots, these two are pending drafts and 16 remain unauthored.
+
 The exact continuation order is therefore:
 
-1. Ask the owner which pair or slice comes next. `kv-core-doc-02` and `kv-core-both-02` can now be
-   authored from the November 2025 manifests (English records need an `as_of` on or after
-   2026-01-22). The other documentary slots need the 2025-05, 2024-11, or 2024-05 outlook
-   releases, whose manifests are not committed, and `kv-core-both-05` and `kv-core-data-05` also
-   need the reserved future data release.
-2. Do not select, draft, or approve another pair before that decision, and keep the approved count
-   at 22/40.
+1. Review only `kv-core-doc-02-ko` and `kv-core-doc-02-en` against the frozen matrix, the
+   committed November 2025 manifests and their ADR 0011 dates, and the local PDF anchors. A
+   Windows workstation must first re-fetch the two PDFs and verify them against the manifests.
+2. Do not mark either record approved, move it into `core/`, or raise the approved count without
+   an explicit named human decision. Stop after recording that decision and a green full baseline;
+   do not select or author another pair.
 3. Preserve the frozen matrix, approved core, source, rights, schema, trace, and runtime boundaries;
    do not begin provider/live-model integration, probes, paid work, or the deferred bounded loop.
 
@@ -1110,6 +1154,10 @@ owner authorization.
   merge full-document/corpus ingestion into the completed GDP authoring or approval units.
 - Do not redo the November 2025 outlook manifests or rewrite them in place; any content change at
   their stable URLs needs new manifests.
+- Do not redo the ADR 0011 date correction or move a corrected `published_on` earlier; do not
+  re-review `kv-core-doc-01` again, whose re-approval is complete.
+- Do not re-author or pre-approve the two `kv-core-doc-02` drafts, or select a later pair before
+  their separate named human review is complete.
 - Do not replace the retrieval baseline with embeddings yet. Its filter-before-scoring invariant
   and synthetic future-document regression are already complete.
 - Do not rerun the paid QLoRA compatibility spike. It passed, all Pods were deleted, and it is not
@@ -1123,7 +1171,7 @@ owner authorization.
 - Do not replace the planner, dispatcher, assembler, or executor boundaries; expose their private
   recording, assembly, or execution internals as public wrappers/schemas; or merge provider/live
   integration into an unselected future slice.
-- Do not reopen accepted ADRs 0003–0010 without new evidence that requires a superseding decision.
+- Do not reopen accepted ADRs 0003–0011 without new evidence that requires a superseding decision.
 - Do not implement the bounded multi-step tool loop in-window; ADR 0008 defers it to v1.1. Do
   not re-litigate that deferral — the supporting matrix/schema arithmetic is recorded in the ADR.
 

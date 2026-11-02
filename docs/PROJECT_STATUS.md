@@ -34,26 +34,29 @@
   frontier abstention pair in `data/benchmark/core/core-batch-009.jsonl`, and the
   `kv-core-both-01` Korean/English pair, the first combined `documents_and_data` pair, now in
   `data/benchmark/core/core-batch-010.jsonl`. Hyungbae Cho approved that pair on 2026-11-02 after
-  one owner-directed English section-label correction. The other 18 matrix slots are unauthored,
-  no draft is pending review, and no next pair is selected. The offline
+  one owner-directed English section-label correction. The owner-selected `kv-core-doc-02`
+  Korean/English pair is complete at `status=draft` in
+  `data/benchmark/drafts/core-draft-011.jsonl` and awaits named human review; the other 16 matrix
+  slots are unauthored. The offline
   bilingual temporal document retriever is now
   implemented with manifest-bound chunks and publication-date filtering before scoring; only
   synthetic fixtures were used. The first real bilingual document-manifest unit is also complete:
   the Korean May 2026
-  Bank of Korea outlook is independently dated 2026-05-28 and the later English full translation
-  2026-06-30; both official PDFs were captured only under `/tmp` for real byte-size/SHA-256
-  measurement. Their landing pages supplied no publication-specific KOGL label, but the owner
+  Bank of Korea outlook was first dated 2026-05-28 and the later English full translation
+  2026-06-30 from their landing pages; ADR 0011 later re-dated the exact PDF bytes to
+  2026-06-12 and 2026-07-06. Both official PDFs were captured only under `/tmp` for real
+  byte-size/SHA-256 measurement. Their landing pages supplied no publication-specific KOGL label, but the owner
   confirmed that the official Economic Outlook family is public data freely usable without a
   separate procedure under the Bank of Korea copyright policy's Public Data Act Article 19 branch.
   ADR 0009 and charter v2.5 correct both manifests to `allowed`, with Bank of Korea attribution,
   transformation disclosure, and separately marked third-party rights preserved. No report body,
   extracted text, or real searchable chunk is committed by repository-scope choice. The first
-  documentary pair uses stable, language-matched locators to the same stated driver while preserving
-  the Korean report's 2026-05-28 cutoff and the English translation's later 2026-06-30 cutoff.
+  documentary pair uses stable, language-matched locators to the same stated driver at
+  language-specific cutoffs, corrected under ADR 0011 to 2026-06-12 (Korean) and 2026-07-06
+  (English) and re-approved by the owner.
   A second bilingual manifest unit (2026-11-02) commits the November 2025 edition under the same
-  ADR 0009 family ruling: the Korean report is dated 2025-11-27 and the English full translation
-  2026-01-22. This makes `kv-core-doc-02` and `kv-core-both-02` authorable, though neither is
-  selected.
+  ADR 0009 family ruling. The Korean report is registered 2025-11-27 but dated 2026-03-31 under
+  ADR 0011, and the English full translation is dated 2026-01-22.
   On 2026-07-28 the owner also approved ADR 0008 and charter v2.4. Its first implementation slice
   is now complete: execution contract 1.0.0 freezes the bilingual request, four-route plan,
   exactly three typed calls/results, evidence packet, replay provenance, trace invariants, and
@@ -289,6 +292,22 @@
   ruling, and each language edition's own retrieval cutoff. The verification record is
   `docs/discovery/05_bok_outlook_2025_11_manifest_log.md`. No benchmark record, matrix row,
   rights decision, schema, trace, or source module changed.
+
+- **ADR 0011 document publication-date correction (2026-11-02):** fix commit `971d1c1` dates each
+  Bank of Korea document manifest no earlier than its exact hashed bytes. The May 2026 Korean,
+  May 2026 English, and November 2025 Korean manifests move to 2026-06-12, 2026-07-06, and
+  2026-03-31, based on the embedded PDF creation/modification dates and the Bank of Korea's own
+  stated publication date. `kv-core-doc-01` moved its cutoffs and question dates to match, and
+  the owner re-approved it after a new named review; `kv-core-both-01` is unchanged. Bytes,
+  hashes, URLs, rights, schemas, traces, and the source package are unchanged.
+
+- **November 2025 outlook inflation-rationale draft pair (2026-11-02):** feature commit
+  `5465eca` adds `kv-core-doc-02-ko` and `kv-core-doc-02-en` at `status=draft` in
+  `data/benchmark/drafts/core-draft-011.jsonl`, with six focused tests. Both bind document unit
+  `bok-outlook-release-2025-11` exactly as the frozen matrix allocates and recover the 2.1% CPI
+  inflation forecast for 2025 and 2026 and its rationale (higher exchange rate and easing
+  domestic-demand weakness outweighing lower oil prices), anchored to page 5 of each edition at
+  its ADR 0011 cutoff. No PDF body or extracted text entered Git.
 
 - **BOK Economic Outlook public-data rights correction — ADR 0009 / charter v2.5 (2026-07-28):**
   the owner confirmed that the official Korean Economic Outlook publication family and official
@@ -1338,6 +1357,15 @@ passed across 81 Python files, and all 13 public schemas regenerated without dri
 benchmark record, matrix, rights decision, schema, trace, or source module changed, no PDF body
 or extracted text entered Git, and the unit cost $0.00.
 
+Validated 2026-11-02 on macOS (Python 3.12.14) after ADR 0011 and the `kv-core-doc-02` drafts.
+Before fix commit `971d1c1`, the corrected manifests and re-dated `kv-core-doc-01` passed all
+1,187 tests. After feature commit `5465eca`, the six new focused draft tests and all 76 tests in
+the 11 focused benchmark files passed. The full suite passed all 1,193 tests with 100%
+SovereignLab statement/branch coverage (4,679 statements, 1,568 branches). Ruff check and format
+check passed across 82 Python files, and all 13 public schemas regenerated without drift. The
+source package, executor digest, schemas, and five replay traces did not change, no PDF body or
+extracted text entered Git, and the work cost $0.00.
+
 ## M1b verification spike record (2026-07-15)
 
 All network work below was read-only, key-free, and free of charge. Raw responses were written only
@@ -2208,18 +2236,51 @@ response bodies.
   statements, 1,568 branches); Ruff checking and format checking passed across 81 Python
   files; and all 13 public schemas regenerated without drift. The captures and review cost
   $0.00.
-- The approved core stays 22/40. `kv-core-doc-02` and `kv-core-both-02` are now authorable, but
-  no pair is selected; the next step is the owner's choice.
+- The approved core stayed 22/40. `kv-core-doc-02` and `kv-core-both-02` became authorable, and
+  the owner then selected `kv-core-doc-02`, recorded below.
 
-## Immediate next action (M2 — owner selects the next slice)
+## Session-close snapshot (2026-11-02, thirty-sixth close: ADR 0011 dates and kv-core-doc-02 drafts)
 
-1. Ask the owner which pair or slice comes next. `kv-core-doc-02` and `kv-core-both-02` can be
-   authored from the committed November 2025 manifests; English records over that edition need an
-   `as_of` on or after 2026-01-22. Every other documentary slot first needs new official Bank of
-   Korea outlook manifests under the ADR 0009 family ruling, as their own reviewable unit, and
-   `kv-core-both-05` and `kv-core-data-05` stay reserved for the future data release.
-2. Do not select, draft, or approve another pair before that decision, and keep the approved count
-   at 22/40.
+- While locating the `kv-core-doc-02` evidence, the embedded PDF dates showed that the Bank of
+  Korea replaced three attachments after registering their posts. The hashed May 2026 Korean
+  bytes were created 2026-06-09, and the English edition states that report was published on
+  June 12, 2026. The May 2026 English bytes were created 2026-07-06, and the November 2025
+  Korean bytes were modified 2026-03-31. No web-archive capture exists for these URLs.
+- The owner chose option A. Fix commit `971d1c1` records ADR 0011: a document manifest's
+  `published_on` is the latest of the registration date, the embedded creation and
+  modification dates, and any publisher-stated date. The three manifests move to 2026-06-12,
+  2026-07-06, and 2026-03-31; bytes, hashes, URLs, and rights are unchanged.
+  `kv-core-doc-01` moved its cutoffs and question dates to 2026-06-12 and 2026-07-06, and
+  Hyungbae Cho re-approved it at `2026-11-02T13:35:01Z` after a new named review.
+  `kv-core-both-01` (cutoff 2026-07-09) is unchanged.
+- Feature commit `5465eca` adds exactly `kv-core-doc-02-ko` and `kv-core-doc-02-en` at
+  `status=draft` in `data/benchmark/drafts/core-draft-011.jsonl`, with six focused tests in
+  `tests/benchmark/test_bok_outlook_2025_11_draft.py`. The records recover the November 2025
+  inflation rationale: CPI inflation of 2.1% in both 2025 and 2026, as the higher exchange rate
+  and easing domestic-demand weakness outweigh lower oil prices. The anchors are the Korean
+  summary page 5 (`요약 1/7`) and the English executive summary page 5
+  (`Executive Summary i`). Each `as_of` equals its edition's ADR 0011 date (2026-03-31 Korean,
+  2026-01-22 English), and both questions name the November 2025 edition explicitly.
+- Python 3.12.14 validation is green: the ADR 0011 correction passed the full suite before its
+  commit, and with the drafts the 11 focused benchmark files pass all 76 tests. The full suite
+  passes all 1,193 tests at 100% SovereignLab statement/branch coverage (4,679 statements, 1,568
+  branches); Ruff checking and format checking pass across 82 Python files; and all 13 public
+  schemas regenerate without drift. Both units cost $0.00.
+- M2 has 22/40 approved records; two drafts await named human review, and 16 slots are
+  unauthored.
+
+## Immediate next action (M2 — named human review of `kv-core-doc-02` only)
+
+1. Review only `kv-core-doc-02-ko` and `kv-core-doc-02-en` in
+   `data/benchmark/drafts/core-draft-011.jsonl` against the frozen matrix. Check the bilingual
+   wording, the language-specific `as_of` values (2026-03-31 Korean, 2026-01-22 English) and
+   their ADR 0011 basis, route, split, evidence group, parallel group, and the bound document
+   unit. Check the page-anchored evidence (Korean summary page 5, English executive summary
+   page 5) against the hash-matched local PDFs, and the reference answers' Bank of Korea
+   attribution and summarization/paraphrase disclosure.
+2. Do not mark either record approved, move it into `core/`, or raise the approved count above
+   22/40 without an explicit named human decision. Stop after recording that decision and a
+   green full baseline; do not select or author another pair.
 3. Preserve the frozen matrix, approved core, source, rights, schema, trace, and runtime boundaries;
    do not begin provider/live-model integration, paid work, probes, or the deferred bounded loop.
 
@@ -2342,6 +2403,8 @@ complete.
 | 2026-11-02 | Weekly harvester diagnosis, ADR 0010 repair, and first committed weekly capture | $0.00 | GitHub Actions history/log reads, offline tests and a local fresh-capture rehearsal, and one owner-authorized dispatched capture (run `41427071224`) using the free official APIs on a public-repository runner; no source package, registry, schema, trace, matrix, benchmark-record, model, GPU, or paid change |
 | 2026-11-02 | Owner approval of the BOK outlook CLI combined pair | $0.00 | Owner-approved free re-fetch of the two official BOK PDFs into the ignored `data/raw/` with byte-for-byte manifest verification, one owner-directed English section-label correction, named reviewer metadata, lifecycle move to `core-batch-010`, and focused/full offline validation; no matrix, source, rights, schema, trace, runtime, provider/live-model, GPU, or paid change |
 | 2026-11-02 | November 2025 BOK outlook bilingual manifests | $0.00 | Free official landing-page reads and an owner-approved capture of the two official PDFs into the ignored `data/raw/` for hashing, two strict manifests under the unchanged ADR 0009 family ruling, three focused tests, a verification log, and full offline validation; no benchmark-record, matrix, rights-decision, schema, trace, runtime, provider/live-model, GPU, or paid change |
+| 2026-11-02 | ADR 0011 document-date correction and `kv-core-doc-01` re-review | $0.00 | Offline PDF metadata reads, three manifest date corrections, `kv-core-doc-01` re-dating with the owner's new named review, test updates, and full offline validation; no byte, hash, rights, schema, trace, runtime, provider/live-model, GPU, or paid change |
+| 2026-11-02 | Bilingual November 2025 outlook inflation-rationale draft pair | $0.00 | Exactly two draft records over the committed November 2025 manifests, anchors verified in the hash-matched local PDFs, six focused tests, and full offline validation; no matrix, approved-core, source, rights, schema, trace, runtime, provider/live-model, GPU, or paid change |
 
 **Cumulative external spend: $0.23584524099715054 / $100.00**
 
@@ -2352,10 +2415,11 @@ Read in this order, in full, before changing anything:
 1. `AGENTS.md` — working protocol, evidence rules, setup, repository map.
 2. `docs/project/01_project_charter.md` — the v2.5 scope authority.
 3. This file — current milestone, next action, gates, blockers.
-4. Accepted ADRs 0001–0010 in `docs/decisions/` (ADR 0008 fixes the join unit's typed
+4. Accepted ADRs 0001–0011 in `docs/decisions/` (ADR 0008 fixes the join unit's typed
    function-calling execution contract and defers the bounded tool loop to v1.1; ADR 0009 records
    the BOK Economic Outlook public-data family ruling; ADR 0010 keeps weekly captures archive-only
-   until a superseding trusted registry admits them).
+   until a superseding trusted registry admits them; ADR 0011 dates document manifests no earlier
+   than their exact attachment bytes).
 5. `docs/project/04_macbook_handoff.md` — cross-machine Windows setup, exact continuation order,
    and acceptance criteria (legacy filename retained for stable links).
 6. `docs/discovery/01_concept_upgrade_proposal.md` — background: why v2 exists, verified data facts,
@@ -2434,11 +2498,15 @@ Read in this order, in full, before changing anything:
     `tests/retrieval/test_bok_outlook_2025_11_manifests.py` — the committed November 2025 outlook
     document unit for `kv-core-doc-02` and `kv-core-both-02`, its verification record, and its
     publication-fact, family-ruling, and per-language retrieval-cutoff checks.
+32. `data/benchmark/drafts/core-draft-011.jsonl` and
+    `tests/benchmark/test_bok_outlook_2025_11_draft.py` — the pending two-record November 2025
+    outlook inflation-rationale draft pair and its frozen-allocation, no-review-metadata,
+    approved-core-separation, ADR 0011 cutoff, day-before fail-closed, and literal-locator checks.
 
-Then follow "Immediate next action" item 1: ask the owner which pair or slice comes next. The
-structural matrix and first twenty-two records are owner-approved; the other 18 slots are
-unauthored, no draft is pending, and no later pair or implementation slice has been selected.
-`kv-core-doc-02` and `kv-core-both-02` are authorable from the committed November 2025 manifests.
+Then follow "Immediate next action" item 1: review only the two `kv-core-doc-02` drafts. The
+structural matrix and first twenty-two records are owner-approved; the other 18 slots remain
+unapproved, with two pending drafts and 16 unauthored slots. No later pair or implementation
+slice has been selected.
 The synthetic retrieval baseline and first real bilingual document manifests are complete. ADR
 0009 resolves those
 manifests to `allowed`, but full PDFs and extracted full text remain outside Git by current

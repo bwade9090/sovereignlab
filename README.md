@@ -12,10 +12,14 @@ live in `data/benchmark/core/core-batch-010.jsonl` as the first approved combine
 page-anchored document evidence entry with one `resolve_stes_as_of` tool expectation at the
 shared `as_of` cutoff 2026-07-09. By that cutoff both document publications had been released,
 and the committed edition-availability ledger proves CLI edition `202607` was demonstrably
-available. No draft is pending review, the other 18 slots are unauthored, and no next pair is
-selected. The November 2025 Bank of Korea outlook manifests are also committed (Korean report
-2025-11-27, official English translation 2026-01-22), which makes `kv-core-doc-02` and
-`kv-core-both-02` authorable. The
+available. The November 2025 Bank of Korea outlook manifests are also committed. Under
+[ADR 0011](docs/decisions/0011-document-publication-dates-follow-exact-bytes.md), every Bank of
+Korea document manifest is now dated no earlier than its exact PDF bytes: the November 2025
+Korean report from 2026-03-31 and its English translation from 2026-01-22. The approved
+`kv-core-doc-01` moved to 2026-06-12 and 2026-07-06 cutoffs and was re-approved. The
+owner-selected `kv-core-doc-02` pair, which recovers the November 2025 inflation rationale, is
+complete as two drafts in `data/benchmark/drafts/core-draft-011.jsonl` pending named human
+review; 16 slots remain unauthored. The
 first nine ADR 0008 slices and work unit C are complete: five machine-readable real-digest traces
 were generated through the actual private offline executor, `ScriptedPlanner`, and committed
 registries and corpora in feature commit `883815b`. The trace set covers all four
@@ -25,9 +29,9 @@ source package is unchanged, the public surface remains 13 deterministic JSON Sc
 executor descriptor still pins 32 source entries and digest
 `08f45dab6a36a49cb7d0b588a69236942cd61534540bd4de0772010402dada64`.
 The focused executor/replay-trace acceptance run passes 80 tests at 100% coverage over 326
-statements and 98 branches, and the focused benchmark acceptance run passes 70 tests. The full
-offline baseline is 1,187 tests at 100% statement/branch coverage (4,679 statements, 1,568
-branches) across 81 Ruff-formatted Python files. The shipped
+statements and 98 branches, and the focused benchmark acceptance run passes 76 tests. The full
+offline baseline is 1,193 tests at 100% statement/branch coverage (4,679 statements, 1,568
+branches) across 82 Ruff-formatted Python files. The shipped
 minimal reference path is described only as `typed function calling with committed traces`. These
 are deterministic offline replays, not provider or live outputs; no provider/live integration or
 bounded tool loop exists, and no model-quality or briefing-performance claim is made. Searchable
@@ -212,8 +216,9 @@ authored in the core; it uses the `eg-both-outlook-2026-05-cli-202607` evidence 
 the existing committed evidence units — document unit `bok-outlook-release-2026-05` and data
 unit `oecd-stes-edition-202607` — exactly as the frozen matrix allocates. Each record carries
 exactly one page-anchored document evidence entry and one `resolve_stes_as_of` tool expectation,
-and both records share `as_of` 2026-07-09: both document publications precede that cutoff (the
-Korean report published 2026-05-28, the official English full translation 2026-06-30), and the
+and both records share `as_of` 2026-07-09: both document publications precede that cutoff (under
+ADR 0011, the Korean report's bytes date from 2026-06-12 and the official English translation's
+from 2026-07-06), and the
 committed edition-availability ledger proves CLI edition `202607` was demonstrably available by
 it. The document claim is the report's 2026 GDP growth projection of 2.6%, well above the
 February forecast of 2.0%, anchored to the Korean summary page 8 and the official English
@@ -222,14 +227,14 @@ earlier into the Git-ignored `data/raw/` — no PDF body or extracted text enter
 reference answers disclose summarization/paraphrase and attribute the Bank of Korea. The tool
 expectation mirrors the approved `kv-core-data-01` convention and resolves edition `202607`
 with raw and normalized value `102.66`, and focused tests prove the English record fails closed
-before its 2026-06-30 release date and that a pre-availability cutoff of 2026-06-30 still
-abstains. On 2026-11-02 Hyungbae Cho approved both records. The review re-fetched the official
+before its corrected 2026-07-06 release date and that a pre-availability cutoff of 2026-06-30
+still abstains. On 2026-11-02 Hyungbae Cho approved both records. The review re-fetched the official
 PDFs with owner approval and confirmed the anchored pages and figures. It also corrected the
 English locator section to the literal `Executive Summary ii` in `4365096`, because its former
 suffix did not appear on the page. Approval feature commit `8bc88a1` moved the pair to
-`data/benchmark/core/core-batch-010.jsonl`. Current validation is 70 focused benchmark tests and
-1,187 full-suite tests across 81 formatted Python files. The approved count is 22/40, and choosing
-the next pair or slice is an owner decision.
+`data/benchmark/core/core-batch-010.jsonl`. Current validation is 76 focused benchmark tests and
+1,193 full-suite tests across 82 formatted Python files. The approved count is 22/40, and the
+exact next action is named human review of only the two `kv-core-doc-02` drafts.
 Charter v2.5 and
 [ADR 0009](docs/decisions/0009-bok-economic-outlook-public-data-rights.md) additionally record the
 owner-approved `allowed` public-data ruling for official Bank of Korea Economic Outlook

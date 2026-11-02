@@ -19,7 +19,8 @@ matrix, source bundle, rights decisions, public schemas, and execution runtime w
 
 Files under `core/` are human-reviewed records. `core/core-batch-001.jsonl` contains the first four
 owner-approved core records, and `core/core-batch-002.jsonl` contains the first two documentary
-core records. `core/core-batch-003.jsonl` contains the two approved ECOS GDP records,
+core records, whose cutoffs ADR 0011 moved to 2026-06-12 (Korean) and 2026-07-06 (English)
+before Hyungbae Cho re-approved them on 2026-11-02. `core/core-batch-003.jsonl` contains the two approved ECOS GDP records,
 `core/core-batch-004.jsonl` contains the two approved ECOS current-account records,
 `core/core-batch-005.jsonl` contains the two approved KOSIS CPI records,
 `core/core-batch-006.jsonl` contains the two approved OECD scope abstention records,
@@ -178,8 +179,9 @@ Feature commit `933c0e9` added exactly `kv-core-both-01-ko` and `kv-core-both-01
 unit `bok-outlook-release-2026-05`, and data unit `oecd-stes-edition-202607`, exactly as the
 frozen matrix allocates. Each record carries exactly one page-anchored document evidence entry
 and one `resolve_stes_as_of` tool expectation. Both records share `as_of` 2026-07-09: both
-document publications precede that cutoff (the Korean report published 2026-05-28, the official
-English full translation 2026-06-30), and the committed edition-availability ledger proves CLI
+document publications precede that cutoff (under ADR 0011, the Korean report's bytes date from
+2026-06-12 and the official English translation's from 2026-07-06), and the committed
+edition-availability ledger proves CLI
 edition `202607` was demonstrably available by it. The document claim is the report's 2026 GDP
 growth projection of 2.6%, well above the February forecast of 2.0%, anchored to the Korean
 summary page 8 (요약 2/10 — 경제전망 요약) and the official English executive summary page 6,
@@ -204,11 +206,24 @@ changed. The focused module is now `tests/benchmark/test_bok_cli_both_core.py`; 
 literal section labels and raises the approved-count assertions in the other focused benchmark
 files from 20 to 22.
 
-At this approval checkpoint, the combined focused benchmark suite passes 70 tests across ten
-files, and the full suite passes 1,184 at 100% SovereignLab statement/branch coverage across 80
-Ruff-formatted Python files. The 13 public schemas and five committed traces are unchanged. With
-22/40 records approved, no draft review candidate remains, and 18 records are unauthored. No
-later pair or slice is selected; choosing the next one is an owner decision.
+At that approval checkpoint, the combined focused benchmark suite passed 70 tests across ten
+files, and the full suite passed 1,184 at 100% SovereignLab statement/branch coverage across 80
+Ruff-formatted Python files. The 13 public schemas and five committed traces were unchanged.
+
+Feature commit `5465eca` adds exactly `kv-core-doc-02-ko` and `kv-core-doc-02-en` at
+`annotation.status=draft` in `drafts/core-draft-011.jsonl`. Both use the frozen `documents` route,
+`train` split, `eg-doc-bok-outlook-2025-11` evidence group, parallel group `kv-core-doc-02`, and
+document unit `bok-outlook-release-2025-11`. Matching the frozen intent, they recover one
+inflation-outlook rationale from the November 2025 report: CPI inflation of 2.1% in both 2025
+and 2026, as the higher exchange rate and easing domestic-demand weakness outweigh lower oil
+prices. The anchors are the Korean summary page 5 (`요약 1/7`) and the English executive summary
+page 5 (`Executive Summary i`). Each `as_of` equals its edition's ADR 0011 date: 2026-03-31 for
+Korean and 2026-01-22 for English. Six focused tests in
+`tests/benchmark/test_bok_outlook_2025_11_draft.py` bring the focused benchmark suite to 76
+tests across 11 files, and the full suite passes 1,193 tests across 82 Ruff-formatted Python
+files. The approved count remains 22/40: two of the other 18 records are drafts and 16 remain
+unauthored. The exact next action is named human review of only these two drafts; do not
+pre-approve them or select another pair.
 
 The matrix assigns every planned documentary or data source unit to one dataset split. Do not
 replace a reserved unit or move a pair between splits without a versioned matrix change, tests, and

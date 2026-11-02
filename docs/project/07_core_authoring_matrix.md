@@ -1,7 +1,7 @@
 # K-VINTAGE human-reviewed core authoring matrix 1.0.0
 
-- Status: structural allocation frozen; first twenty-two records owner-approved; no draft pending
-  named human review
+- Status: structural allocation frozen; first twenty-two records owner-approved; `kv-core-doc-02`
+  drafted and pending named human review
 - Date: 2026-11-02
 - Scope authority: charter v2.5 §5 and M2 continuation order
 - Canonical matrix: `data/benchmark/core-authoring-matrix-v1.json`
@@ -54,14 +54,16 @@ timestamp. They count as four human-reviewed core records.
 `data/benchmark/core/core-batch-002.jsonl` contains the frozen `kv-core-doc-01` Korean/English
 pair. Both records use the `documents` route, `train` split,
 `eg-doc-bok-outlook-2026-05` evidence group, and `kv-core-doc-01` parallel group. The Korean record
-is bounded to the Korean report's 2026-05-28 publication date and cites PDF page 10; the English
-record is independently bounded to the full translation's 2026-06-30 publication date and cites
-PDF page 9.
+cites PDF page 10 and the English record PDF page 9, each bounded to its own edition's
+publication date. Those cutoffs were first the landing-page dates 2026-05-28 and 2026-06-30. On
+2026-11-02, ADR 0011 found that the hashed PDF bytes postdate them, and fix commit `971d1c1`
+moved the cutoffs and question dates to 2026-06-12 (Korean) and 2026-07-06 (English).
 
 Both answers paraphrase one stated driver: stronger-than-expected IT exports contributed `+0.7%p`
 to the `0.6%p` upward revision of the 2026 GDP growth forecast. They attribute the Bank of Korea
 and disclose summarization/paraphrase. On 2026-07-29, Hyungbae Cho approved both records without a
-question, answer, route, evidence, `as_of`, or frozen-allocation change. Their annotations preserve
+question, answer, route, evidence, `as_of`, or frozen-allocation change. On 2026-11-02, Hyungbae
+Cho re-approved the date-corrected pair after a new named review. Their annotations preserve
 the AI author and record the named human reviewer and aware review timestamp. The lifecycle tag
 changed from `draft-002` to `batch-002` when the file moved into `core/`.
 
@@ -384,8 +386,9 @@ parallel group; this is the first approved combined pair in the core.
 Exactly as the frozen matrix allocates, each record binds document unit
 `bok-outlook-release-2026-05` and data unit `oecd-stes-edition-202607`, carrying exactly one
 page-anchored document evidence entry and one `resolve_stes_as_of` tool expectation. Both
-records share `as_of` 2026-07-09: both document publications precede that cutoff (the Korean
-report published 2026-05-28, the official English full translation 2026-06-30), and the
+records share `as_of` 2026-07-09: both document publications precede that cutoff (under ADR 0011
+the Korean report's bytes date from 2026-06-12 and the official English translation's from
+2026-07-06), and the
 committed edition-availability ledger proves CLI edition `202607` was demonstrably available
 by it.
 
@@ -432,10 +435,41 @@ records are unauthored: the `kv-core-doc-02`..`kv-core-doc-05` and
 `kv-core-data-05` pair. No later pair or slice is selected; choosing the next one is an owner
 decision. On 2026-11-02, feature commit `33a687a` committed the November 2025 outlook
 manifests (`bok-outlook-2025-11-ko`, `bok-outlook-2025-11-en`) for document unit
-`bok-outlook-release-2025-11`. `kv-core-doc-02` and `kv-core-both-02` are therefore authorable,
-but neither is selected.
+`bok-outlook-release-2025-11`. `kv-core-doc-02` and `kv-core-both-02` therefore became
+authorable, and the owner selected `kv-core-doc-02`, described below.
 
-## 12. Approval records
+## 12. Draft November 2025 outlook inflation pair
+
+Feature commit `5465eca` adds exactly the frozen `kv-core-doc-02` Korean/English pair to
+`data/benchmark/drafts/core-draft-011.jsonl` at `annotation.status=draft`. Both records use the
+`documents` route, `train` split, `eg-doc-bok-outlook-2025-11` evidence group, and
+`kv-core-doc-02` parallel group, and bind document unit `bok-outlook-release-2025-11` exactly as
+the frozen matrix allocates. Each carries one page-anchored document evidence entry and no tool
+expectation.
+
+Matching the frozen intent to recover one inflation-outlook rationale, both records ask for the
+November 2025 CPI inflation forecasts and their upward drivers. The gold answer is 2.1% for both
+2025 and 2026, as the higher exchange rate and easing domestic-demand weakness outweigh the
+downward pressure from lower oil prices. The anchors are the Korean summary page 5 (`요약 1/7`)
+and the English executive summary page 5 (`Executive Summary i`), verified in the owner-approved,
+hash-matched local PDFs. Each record's `as_of` equals its edition's ADR 0011 date: 2026-03-31 for
+Korean and 2026-01-22 for English. Because the February 2026 outlook had appeared by the Korean
+cutoff, both questions name the November 2025 edition explicitly. The reference answers
+attribute the Bank of Korea and disclose summarization and paraphrase. The annotations record
+`annotated_by="Claude AI draft"`, contain no reviewer metadata, and carry the `core`,
+`temporal`, `documents`, `bok-outlook`, and `draft-011` tags.
+
+The pair-specific focused test file `tests/benchmark/test_bok_outlook_2025_11_draft.py` passes
+six tests. They check the frozen allocation and absent review metadata, that the approved core
+remains twenty-two and the drafts stay separate, a real `BenchmarkBundle` at each edition's own
+cutoff, fail-closed validation on the day before each edition, and the literal locators,
+attribution, and paraphrase disclosure. The 11 focused benchmark files pass 76 tests, and the
+full suite passes 1,193 tests at 100% SovereignLab statement/branch coverage across 82
+Ruff-formatted Python files. The approved core remains 22/40. These two drafts and the 16
+unauthored slots make up the other 18 unapproved records. The exact next action is named human
+review of only `kv-core-doc-02-ko` and `kv-core-doc-02-en`.
+
+## 13. Approval records
 
 On 2026-07-25, Hyungbae Cho explicitly approved:
 
@@ -500,7 +534,12 @@ unchanged. Approval feature commit `8bc88a1` records reviewer `Hyungbae Cho`, re
 timestamp `2026-11-02T11:04:32Z`, `annotation.status=approved`, the `batch-010` lifecycle tag,
 and the move from `drafts/core-draft-010.jsonl` to `core/core-batch-010.jsonl`.
 
-## 13. Human-review checklist
+On 2026-11-02, after ADR 0011 moved the `kv-core-doc-01` cutoffs and question dates to
+2026-06-12 and 2026-07-06 in fix commit `971d1c1`, Hyungbae Cho re-approved both records after a
+new named review. Their review timestamp is now `2026-11-02T13:35:01Z`; nothing else in the
+records changed.
+
+## 14. Human-review checklist
 
 For each bilingual pair, the reviewer must verify:
 
@@ -516,7 +555,7 @@ Future corrections remain in their draft batch until review is complete. An appr
 reviewer and review timestamp in each `BenchmarkRecord`; it does not rewrite the frozen matrix
 allocation.
 
-## 14. Reproduction
+## 15. Reproduction
 
 ```bash
 python scripts/export_json_schemas.py
@@ -530,6 +569,7 @@ python -m pytest tests/benchmark/test_cpi_revision_abstain_core.py
 python -m pytest tests/benchmark/test_missing_as_of_abstain_core.py
 python -m pytest tests/benchmark/test_ledger_frontier_abstain_core.py
 python -m pytest tests/benchmark/test_bok_cli_both_core.py
+python -m pytest tests/benchmark/test_bok_outlook_2025_11_draft.py
 python -m ruff check .
 python -m ruff format --check .
 ```
@@ -601,6 +641,14 @@ named-review metadata against the frozen allocation, pins both literal page-sect
 builds a real `BenchmarkBundle` over both document manifests, the CLI manifest, the two
 constraint captures, the availability ledger, and the rights catalog, reproduces the declared
 CLI gold through the real fail-closed resolver, checks the bilingual document-plus-data claims,
-proves the English record fails closed before its 2026-06-30 release date, and confirms a
-pre-availability ledger cutoff (2026-06-30) still abstains. With it, the ten focused benchmark
-files pass 70 tests, and the approved count it verifies is twenty-two.
+proves the English record fails closed before its corrected 2026-07-06 release date, and
+confirms a pre-availability ledger cutoff (2026-06-30) still abstains. At its approval
+checkpoint, the ten focused benchmark files passed 70 tests; the approved count it verifies is
+twenty-two.
+
+The November 2025 outlook draft test validates the two unapproved `kv-core-doc-02` records
+against the frozen allocation, confirms they carry no reviewer metadata and leave the approved
+core and drafts separate, builds a real `BenchmarkBundle` over both November 2025 manifests at
+each edition's ADR 0011 cutoff, proves each record fails closed on the day before its edition,
+and pins the literal locators, attribution, and paraphrase disclosure. It adds six tests,
+bringing the focused benchmark suite to 76 while the approved count remains twenty-two.

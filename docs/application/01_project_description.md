@@ -37,8 +37,8 @@ milestone. Its evidence, benchmark, core-authoring-matrix, availability-ledger, 
 execution contracts are published as 13 synchronized deterministic JSON Schemas; the offline
 resolver is operational; the GitHub Actions harvester committed its first weekly capture on
 2026-11-02 after a registry-admission repair, so weekly capture coverage has a disclosed gap from
-2026-07-20; and 1,187 tests pass with 100% statement and branch coverage (4,679 statements, 1,568
-branches) across 81 formatted Python files. The
+2026-07-20; and 1,193 tests pass with 100% statement and branch coverage (4,679 statements, 1,568
+branches) across 82 formatted Python files. The
 40-question human-reviewed bilingual core is frozen as an allocation, and 22 of 40 records —
 initially AI-authored, then approved under
 named human review —
@@ -200,8 +200,9 @@ drafts in `data/benchmark/drafts/core-draft-010.jsonl` — the first combined
 and the `oecd-stes-edition-202607` data unit exactly as the frozen matrix allocates. Each
 record carries exactly one page-anchored document evidence entry and one `resolve_stes_as_of`
 tool expectation, and both records share the 2026-07-09 `as_of`: both document publications
-precede that cutoff — the Korean report was published 2026-05-28 and its official English full
-translation on 2026-06-30 — and the committed edition-availability ledger proves CLI edition
+precede that cutoff — under ADR 0011 the Korean report's exact PDF bytes date from 2026-06-12
+and its official English translation's from 2026-07-06 — and the committed
+edition-availability ledger proves CLI edition
 202607 was demonstrably available by it. The document claim reads the report's 2026 GDP growth
 projection of 2.6%, well above the February forecast of 2.0%, anchored to the Korean summary
 page 8 (요약 2/10 — 경제전망 요약) and the official English executive summary page 6, located
@@ -215,8 +216,9 @@ rule `oecd-stes-kor-li-aa-index-v1`. The commit added only these two records and
 tests covering the frozen allocation, a real `BenchmarkBundle` over both document manifests,
 the CLI manifest, the two constraint captures, the availability ledger, and the rights catalog,
 reproduction of the declared CLI gold through the real fail-closed resolver, bilingual
-document-plus-data claims, the English record failing closed before its 2026-06-30 release
-date, and a pre-availability ledger cutoff (2026-06-30) still abstaining.
+document-plus-data claims, the English record failing closed before its release date (now
+2026-07-06 under ADR 0011), and a pre-availability ledger cutoff (2026-06-30) still
+abstaining.
 
 Hyungbae Cho approved both records on 2026-11-02. For the review, both official PDFs were
 re-fetched with owner approval and matched their manifests byte-for-byte, and both anchored
@@ -226,8 +228,8 @@ Commit `4365096` corrected it to the literal `Executive Summary ii` before appro
 field changed. Approval feature commit `8bc88a1` added the reviewer metadata and lifecycle tag
 and moved the pair to `data/benchmark/core/core-batch-010.jsonl`; the focused module is now
 `tests/benchmark/test_bok_cli_both_core.py`. This first approved combined `documents_and_data`
-pair brings the approved core to 22 of 40 records; no draft is pending, and 18 records remain
-unauthored. The focused benchmark suite passes 70 tests across ten files. The frozen matrix,
+pair brought the approved core to 22 of 40 records; at that point no draft was pending, and
+18 records remained unauthored. The focused benchmark suite then passed 70 tests across ten files. The frozen matrix,
 source bundle, rights decisions, 13 public schemas, five committed traces, source package, and
 execution runtime are unchanged, and no PDF body or extracted text entered Git.
 
@@ -272,8 +274,8 @@ boundary, an internal deterministic evidence-packet assembler, and a private pro
 offline executor. Five real-digest offline replays now provide `typed function calling with
 committed traces`, covering all routes and tools, Korean and English, explicit and implicit cutoffs,
 complete execution, and terminal planned/tool abstention without partial evidence. The repository
-passes 1,187 tests with 100% statement and branch coverage (4,679 statements, 1,568 branches)
-across 81 formatted Python files. The frozen 40-record bilingual K-VINTAGE core has its first 22
+passes 1,193 tests with 100% statement and branch coverage (4,679 statements, 1,568 branches)
+across 82 formatted Python files. The frozen 40-record bilingual K-VINTAGE core has its first 22
 records reviewed and approved, including a
 Korean/English documentary pair over the Bank of Korea's May 2026 Economic Outlook and its later
 official English translation. A further Korean/English `kv-core-data-02` pair over the 2026-07-17
@@ -325,13 +327,17 @@ carry one page-anchored document evidence entry reading the Bank of Korea May 20
 `resolve_stes_as_of` tool expectation reproducing CLI edition 202607, value 102.66, through the
 real fail-closed resolver at a shared 2026-07-09 as-of that the committed availability ledger
 demonstrably covers; a negative test proves the English record fails closed before its
-2026-06-30 release date, and a ledger check proves a pre-availability cutoff still abstains.
+release date, and a ledger check proves a pre-availability cutoff still abstains.
 Hyungbae Cho approved that pair on 2026-11-02 after one owner-directed correction of the English
-evidence section label, bringing the approved count to 22/40 with 18 slots unauthored; focused
-validation is 70 tests across ten files. I also
+evidence section label, bringing the approved count to 22/40. The same day, a check of the
+embedded PDF dates showed that the Bank of Korea had replaced report attachments after posting,
+so ADR 0011 dates every document manifest no earlier than its exact bytes. The documentary pair
+moved to the corrected cutoffs and was re-approved. A second documentary pair over the November
+2025 outlook's inflation rationale is now drafted and awaits named human review, and 16 slots
+remain unauthored; focused validation is 76 tests across 11 files. I also
 verified the pinned Ministral 3 3B NF4/QLoRA training path on a disposable A40/CUDA 13 GPU without
-claiming model-quality gains. The next pair or slice is the owner's choice; later work covers the
-remaining core, separately reported deterministic revision probes, and the four-variant baseline
+claiming model-quality gains. Next is named human review of those two drafts; later work covers
+the remaining core, separately reported deterministic revision probes, and the four-variant baseline
 suite, with temporal leakage as the headline metric.
 
 ## Usage guardrails

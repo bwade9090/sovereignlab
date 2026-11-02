@@ -3,7 +3,8 @@
 - Status: wording bank; use only the section matching the achieved milestone
 - Last updated: 2026-11-02 (M2 mid-window refresh: 22/40 approved core including the first
   combined document-plus-data pair, ADR 0008 slices 1–9 and work unit C complete, weekly harvester
-  repaired under ADR 0010, 81-file/1,187-test baseline)
+  repaired under ADR 0010, document dates corrected under ADR 0011,
+  82-file/1,193-test baseline)
 - Rule: never replace placeholders with targets or estimates; use measured, reproducible results only
 - Narrative versions: `docs/application/01_project_description.md`
 
@@ -51,8 +52,8 @@
   public JSON Schemas remain unchanged. These are deterministic offline replay artifacts, not
   provider or live outputs, and no briefing-quality result is claimed.
 - Verified the pinned Ministral 3 3B NF4/QLoRA compatibility path on a disposable A40/CUDA 13 GPU
-  and maintain 1,187 tests at 100% statement/branch coverage (4,679 statements, 1,568 branches)
-  across 81 formatted Python files; temporal leakage remains the planned headline metric, and no
+  and maintain 1,193 tests at 100% statement/branch coverage (4,679 statements, 1,568 branches)
+  across 82 formatted Python files; temporal leakage remains the planned headline metric, and no
   model-quality result is claimed yet.
 
 ### Short form (single bullet)
@@ -70,7 +71,7 @@
   both cutoff modes, complete execution, and planned/tool abstention with terminal stop and no
   partial evidence. The approved core includes the first combined document-plus-data pair
   (`kv-core-both-01`). The
-  verified Ministral 3 3B NF4/QLoRA compatibility path is retained, and 1,187 tests pass at 100%
+  verified Ministral 3 3B NF4/QLoRA compatibility path is retained, and 1,193 tests pass at 100%
   statement/branch coverage; temporal leakage is the planned headline metric and no model-quality
   or briefing-performance result is claimed yet.
 
