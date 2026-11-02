@@ -315,11 +315,32 @@ The charter is the scope authority. Do not expand sources, agents, UI, or infras
 - Update `docs/PROJECT_STATUS.md` whenever a milestone state, blocker, cost, or next action changes.
 - Record consequential technical choices as an ADR in `docs/decisions/`.
 - Add or update tests in the same change as behavior.
-- Run the relevant offline checks before committing and record the commands in the status document.
+- Before committing, run the checks for the tier of the change (see "Validation tiers" below) and
+  record the commands in the status document.
 - Use conventional commit prefixes: `docs:`, `chore:`, `feat:`, `fix:`, `test:`, `refactor:`, `eval:`.
 - After green checks, commit in semantic units, push the current branch to `origin`, and confirm
   the local/remote commit IDs match and the worktree is clean.
 - Do not rewrite or discard unrelated user changes.
+
+### Validation tiers
+
+Match the checks to what a commit changes. When a commit spans several tiers, use the highest.
+
+| What changed | Required checks |
+| --- | --- |
+| Documentation only | `git diff --check` |
+| Benchmark records or `tests/benchmark/` only (drafts, approvals, lifecycle moves) | `python -m pytest tests/benchmark -p no:cacheprovider`, `python -m ruff check --no-cache .`, and `python -m ruff format --check .` |
+| Data artifacts: manifests, archives, ledgers, or rights catalogs | The benchmark tier plus `tests/retrieval`, `tests/schemas`, `tests/snapshots`, `tests/vintage`, and `tests/harvest`, or the full suite without coverage |
+| `src/`, schemas, scripts, workflows, or shared test fixtures such as `tests/conftest.py` | The full baseline under "Local setup and required checks" |
+
+- Only two tests outside `tests/benchmark/` read committed benchmark data, and both read only
+  `core-batch-001.jsonl`. Add `tests/vintage/test_adapter.py` and `tests/schemas/test_execution.py`
+  when that file changes.
+- The trusted-registry completeness tests read `data/manifests/` directly, which is why data
+  artifacts need the wider tier.
+- Run the full baseline at session start and once before a round's final push or handoff.
+- Whenever the test count changes, update the recorded baseline numbers;
+  `python -m pytest --collect-only -q` reports the count without running the suite.
 
 ## Evidence and evaluation rules
 

@@ -481,7 +481,10 @@ git diff --exit-code
 
 Expected handoff baseline: Python 3.12, 13 deterministic public schemas, 82 formatted Python
 files, 1,193 passing tests, 100% SovereignLab statement/branch coverage (4,679 statements, 1,568
-branches), and no unexpected Git diff.
+branches), and no unexpected Git diff. Run this full baseline at session start and once before
+a round's final push or handoff. Between those, each commit needs only the checks for its tier
+under "Validation tiers" in `AGENTS.md`; for example, a benchmark draft or approval needs
+`pytest tests/benchmark` plus Ruff.
 On this workstation, the ignored repository-root `.pytest_tmp` can retain an access-denying ACL
 and make the canonical pytest command report only tmp-path setup errors. Do not treat that known
 ACL failure as a source regression or alter the directory during repository work. Rerun the exact

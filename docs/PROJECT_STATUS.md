@@ -2293,6 +2293,11 @@ response bodies.
   unauthored. `kv-core-both-02` can be authored from the committed November 2025 manifests and
   the existing ECOS GDP snapshot. The other slots need the 2025-05, 2024-11, or 2024-05 outlook
   manifests, and the `test` slots also need the reserved future data release.
+- On the owner's request, `AGENTS.md` now defines validation tiers. Documentation-only commits
+  need `git diff --check`. Benchmark-only commits need `pytest tests/benchmark` plus Ruff. Data
+  artifacts add the retrieval, schema, snapshot, vintage, and harvest tests. Source, schema,
+  script, workflow, or shared-fixture changes need the full baseline, which also runs at session
+  start and before a round's final push.
 
 ## Immediate next action (M2 — owner selects the next slice)
 
