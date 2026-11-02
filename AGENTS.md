@@ -8,11 +8,11 @@ Build **KOR-RTD**, a provenance-contracted point-in-time (vintage) data layer fo
 
 ## Current handoff checkpoint
 
-This repository is between the completed `kv-core-doc-02` draft-authoring unit and its named
-human-review gate.
+This repository is past the completed `kv-core-doc-02` named human-review gate. No next authoring
+slice is selected; choosing it is an owner decision.
 
 - Current milestone: **M2 — benchmark and baselines**.
-- Approved human-reviewed core: **22/40** records of the frozen 40-record matrix, which must not
+- Approved human-reviewed core: **24/40** records of the frozen 40-record matrix, which must not
   be edited merely to accelerate authoring.
 - The Korean/English `kv-core-data-02` pair is approved in
   `data/benchmark/core/core-batch-003.jsonl`. Hyungbae Cho approved both records on 2026-08-20;
@@ -188,13 +188,16 @@ human-review gate.
   November 2025 Korean 2026-03-31. `kv-core-doc-01` moved its cutoffs and question dates to
   2026-06-12 and 2026-07-06; Hyungbae Cho re-approved it at `2026-11-02T13:35:01Z`.
   `kv-core-both-01` is unchanged.
-- The Korean/English `kv-core-doc-02` pair is complete at `annotation.status=draft` in
-  `data/benchmark/drafts/core-draft-011.jsonl` (feature commit `5465eca`). These two records
-  do not increase the approved count and remain pending named human review.
-- Exact next outcome: named human review of only the Korean/English `kv-core-doc-02` drafts.
-- Exact next reviewable slice: the two records in `core-draft-011.jsonl` only. Do not pre-approve
-  them or select another pair; until the named review gate is complete, the approved core count
-  remains 22/40.
+- The Korean/English `kv-core-doc-02` pair is approved in
+  `data/benchmark/core/core-batch-011.jsonl`. Hyungbae Cho approved both records on 2026-11-02;
+  their review timestamp is `2026-11-02T13:44:04Z`. The drafts came from feature commit
+  `5465eca`, and approval feature commit `6cdd13d` records only the named review decision,
+  approval metadata, lifecycle tag, file move into `core/`, and focused-test transition.
+- Exact next outcome: none selected. The owner chooses the next pair or slice. `kv-core-both-02`
+  is authorable from the committed November 2025 manifests; every other remaining slot needs an
+  earlier outlook release or the reserved future data release.
+- Until the owner selects one, do not author, draft, or approve another pair; the approved core
+  count remains 24/40.
 - Not implemented yet: a provider or live-model integration or the bounded tool loop. The five
   committed traces are deterministic offline replay artifacts, not provider recordings.
 - The planner boundary exists under `src/sovereignlab/execution/planner.py`; its recording registry
@@ -209,34 +212,18 @@ The authoritative live checkpoint and acceptance criteria are in
 `docs/project/04_macbook_handoff.md`. The filename is retained for history, but the document is now
 the cross-machine Windows continuation handoff.
 
-## Exact next slice — named human review of `kv-core-doc-02` only
+## Exact next slice — none selected (owner decision)
 
-The owner-selected `kv-core-doc-02` pair (`train` split, `documents` route) is complete as
-`data/benchmark/drafts/core-draft-011.jsonl`. Both records bind document unit
-`bok-outlook-release-2025-11` in evidence group `eg-doc-bok-outlook-2025-11` and parallel group
-`kv-core-doc-02`, exactly as the frozen matrix allocates, with one page-anchored document
-evidence entry each and no tool expectation. Matching the frozen intent, they recover one
-inflation-outlook rationale: the November 2025 report forecasts CPI inflation of 2.1% in both
-2025 and 2026, as the higher exchange rate and easing domestic-demand weakness outweigh lower
-oil prices. The anchors are the Korean summary page 5 (`요약 1/7`) and the English executive
-summary page 5 (`Executive Summary i`), verified in the hash-matched local PDFs. Each record's
-`as_of` equals its edition's ADR 0011 date: 2026-03-31 for Korean and 2026-01-22 for English.
-Both questions name the November 2025 edition explicitly, because the February 2026 outlook
-was already out by the Korean cutoff. The reference answers attribute the Bank of Korea and
-disclose summarization and paraphrase. Both records carry `annotated_by` "Claude AI draft"
-and no reviewer metadata. The approved core remains 22/40; these two records are drafted and
-unapproved, and 16 slots remain unauthored.
+The named human review of `kv-core-doc-02` is complete. Hyungbae Cho approved both records on
+2026-11-02 in `6cdd13d` without a substantive change. The approved core is 24/40, and no
+draft review candidate remains. The other 16 records are unauthored.
 
-- Review the Korean/English questions, document claims, page anchors, cutoffs, route, split,
-  evidence group, parallel group, record IDs, unit binding, tags, and lifecycle metadata
-  against the frozen matrix and the evidence, rights, and ADR 0011 date contracts only.
-- Do not mark the records approved, move them into `core/`, or raise the approved count above
-  22/40 without an explicit named human decision.
-- Stop after recording that decision and a green full baseline. Do not choose another pair, add
-  probes, alter the matrix, source, rights decisions, or public schemas, add a provider or
-  live-model call, start the deferred bounded loop, or initiate a paid operation.
+- Do not select, draft, or approve another pair until the owner chooses one.
+- Do not alter the matrix, source, rights decisions, or public schemas, add probes, add a provider
+  or live-model call, start the deferred bounded loop, or initiate a paid operation as part of
+  choosing the next slice.
 
-Other remaining slots, for later owner choice:
+Remaining slots, for the owner's choice:
 
 - `kv-core-both-02` (`documents_and_data`) can be authored from the same November 2025
   manifests with the existing ECOS GDP snapshot.
@@ -244,9 +231,9 @@ Other remaining slots, for later owner choice:
   releases of 2025-05, 2024-11, and 2024-05, whose manifests are not yet committed.
 - `kv-core-both-05` and `kv-core-data-05` (`test` split) need the reserved future data release.
 
-Each documentary slot other than `kv-core-doc-02` and `kv-core-both-02` first needs new official
-document manifests under the ADR 0009 family ruling and dated under ADR 0011, which is its own
-reviewable unit.
+Each remaining documentary slot other than `kv-core-both-02` first needs new official document
+manifests under the ADR 0009 family ruling and dated under ADR 0011, which is its own reviewable
+unit.
 
 ## New-session onboarding procedure
 
@@ -261,9 +248,9 @@ Before editing:
    under "Local setup and required checks."
 4. State back four facts before implementation: current milestone, approved core count, exact next
    work unit, and hard stops.
-5. Start only with named human review of the two `kv-core-doc-02` records in
-   `data/benchmark/drafts/core-draft-011.jsonl`. Do not pre-approve them, choose another pair, or
-   combine source expansion, probes, provider/live-model work, or a paid operation with review.
+5. Do not start authoring: no next slice is selected. Ask the owner which pair or slice comes
+   next, and do not combine source expansion, probes, provider/live-model work, or a paid
+   operation with that choice.
 
 ## Read before changing anything
 
@@ -283,7 +270,7 @@ Before editing:
 5. `docs/discovery/01_concept_upgrade_proposal.md` — background rationale for v2: verified data facts, judged alternatives, risk register.
 6. `docs/project/05_evidence_contract_2_0_migration.md` — implemented evidence/rights contract
    that the execution path must not change.
-7. `docs/project/07_core_authoring_matrix.md` — approved 40-record allocation, 22/40 review state,
+7. `docs/project/07_core_authoring_matrix.md` — approved 40-record allocation, 24/40 review state,
    and frozen human-review boundary.
 8. `docs/project/08_temporal_document_retrieval.md` — implemented cutoff-before-scoring retrieval
    contract.
@@ -311,13 +298,13 @@ For the current checkpoint, also read `data/benchmark/core-authoring-matrix-v1.j
 `data/benchmark/README.md`, the approved records in
 `data/benchmark/core/core-batch-001.jsonl`, `core-batch-002.jsonl`, `core-batch-003.jsonl`,
 `core-batch-004.jsonl`, `core-batch-005.jsonl`, `core-batch-006.jsonl`, `core-batch-007.jsonl`,
-`core-batch-008.jsonl`, `core-batch-009.jsonl`, and `core-batch-010.jsonl`, the pending records in
-`data/benchmark/drafts/core-draft-011.jsonl`, the benchmark model and normalization code in `src/sovereignlab/schemas/benchmark.py` and
+`core-batch-008.jsonl`, `core-batch-009.jsonl`, `core-batch-010.jsonl`, and
+`core-batch-011.jsonl`, the benchmark model and normalization code in `src/sovereignlab/schemas/benchmark.py` and
 `src/sovereignlab/normalization.py`, and `tests/benchmark/test_core_batch.py`,
 `test_bok_outlook_core.py`, `test_ecos_gdp_core.py`, `test_ecos_current_account_core.py`,
 `test_kosis_cpi_core.py`, `test_oecd_scope_abstain_core.py`, `test_cpi_revision_abstain_core.py`,
 `test_missing_as_of_abstain_core.py`, `test_ledger_frontier_abstain_core.py`, and
-`test_bok_cli_both_core.py`, plus `test_bok_outlook_2025_11_draft.py`. Treat the matrix allocation, approved records, source bundle, and
+`test_bok_cli_both_core.py`, plus `test_bok_outlook_2025_11_core.py`. Treat the matrix allocation, approved records, source bundle, and
 human-review boundary as frozen.
 
 The charter is the scope authority. Do not expand sources, agents, UI, or infrastructure before the current milestone gate passes.

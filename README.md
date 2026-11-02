@@ -3,7 +3,7 @@
 > What did the data say *then*? Vintage-conditioned evaluation and auditable briefings for Korean/English economic research.
 
 **Status:** M1b verification and vintage-contract groundwork are complete; M2 benchmark and
-baseline development is in progress with a frozen 40-record core matrix and 22/40 records
+baseline development is in progress with a frozen 40-record core matrix and 24/40 records
 owner-approved. Hyungbae Cho approved the Korean/English `kv-core-both-01` pair on 2026-11-02,
 after one owner-directed correction of the English evidence section label. The two records now
 live in `data/benchmark/core/core-batch-010.jsonl` as the first approved combined
@@ -17,9 +17,9 @@ available. The November 2025 Bank of Korea outlook manifests are also committed.
 Korea document manifest is now dated no earlier than its exact PDF bytes: the November 2025
 Korean report from 2026-03-31 and its English translation from 2026-01-22. The approved
 `kv-core-doc-01` moved to 2026-06-12 and 2026-07-06 cutoffs and was re-approved. The
-owner-selected `kv-core-doc-02` pair, which recovers the November 2025 inflation rationale, is
-complete as two drafts in `data/benchmark/drafts/core-draft-011.jsonl` pending named human
-review; 16 slots remain unauthored. The
+owner-selected `kv-core-doc-02` pair, which recovers the November 2025 inflation rationale, was
+approved on 2026-11-02 and now lives in `data/benchmark/core/core-batch-011.jsonl`. No draft is
+pending review, 16 slots remain unauthored, and no next pair is selected. The
 first nine ADR 0008 slices and work unit C are complete: five machine-readable real-digest traces
 were generated through the actual private offline executor, `ScriptedPlanner`, and committed
 registries and corpora in feature commit `883815b`. The trace set covers all four
@@ -233,8 +233,8 @@ PDFs with owner approval and confirmed the anchored pages and figures. It also c
 English locator section to the literal `Executive Summary ii` in `4365096`, because its former
 suffix did not appear on the page. Approval feature commit `8bc88a1` moved the pair to
 `data/benchmark/core/core-batch-010.jsonl`. Current validation is 76 focused benchmark tests and
-1,193 full-suite tests across 82 formatted Python files. The approved count is 22/40, and the
-exact next action is named human review of only the two `kv-core-doc-02` drafts.
+1,193 full-suite tests across 82 formatted Python files. The approved count is now 24/40 after
+the `kv-core-doc-02` approval, and choosing the next pair or slice is an owner decision.
 Charter v2.5 and
 [ADR 0009](docs/decisions/0009-bok-economic-outlook-public-data-rights.md) additionally record the
 owner-approved `allowed` public-data ruling for official Bank of Korea Economic Outlook

@@ -20,8 +20,8 @@
   committed the first weekly capture, `20261102t101403605391z`, in `fe4f9a9`. The weeks in between
   are a permanent, disclosed gap. Number-normalization 1.0.0, the zero-cost QLoRA preflight, and the paid A40/CUDA 13
   one-step compatibility run are complete. The M1b week-1 gate passed on 2026-07-18. In M2, the
-  40-record core authoring allocation and the first ten core batch files are owner-approved.
-  The approved human-reviewed core count is 22/40: the first four data/abstention records, the
+  40-record core authoring allocation and the first eleven core batch files are owner-approved.
+  The approved human-reviewed core count is 24/40: the first four data/abstention records, the
   first Korean/English documentary pair, the `kv-core-data-02` Korean/English ECOS GDP pair in
   `data/benchmark/core/core-batch-003.jsonl`, the `kv-core-data-03` Korean/English ECOS
   current-account pair in `data/benchmark/core/core-batch-004.jsonl`, the `kv-core-data-04`
@@ -34,10 +34,10 @@
   frontier abstention pair in `data/benchmark/core/core-batch-009.jsonl`, and the
   `kv-core-both-01` Korean/English pair, the first combined `documents_and_data` pair, now in
   `data/benchmark/core/core-batch-010.jsonl`. Hyungbae Cho approved that pair on 2026-11-02 after
-  one owner-directed English section-label correction. The owner-selected `kv-core-doc-02`
-  Korean/English pair is complete at `status=draft` in
-  `data/benchmark/drafts/core-draft-011.jsonl` and awaits named human review; the other 16 matrix
-  slots are unauthored. The offline
+  one owner-directed English section-label correction. The `kv-core-doc-02` Korean/English pair
+  over the November 2025 outlook's inflation rationale is approved in
+  `data/benchmark/core/core-batch-011.jsonl`. The other 16 matrix slots are unauthored, no draft
+  is pending review, and no next pair is selected. The offline
   bilingual temporal document retriever is now
   implemented with manifest-bound chunks and publication-date filtering before scoring; only
   synthetic fixtures were used. The first real bilingual document-manifest unit is also complete:
@@ -308,6 +308,12 @@
   inflation forecast for 2025 and 2026 and its rationale (higher exchange rate and easing
   domestic-demand weakness outweighing lower oil prices), anchored to page 5 of each edition at
   its ADR 0011 cutoff. No PDF body or extracted text entered Git.
+
+- **Owner approval of the November 2025 outlook inflation pair (2026-11-02):** approval feature
+  commit `6cdd13d` records Hyungbae Cho's named decision on the unchanged `kv-core-doc-02`
+  pair (review timestamp `2026-11-02T13:44:04Z`), moves it to
+  `data/benchmark/core/core-batch-011.jsonl`, renames the focused tests to
+  `test_bok_outlook_2025_11_core.py`, and raises the approved-count assertions from 22 to 24.
 
 - **BOK Economic Outlook public-data rights correction — ADR 0009 / charter v2.5 (2026-07-28):**
   the owner confirmed that the official Korean Economic Outlook publication family and official
@@ -2266,21 +2272,36 @@ response bodies.
   passes all 1,193 tests at 100% SovereignLab statement/branch coverage (4,679 statements, 1,568
   branches); Ruff checking and format checking pass across 82 Python files; and all 13 public
   schemas regenerate without drift. Both units cost $0.00.
-- M2 has 22/40 approved records; two drafts await named human review, and 16 slots are
-  unauthored.
+- At that checkpoint M2 had 22/40 approved records, two drafts awaited named human review, and 16
+  slots were unauthored.
 
-## Immediate next action (M2 — named human review of `kv-core-doc-02` only)
+## Session-close snapshot (2026-11-02, thirty-seventh close: kv-core-doc-02 pair approved)
 
-1. Review only `kv-core-doc-02-ko` and `kv-core-doc-02-en` in
-   `data/benchmark/drafts/core-draft-011.jsonl` against the frozen matrix. Check the bilingual
-   wording, the language-specific `as_of` values (2026-03-31 Korean, 2026-01-22 English) and
-   their ADR 0011 basis, route, split, evidence group, parallel group, and the bound document
-   unit. Check the page-anchored evidence (Korean summary page 5, English executive summary
-   page 5) against the hash-matched local PDFs, and the reference answers' Bank of Korea
-   attribution and summarization/paraphrase disclosure.
-2. Do not mark either record approved, move it into `core/`, or raise the approved count above
-   22/40 without an explicit named human decision. Stop after recording that decision and a
-   green full baseline; do not select or author another pair.
+- Approval feature commit `6cdd13d` records Hyungbae Cho's named decision on the unchanged
+  `kv-core-doc-02` pair: reviewer `Hyungbae Cho`, review timestamp `2026-11-02T13:44:04Z`,
+  `annotation.status=approved`, and the `batch-011` tag. It moves the pair from
+  `drafts/core-draft-011.jsonl` to `core/core-batch-011.jsonl`. The focused module is renamed to
+  `tests/benchmark/test_bok_outlook_2025_11_core.py` with approved expectations, and the other
+  nine focused benchmark files raise their approved-count assertions from 22 to 24.
+- The questions, answers, cutoffs, evidence, frozen matrix, source bundle, rights decisions,
+  public schemas, traces, and runtime source are unchanged.
+- Python 3.12.14 validation is green: all 76 tests in the 11 focused benchmark files; 1,193
+  full-suite tests at 100% SovereignLab statement/branch coverage (4,679 statements, 1,568
+  branches); Ruff checking and format checking across 82 Python files; deterministic
+  regeneration of all 13 public schemas without drift. The approval cost $0.00.
+- M2 now has 24/40 owner-approved core records. No draft is pending, and 16 records are
+  unauthored. `kv-core-both-02` can be authored from the committed November 2025 manifests and
+  the existing ECOS GDP snapshot. The other slots need the 2025-05, 2024-11, or 2024-05 outlook
+  manifests, and the `test` slots also need the reserved future data release.
+
+## Immediate next action (M2 — owner selects the next slice)
+
+1. Ask the owner which pair or slice comes next. `kv-core-both-02` is authorable now; every other
+   documentary slot first needs new official outlook manifests under ADR 0009 and dated under
+   ADR 0011, as their own reviewable unit, and `kv-core-both-05` and `kv-core-data-05` stay
+   reserved for the future data release.
+2. Do not select, draft, or approve another pair before that decision, and keep the approved count
+   at 24/40.
 3. Preserve the frozen matrix, approved core, source, rights, schema, trace, and runtime boundaries;
    do not begin provider/live-model integration, paid work, probes, or the deferred bounded loop.
 
@@ -2405,6 +2426,7 @@ complete.
 | 2026-11-02 | November 2025 BOK outlook bilingual manifests | $0.00 | Free official landing-page reads and an owner-approved capture of the two official PDFs into the ignored `data/raw/` for hashing, two strict manifests under the unchanged ADR 0009 family ruling, three focused tests, a verification log, and full offline validation; no benchmark-record, matrix, rights-decision, schema, trace, runtime, provider/live-model, GPU, or paid change |
 | 2026-11-02 | ADR 0011 document-date correction and `kv-core-doc-01` re-review | $0.00 | Offline PDF metadata reads, three manifest date corrections, `kv-core-doc-01` re-dating with the owner's new named review, test updates, and full offline validation; no byte, hash, rights, schema, trace, runtime, provider/live-model, GPU, or paid change |
 | 2026-11-02 | Bilingual November 2025 outlook inflation-rationale draft pair | $0.00 | Exactly two draft records over the committed November 2025 manifests, anchors verified in the hash-matched local PDFs, six focused tests, and full offline validation; no matrix, approved-core, source, rights, schema, trace, runtime, provider/live-model, GPU, or paid change |
+| 2026-11-02 | Owner approval of the November 2025 outlook inflation pair | $0.00 | Named reviewer metadata, lifecycle move to `core-batch-011`, focused-test transition, and offline validation only; no matrix, source, rights, schema, trace, runtime, provider/live-model, GPU, or paid change |
 
 **Cumulative external spend: $0.23584524099715054 / $100.00**
 
@@ -2498,15 +2520,14 @@ Read in this order, in full, before changing anything:
     `tests/retrieval/test_bok_outlook_2025_11_manifests.py` — the committed November 2025 outlook
     document unit for `kv-core-doc-02` and `kv-core-both-02`, its verification record, and its
     publication-fact, family-ruling, and per-language retrieval-cutoff checks.
-32. `data/benchmark/drafts/core-draft-011.jsonl` and
-    `tests/benchmark/test_bok_outlook_2025_11_draft.py` — the pending two-record November 2025
-    outlook inflation-rationale draft pair and its frozen-allocation, no-review-metadata,
-    approved-core-separation, ADR 0011 cutoff, day-before fail-closed, and literal-locator checks.
+32. `data/benchmark/core/core-batch-011.jsonl` and
+    `tests/benchmark/test_bok_outlook_2025_11_core.py` — the approved two-record November 2025
+    outlook inflation-rationale core batch and its frozen-allocation, review-metadata, ADR 0011
+    cutoff, day-before fail-closed, and literal-locator checks.
 
-Then follow "Immediate next action" item 1: review only the two `kv-core-doc-02` drafts. The
-structural matrix and first twenty-two records are owner-approved; the other 18 slots remain
-unapproved, with two pending drafts and 16 unauthored slots. No later pair or implementation
-slice has been selected.
+Then follow "Immediate next action" item 1: ask the owner which pair or slice comes next. The
+structural matrix and first twenty-four records are owner-approved; the other 16 slots are
+unauthored, no draft is pending, and no later pair or implementation slice has been selected.
 The synthetic retrieval baseline and first real bilingual document manifests are complete. ADR
 0009 resolves those
 manifests to `allowed`, but full PDFs and extracted full text remain outside Git by current

@@ -1,7 +1,7 @@
 # SovereignLab CV bullets
 
 - Status: wording bank; use only the section matching the achieved milestone
-- Last updated: 2026-11-02 (M2 mid-window refresh: 22/40 approved core including the first
+- Last updated: 2026-11-02 (M2 mid-window refresh: 24/40 approved core including the first
   combined document-plus-data pair, ADR 0008 slices 1–9 and work unit C complete, weekly harvester
   repaired under ADR 0010, document dates corrected under ADR 0011,
   82-file/1,193-test baseline)
@@ -20,7 +20,7 @@
   at the requested cutoff cannot be proven.
 - Building **K-VINTAGE**, a bilingual Korean/English benchmark whose gold answers depend on the
   official-statistics vintage available at each question's `as_of` date: the 40-question
-  human-reviewed core allocation is frozen and 22/40 records are reviewed and approved so far —
+  human-reviewed core allocation is frozen and 24/40 records are reviewed and approved so far —
   four data/abstention records over the OECD Korea CLI revision archive plus a Korean/English
   documentary pair grounded in the Bank of Korea's May 2026 Economic Outlook and its independently
   dated official English translation, Korean/English data pairs over the 2026-07-17 ECOS GDP and
@@ -63,7 +63,7 @@
   `as_of` date (prior art: arXiv 2605.23497, the Dallas Fed real-time OECD dataset, and the OECD MEI
   revisions database), built on **KOR-RTD** — a provenance-contracted point-in-time archive of Korean
   macro data with append-only checksummed captures and a fail-closed vintage resolver. Current
-  state: 22/40 reviewed-and-approved bilingual core records, cutoff-filtered bilingual temporal
+  state: 24/40 reviewed-and-approved bilingual core records, cutoff-filtered bilingual temporal
   retrieval over a committed synthetic corpus, a frozen typed execution-and-trace contract within
   the project's 13 public JSON Schemas, three deterministic evidence tools behind a replay-checked
   dispatcher, a private provenance-bound offline executor, and `typed function calling with

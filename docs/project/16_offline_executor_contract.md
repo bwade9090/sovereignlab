@@ -422,10 +422,19 @@ November 2025 outlook's inflation rationale: CPI inflation of 2.1% in both 2025 
 higher exchange rate and easing domestic-demand weakness outweigh lower oil prices. They are
 anchored to the Korean summary page 5 (`요약 1/7`) and the English executive summary page 5
 (`Executive Summary i`), at each edition's corrected cutoff (2026-03-31 Korean, 2026-01-22
-English). The approved core remains 22/40; two draft records are pending named human review, and
-16 matrix slots remain unauthored.
+English). At that checkpoint the approved core remained 22/40; two draft records were pending
+named human review, and 16 matrix slots remained unauthored.
 
-The exact next independent slice is only named human review of those two drafts. Do not
-pre-approve or move them into `core/`, increase the approved count, or select or author another
-pair before that decision. Provider or live-model integration remains absent, and the bounded tool
-loop deferred by ADR 0008 remains outside the authoring slices.
+That review gate completed on 2026-11-02 at approval feature commit `6cdd13d`. Hyungbae Cho
+approved exactly the two `kv-core-doc-02` records without a substantive change. They now live in
+`data/benchmark/core/core-batch-011.jsonl`, the focused module is
+`tests/benchmark/test_bok_outlook_2025_11_core.py`, and the approved core is 24/40 with 16 matrix
+slots unauthored. This was a lifecycle-only transition: the questions, answers, cutoffs, evidence,
+frozen matrix, execution contracts and runtime, source bytes and manifests, rights decisions, 13
+public schemas, and five committed traces remain unchanged.
+
+No draft review candidate remains, and no later pair or slice is selected; choosing the next one
+is an owner decision. `kv-core-both-02` is authorable from the committed November 2025 manifests,
+and the other remaining slots need earlier outlook releases or the reserved future data release.
+Provider or live-model integration remains absent, and the bounded tool loop deferred by ADR 0008
+remains outside the authoring slices.

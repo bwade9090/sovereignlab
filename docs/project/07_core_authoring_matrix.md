@@ -1,7 +1,7 @@
 # K-VINTAGE human-reviewed core authoring matrix 1.0.0
 
-- Status: structural allocation frozen; first twenty-two records owner-approved; `kv-core-doc-02`
-  drafted and pending named human review
+- Status: structural allocation frozen; first twenty-four records owner-approved; no draft pending
+  named human review
 - Date: 2026-11-02
 - Scope authority: charter v2.5 §5 and M2 continuation order
 - Canonical matrix: `data/benchmark/core-authoring-matrix-v1.json`
@@ -70,8 +70,8 @@ changed from `draft-002` to `batch-002` when the file moved into `core/`.
 At the 2026-07-29 checkpoint, these two records brought the approved human-reviewed core to 6/40.
 The later ECOS GDP, ECOS current-account, KOSIS CPI, OECD scope abstention, CPI revision
 false-premise abstention, missing-as-of abstention, and ledger frontier abstention approvals
-described below bring the current total to 20/40. The BOK outlook CLI combined draft described
-after them accounts for two of the 20 unapproved records; the other 18 remain unauthored and
+described below, followed by the BOK outlook CLI combined and November 2025 outlook inflation
+approvals, bring the current total to 24/40; the other 16 slots remain unauthored and
 unapproved.
 
 ## 4. Approved ECOS GDP pair
@@ -427,8 +427,8 @@ regenerate deterministically, the five committed traces remain unchanged, and th
 $0.00. The frozen matrix, source bundle, rights decisions, source package, and execution runtime
 did not change.
 
-That approval brings the approved core to 22/40 (batch 001 has four records, and batches
-002..010 have two each), leaving no draft review candidate in the committed tree. The other 18
+That approval brought the approved core to 22/40 (batch 001 has four records, and batches
+002..010 have two each), leaving no draft review candidate at that checkpoint. The other 18
 records are unauthored: the `kv-core-doc-02`..`kv-core-doc-05` and
 `kv-core-both-02`..`kv-core-both-05` pairs, which need earlier Bank of Korea outlook releases
 (and, for `kv-core-both-05`, the reserved future data release), and the reserved
@@ -438,9 +438,9 @@ manifests (`bok-outlook-2025-11-ko`, `bok-outlook-2025-11-en`) for document unit
 `bok-outlook-release-2025-11`. `kv-core-doc-02` and `kv-core-both-02` therefore became
 authorable, and the owner selected `kv-core-doc-02`, described below.
 
-## 12. Draft November 2025 outlook inflation pair
+## 12. Approved November 2025 outlook inflation pair
 
-Feature commit `5465eca` adds exactly the frozen `kv-core-doc-02` Korean/English pair to
+Feature commit `5465eca` added exactly the frozen `kv-core-doc-02` Korean/English pair to
 `data/benchmark/drafts/core-draft-011.jsonl` at `annotation.status=draft`. Both records use the
 `documents` route, `train` split, `eg-doc-bok-outlook-2025-11` evidence group, and
 `kv-core-doc-02` parallel group, and bind document unit `bok-outlook-release-2025-11` exactly as
@@ -455,19 +455,22 @@ and the English executive summary page 5 (`Executive Summary i`), verified in th
 hash-matched local PDFs. Each record's `as_of` equals its edition's ADR 0011 date: 2026-03-31 for
 Korean and 2026-01-22 for English. Because the February 2026 outlook had appeared by the Korean
 cutoff, both questions name the November 2025 edition explicitly. The reference answers
-attribute the Bank of Korea and disclose summarization and paraphrase. The annotations record
-`annotated_by="Claude AI draft"`, contain no reviewer metadata, and carry the `core`,
-`temporal`, `documents`, `bok-outlook`, and `draft-011` tags.
+attribute the Bank of Korea and disclose summarization and paraphrase. The approved records
+preserve the AI author (`Claude AI draft`), add the named reviewer and aware review timestamp,
+record `annotation.status=approved`, and carry the `core`, `temporal`, `documents`,
+`bok-outlook`, and `batch-011` tags. The questions, answers, evidence, cutoffs, route, split,
+groups, and record IDs did not change during review.
 
-The pair-specific focused test file `tests/benchmark/test_bok_outlook_2025_11_draft.py` passes
-six tests. They check the frozen allocation and absent review metadata, that the approved core
-remains twenty-two and the drafts stay separate, a real `BenchmarkBundle` at each edition's own
-cutoff, fail-closed validation on the day before each edition, and the literal locators,
-attribution, and paraphrase disclosure. The 11 focused benchmark files pass 76 tests, and the
-full suite passes 1,193 tests at 100% SovereignLab statement/branch coverage across 82
-Ruff-formatted Python files. The approved core remains 22/40. These two drafts and the 16
-unauthored slots make up the other 18 unapproved records. The exact next action is named human
-review of only `kv-core-doc-02-ko` and `kv-core-doc-02-en`.
+Hyungbae Cho approved both records on 2026-11-02 with review timestamp `2026-11-02T13:44:04Z`.
+Approval feature commit `6cdd13d` moved the pair to `data/benchmark/core/core-batch-011.jsonl`
+and renamed the focused test file to `tests/benchmark/test_bok_outlook_2025_11_core.py`, whose
+six tests check the frozen allocation and review metadata, that the approved core contains
+twenty-four records, a real `BenchmarkBundle` at each edition's own cutoff, fail-closed
+validation on the day before each edition, and the literal locators, attribution, and
+paraphrase disclosure. The 11 focused benchmark files pass 76 tests, and the full suite passes
+1,193 tests at 100% SovereignLab statement/branch coverage across 82 Ruff-formatted Python
+files. The approved core is now 24/40, no draft is pending, and 16 slots remain unauthored. No
+later pair or slice is selected; choosing the next one is an owner decision.
 
 ## 13. Approval records
 
@@ -539,6 +542,12 @@ On 2026-11-02, after ADR 0011 moved the `kv-core-doc-01` cutoffs and question da
 new named review. Their review timestamp is now `2026-11-02T13:35:01Z`; nothing else in the
 records changed.
 
+On 2026-11-02, Hyungbae Cho explicitly approved both records in the `kv-core-doc-02` November
+2025 outlook inflation pair without a substantive change. Approval feature commit `6cdd13d`
+records reviewer `Hyungbae Cho`, review timestamp `2026-11-02T13:44:04Z`,
+`annotation.status=approved`, the `batch-011` lifecycle tag, and the move from
+`drafts/core-draft-011.jsonl` to `core/core-batch-011.jsonl`.
+
 ## 14. Human-review checklist
 
 For each bilingual pair, the reviewer must verify:
@@ -569,7 +578,7 @@ python -m pytest tests/benchmark/test_cpi_revision_abstain_core.py
 python -m pytest tests/benchmark/test_missing_as_of_abstain_core.py
 python -m pytest tests/benchmark/test_ledger_frontier_abstain_core.py
 python -m pytest tests/benchmark/test_bok_cli_both_core.py
-python -m pytest tests/benchmark/test_bok_outlook_2025_11_draft.py
+python -m pytest tests/benchmark/test_bok_outlook_2025_11_core.py
 python -m ruff check .
 python -m ruff format --check .
 ```
@@ -580,24 +589,24 @@ normalization 1.0.0, and checks the earlier-cutoff abstention.
 
 The documentary-core test validates both records against their strict manifests and the frozen
 matrix, enforces language-specific publication cutoffs and split-group integrity, verifies the
-named reviewer metadata, and confirms the current approved count is twenty-two.
+named reviewer metadata, and confirms the current approved count is twenty-four.
 
 The ECOS GDP core test validates both approved records and named-review metadata against the frozen
 matrix, existing snapshot, manifest, checksum, rights decision, and normalization rule. At its
 approval checkpoint, the first three focused benchmark files passed 27 tests; the approved count it
-verifies is now twenty-two.
+verifies is now twenty-four.
 
 The ECOS current-account core test validates both approved records and named-review metadata
 against the frozen allocation, existing snapshot, manifest, checksum, rights decision, exact
 `202605` observation, normalization rule, attribution, and prior-day abstention. At its approval
 checkpoint, the first four focused benchmark files passed 33 tests; the approved count it verifies
-is now twenty-two.
+is now twenty-four.
 
 The KOSIS CPI core test validates both approved records and named-review metadata against the
 frozen allocation, existing snapshot, manifest, checksum, rights decision, exact `202606`
 observation, normalization rule, attribution, and prior-day abstention. At its approval
 checkpoint, the first five focused benchmark files passed 39 tests; the approved count it verifies
-is now twenty-two.
+is now twenty-four.
 
 The OECD scope abstention core test validates both approved records and named-review metadata
 against the frozen allocation and the committed rights decisions, confirms they bind no source
@@ -605,7 +614,7 @@ units and carry no tool expectations or reference answers, proves through the ap
 contrast that the abstention is rights-driven rather than availability-driven, and asserts the
 serialized records contain neither the `102.66` observation nor the CLI source or ledger
 identifiers. At its approval checkpoint, the first six focused benchmark files passed 45 tests;
-the approved count it verifies is now twenty-two.
+the approved count it verifies is now twenty-four.
 
 The CPI revision abstention core test validates both approved records and named-review metadata
 against the frozen allocation and the committed rights decisions, confirms they bind no source
@@ -614,7 +623,7 @@ decision is the approved CLI scope, asserts the serialized records leak no obser
 no snapshot identifier, and proves the only approved CPI evidence in KOR-RTD — the KOSIS
 latest-only snapshot — carries `vintage_semantics=latest_only`, so committed evidence cannot
 serve any CPI revision by construction. At its approval checkpoint, the first seven focused
-benchmark files passed 51 tests; the approved count it verifies is now twenty-two.
+benchmark files passed 51 tests; the approved count it verifies is now twenty-four.
 
 The missing-as-of abstention core test validates both approved records and named-review metadata
 against the frozen allocation, confirms they bind no source units and carry no tool expectations
@@ -624,7 +633,7 @@ value and no snapshot or ledger identifier, and proves through an explicit-cutof
 the same request resolves once a 2026-07-09 cutoff is supplied (edition `202607`, value `102.66`
 from the owner-approved CLI scope), so the approved abstention is missing-cutoff driven rather
 than availability- or rights-driven. At its approval checkpoint, the first eight focused
-benchmark files passed 57 tests; the approved count it verifies is now twenty-two.
+benchmark files passed 57 tests; the approved count it verifies is now twenty-four.
 
 The ledger frontier abstention core test validates both approved records and named-review
 metadata against the frozen allocation, confirms they bind no source units and carry no tool
@@ -634,7 +643,7 @@ through a pre-frontier contrast that a 2026-07-09 cutoff still selects edition `
 approved abstention is frontier-driven rather than rights- or premise-driven, and asserts the
 serialized records leak no edition code, no observation value, and no snapshot or ledger
 identifier. At its approval checkpoint, the first nine focused benchmark files passed 63 tests;
-the approved count it verifies is now twenty-two.
+the approved count it verifies is now twenty-four.
 
 The BOK outlook CLI combined core test validates both approved `kv-core-both-01` records and
 named-review metadata against the frozen allocation, pins both literal page-section labels,
@@ -644,11 +653,11 @@ CLI gold through the real fail-closed resolver, checks the bilingual document-pl
 proves the English record fails closed before its corrected 2026-07-06 release date, and
 confirms a pre-availability ledger cutoff (2026-06-30) still abstains. At its approval
 checkpoint, the ten focused benchmark files passed 70 tests; the approved count it verifies is
-twenty-two.
+now twenty-four.
 
-The November 2025 outlook draft test validates the two unapproved `kv-core-doc-02` records
-against the frozen allocation, confirms they carry no reviewer metadata and leave the approved
-core and drafts separate, builds a real `BenchmarkBundle` over both November 2025 manifests at
-each edition's ADR 0011 cutoff, proves each record fails closed on the day before its edition,
-and pins the literal locators, attribution, and paraphrase disclosure. It adds six tests,
-bringing the focused benchmark suite to 76 while the approved count remains twenty-two.
+The November 2025 outlook core test validates both approved `kv-core-doc-02` records and
+named-review metadata against the frozen allocation, builds a real `BenchmarkBundle` over both
+November 2025 manifests at each edition's ADR 0011 cutoff, proves each record fails closed on
+the day before its edition, and pins the literal locators, attribution, and paraphrase
+disclosure. With it, the 11 focused benchmark files pass 76 tests, and the approved count it
+verifies is twenty-four.

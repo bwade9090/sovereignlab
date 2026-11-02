@@ -29,7 +29,8 @@ records, `core/core-batch-008.jsonl` contains the two approved missing-as-of abs
 records, `core/core-batch-009.jsonl` contains the two approved ledger frontier abstention
 records, and `core/core-batch-010.jsonl` contains the two approved BOK outlook CLI combined
 records. Their annotations preserve the AI author and name the human reviewer and review
-timestamp. Together they total 22/40 approved records.
+timestamp. `core/core-batch-011.jsonl` contains the two approved November 2025 outlook inflation
+records. Together they total 24/40 approved records.
 
 The Korean/English `kv-core-data-03` pair was completed as
 `drafts/core-draft-004.jsonl` on 2026-08-20 in feature commit `50c4d9c`. Hyungbae Cho approved both
@@ -210,7 +211,7 @@ At that approval checkpoint, the combined focused benchmark suite passed 70 test
 files, and the full suite passed 1,184 at 100% SovereignLab statement/branch coverage across 80
 Ruff-formatted Python files. The 13 public schemas and five committed traces were unchanged.
 
-Feature commit `5465eca` adds exactly `kv-core-doc-02-ko` and `kv-core-doc-02-en` at
+Feature commit `5465eca` added exactly `kv-core-doc-02-ko` and `kv-core-doc-02-en` at
 `annotation.status=draft` in `drafts/core-draft-011.jsonl`. Both use the frozen `documents` route,
 `train` split, `eg-doc-bok-outlook-2025-11` evidence group, parallel group `kv-core-doc-02`, and
 document unit `bok-outlook-release-2025-11`. Matching the frozen intent, they recover one
@@ -219,11 +220,16 @@ and 2026, as the higher exchange rate and easing domestic-demand weakness outwei
 prices. The anchors are the Korean summary page 5 (`요약 1/7`) and the English executive summary
 page 5 (`Executive Summary i`). Each `as_of` equals its edition's ADR 0011 date: 2026-03-31 for
 Korean and 2026-01-22 for English. Six focused tests in
-`tests/benchmark/test_bok_outlook_2025_11_draft.py` bring the focused benchmark suite to 76
+`tests/benchmark/test_bok_outlook_2025_11_draft.py` brought the focused benchmark suite to 76
 tests across 11 files, and the full suite passes 1,193 tests across 82 Ruff-formatted Python
-files. The approved count remains 22/40: two of the other 18 records are drafts and 16 remain
-unauthored. The exact next action is named human review of only these two drafts; do not
-pre-approve them or select another pair.
+files.
+
+Hyungbae Cho approved both records on 2026-11-02 without a substantive change, with review
+timestamp `2026-11-02T13:44:04Z`. Approval feature commit `6cdd13d` moved them to
+`core/core-batch-011.jsonl` and renamed the focused module to
+`tests/benchmark/test_bok_outlook_2025_11_core.py`. The approved count is now 24/40, no draft
+is pending, and 16 records remain unauthored. No later pair or slice is selected; choosing the
+next one is an owner decision.
 
 The matrix assigns every planned documentary or data source unit to one dataset split. Do not
 replace a reserved unit or move a pair between splits without a versioned matrix change, tests, and
