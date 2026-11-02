@@ -63,7 +63,8 @@ slice is selected; choosing it is an owner decision.
   permanent and must not be backfilled.
 - Completed: fail-closed vintage resolver, weekly append-only harvester, approved ECOS/KOSIS/OECD
   captures, number normalization, offline bilingual temporal retrieval, strict Korean/English Bank
-  of Korea May-2026 Outlook manifests, the approved `kv-core-doc-01` documentary pair, and strict
+  of Korea May-2026 and November-2025 Outlook manifests, the approved `kv-core-doc-01`
+  documentary pair, and strict
   execution/trace contract 1.0.0 with 13 deterministic public schemas. The trusted latest-only
   snapshot registry, deterministic `read_snapshot_as_of` adapter, trusted synthetic retrieval
   registry, typed `retrieve_temporal_documents` adapter, trusted historical STES registry, and
@@ -173,8 +174,16 @@ slice is selected; choosing it is an owner decision.
   `4365096`, it records only the named review decision, approval metadata, lifecycle tag, file
   move into `core/`, and focused-test transition. The frozen matrix, source bundle, rights
   decisions, public schemas, source package, and execution runtime are unchanged.
-- Exact next outcome: none selected. The owner chooses the next pair or slice; every remaining
-  slot needs an earlier Bank of Korea outlook release or the reserved future data release.
+- The 2026-11-02 November 2025 outlook manifest feature commit is `33a687a`. It adds
+  `bok-outlook-2025-11-ko` (published 2025-11-27) and `bok-outlook-2025-11-en` (official English
+  full translation, published 2026-01-22) for document unit `bok-outlook-release-2025-11`. Both
+  are `allowed` under the unchanged ADR 0009 family ruling, with three focused tests and the
+  verification log `docs/discovery/05_bok_outlook_2025_11_manifest_log.md`. The PDFs stay in the
+  Git-ignored `data/raw/`. No benchmark record, matrix row, rights decision, schema, trace, or
+  source module changed.
+- Exact next outcome: none selected. The owner chooses the next pair or slice. The committed
+  November 2025 manifests make `kv-core-doc-02` and `kv-core-both-02` authorable; every other
+  remaining slot needs an earlier outlook release or the reserved future data release.
 - Until the owner selects one, do not author, draft, or approve another pair; the approved core
   count remains 22/40.
 - Not implemented yet: a provider or live-model integration or the bounded tool loop. The five
@@ -198,16 +207,19 @@ The named human review of `kv-core-both-01` is complete. Hyungbae Cho approved b
 The approved core is 22/40, and no draft review candidate remains. The other 18 records are
 unauthored:
 
-- `kv-core-doc-02`..`kv-core-doc-05` (`documents`) need the Bank of Korea outlook releases of
-  2025-11, 2025-05, 2024-11, and 2024-05, whose manifests are not yet committed.
-- `kv-core-both-02`..`kv-core-both-04` (`documents_and_data`) combine those releases with the
-  existing ECOS GDP, ECOS current-account, and KOSIS CPI snapshots.
+- `kv-core-doc-02` (`documents`) and `kv-core-both-02` (`documents_and_data`, with the existing
+  ECOS GDP snapshot) can now be authored. Their document unit `bok-outlook-release-2025-11` is
+  committed as `bok-outlook-2025-11-ko` and `bok-outlook-2025-11-en`. English records over it need
+  an `as_of` on or after 2026-01-22, the English translation's own publication date.
+- `kv-core-doc-03`..`kv-core-doc-05` and `kv-core-both-03`..`kv-core-both-04` need the outlook
+  releases of 2025-05, 2024-11, and 2024-05, whose manifests are not yet committed.
 - `kv-core-both-05` and `kv-core-data-05` (`test` split) need the reserved future data release.
 
 Rules until the owner chooses:
 
-- Do not select, draft, or approve another pair. Each remaining documentary slot first needs new
-  official document manifests under the ADR 0009 family ruling, which is its own reviewable unit.
+- Do not select, draft, or approve another pair. Each documentary slot other than
+  `kv-core-doc-02` and `kv-core-both-02` first needs new official document manifests under the
+  ADR 0009 family ruling, which is its own reviewable unit.
 - Do not alter the matrix, source, rights decisions, or public schemas, add probes, add a provider
   or live-model call, start the deferred bounded loop, or initiate a paid operation as part of
   choosing the next slice.
@@ -403,8 +415,8 @@ commit that machine-specific path. Do not reuse a `.venv` whose interpreter chec
 The Windows requirements include a `win32`-only `tzdata` pin because a standard Windows Python
 installation has no system IANA timezone database.
 
-The 2026-11-02 handoff baseline is 13 deterministic public schemas, 80 formatted Python files,
-1,184 passing tests, and 100% SovereignLab statement/branch coverage (4,679 statements, 1,568
+The 2026-11-02 handoff baseline is 13 deterministic public schemas, 81 formatted Python files,
+1,187 passing tests, and 100% SovereignLab statement/branch coverage (4,679 statements, 1,568
 branches). The focused benchmark acceptance run is 70 passing tests. A different result is a
 diagnostic signal: stop before implementation and record the discrepancy in
 `docs/PROJECT_STATUS.md`.

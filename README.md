@@ -13,7 +13,9 @@ page-anchored document evidence entry with one `resolve_stes_as_of` tool expecta
 shared `as_of` cutoff 2026-07-09. By that cutoff both document publications had been released,
 and the committed edition-availability ledger proves CLI edition `202607` was demonstrably
 available. No draft is pending review, the other 18 slots are unauthored, and no next pair is
-selected. The
+selected. The November 2025 Bank of Korea outlook manifests are also committed (Korean report
+2025-11-27, official English translation 2026-01-22), which makes `kv-core-doc-02` and
+`kv-core-both-02` authorable. The
 first nine ADR 0008 slices and work unit C are complete: five machine-readable real-digest traces
 were generated through the actual private offline executor, `ScriptedPlanner`, and committed
 registries and corpora in feature commit `883815b`. The trace set covers all four
@@ -24,8 +26,8 @@ executor descriptor still pins 32 source entries and digest
 `08f45dab6a36a49cb7d0b588a69236942cd61534540bd4de0772010402dada64`.
 The focused executor/replay-trace acceptance run passes 80 tests at 100% coverage over 326
 statements and 98 branches, and the focused benchmark acceptance run passes 70 tests. The full
-offline baseline is 1,184 tests at 100% statement/branch coverage (4,679 statements, 1,568
-branches) across 80 Ruff-formatted Python files. The shipped
+offline baseline is 1,187 tests at 100% statement/branch coverage (4,679 statements, 1,568
+branches) across 81 Ruff-formatted Python files. The shipped
 minimal reference path is described only as `typed function calling with committed traces`. These
 are deterministic offline replays, not provider or live outputs; no provider/live integration or
 bounded tool loop exists, and no model-quality or briefing-performance claim is made. Searchable
@@ -226,7 +228,7 @@ PDFs with owner approval and confirmed the anchored pages and figures. It also c
 English locator section to the literal `Executive Summary ii` in `4365096`, because its former
 suffix did not appear on the page. Approval feature commit `8bc88a1` moved the pair to
 `data/benchmark/core/core-batch-010.jsonl`. Current validation is 70 focused benchmark tests and
-1,184 full-suite tests across 80 formatted Python files. The approved count is 22/40, and choosing
+1,187 full-suite tests across 81 formatted Python files. The approved count is 22/40, and choosing
 the next pair or slice is an owner decision.
 Charter v2.5 and
 [ADR 0009](docs/decisions/0009-bok-economic-outlook-public-data-rights.md) additionally record the

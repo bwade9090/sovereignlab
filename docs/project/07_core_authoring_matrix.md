@@ -430,7 +430,10 @@ records are unauthored: the `kv-core-doc-02`..`kv-core-doc-05` and
 `kv-core-both-02`..`kv-core-both-05` pairs, which need earlier Bank of Korea outlook releases
 (and, for `kv-core-both-05`, the reserved future data release), and the reserved
 `kv-core-data-05` pair. No later pair or slice is selected; choosing the next one is an owner
-decision.
+decision. On 2026-11-02, feature commit `33a687a` committed the November 2025 outlook
+manifests (`bok-outlook-2025-11-ko`, `bok-outlook-2025-11-en`) for document unit
+`bok-outlook-release-2025-11`. `kv-core-doc-02` and `kv-core-both-02` are therefore authorable,
+but neither is selected.
 
 ## 12. Approval records
 

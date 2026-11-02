@@ -1,9 +1,10 @@
 # Cross-machine continuation handoff
 
 - Legacy filename: retained so existing links and onboarding instructions do not break.
-- Prepared: 2026-07-16; refreshed 2026-11-02 after the owner approval of the `kv-core-both-01`
-  pair (thirty-fourth refresh: approved core 22/40, no draft pending, next slice is the owner's
-  choice; the thirty-third refresh recorded the ADR 0010 weekly harvester repair)
+- Prepared: 2026-07-16; refreshed 2026-11-02 after the November 2025 outlook manifest unit
+  (thirty-fifth refresh: `kv-core-doc-02` and `kv-core-both-02` are now authorable, approved core
+  22/40, and the next slice is the owner's choice; the thirty-fourth refresh recorded the
+  `kv-core-both-01` approval and the thirty-third the ADR 0010 weekly harvester repair)
 - Target continuation machine: Windows workstation
 - Authority: charter v2.5; accepted ADRs 0001–0010
 - Branch to continue: `main` from `origin`
@@ -14,6 +15,7 @@
   digest replay traces are complete; Hyungbae Cho approved the `kv-core-both-01` Korean/English
   pair after one owner-directed English section-label correction, so the core is 22/40; no draft
   is pending, and no later pair or slice is selected
+- Completed November 2025 outlook manifest checkpoint: `33a687a` (`feat: add November 2025 outlook bilingual manifests`).
 - Completed BOK outlook CLI combined approval checkpoints: `4365096` (`fix: correct kv-core-both-01-en evidence section label`) and `8bc88a1` (`feat: approve BOK outlook CLI combined bilingual pair`).
 - Completed weekly harvester repair checkpoints: `a3067f5` (`fix: keep post-v1 weekly captures archive-only in registry tests`), `d4a8c22` (`fix: retry harvester connects and pin the capture runner`), and `20733a8` (`docs: record ADR 0010 weekly capture admission`); first committed weekly capture `fe4f9a9` (`data: capture weekly KOR-RTD snapshot`).
 - Completed BOK outlook CLI combined draft functional checkpoint: `933c0e9` (`feat: add BOK outlook CLI combined bilingual drafts`).
@@ -425,6 +427,13 @@ If local `main` has diverged from `origin/main`, stop rather than rewriting hist
   branches). Ruff check plus format check passed across 80 Python files, and all 13 public
   schemas regenerated without drift. The matrix, source, rights, schema, trace, and runtime
   boundaries are unchanged, and no PDF body or extracted text entered Git; cost was $0.00.
+- November 2025 outlook manifest unit validated 2026-11-02 on macOS/Python 3.12.14. Both
+  owner-approved captures matched the servers' advertised byte lengths. After feature commit
+  `33a687a`, the three new focused manifest tests passed, and the full suite passed all 1,187
+  tests with 100% SovereignLab statement/branch coverage (4,679 statements, 1,568 branches).
+  Ruff check plus format check passed across 81 Python files, and all 13 public schemas
+  regenerated without drift. No benchmark record, matrix, rights decision, schema, trace, or
+  source module changed, and no PDF body or extracted text entered Git; cost was $0.00.
 
 ## 2. Set up and validate the Windows machine
 
@@ -452,8 +461,8 @@ $venvPython = (Resolve-Path .\.venv\Scripts\python.exe).Path
 git diff --exit-code
 ```
 
-Expected handoff baseline: Python 3.12, 13 deterministic public schemas, 80 formatted Python
-files, 1,184 passing tests, 100% SovereignLab statement/branch coverage (4,679 statements, 1,568
+Expected handoff baseline: Python 3.12, 13 deterministic public schemas, 81 formatted Python
+files, 1,187 passing tests, 100% SovereignLab statement/branch coverage (4,679 statements, 1,568
 branches), and no unexpected Git diff.
 On this workstation, the ignored repository-root `.pytest_tmp` can retain an access-denying ACL
 and make the canonical pytest command report only tmp-path setup errors. Do not treat that known
@@ -587,9 +596,10 @@ gate.
   other 18 matrix slots are unauthored.
 - The field names and allocation in the approved matrix and ten core batches are intentionally
   unchanged. Do not rename them or alter the frozen allocation.
-- Two real BOK document manifests are committed, but no provider report body or extracted provider
-  text has been added. ADR 0009 classifies the manifests as `allowed`; their absence is a
-  repository-scope choice, and the committed searchable retrieval corpus remains entirely
+- Four real BOK document manifests are committed: the May 2026 and November 2025 editions, each in
+  Korean and as the official English full translation. No provider report body or extracted
+  provider text has been added. ADR 0009 classifies the manifests as `allowed`; leaving the bodies
+  out is a repository-scope choice, and the committed searchable retrieval corpus remains entirely
   synthetic.
 - With explicit owner approval, the two official Bank of Korea May 2026 Economic Outlook PDF
   bodies were re-fetched from their committed canonical BOK URLs into the Git-ignored `data/raw/`
@@ -598,7 +608,10 @@ gate.
   extracted text enters Git; the local verified copies exist to author page-anchored document
   evidence, and the re-fetch cost USD 0.00. On 2026-11-02 the same two PDFs were re-fetched with
   owner approval into `data/raw/` on the macOS machine for the `kv-core-both-01` review. They
-  matched byte-for-byte, and that re-fetch also cost USD 0.00.
+  matched byte-for-byte, and that re-fetch also cost USD 0.00. The same day, with owner approval,
+  the two November 2025 PDFs were captured into `data/raw/` on the macOS machine to create their
+  manifests. A Windows workstation that authors `kv-core-doc-02` or `kv-core-both-02` must re-fetch
+  them and verify byte size and SHA-256 against the committed manifests first.
 
 ## 5. Exact continuation order
 
@@ -1050,12 +1063,26 @@ pair to `data/benchmark/core/core-batch-010.jsonl`. The focused module is now
 `tests/benchmark/test_bok_cli_both_core.py`. The approved core is 22/40, no draft is pending,
 and 18 slots are unauthored.
 
+### Completed November 2025 outlook manifest unit
+
+On the owner's choice, feature commit `33a687a` adds `bok-outlook-2025-11-ko` (registered
+2025-11-27, `nttId=10094817`) and `bok-outlook-2025-11-en` (official English full translation,
+registered 2026-01-22, `nttId=10096024`) for document unit `bok-outlook-release-2025-11`. The
+owner-approved captures into the Git-ignored `data/raw/` measured 17,435,251 and 7,033,792 bytes
+with exact SHA-256 values. Neither landing page carries an edition-specific licence. The English
+PDF's commercial-permission and source-credit notices match the already-ruled May 2026 English
+edition, so both manifests record `allowed` under the unchanged ADR 0009 family ruling. Three
+focused tests in `tests/retrieval/test_bok_outlook_2025_11_manifests.py` and the verification log
+`docs/discovery/05_bok_outlook_2025_11_manifest_log.md` accompany them. No benchmark record,
+matrix row, rights decision, schema, trace, or source module changed.
+
 The exact continuation order is therefore:
 
-1. Ask the owner which pair or slice comes next. The remaining documentary slots
-   (`kv-core-doc-02`..`kv-core-doc-05`, `kv-core-both-02`..`kv-core-both-05`) need earlier Bank of
-   Korea outlook releases whose manifests are not committed. `kv-core-both-05` and
-   `kv-core-data-05` also need the reserved future data release.
+1. Ask the owner which pair or slice comes next. `kv-core-doc-02` and `kv-core-both-02` can now be
+   authored from the November 2025 manifests (English records need an `as_of` on or after
+   2026-01-22). The other documentary slots need the 2025-05, 2024-11, or 2024-05 outlook
+   releases, whose manifests are not committed, and `kv-core-both-05` and `kv-core-data-05` also
+   need the reserved future data release.
 2. Do not select, draft, or approve another pair before that decision, and keep the approved count
    at 22/40.
 3. Preserve the frozen matrix, approved core, source, rights, schema, trace, and runtime boundaries;
@@ -1081,6 +1108,8 @@ owner authorization.
   its separate named human review is complete.
 - Do not redo the first real BOK document manifests, revert their ADR 0009 `allowed` conclusion, or
   merge full-document/corpus ingestion into the completed GDP authoring or approval units.
+- Do not redo the November 2025 outlook manifests or rewrite them in place; any content change at
+  their stable URLs needs new manifests.
 - Do not replace the retrieval baseline with embeddings yet. Its filter-before-scoring invariant
   and synthetic future-document regression are already complete.
 - Do not rerun the paid QLoRA compatibility spike. It passed, all Pods were deleted, and it is not
