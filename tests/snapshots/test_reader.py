@@ -13,6 +13,7 @@ from pydantic import ValidationError
 
 import sovereignlab.snapshots.reader as reader_module
 import sovereignlab.snapshots.registry as registry_module
+from sovereignlab.harvest.weekly import HarvestSummary
 from sovereignlab.schemas import (
     RedistributionStatus,
     RightsCatalog,
@@ -218,10 +219,12 @@ def test_committed_registry_loads_only_the_three_explicit_approved_scopes(
     assert committed_registry.descriptor_sha256 == SNAPSHOT_REGISTRY_DESCRIPTOR_SHA256
 
 
-def test_explicit_locations_cover_every_current_approved_snapshot_manifest() -> None:
+def _approved_snapshot_captures(repository_root: Path) -> dict[Path, datetime]:
+    """Map every approved latest-only snapshot manifest to its capture instant."""
+
     approved_scopes = {binding.scope for binding in SNAPSHOT_SERIES_BINDINGS}
-    discovered: set[Path] = set()
-    for path in (REPOSITORY_ROOT / "data" / "manifests").glob("*.json"):
+    approved: dict[Path, datetime] = {}
+    for path in (repository_root / "data" / "manifests").glob("*.json"):
         manifest = SourceManifest.model_validate_json(path.read_bytes())
         reference = manifest.rights_decision
         if (
@@ -236,16 +239,58 @@ def test_explicit_locations_cover_every_current_approved_snapshot_manifest() -> 
             and manifest.vintage_semantics is VintageSemantics.LATEST_ONLY
             and manifest.redistribution.status is RedistributionStatus.ALLOWED
         ):
-            discovered.add(path.relative_to(REPOSITORY_ROOT))
+            approved[path.relative_to(repository_root)] = manifest.retrieved_at
+    return approved
 
+
+def _unexplained_snapshot_inputs(repository_root: Path) -> set[Path]:
+    """Return approved snapshot inputs that contradict the v1 admission decision.
+
+    Every approved capture no later than the newest capture v1 admits must be registered, as must
+    every committed rights catalog. Weekly captures after that frontier stay archive-only until a
+    superseding registry version admits them.
+    """
+
+    approved = _approved_snapshot_captures(repository_root)
     registered = {location.manifest_path for location in COMMITTED_SNAPSHOT_LOCATIONS}
-    assert registered == discovered
-    registered_catalogs = set(COMMITTED_RIGHTS_CATALOG_PATHS)
-    discovered_catalogs = {
-        path.relative_to(REPOSITORY_ROOT)
-        for path in (REPOSITORY_ROOT / "data" / "rights").glob("*.json")
+    frontier = max(approved[path] for path in registered)
+    admission_window = {path for path, captured in approved.items() if captured <= frontier}
+    catalogs = {
+        path.relative_to(repository_root)
+        for path in (repository_root / "data" / "rights").glob("*.json")
     }
-    assert registered_catalogs == discovered_catalogs
+    return (admission_window ^ registered) | (catalogs ^ set(COMMITTED_RIGHTS_CATALOG_PATHS))
+
+
+def test_explicit_locations_cover_every_snapshot_input_through_the_v1_frontier() -> None:
+    assert _unexplained_snapshot_inputs(REPOSITORY_ROOT) == set()
+
+
+def test_weekly_capture_after_the_v1_frontier_stays_archive_only(
+    weekly_capture_after_v1: tuple[Path, HarvestSummary],
+) -> None:
+    root, summary = weekly_capture_after_v1
+    captured = {Path(path) for path in summary.manifest_paths}
+
+    assert len(captured & _approved_snapshot_captures(root).keys()) == 3
+    assert _unexplained_snapshot_inputs(root) == set()
+    assert load_committed_snapshot_registry(root).descriptor_sha256 == (
+        SNAPSHOT_REGISTRY_DESCRIPTOR_SHA256
+    )
+
+
+def test_unregistered_capture_inside_the_v1_frontier_is_unexplained(
+    committed_kor_rtd_inputs: Path,
+) -> None:
+    admitted = committed_kor_rtd_inputs / COMMITTED_SNAPSHOT_LOCATIONS[0].manifest_path
+    manifest = SourceManifest.model_validate_json(admitted.read_bytes())
+    backdated = manifest.model_copy(
+        update={"source_id": f"{manifest.document_family}-20260717t000000000000z"}
+    )
+    path = Path("data/manifests") / f"{backdated.source_id}.json"
+    (committed_kor_rtd_inputs / path).write_text(backdated.model_dump_json(), encoding="utf-8")
+
+    assert _unexplained_snapshot_inputs(committed_kor_rtd_inputs) == {path}
 
 
 @pytest.mark.parametrize(

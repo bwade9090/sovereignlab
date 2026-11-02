@@ -4,6 +4,7 @@ import copy
 import csv
 import hashlib
 import io
+from collections.abc import Callable
 from dataclasses import replace
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
@@ -12,6 +13,7 @@ from typing import Any
 import pytest
 
 import sovereignlab.vintage.registry as registry_module
+from sovereignlab.harvest.weekly import HarvestSummary
 from sovereignlab.schemas import (
     AvailabilityEvidenceBasis,
     EditionAvailabilityLedger,
@@ -391,29 +393,131 @@ def test_committed_registry_id_is_pinned_to_one_descriptor(
         load_committed_stes_registry(REPOSITORY_ROOT)
 
 
-def test_explicit_locations_cover_all_current_stes_inputs() -> None:
+def _unexplained_stes_inputs(repository_root: Path) -> set[Path]:
+    """Return STES inputs that contradict the v1 admission decision.
+
+    v1 admits an explicit artifact, ledger, and catalog set. Constraint captures the weekly
+    harvester appends after the newest admitted capture, their XML archives, and the ledgers built
+    from them stay archive-only until a superseding registry version admits them. Any other
+    unregistered input, including a later data archive, is unexplained.
+    """
+
     manifests = {
-        path.relative_to(REPOSITORY_ROOT)
-        for path in (REPOSITORY_ROOT / "data" / "manifests").glob("oecd-stes-*.json")
+        path.relative_to(repository_root): SourceManifest.model_validate_json(path.read_bytes())
+        for path in (repository_root / "data" / "manifests").glob("oecd-stes-*.json")
     }
-    archives = {
-        path.relative_to(REPOSITORY_ROOT)
-        for path in (REPOSITORY_ROOT / "data" / "archive" / "oecd-stes").glob("*")
-        if path.is_file()
+    frontier = max(
+        manifests[location.manifest_path].retrieved_at
+        for location in COMMITTED_STES_ARTIFACT_LOCATIONS
+    )
+    weekly = {
+        path: manifest.source_id
+        for path, manifest in manifests.items()
+        if manifest.retrieved_at > frontier and manifest.document_family == "oecd-stes-constraint"
     }
     ledgers = {
-        path.relative_to(REPOSITORY_ROOT)
-        for path in (REPOSITORY_ROOT / "data" / "availability").glob("oecd-stes-ledger-*.json")
+        path.relative_to(repository_root): EditionAvailabilityLedger.model_validate_json(
+            path.read_bytes()
+        )
+        for path in (repository_root / "data" / "availability").glob("oecd-stes-ledger-*.json")
+    }
+    weekly_ledgers = {
+        path
+        for path, ledger in ledgers.items()
+        if ledger.captured_at > frontier
+        and f"oecd-stes-availableconstraint-{ledger.ledger_id.removeprefix('oecd-stes-ledger-')}"
+        in weekly.values()
+    }
+    archives = {
+        path.relative_to(repository_root)
+        for path in (repository_root / "data" / "archive" / "oecd-stes").glob("*")
+        if path.is_file()
     }
     catalogs = {
-        path.relative_to(REPOSITORY_ROOT)
-        for path in (REPOSITORY_ROOT / "data" / "rights").glob("*.json")
+        path.relative_to(repository_root)
+        for path in (repository_root / "data" / "rights").glob("*.json")
     }
+    expected_manifests = {
+        location.manifest_path for location in COMMITTED_STES_ARTIFACT_LOCATIONS
+    } | set(weekly)
+    expected_archives = {
+        location.archive_path for location in COMMITTED_STES_ARTIFACT_LOCATIONS
+    } | {Path("data/archive/oecd-stes") / f"{source_id}.xml" for source_id in weekly.values()}
+    return (
+        (set(manifests) ^ expected_manifests)
+        | (archives ^ expected_archives)
+        | (set(ledgers) ^ (set(COMMITTED_STES_LEDGER_PATHS) | weekly_ledgers))
+        | (catalogs ^ set(COMMITTED_STES_CATALOG_PATHS))
+    )
 
-    assert manifests == {location.manifest_path for location in COMMITTED_STES_ARTIFACT_LOCATIONS}
-    assert archives == {location.archive_path for location in COMMITTED_STES_ARTIFACT_LOCATIONS}
-    assert ledgers == set(COMMITTED_STES_LEDGER_PATHS)
-    assert catalogs == set(COMMITTED_STES_CATALOG_PATHS)
+
+def test_explicit_locations_cover_all_stes_inputs_through_the_v1_frontier() -> None:
+    assert _unexplained_stes_inputs(REPOSITORY_ROOT) == set()
+
+
+def test_weekly_capture_after_the_v1_frontier_stays_archive_only(
+    weekly_capture_after_v1: tuple[Path, HarvestSummary],
+) -> None:
+    root, summary = weekly_capture_after_v1
+    ledger = EditionAvailabilityLedger.model_validate_json(
+        (root / summary.ledger_path).read_bytes()
+    )
+
+    assert Path(summary.ledger_path) not in COMMITTED_STES_LEDGER_PATHS
+    assert ledger.supersedes_ledger_id is not None
+    assert _unexplained_stes_inputs(root) == set()
+    assert load_committed_stes_registry(root).descriptor_sha256 == STES_REGISTRY_DESCRIPTOR_SHA256
+
+
+def _append_backdated_constraint_capture(root: Path) -> set[Path]:
+    admitted = root / "data" / "manifests" / f"{COMMITTED_COMPLETE_THROUGH_SOURCE_ID}.json"
+    manifest = SourceManifest.model_validate_json(admitted.read_bytes())
+    backdated = manifest.model_copy(
+        update={"source_id": "oecd-stes-availableconstraint-20260717t000000000000z"}
+    )
+    manifest_path = Path("data/manifests") / f"{backdated.source_id}.json"
+    archive_path = Path("data/archive/oecd-stes") / f"{backdated.source_id}.xml"
+    (root / manifest_path).write_text(backdated.model_dump_json(), encoding="utf-8")
+    (root / archive_path).write_bytes(
+        (
+            root / "data/archive/oecd-stes" / f"{COMMITTED_COMPLETE_THROUGH_SOURCE_ID}.xml"
+        ).read_bytes()
+    )
+    return {manifest_path, archive_path}
+
+
+def _append_later_data_capture(root: Path) -> set[Path]:
+    admitted = root / "data" / "manifests" / f"{CLI_SOURCE_ID}.json"
+    manifest = SourceManifest.model_validate_json(admitted.read_bytes())
+    later = manifest.model_copy(
+        update={
+            "source_id": "oecd-stes-cli-kor-li-aa-20991231t000000000000z",
+            "retrieved_at": datetime(2099, 12, 31, tzinfo=UTC),
+        }
+    )
+    manifest_path = Path("data/manifests") / f"{later.source_id}.json"
+    (root / manifest_path).write_text(later.model_dump_json(), encoding="utf-8")
+    return {manifest_path}
+
+
+def _append_orphan_archive(root: Path) -> set[Path]:
+    path = Path("data/archive/oecd-stes/oecd-stes-availableconstraint-20991231t000000000000z.xml")
+    (root / path).write_bytes(b"<Structure />")
+    return {path}
+
+
+@pytest.mark.parametrize(
+    "append",
+    [_append_backdated_constraint_capture, _append_later_data_capture, _append_orphan_archive],
+    ids=["backdated-constraint", "later-data-archive", "orphan-archive"],
+)
+def test_stes_inputs_outside_weekly_constraint_captures_are_unexplained(
+    committed_kor_rtd_inputs: Path,
+    append: Callable[[Path], set[Path]],
+) -> None:
+    expected = append(committed_kor_rtd_inputs)
+
+    assert _unexplained_stes_inputs(committed_kor_rtd_inputs) == expected
 
 
 @pytest.mark.parametrize(
