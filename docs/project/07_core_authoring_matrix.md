@@ -1,7 +1,7 @@
 # K-VINTAGE human-reviewed core authoring matrix 1.0.0
 
-- Status: structural allocation frozen; first twenty-four records owner-approved; no draft pending
-  named human review
+- Status: structural allocation frozen; first twenty-four records owner-approved;
+  `kv-core-both-02` drafted and pending named human review
 - Date: 2026-11-02
 - Scope authority: charter v2.5 §5 and M2 continuation order
 - Canonical matrix: `data/benchmark/core-authoring-matrix-v1.json`
@@ -467,12 +467,51 @@ and renamed the focused test file to `tests/benchmark/test_bok_outlook_2025_11_c
 six tests check the frozen allocation and review metadata, that the approved core contains
 twenty-four records, a real `BenchmarkBundle` at each edition's own cutoff, fail-closed
 validation on the day before each edition, and the literal locators, attribution, and
-paraphrase disclosure. The 11 focused benchmark files pass 76 tests, and the full suite passes
-1,193 tests at 100% SovereignLab statement/branch coverage across 82 Ruff-formatted Python
-files. The approved core is now 24/40, no draft is pending, and 16 slots remain unauthored. No
-later pair or slice is selected; choosing the next one is an owner decision.
+paraphrase disclosure. At that approval checkpoint, the 11 focused benchmark files passed 76
+tests, and the full suite passed 1,193 tests at 100% SovereignLab statement/branch coverage
+across 82 Ruff-formatted Python files. That approval brought the approved core to 24/40 with no draft pending and 16 slots
+unauthored. The owner then selected `kv-core-both-02`, described below.
 
-## 13. Approval records
+## 13. Draft November 2025 outlook ECOS GDP combined pair
+
+Feature commit `c795aab` adds exactly the frozen `kv-core-both-02` Korean/English pair to
+`data/benchmark/drafts/core-draft-012.jsonl` at `annotation.status=draft`. Both records use the
+`documents_and_data` route, `train` split, `eg-both-outlook-2025-11-ecos-gdp-20260717` evidence
+group, and `kv-core-both-02` parallel group. They bind document unit
+`bok-outlook-release-2025-11` and data unit `ecos-200y108-snapshot-20260717` exactly as the
+frozen matrix allocates. Each record carries one page-anchored document evidence entry and one
+`read_snapshot_as_of` tool expectation, and both share `as_of` 2026-07-17. That cutoff follows
+both edition dates under ADR 0011 (2026-03-31 Korean, 2026-01-22 English) and is the ECOS
+snapshot's capture date.
+
+Matching the frozen intent, each record combines one November 2025 outlook claim with a
+separately cited approved ECOS GDP snapshot:
+
+- **Document claim:** the 2025 GDP growth forecast of `1.0%`, above the August projection of
+  `0.9%`. The anchors are the Korean summary page 7 (`요약 3/7 — 경제전망`) and the English
+  executive summary page 8 (`Executive Summary iv — Economic Outlook`).
+- **Data claim:** 2025Q4 seasonally adjusted real GDP, following the approved `kv-core-data-02`
+  convention: source `ecos-200y108-10601-20260717t115242998550z`, raw value `585964`,
+  normalization rule `ecos-200y108-10601-billion-krw-v1`, canonical unit `billion_krw`, and
+  display value `585964.0` at one place, shown as 585,964.0 billion won.
+
+The reference answers attribute the Bank of Korea and ECOS and disclose paraphrase and vintage
+structuring. The annotations record `annotated_by="Claude AI draft"`, contain no reviewer
+metadata, and carry the `core`, `temporal`, `documents`, `vintage`, `bok-outlook-ecos-gdp`, and
+`draft-012` tags.
+
+The pair-specific focused test file `tests/benchmark/test_bok_gdp_both_draft.py` passes six
+tests. They check the frozen allocation and absent review metadata, that the approved core
+remains twenty-four and the drafts stay separate, a real `BenchmarkBundle` over both November
+2025 manifests, the ECOS manifest, and the rights catalog, reproduction of the declared gold
+through the real snapshot reader, the bilingual claims and attribution, and the reader's
+abstention the day before the capture. Validation used the benchmark tier: the 12 focused
+benchmark files pass 82 tests, Ruff passes across 83 Python files, and the suite collects
+1,199 tests. The approved core remains 24/40. These two drafts and the 14 unauthored slots make
+up the other 16 unapproved records. The exact next action is named human review of only
+`kv-core-both-02-ko` and `kv-core-both-02-en`.
+
+## 14. Approval records
 
 On 2026-07-25, Hyungbae Cho explicitly approved:
 
@@ -548,7 +587,7 @@ records reviewer `Hyungbae Cho`, review timestamp `2026-11-02T13:44:04Z`,
 `annotation.status=approved`, the `batch-011` lifecycle tag, and the move from
 `drafts/core-draft-011.jsonl` to `core/core-batch-011.jsonl`.
 
-## 14. Human-review checklist
+## 15. Human-review checklist
 
 For each bilingual pair, the reviewer must verify:
 
@@ -564,7 +603,7 @@ Future corrections remain in their draft batch until review is complete. An appr
 reviewer and review timestamp in each `BenchmarkRecord`; it does not rewrite the frozen matrix
 allocation.
 
-## 15. Reproduction
+## 16. Reproduction
 
 ```bash
 python scripts/export_json_schemas.py
@@ -579,6 +618,7 @@ python -m pytest tests/benchmark/test_missing_as_of_abstain_core.py
 python -m pytest tests/benchmark/test_ledger_frontier_abstain_core.py
 python -m pytest tests/benchmark/test_bok_cli_both_core.py
 python -m pytest tests/benchmark/test_bok_outlook_2025_11_core.py
+python -m pytest tests/benchmark/test_bok_gdp_both_draft.py
 python -m ruff check .
 python -m ruff format --check .
 ```
@@ -659,5 +699,13 @@ The November 2025 outlook core test validates both approved `kv-core-doc-02` rec
 named-review metadata against the frozen allocation, builds a real `BenchmarkBundle` over both
 November 2025 manifests at each edition's ADR 0011 cutoff, proves each record fails closed on
 the day before its edition, and pins the literal locators, attribution, and paraphrase
-disclosure. With it, the 11 focused benchmark files pass 76 tests, and the approved count it
+disclosure. With it, the 11 focused benchmark files passed 76 tests, and the approved count it
 verifies is twenty-four.
+
+The November 2025 outlook ECOS GDP combined draft test validates the two unapproved
+`kv-core-both-02` records against the frozen allocation and confirms they carry no reviewer
+metadata and stay separate from the approved core. It builds a real `BenchmarkBundle` with both
+November 2025 manifests, the ECOS manifest, and the rights catalog, and reproduces the 2025Q4
+GDP gold through the real snapshot reader. It also checks the bilingual claims and attribution
+and confirms the reader abstains the day before the capture. It adds six tests, bringing the
+focused benchmark suite to 82 while the approved count remains twenty-four.

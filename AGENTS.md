@@ -8,8 +8,8 @@ Build **KOR-RTD**, a provenance-contracted point-in-time (vintage) data layer fo
 
 ## Current handoff checkpoint
 
-This repository is past the completed `kv-core-doc-02` named human-review gate. No next authoring
-slice is selected; choosing it is an owner decision.
+This repository is between the completed `kv-core-both-02` draft-authoring unit and its named
+human-review gate.
 
 - Current milestone: **M2 — benchmark and baselines**.
 - Approved human-reviewed core: **24/40** records of the frozen 40-record matrix, which must not
@@ -193,11 +193,13 @@ slice is selected; choosing it is an owner decision.
   their review timestamp is `2026-11-02T13:44:04Z`. The drafts came from feature commit
   `5465eca`, and approval feature commit `6cdd13d` records only the named review decision,
   approval metadata, lifecycle tag, file move into `core/`, and focused-test transition.
-- Exact next outcome: none selected. The owner chooses the next pair or slice. `kv-core-both-02`
-  is authorable from the committed November 2025 manifests; every other remaining slot needs an
-  earlier outlook release or the reserved future data release.
-- Until the owner selects one, do not author, draft, or approve another pair; the approved core
-  count remains 24/40.
+- The Korean/English `kv-core-both-02` pair is complete at `annotation.status=draft` in
+  `data/benchmark/drafts/core-draft-012.jsonl` (feature commit `c795aab`). These two records do
+  not increase the approved count and remain pending named human review.
+- Exact next outcome: named human review of only the Korean/English `kv-core-both-02` drafts.
+- Exact next reviewable slice: the two records in `core-draft-012.jsonl` only. Do not pre-approve
+  them or select another pair; until the named review gate is complete, the approved core count
+  remains 24/40.
 - Not implemented yet: a provider or live-model integration or the bounded tool loop. The five
   committed traces are deterministic offline replay artifacts, not provider recordings.
 - The planner boundary exists under `src/sovereignlab/execution/planner.py`; its recording registry
@@ -212,28 +214,48 @@ The authoritative live checkpoint and acceptance criteria are in
 `docs/project/04_macbook_handoff.md`. The filename is retained for history, but the document is now
 the cross-machine Windows continuation handoff.
 
-## Exact next slice — none selected (owner decision)
+## Exact next slice — named human review of `kv-core-both-02` only
 
-The named human review of `kv-core-doc-02` is complete. Hyungbae Cho approved both records on
-2026-11-02 in `6cdd13d` without a substantive change. The approved core is 24/40, and no
-draft review candidate remains. The other 16 records are unauthored.
+The owner-selected `kv-core-both-02` pair (`train` split, `documents_and_data` route) is
+complete as `data/benchmark/drafts/core-draft-012.jsonl`. Both records bind document unit
+`bok-outlook-release-2025-11` and data unit `ecos-200y108-snapshot-20260717` in evidence group
+`eg-both-outlook-2025-11-ecos-gdp-20260717` and parallel group `kv-core-both-02`, exactly as
+the frozen matrix allocates. Each carries one page-anchored document evidence entry and one
+`read_snapshot_as_of` tool expectation.
 
-- Do not select, draft, or approve another pair until the owner chooses one.
-- Do not alter the matrix, source, rights decisions, or public schemas, add probes, add a provider
-  or live-model call, start the deferred bounded loop, or initiate a paid operation as part of
-  choosing the next slice.
+- **Document claim:** the November 2025 outlook's 2025 GDP growth forecast of 1.0%, above the
+  August projection of 0.9%. The anchors are the Korean summary page 7 (`요약 3/7 — 경제전망`)
+  and the English executive summary page 8 (`Executive Summary iv — Economic Outlook`).
+- **Data claim:** 2025Q4 seasonally adjusted real GDP of 585,964.0 billion won in the approved
+  July 2026 ECOS snapshot. It follows the approved `kv-core-data-02` convention (raw `585964`,
+  rule `ecos-200y108-10601-billion-krw-v1`, one display place) and is reproduced by the real
+  snapshot reader.
+- **Cutoff:** both records share `as_of` 2026-07-17, which follows both edition dates under
+  ADR 0011 and is the snapshot's capture date.
+- **Answers:** the reference answers attribute the Bank of Korea and ECOS and disclose
+  paraphrase and vintage structuring.
 
-Remaining slots, for the owner's choice:
+The approved core remains 24/40; these two records are drafted and unapproved, and 14 slots
+remain unauthored.
 
-- `kv-core-both-02` (`documents_and_data`) can be authored from the same November 2025
-  manifests with the existing ECOS GDP snapshot.
+- Review the Korean/English questions, document claims, page anchors, tool expectations,
+  cutoff, route, split, evidence group, parallel group, record IDs, unit bindings, tags, and
+  lifecycle metadata against the frozen matrix and the evidence, rights, and ADR 0011
+  contracts only.
+- Do not mark the records approved, move them into `core/`, or raise the approved count above
+  24/40 without an explicit named human decision.
+- Stop after recording that decision and the checks its validation tier requires. Do not choose
+  another pair, add probes, alter the matrix, source, rights decisions, or public schemas, add a
+  provider or live-model call, start the deferred bounded loop, or initiate a paid operation.
+
+Remaining slots, for later owner choice:
+
 - `kv-core-doc-03`..`kv-core-doc-05` and `kv-core-both-03`..`kv-core-both-04` need the outlook
   releases of 2025-05, 2024-11, and 2024-05, whose manifests are not yet committed.
 - `kv-core-both-05` and `kv-core-data-05` (`test` split) need the reserved future data release.
 
-Each remaining documentary slot other than `kv-core-both-02` first needs new official document
-manifests under the ADR 0009 family ruling and dated under ADR 0011, which is its own reviewable
-unit.
+Each of these documentary slots first needs new official document manifests under the ADR 0009
+family ruling and dated under ADR 0011, which is its own reviewable unit.
 
 ## New-session onboarding procedure
 
@@ -248,9 +270,9 @@ Before editing:
    under "Local setup and required checks."
 4. State back four facts before implementation: current milestone, approved core count, exact next
    work unit, and hard stops.
-5. Do not start authoring: no next slice is selected. Ask the owner which pair or slice comes
-   next, and do not combine source expansion, probes, provider/live-model work, or a paid
-   operation with that choice.
+5. Start only with named human review of the two `kv-core-both-02` records in
+   `data/benchmark/drafts/core-draft-012.jsonl`. Do not pre-approve them, choose another pair, or
+   combine source expansion, probes, provider/live-model work, or a paid operation with review.
 
 ## Read before changing anything
 
@@ -299,12 +321,14 @@ For the current checkpoint, also read `data/benchmark/core-authoring-matrix-v1.j
 `data/benchmark/core/core-batch-001.jsonl`, `core-batch-002.jsonl`, `core-batch-003.jsonl`,
 `core-batch-004.jsonl`, `core-batch-005.jsonl`, `core-batch-006.jsonl`, `core-batch-007.jsonl`,
 `core-batch-008.jsonl`, `core-batch-009.jsonl`, `core-batch-010.jsonl`, and
-`core-batch-011.jsonl`, the benchmark model and normalization code in `src/sovereignlab/schemas/benchmark.py` and
+`core-batch-011.jsonl`, the pending records in `data/benchmark/drafts/core-draft-012.jsonl`, the
+benchmark model and normalization code in `src/sovereignlab/schemas/benchmark.py` and
 `src/sovereignlab/normalization.py`, and `tests/benchmark/test_core_batch.py`,
 `test_bok_outlook_core.py`, `test_ecos_gdp_core.py`, `test_ecos_current_account_core.py`,
 `test_kosis_cpi_core.py`, `test_oecd_scope_abstain_core.py`, `test_cpi_revision_abstain_core.py`,
 `test_missing_as_of_abstain_core.py`, `test_ledger_frontier_abstain_core.py`, and
-`test_bok_cli_both_core.py`, plus `test_bok_outlook_2025_11_core.py`. Treat the matrix allocation, approved records, source bundle, and
+`test_bok_cli_both_core.py`, `test_bok_outlook_2025_11_core.py`, plus
+`test_bok_gdp_both_draft.py`. Treat the matrix allocation, approved records, source bundle, and
 human-review boundary as frozen.
 
 The charter is the scope authority. Do not expand sources, agents, UI, or infrastructure before the current milestone gate passes.
@@ -451,9 +475,9 @@ commit that machine-specific path. Do not reuse a `.venv` whose interpreter chec
 The Windows requirements include a `win32`-only `tzdata` pin because a standard Windows Python
 installation has no system IANA timezone database.
 
-The 2026-11-02 handoff baseline is 13 deterministic public schemas, 82 formatted Python files,
-1,193 passing tests, and 100% SovereignLab statement/branch coverage (4,679 statements, 1,568
-branches). The focused benchmark acceptance run is 76 passing tests. A different result is a
+The 2026-11-02 handoff baseline is 13 deterministic public schemas, 83 formatted Python files,
+1,199 passing tests, and 100% SovereignLab statement/branch coverage (4,679 statements, 1,568
+branches). The focused benchmark acceptance run is 82 passing tests. A different result is a
 diagnostic signal: stop before implementation and record the discrepancy in
 `docs/PROJECT_STATUS.md`.
 

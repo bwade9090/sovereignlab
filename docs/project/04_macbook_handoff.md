@@ -1,10 +1,11 @@
 # Cross-machine continuation handoff
 
 - Legacy filename: retained so existing links and onboarding instructions do not break.
-- Prepared: 2026-07-16; refreshed 2026-11-02 after the owner approval of `kv-core-doc-02`
-  (thirty-seventh refresh: approved core 24/40, no draft pending, next slice is the owner's
-  choice; earlier refreshes the same day recorded the ADR 0011 date correction, the November
-  2025 manifests, the `kv-core-both-01` approval, and the ADR 0010 weekly harvester repair)
+- Prepared: 2026-07-16; refreshed 2026-11-02 after the `kv-core-both-02` draft slice
+  (thirty-eighth refresh: two review candidates complete, named human review next; earlier
+  refreshes the same day recorded the `kv-core-doc-02` approval, the ADR 0011 date correction,
+  the November 2025 manifests, the `kv-core-both-01` approval, and the ADR 0010 weekly
+  harvester repair)
 - Target continuation machine: Windows workstation
 - Authority: charter v2.5; accepted ADRs 0001–0011
 - Branch to continue: `main` from `origin`
@@ -14,8 +15,10 @@
   deterministic evidence-packet assembler, private offline executor, and five committed real-
   digest replay traces are complete; Hyungbae Cho approved the `kv-core-both-01` Korean/English
   pair, re-approved `kv-core-doc-01` after its ADR 0011 date correction, and approved the
-  `kv-core-doc-02` Korean/English pair, so the core is 24/40; no draft is pending, and no later
-  pair or slice is selected
+  `kv-core-doc-02` Korean/English pair, so the core is 24/40; the `kv-core-both-02`
+  Korean/English pair is complete at `status=draft` and awaits named human review, while no
+  later pair or slice is selected
+- Completed `kv-core-both-02` draft functional checkpoint: `c795aab` (`feat: add November 2025 outlook ECOS GDP combined drafts`).
 - Completed `kv-core-doc-02` approval feature checkpoint: `6cdd13d` (`feat: approve November 2025 outlook inflation pair`).
 - Completed `kv-core-doc-02` draft functional checkpoint: `5465eca` (`feat: add November 2025 outlook inflation drafts`).
 - Completed ADR 0011 date-correction checkpoint: `971d1c1` (`fix: date BOK document manifests from their exact bytes`).
@@ -59,8 +62,8 @@ state from the Mac. At the beginning of the Windows session:
 3. Create or verify the Windows-local `.venv` and run the PowerShell baseline in section 2 before
    changing files.
 4. State back the current milestone, approved core count, exact next work unit, and hard stops.
-5. Do not start a new work unit. Section 5 records that no next slice is selected; ask the owner
-   which pair or slice comes next, and do not draft or approve another pair before that choice.
+5. Do not start a new work unit. Section 5 names only the pending human review of the
+   `kv-core-both-02` Korean/English drafts; do not pre-approve them or select another pair.
 
 If the worktree is dirty, preserve the existing changes and determine their owner before editing.
 If local `main` has diverged from `origin/main`, stop rather than rewriting history.
@@ -452,6 +455,10 @@ If local `main` has diverged from `origin/main`, stop rather than rewriting hist
   1,568 branches). Ruff check plus format check passed across 82 Python files, and all 13 public
   schemas regenerated without drift. The record substance, matrix, source, rights, schema, trace,
   and runtime boundaries are unchanged; cost was $0.00.
+- `kv-core-both-02` drafts validated 2026-11-02 on macOS/Python 3.12.14 at the benchmark tier.
+  After feature commit `c795aab`, the 12 focused benchmark files passed all 82 tests, Ruff check
+  plus format check passed across 83 Python files, and the suite collects 1,199 tests. The full
+  baseline last ran at `6cdd13d`, and no source changed since; cost was $0.00.
 
 ## 2. Set up and validate the Windows machine
 
@@ -479,8 +486,8 @@ $venvPython = (Resolve-Path .\.venv\Scripts\python.exe).Path
 git diff --exit-code
 ```
 
-Expected handoff baseline: Python 3.12, 13 deterministic public schemas, 82 formatted Python
-files, 1,193 passing tests, 100% SovereignLab statement/branch coverage (4,679 statements, 1,568
+Expected handoff baseline: Python 3.12, 13 deterministic public schemas, 83 formatted Python
+files, 1,199 passing tests, 100% SovereignLab statement/branch coverage (4,679 statements, 1,568
 branches), and no unexpected Git diff. Run this full baseline at session start and once before
 a round's final push or handoff. Between those, each commit needs only the checks for its tier
 under "Validation tiers" in `AGENTS.md`; for example, a benchmark draft or approval needs
@@ -582,6 +589,10 @@ do not remove it merely because another operating system supplies an IANA timezo
     `tests/benchmark/test_bok_outlook_2025_11_core.py` — the approved two-record November 2025
     outlook inflation-rationale core batch and its frozen-allocation/review-metadata, ADR 0011
     cutoff, day-before fail-closed, and literal-locator checks.
+31. `data/benchmark/drafts/core-draft-012.jsonl` and `tests/benchmark/test_bok_gdp_both_draft.py`
+    — the pending two-record November 2025 outlook ECOS GDP combined draft pair and its
+    frozen-allocation/no-review-metadata, real-bundle, snapshot-gold-reproduction, bilingual
+    claim, and day-before abstention checks.
 
 Only when changing source/resolver/harvester behavior, also read
 `docs/discovery/03_week1_verification_log.md` and the relevant resolver, retrieval, registry,
@@ -619,8 +630,10 @@ gate.
   `data/benchmark/core/core-batch-008.jsonl`, the two records in
   `data/benchmark/core/core-batch-009.jsonl`, the two `kv-core-both-01` records in
   `data/benchmark/core/core-batch-010.jsonl`, and the two `kv-core-doc-02` records in
-  `data/benchmark/core/core-batch-011.jsonl` are approved. No draft is pending review, and the
-  other 16 matrix slots are unauthored.
+  `data/benchmark/core/core-batch-011.jsonl` are approved. The two `kv-core-both-02` records in
+  `data/benchmark/drafts/core-draft-012.jsonl` are pending named human review and do not
+  increase the approved count. The other 16 matrix slots remain unapproved: two are drafts and 14
+  are unauthored.
 - The field names and allocation in the approved matrix and eleven core batches are intentionally
   unchanged. Do not rename them or alter the frozen allocation.
 - Four real BOK document manifests are committed: the May 2026 and November 2025 editions, each in
@@ -1132,18 +1145,38 @@ of the other 18 unapproved slots, these two were pending drafts and 16 remained 
 Hyungbae Cho approved both records on 2026-11-02 without a substantive change. Approval feature
 commit `6cdd13d` records review timestamp `2026-11-02T13:44:04Z`, `status=approved`, and the
 `batch-011` tag, moves the pair to `data/benchmark/core/core-batch-011.jsonl`, and renames the
-focused module to `tests/benchmark/test_bok_outlook_2025_11_core.py`. The approved core is
-24/40, no draft is pending, and 16 slots are unauthored.
+focused module to `tests/benchmark/test_bok_outlook_2025_11_core.py`. At that checkpoint the
+approved core was 24/40, no draft was pending, and 16 slots were unauthored.
+
+### Completed `kv-core-both-02` draft slice — named human review only
+
+On the owner's choice, feature commit `c795aab` adds exactly `kv-core-both-02-ko` and
+`kv-core-both-02-en` at `status=draft` in `data/benchmark/drafts/core-draft-012.jsonl`, with six
+focused tests in `tests/benchmark/test_bok_gdp_both_draft.py`. Both bind document unit
+`bok-outlook-release-2025-11` and data unit `ecos-200y108-snapshot-20260717` exactly as the
+frozen matrix allocates.
+
+- **Document claim:** the November 2025 outlook's 2025 GDP growth forecast of 1.0%, above the
+  August 0.9%. The anchors are the Korean summary page 7 (`요약 3/7 — 경제전망`) and the English
+  executive summary page 8 (`Executive Summary iv — Economic Outlook`).
+- **Data claim:** a `read_snapshot_as_of` expectation for 2025Q4 seasonally adjusted real GDP
+  of 585,964.0 billion won (raw `585964`), reproduced by the real snapshot reader.
+- **Cutoff:** both records share `as_of` 2026-07-17, after both edition dates under ADR 0011 and
+  on the snapshot's capture date.
+
+Validation used the benchmark tier: 82 focused benchmark tests and Ruff across 83 files passed,
+and the suite collects 1,199 tests. The approved count remains 24/40; of the other 16
+unapproved slots, these two are pending drafts and 14 remain unauthored.
 
 The exact continuation order is therefore:
 
-1. Ask the owner which pair or slice comes next. `kv-core-both-02` can be authored from the
-   committed November 2025 manifests and the existing ECOS GDP snapshot; a Windows workstation
-   must first re-fetch the two November 2025 PDFs and verify them against the manifests. The
-   other documentary slots need the 2025-05, 2024-11, or 2024-05 outlook manifests, and
-   `kv-core-both-05` and `kv-core-data-05` also need the reserved future data release.
-2. Do not select, draft, or approve another pair before that decision, and keep the approved count
-   at 24/40.
+1. Review only `kv-core-both-02-ko` and `kv-core-both-02-en` against the frozen matrix, the
+   committed November 2025 manifests and ECOS snapshot, and the local PDF anchors. A Windows
+   workstation must first re-fetch the two November 2025 PDFs and verify them against the
+   manifests.
+2. Do not mark either record approved, move it into `core/`, or raise the approved count without
+   an explicit named human decision. Stop after recording that decision and the checks its
+   validation tier requires; do not select or author another pair.
 3. Preserve the frozen matrix, approved core, source, rights, schema, trace, and runtime boundaries;
    do not begin provider/live-model integration, probes, paid work, or the deferred bounded loop.
 
@@ -1174,6 +1207,8 @@ owner authorization.
   re-review `kv-core-doc-01` again, whose re-approval is complete.
 - Do not re-author or re-review the approved `kv-core-doc-02` November 2025 outlook inflation
   pair; its named human review is complete.
+- Do not re-author or pre-approve the two `kv-core-both-02` drafts, or select a later pair before
+  their separate named human review is complete.
 - Do not replace the retrieval baseline with embeddings yet. Its filter-before-scoring invariant
   and synthetic future-document regression are already complete.
 - Do not rerun the paid QLoRA compatibility spike. It passed, all Pods were deleted, and it is not

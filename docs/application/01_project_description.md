@@ -37,8 +37,8 @@ milestone. Its evidence, benchmark, core-authoring-matrix, availability-ledger, 
 execution contracts are published as 13 synchronized deterministic JSON Schemas; the offline
 resolver is operational; the GitHub Actions harvester committed its first weekly capture on
 2026-11-02 after a registry-admission repair, so weekly capture coverage has a disclosed gap from
-2026-07-20; and 1,193 tests pass with 100% statement and branch coverage (4,679 statements, 1,568
-branches) across 82 formatted Python files. The
+2026-07-20; and 1,199 tests pass with 100% statement and branch coverage (4,679 statements, 1,568
+branches) across 83 formatted Python files. The
 40-question human-reviewed bilingual core is frozen as an allocation, and 24 of 40 records —
 initially AI-authored, then approved under
 named human review —
@@ -275,8 +275,8 @@ boundary, an internal deterministic evidence-packet assembler, and a private pro
 offline executor. Five real-digest offline replays now provide `typed function calling with
 committed traces`, covering all routes and tools, Korean and English, explicit and implicit cutoffs,
 complete execution, and terminal planned/tool abstention without partial evidence. The repository
-passes 1,193 tests with 100% statement and branch coverage (4,679 statements, 1,568 branches)
-across 82 formatted Python files. The frozen 40-record bilingual K-VINTAGE core has its first 24
+passes 1,199 tests with 100% statement and branch coverage (4,679 statements, 1,568 branches)
+across 83 formatted Python files. The frozen 40-record bilingual K-VINTAGE core has its first 24
 records reviewed and approved, including a
 Korean/English documentary pair over the Bank of Korea's May 2026 Economic Outlook and its later
 official English translation. A further Korean/English `kv-core-data-02` pair over the 2026-07-17
@@ -335,10 +335,12 @@ embedded PDF dates showed that the Bank of Korea had replaced report attachments
 so ADR 0011 dates every document manifest no earlier than its exact bytes. The documentary pair
 moved to the corrected cutoffs and was re-approved. A second documentary pair over the November
 2025 outlook's inflation rationale was then drafted and approved, bringing the approved core to
-24/40 with 16 slots unauthored; focused validation is 76 tests across 11 files. I also
+24/40. A second combined pair over the November 2025 outlook and the approved ECOS GDP snapshot
+is now drafted and awaits named human review, and 14 slots remain unauthored; focused validation
+is 82 tests across 12 files. I also
 verified the pinned Ministral 3 3B NF4/QLoRA training path on a disposable A40/CUDA 13 GPU without
-claiming model-quality gains. The next pair or slice is the owner's choice; later work covers the
-remaining core, separately reported deterministic revision probes, and the four-variant baseline
+claiming model-quality gains. Next is named human review of those two drafts; later work covers
+the remaining core, separately reported deterministic revision probes, and the four-variant baseline
 suite, with temporal leakage as the headline metric.
 
 ## Usage guardrails

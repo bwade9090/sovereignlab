@@ -18,8 +18,11 @@ Korea document manifest is now dated no earlier than its exact PDF bytes: the No
 Korean report from 2026-03-31 and its English translation from 2026-01-22. The approved
 `kv-core-doc-01` moved to 2026-06-12 and 2026-07-06 cutoffs and was re-approved. The
 owner-selected `kv-core-doc-02` pair, which recovers the November 2025 inflation rationale, was
-approved on 2026-11-02 and now lives in `data/benchmark/core/core-batch-011.jsonl`. No draft is
-pending review, 16 slots remain unauthored, and no next pair is selected. The
+approved on 2026-11-02 and now lives in `data/benchmark/core/core-batch-011.jsonl`. The
+owner-selected `kv-core-both-02` pair combines the November 2025 outlook's 2025 growth forecast
+with 2025Q4 real GDP from the approved ECOS snapshot. It is complete as two drafts in
+`data/benchmark/drafts/core-draft-012.jsonl` pending named human review; 14 slots remain
+unauthored. The
 first nine ADR 0008 slices and work unit C are complete: five machine-readable real-digest traces
 were generated through the actual private offline executor, `ScriptedPlanner`, and committed
 registries and corpora in feature commit `883815b`. The trace set covers all four
@@ -29,9 +32,9 @@ source package is unchanged, the public surface remains 13 deterministic JSON Sc
 executor descriptor still pins 32 source entries and digest
 `08f45dab6a36a49cb7d0b588a69236942cd61534540bd4de0772010402dada64`.
 The focused executor/replay-trace acceptance run passes 80 tests at 100% coverage over 326
-statements and 98 branches, and the focused benchmark acceptance run passes 76 tests. The full
-offline baseline is 1,193 tests at 100% statement/branch coverage (4,679 statements, 1,568
-branches) across 82 Ruff-formatted Python files. The shipped
+statements and 98 branches, and the focused benchmark acceptance run passes 82 tests. The full
+offline baseline is 1,199 tests at 100% statement/branch coverage (4,679 statements, 1,568
+branches) across 83 Ruff-formatted Python files. The shipped
 minimal reference path is described only as `typed function calling with committed traces`. These
 are deterministic offline replays, not provider or live outputs; no provider/live integration or
 bounded tool loop exists, and no model-quality or briefing-performance claim is made. Searchable
@@ -232,9 +235,10 @@ still abstains. On 2026-11-02 Hyungbae Cho approved both records. The review re-
 PDFs with owner approval and confirmed the anchored pages and figures. It also corrected the
 English locator section to the literal `Executive Summary ii` in `4365096`, because its former
 suffix did not appear on the page. Approval feature commit `8bc88a1` moved the pair to
-`data/benchmark/core/core-batch-010.jsonl`. Current validation is 76 focused benchmark tests and
-1,193 full-suite tests across 82 formatted Python files. The approved count is now 24/40 after
-the `kv-core-doc-02` approval, and choosing the next pair or slice is an owner decision.
+`data/benchmark/core/core-batch-010.jsonl`. Current validation is 82 focused benchmark tests and
+1,199 collected tests across 83 formatted Python files. The approved count is 24/40 after the
+`kv-core-doc-02` approval, and the exact next action is named human review of only the two
+`kv-core-both-02` drafts.
 Charter v2.5 and
 [ADR 0009](docs/decisions/0009-bok-economic-outlook-public-data-rights.md) additionally record the
 owner-approved `allowed` public-data ruling for official Bank of Korea Economic Outlook

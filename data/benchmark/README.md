@@ -221,15 +221,27 @@ prices. The anchors are the Korean summary page 5 (`요약 1/7`) and the English
 page 5 (`Executive Summary i`). Each `as_of` equals its edition's ADR 0011 date: 2026-03-31 for
 Korean and 2026-01-22 for English. Six focused tests in
 `tests/benchmark/test_bok_outlook_2025_11_draft.py` brought the focused benchmark suite to 76
-tests across 11 files, and the full suite passes 1,193 tests across 82 Ruff-formatted Python
+tests across 11 files, and the full suite passed 1,193 tests across 82 Ruff-formatted Python
 files.
 
 Hyungbae Cho approved both records on 2026-11-02 without a substantive change, with review
 timestamp `2026-11-02T13:44:04Z`. Approval feature commit `6cdd13d` moved them to
 `core/core-batch-011.jsonl` and renamed the focused module to
 `tests/benchmark/test_bok_outlook_2025_11_core.py`. The approved count is now 24/40, no draft
-is pending, and 16 records remain unauthored. No later pair or slice is selected; choosing the
-next one is an owner decision.
+was pending, and 16 records remained unauthored.
+
+Feature commit `c795aab` adds exactly `kv-core-both-02-ko` and `kv-core-both-02-en` at
+`annotation.status=draft` in `drafts/core-draft-012.jsonl`. Both use the frozen
+`documents_and_data` route, `train` split, `eg-both-outlook-2025-11-ecos-gdp-20260717` evidence
+group, parallel group `kv-core-both-02`, document unit `bok-outlook-release-2025-11`, and data
+unit `ecos-200y108-snapshot-20260717`. Each record combines the November 2025 outlook's 2025 GDP
+growth forecast of 1.0%, above the August 0.9%, with a `read_snapshot_as_of` expectation for
+2025Q4 seasonally adjusted real GDP of 585,964.0 billion won in the approved July 2026 ECOS
+snapshot, at a shared `as_of` of 2026-07-17. Six focused tests in
+`tests/benchmark/test_bok_gdp_both_draft.py` bring the focused benchmark suite to 82 tests
+across 12 files. The approved count remains 24/40: two of the other 16 records are drafts and 14
+remain unauthored. The exact next action is named human review of only these two drafts; do
+not pre-approve them or select another pair.
 
 The matrix assigns every planned documentary or data source unit to one dataset split. Do not
 replace a reserved unit or move a pair between splits without a versioned matrix change, tests, and

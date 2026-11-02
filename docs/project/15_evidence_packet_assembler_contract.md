@@ -329,8 +329,19 @@ slots unauthored. This was a lifecycle-only transition: the questions, answers, 
 frozen matrix, execution contracts and runtime, source bytes and manifests, rights decisions, 13
 public schemas, and five committed traces remain unchanged.
 
-No draft review candidate remains, and no later pair or slice is selected; choosing the next one
-is an owner decision. `kv-core-both-02` is authorable from the committed November 2025 manifests,
-and the other remaining slots need earlier outlook releases or the reserved future data release.
-Provider or live-model integration remains absent, and the bounded tool loop deferred by ADR 0008
-remains outside the authoring slices.
+At that checkpoint no draft review candidate remained.
+
+The owner then selected `kv-core-both-02`. Feature commit `c795aab` adds exactly the two
+draft-only Korean/English records in `data/benchmark/drafts/core-draft-012.jsonl`, binding
+document unit `bok-outlook-release-2025-11` and data unit `ecos-200y108-snapshot-20260717` in
+evidence group `eg-both-outlook-2025-11-ecos-gdp-20260717` (`train` split). Each record combines
+the November 2025 outlook's 2025 GDP growth forecast of 1.0%, above the August projection of
+0.9%, with one `read_snapshot_as_of` expectation. That expectation is 2025Q4 seasonally adjusted
+real GDP of 585,964.0 billion won in the approved July 2026 ECOS snapshot. Both records share
+`as_of` 2026-07-17. The approved core remains 24/40; two draft records are pending named human
+review, and 14 matrix slots remain unauthored.
+
+The exact next independent slice is only named human review of those two drafts. Do not
+pre-approve or move them into `core/`, increase the approved count, or select or author another
+pair before that decision. Provider or live-model integration remains absent, and the bounded tool
+loop deferred by ADR 0008 remains outside the authoring slices.
