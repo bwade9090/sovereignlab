@@ -1,0 +1,25 @@
+{
+  "byte_size": 7033792,
+  "canonical_url": "https://www.bok.or.kr/fileSrc/eng/337f8afe778640708bc06cae6386144d/1/24dfb68f6b6f452bb6299829fb19f962.pdf",
+  "content_sha256": "d997c6a1f5853b434449a0322119fe3e9e2a3df3704e909afdfa9504a1e8eb78",
+  "document_family": "bok-economic-outlook",
+  "language": "en",
+  "media_type": "application/pdf",
+  "publication_date_basis": "publisher_metadata",
+  "publication_date_notes": "The official English landing page https://www.bok.or.kr/eng/bbs/B0000358/view.do?menuNo=400413&nttId=10096024 displays registration date 2026-01-22 for this exact attachment; it is not backdated to the Korean release.",
+  "published_on": "2026-01-22",
+  "publisher": "Bank of Korea",
+  "redistribution": {
+    "license_name": "Bank of Korea Copyright Policy (Public Data Act Article 19 public-data branch)",
+    "license_url": "https://www.bok.or.kr/portal/main/contents.do?menuNo=200228",
+    "notes": "ADR 0009 records the owner-approved family ruling that official Bank of Korea Economic Outlook reports, including their official English full translations, are public data covered by the copyright policy's Article 19 branch and may be used without a separate procedure. On 2026-11-02 this edition's landing page and PDF showed no separate licence, KOGL mark, or edition-specific restriction beyond the notices already present in the ruled May 2026 edition, so the family ruling applies unchanged. Use must attribute the Bank of Korea and disclose modification, processing, or transformation; separately marked third-party material remains subject to its own rights. The PDF and extracted text remain uncommitted as a repository-scope choice, not a rights restriction.",
+    "status": "allowed"
+  },
+  "release_label": "November 2025",
+  "retrieved_at": "2026-11-02T11:51:59Z",
+  "schema_version": "2.0.0",
+  "source_id": "bok-outlook-2025-11-en",
+  "source_kind": "document",
+  "title": "Korea Economic Outlook (November 2025)",
+  "vintage_semantics": "latest_only"
+}
