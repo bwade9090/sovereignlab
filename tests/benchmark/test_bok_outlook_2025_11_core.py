@@ -1,4 +1,4 @@
-"""Contract and evidence checks for the draft kv-core-doc-02 pair."""
+"""Contract and evidence checks for the approved kv-core-doc-02 pair."""
 
 from datetime import date, timedelta
 from pathlib import Path
@@ -20,6 +20,7 @@ from sovereignlab.schemas import (
 ROOT = Path(__file__).resolve().parents[2]
 MATRIX_PATH = ROOT / "data" / "benchmark" / "core-authoring-matrix-v1.json"
 CORE_DIRECTORY = ROOT / "data" / "benchmark" / "core"
+BATCH_PATH = CORE_DIRECTORY / "core-batch-011.jsonl"
 DRAFT_PATH = ROOT / "data" / "benchmark" / "drafts" / "core-draft-011.jsonl"
 SOURCE_IDS = ("bok-outlook-2025-11-ko", "bok-outlook-2025-11-en")
 
@@ -32,8 +33,8 @@ def _records(path: Path) -> tuple[BenchmarkRecord, ...]:
     )
 
 
-def _draft_records() -> tuple[BenchmarkRecord, ...]:
-    return _records(DRAFT_PATH)
+def _core_records() -> tuple[BenchmarkRecord, ...]:
+    return _records(BATCH_PATH)
 
 
 def _manifests() -> tuple[SourceManifest, ...]:
@@ -45,11 +46,12 @@ def _manifests() -> tuple[SourceManifest, ...]:
     )
 
 
-def test_draft_pair_matches_the_frozen_allocation_and_has_no_review_metadata() -> None:
+def test_approved_pair_matches_the_frozen_allocation_and_review_metadata() -> None:
     matrix = CoreAuthoringMatrix.model_validate_json(MATRIX_PATH.read_text(encoding="utf-8"))
     pair = next(item for item in matrix.pairs if item.pair_id == "kv-core-doc-02")
-    records = _draft_records()
+    records = _core_records()
 
+    assert not DRAFT_PATH.exists()
     assert tuple(record.record_id for record in records) == (
         pair.ko_record_id,
         pair.en_record_id,
@@ -65,35 +67,35 @@ def test_draft_pair_matches_the_frozen_allocation_and_has_no_review_metadata() -
     assert all(record.evidence_group_id == pair.evidence_group_id for record in records)
     assert all(record.parallel_group_id == pair.pair_id for record in records)
     assert all(record.tool_expectations == () for record in records)
-    assert all(record.annotation.status is AnnotationStatus.DRAFT for record in records)
+    assert all(record.annotation.status is AnnotationStatus.APPROVED for record in records)
     assert all(record.annotation.annotated_by == "Claude AI draft" for record in records)
-    assert all(record.annotation.reviewed_by is None for record in records)
-    assert all(record.annotation.reviewed_at is None for record in records)
-    annotation_times = {record.annotation.annotated_at for record in records}
-    assert len(annotation_times) == 1
-    assert next(iter(annotation_times)).utcoffset() == timedelta(0)
-    expected_tags = ("core", "temporal", "documents", "bok-outlook", "draft-011")
+    assert all(record.annotation.reviewed_by == "Hyungbae Cho" for record in records)
+    review_times = {record.annotation.reviewed_at for record in records}
+    assert None not in review_times
+    assert len(review_times) == 1
+    reviewed_at = next(iter(review_times))
+    assert reviewed_at is not None
+    assert reviewed_at.utcoffset() == timedelta(0)
+    assert all(record.annotation.annotated_at <= reviewed_at for record in records)
+    expected_tags = ("core", "temporal", "documents", "bok-outlook", "batch-011")
     assert all(record.tags == expected_tags for record in records)
 
 
-def test_approved_core_remains_twenty_two_and_drafts_are_separate() -> None:
-    matrix = CoreAuthoringMatrix.model_validate_json(MATRIX_PATH.read_text(encoding="utf-8"))
+def test_approved_core_contains_twenty_four_records_and_the_new_pair() -> None:
     approved = tuple(
         record for path in sorted(CORE_DIRECTORY.glob("*.jsonl")) for record in _records(path)
     )
-    drafts = _draft_records()
+    records = _core_records()
 
-    assert len(approved) == 22
+    assert len(approved) == 24
     assert all(record.annotation.status is AnnotationStatus.APPROVED for record in approved)
-    assert len(drafts) == 2
-    assert {record.record_id for record in approved}.isdisjoint(
-        {record.record_id for record in drafts}
-    )
-    assert matrix.target_record_count - len(approved) - len(drafts) == 16
+    assert {record.record_id for record in records} <= {record.record_id for record in approved}
+    assert len(records) == 2
+    assert all(record.annotation.status is AnnotationStatus.APPROVED for record in records)
 
 
-def test_draft_pair_validates_at_each_editions_own_cutoff() -> None:
-    records = _draft_records()
+def test_approved_pair_validates_at_each_editions_own_cutoff() -> None:
+    records = _core_records()
     manifests = _manifests()
 
     BenchmarkBundle(sources=manifests, records=records)
@@ -116,7 +118,7 @@ def test_draft_pair_validates_at_each_editions_own_cutoff() -> None:
     ids=["korean", "english"],
 )
 def test_each_record_fails_closed_the_day_before_its_edition(index: int, source_id: str) -> None:
-    record = _draft_records()[index]
+    record = _core_records()[index]
     early = record.model_copy(update={"as_of": record.as_of - timedelta(days=1)})
 
     with pytest.raises(ValidationError, match=f"post-cutoff source {source_id}"):
@@ -124,7 +126,7 @@ def test_each_record_fails_closed_the_day_before_its_edition(index: int, source_
 
 
 def test_inflation_rationale_uses_literal_locators_and_disclosure() -> None:
-    korean, english = _draft_records()
+    korean, english = _core_records()
 
     assert korean.document_evidence[0].locator.page == 5
     assert korean.document_evidence[0].locator.section == "요약 1/7"
