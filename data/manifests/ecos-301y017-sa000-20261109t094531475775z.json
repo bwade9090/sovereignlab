@@ -1,0 +1,32 @@
+{
+  "byte_size": 172071,
+  "canonical_url": "https://ecos.bok.or.kr/api/StatisticSearch/%7Bapi-key%7D/json/kr/1/1000/301Y017/M/198001/202611/SA000",
+  "content_sha256": "5c1b3a177d5661337e1f596abe9966cf4da46e62544315c530d6f2fdfec0f4f2",
+  "document_family": "ecos-301y017-sa000",
+  "language": "ko",
+  "media_type": "application/json",
+  "publication_date_basis": "retrieval_date_fallback",
+  "publication_date_notes": "ECOS is latest-only; retrieval date is the earliest defensible date for these exact response bytes.",
+  "published_on": "2026-11-09",
+  "publisher": "한국은행",
+  "redistribution": {
+    "license_name": "ECOS Statistics Information Use Guide",
+    "license_url": "https://ecos.bok.or.kr/",
+    "notes": "Attributed Bank of Korea-produced series approved in ADR 0004.",
+    "status": "allowed"
+  },
+  "release_label": "Weekly forward capture 20261109t094531475775z",
+  "retrieved_at": "2026-11-09T09:45:33.454301Z",
+  "rights_decision": {
+    "catalog_id": "kor-rtd-rights-2026-07-17",
+    "decision_id": "ecos-301y017-sa000-rights-v1",
+    "item_id": "SA000",
+    "source_system": "ecos",
+    "table_id": "301Y017"
+  },
+  "schema_version": "2.0.0",
+  "source_id": "ecos-301y017-sa000-20261109t094531475775z",
+  "source_kind": "api",
+  "title": "경상수지(계절조정)",
+  "vintage_semantics": "latest_only"
+}
