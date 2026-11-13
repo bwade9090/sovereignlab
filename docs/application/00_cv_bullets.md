@@ -1,11 +1,9 @@
 # SovereignLab CV bullets
 
 - Status: wording bank; use only the section matching the achieved milestone
-- Last updated: 2026-11-02 (M2 mid-window refresh: 26/40 approved core including two
-  combined document-plus-data pairs, ADR 0008 slices 1–9 and work unit C complete, weekly harvester
-  repaired under ADR 0010, document dates corrected under ADR 0011,
-  83-file/1,199-test baseline)
-- Rule: never replace placeholders with targets or estimates; use measured, reproducible results only
+- Last updated: 2026-11-13 (shortened; engineering counts removed after ADR 0012)
+- Rule: never replace placeholders with targets or estimates; use measured, reproducible results
+  only, and take the approved-record count from `docs/PROJECT_STATUS.md` on the day of use
 - Narrative versions: `docs/application/01_project_description.md`
 
 ## Version A — safe to use now (project in progress)
@@ -20,43 +18,23 @@
   at the requested cutoff cannot be proven.
 - Building **K-VINTAGE**, a bilingual Korean/English benchmark whose gold answers depend on the
   official-statistics vintage available at each question's `as_of` date: the 40-question
-  human-reviewed core allocation is frozen and 26/40 records are reviewed and approved so far —
-  four data/abstention records over the OECD Korea CLI revision archive plus a Korean/English
-  documentary pair grounded in the Bank of Korea's May 2026 Economic Outlook and its independently
-  dated official English translation, Korean/English data pairs over the 2026-07-17 ECOS GDP and
-  current-account snapshots, a Korean/English data pair over the 2026-07-17 KOSIS national CPI
-  snapshot, a Korean/English rights-based abstention pair asking for Korea's OECD normalised
-  CLI, a neighboring measure outside the sole owner-approved OECD raw-data scope, a
-  Korean/English false-premise abstention pair that rejects the premise that archived OECD
-  edition counts prove the Korean CPI was revised, and a Korean/English missing-as-of
-  clarification abstention pair that asks for Korea's OECD amplitude-adjusted CLI for May 2026
-  while omitting the as-of date the vintage request depends on, so the approved gold behavior
-  is to ask for the missing as-of and abstain, and a Korean/English test-split ledger-frontier
-  abstention pair asking for Korea's OECD amplitude-adjusted CLI for May 2026 using only the
-  vintage available as of August 15, 2026 — a cutoff beyond the committed availability ledger's
-  completeness frontier (`complete_through`, the 2026-07-17 capture instant), so the approved
-  gold behavior is abstention with `cutoff_beyond_complete_through` — completing approval of
-  the abstention route's five pairs, and the first approved combined `documents_and_data` pair.
-  That train-split pair's records each combine one page-anchored document claim over the Bank of
-  Korea May 2026 outlook's 2026 GDP growth projection of 2.6%, well above the February forecast
-  of 2.0%, with one fail-closed resolution of the demonstrably available July 2026 OECD Korea CLI
-  edition 202607, value 102.66, at a shared 2026-07-09 as-of. Two further Korean/English pairs
-  over the Bank of Korea's November 2025 outlook recover its inflation rationale and pair its
-  2025 growth forecast with 2025Q4 real GDP from the approved 2026-07-17 ECOS snapshot.
+  human-reviewed core allocation is frozen and 26/40 records are reviewed and approved so far.
+  They cover documentary questions over the Bank of Korea's May 2026 and November 2025 Economic
+  Outlooks and their independently dated English translations, data questions over the OECD Korea
+  CLI revision archive and ECOS/KOSIS snapshots, two combined document-plus-data pairs, and all
+  five abstention pairs (no provably available edition, an unapproved neighbouring series, a false
+  premise, a missing as-of date, and a cutoff beyond the availability ledger's frontier).
   Machine-generated revision probes will be reported separately.
 - Shipped `typed function calling with committed traces` for the deterministic offline evidence
-  path: bilingual temporal retrieval filters by publication date before scoring over a committed
-  synthetic corpus; three digest-linked evidence tools run behind a replay-checked dispatcher; and
-  five machine-readable real-digest traces generated through the actual private executor,
-  `ScriptedPlanner`, and committed registries and corpus cover all four routes, all three tools,
-  Korean and English, explicit and implicit cutoffs, complete execution, planned abstention, and
-  terminal tool abstention without partial evidence. The source package and the project's 13
-  public JSON Schemas remain unchanged. These are deterministic offline replay artifacts, not
-  provider or live outputs, and no briefing-quality result is claimed.
-- Verified the pinned Ministral 3 3B NF4/QLoRA compatibility path on a disposable A40/CUDA 13 GPU
-  and maintain 1,199 tests at 100% statement/branch coverage (4,679 statements, 1,568 branches)
-  across 83 formatted Python files; temporal leakage remains the planned headline metric, and no
-  model-quality result is claimed yet.
+  path: bilingual temporal retrieval that filters by publication date before scoring over a
+  committed synthetic corpus, three deterministic evidence tools, and five machine-readable replay
+  traces covering all four routes, all three tools, Korean and English, explicit and implicit
+  cutoffs, complete execution, planned abstention, and tool abstention without partial evidence.
+  These are deterministic offline replay artifacts, not provider or live outputs, and no
+  briefing-quality result is claimed.
+- Verified the pinned Ministral 3 3B NF4/QLoRA compatibility path on a disposable A40/CUDA 13 GPU.
+  Every approved gold answer is reproduced through the real tools by the offline test suite;
+  temporal leakage remains the planned headline metric, and no model-quality result is claimed yet.
 
 ### Short form (single bullet)
 
@@ -65,17 +43,13 @@
   `as_of` date (prior art: arXiv 2605.23497, the Dallas Fed real-time OECD dataset, and the OECD MEI
   revisions database), built on **KOR-RTD** — a provenance-contracted point-in-time archive of Korean
   macro data with append-only checksummed captures and a fail-closed vintage resolver. Current
-  state: 26/40 reviewed-and-approved bilingual core records, cutoff-filtered bilingual temporal
-  retrieval over a committed synthetic corpus, a frozen typed execution-and-trace contract within
-  the project's 13 public JSON Schemas, three deterministic evidence tools behind a replay-checked
-  dispatcher, a private provenance-bound offline executor, and `typed function calling with
-  committed traces`: five real-digest offline replays covering all routes and tools, both languages,
-  both cutoff modes, complete execution, and planned/tool abstention with terminal stop and no
-  partial evidence. The approved core includes two combined document-plus-data pairs
-  (`kv-core-both-01` and `kv-core-both-02`). The
-  verified Ministral 3 3B NF4/QLoRA compatibility path is retained, and 1,199 tests pass at 100%
-  statement/branch coverage; temporal leakage is the planned headline metric and no model-quality
-  or briefing-performance result is claimed yet.
+  state: 26/40 reviewed-and-approved bilingual core records, including two combined
+  document-plus-data pairs; cutoff-filtered bilingual retrieval over a committed synthetic corpus;
+  three deterministic evidence tools under 13 public JSON Schemas; and `typed function calling with
+  committed traces`: five offline replays covering all routes and tools, both languages, both
+  cutoff modes, complete execution, and planned and tool abstention with no partial evidence. The
+  Ministral 3 3B NF4/QLoRA compatibility path is verified; temporal leakage is the planned headline
+  metric, and no model-quality or briefing-performance result is claimed yet.
 
 This version distinguishes the deterministic offline replay slice from provider/live integration,
 the 14 unauthored core slots, and the not-yet-evaluated model variants.
@@ -100,7 +74,9 @@ the 14 unauthored core slots, and the not-yet-evaluated model variants.
 - Keep `(in progress)` while the M2 benchmark and baseline work remains incomplete; the committed
   replay slice does not imply benchmark completion.
 - Do not say `fine-tuned` until an adapter has been trained, loaded, and evaluated.
-- Do not cite benchmark size until each counted test item passes schema and human review; **always report the human-reviewed core and machine-generated probes as separate counts**. The current approved core count is 20/40 — the halfway mark of the frozen matrix; of the 20 unapproved slots, two are AI-authored drafts pending named human review and 18 remain unauthored.
+- Do not cite benchmark size until each counted test item passes schema and human review;
+  **always report the human-reviewed core and machine-generated probes as separate counts**.
+  The approved core count is 26/40 as of 2026-11-13; the other 14 records are unauthored.
 - Core records are initially AI-authored and then human-reviewed; do not claim personal manual
   authorship of individual records. "Reviewed and approved" is the accurate personal-CV verb.
 - Do not cite improvement, cost, latency, leakage, or error-rate figures until the aggregation command reproduces them from committed artifacts.

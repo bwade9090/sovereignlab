@@ -28,9 +28,9 @@ recorded in its source manifest and owner-approved series rights decision.
 The operational gate accepted in ADR 0004 remains fail closed: no raw observation may be committed
 until its exact producer or KOSIS content category, applicable rights instrument, attribution,
 permitted operations, and owner approval are present in strict rights records. `SourceManifest`
-2.0.0 implements the typed rights-decision link and `BenchmarkBundle` 2.0.0 cross-validates it
-(`docs/project/05_evidence_contract_2_0_migration.md`); an `allowed` data manifest without a
-matching owner-approved decision fails validation.
+2.0.0 carries the typed rights-decision link and `BenchmarkBundle` 2.0.0 cross-validates it
+(see `docs/architecture.md`); an `allowed` data manifest without a matching owner-approved
+decision fails validation.
 
 Repository layout:
 
@@ -43,8 +43,8 @@ Repository layout:
   rights decision validates.
 - `availability/` — immutable edition-availability ledgers whose inventories are derived from the
   same captured constraint bytes; historical ledgers are never rewritten.
-- `benchmark/` — the frozen 40-record core authoring matrix, AI-authored review drafts, and later
-  human-reviewed task records; drafts are never reported as reviewed gold.
+- `benchmark/` — the frozen 40-record core authoring matrix, review drafts, and the
+  human-reviewed core records; drafts are never reported as reviewed gold.
 - `fixtures/` — synthetic examples, including the bilingual temporal-retrieval corpus, and later
   small redistributable recorded responses used by offline tests.
 - `manifests/` — source URL, publisher, publication date, retrieval time, checksum, language, and license notes.
@@ -56,12 +56,13 @@ Repository layout:
 
 Run one capture with `python scripts/harvest_weekly.py --repository-root .`. The operation is
 append-only: a reused capture path fails instead of overwriting bytes. The weekly GitHub Actions
-workflow runs the same command, validates the full offline suite, and commits only `archive/`,
-`availability/`, and `manifests/` outputs. Captures after a trusted registry's admission frontier
-stay archive-only until a superseding registry version admits them (ADR 0010); the weekly capture
-record has a permanent gap from 2026-07-20 until the first successful scheduled-pipeline capture,
-because every earlier run failed before committing. Files under `archive/` are marked binary in
-`.gitattributes` so Git cannot change provider line endings and invalidate the manifest hash.
+workflow runs the same command, checks the captured artifacts with `tests/test_committed_data.py`
+and the harvester tests, and commits only `archive/`, `availability/`, and `manifests/` outputs.
+Captures taken after an evidence registry was frozen stay archive-only until a new registry
+version admits them (ADR 0010). The weekly capture record has a permanent gap from 2026-07-20 to
+2026-11-02, because every run in that period failed before committing. Files under `archive/` are
+marked binary in `.gitattributes` so Git cannot change provider line endings and invalidate the
+manifest hash.
 Public Git history is the capture-date evidence.
 
 Do not commit a PDF, extracted full text, or API response until its redistribution basis is documented. Never place confidential, applicant, or institutional internal data in this repository.

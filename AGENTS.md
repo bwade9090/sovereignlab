@@ -1,486 +1,138 @@
-# SovereignLab agent guide
+# SovereignLab contributor guide
 
-This file applies to the entire repository. It is the onboarding contract for human contributors and AI agents.
+This file applies to the whole repository, for human contributors and AI assistants alike.
 
-## Mission
+## What this project is
 
-Build **KOR-RTD**, a provenance-contracted point-in-time (vintage) data layer for Korean macroeconomic statistics, and **K-VINTAGE**, a bilingual Korean/English benchmark whose gold answers depend on the data vintage available at each question's `as_of` date — with the SovereignLab briefing pipeline as the reference implementation and public baseline suite. Preserve evaluation-first rigor without overstating results: techniques (fine-tuning, RAG, deterministic tools) are means, not the mission, and temporal-leakage rate is the headline metric.
+**KOR-RTD** is a point-in-time (vintage) data layer for Korean macroeconomic statistics.
+**K-VINTAGE** is a bilingual Korean/English benchmark whose gold answers depend on the data
+vintage available at each question's `as_of` date. The offline briefing path under
+`src/sovereignlab/execution/` is the reference implementation. Temporal-leakage rate is the
+headline metric; fine-tuning, RAG, and tools are means, not the mission.
 
-## Current handoff checkpoint
-
-This repository is past the completed `kv-core-both-02` named human-review gate. No next authoring
-slice is selected; choosing it is an owner decision.
-
-- Current milestone: **M2 — benchmark and baselines**.
-- Approved human-reviewed core: **26/40** records of the frozen 40-record matrix, which must not
-  be edited merely to accelerate authoring.
-- The Korean/English `kv-core-data-02` pair is approved in
-  `data/benchmark/core/core-batch-003.jsonl`. Hyungbae Cho approved both records on 2026-08-20;
-  their review timestamp is `2026-08-20T00:24:18Z`.
-- The Korean/English `kv-core-data-03` pair is approved in
-  `data/benchmark/core/core-batch-004.jsonl`. Hyungbae Cho approved both records on 2026-08-21;
-  their review timestamp is `2026-08-21T07:14:13Z`.
-- The Korean/English `kv-core-data-04` pair is approved in
-  `data/benchmark/core/core-batch-005.jsonl`. Hyungbae Cho approved both records on 2026-08-25;
-  their review timestamp is `2026-08-25T07:10:15Z`. This approval completes the data route's four
-  authorable pairs (`kv-core-data-01`..`kv-core-data-04`); the fifth data pair `kv-core-data-05`
-  stays reserved on the deliberately unauthored test-split unit.
-- The Korean/English `kv-core-abstain-02` pair is approved in
-  `data/benchmark/core/core-batch-006.jsonl`. Hyungbae Cho approved both records on 2026-08-26;
-  their review timestamp is `2026-08-26T01:49:45Z`. This is the second approved abstain pair
-  after `kv-core-abstain-01` and the first approved pair whose fail-closed basis is a rights
-  boundary rather than the availability ledger.
-- The Korean/English `kv-core-abstain-03` pair is approved in
-  `data/benchmark/core/core-batch-007.jsonl`. Hyungbae Cho approved both records on 2026-08-26;
-  their review timestamp is `2026-08-26T07:34:50Z`. This is the third approved abstain pair
-  after `kv-core-abstain-01` and `kv-core-abstain-02` and the first approved false-premise
-  rejection pair.
-- The Korean/English `kv-core-abstain-04` pair is approved in
-  `data/benchmark/core/core-batch-008.jsonl`. Hyungbae Cho approved both records on 2026-08-27;
-  their review timestamp is `2026-08-27T06:37:54Z`. This is the fourth approved abstain pair
-  after `kv-core-abstain-01`, `kv-core-abstain-02`, and `kv-core-abstain-03`, the first
-  approved missing-as-of clarification pair, and the first approved dev-split abstain pair.
-- The Korean/English `kv-core-abstain-05` pair is approved in
-  `data/benchmark/core/core-batch-009.jsonl`. Hyungbae Cho approved both records on 2026-08-27;
-  their review timestamp is `2026-08-27T07:51:13Z`. This is the fifth approved abstain pair
-  after `kv-core-abstain-01`, `kv-core-abstain-02`, `kv-core-abstain-03`, and
-  `kv-core-abstain-04` — all five abstain pairs are approved — and the first approved
-  test-split pair.
-- The Korean/English `kv-core-both-01` pair is approved in
-  `data/benchmark/core/core-batch-010.jsonl`. Hyungbae Cho approved both records on 2026-11-02;
-  their review timestamp is `2026-11-02T11:04:32Z`. This is the first approved combined
-  `documents_and_data` pair. Before approval, commit `4365096` corrected only the English evidence
-  section label to the literal `Executive Summary ii`, because `Economic outlook summary` does not
-  appear on page 6 of the official English translation.
-- The 2026-11-02 weekly harvester repair is complete (ADR 0010). None of the 16 scheduled runs
-  from 2026-07-20 had committed a capture. Frozen-registry completeness tests rejected every fresh
-  capture, three runs timed out connecting to KOSIS or ECOS, and GitHub then disabled the schedule
-  for inactivity. Commits `a3067f5`, `d4a8c22`, and `20733a8` keep post-v1 captures archive-only,
-  retry connection establishment in `scripts/harvest_weekly.py`, pin the runner, and record the
-  decision. An owner-authorized dispatch then committed the first weekly capture,
-  `20261102t101403605391z`, as `fe4f9a9`. The source package, executor digest, trusted registries,
-  public schemas, traces, matrix, and benchmark records are unchanged. The gap from 2026-07-20 is
-  permanent and must not be backfilled.
-- Completed: fail-closed vintage resolver, weekly append-only harvester, approved ECOS/KOSIS/OECD
-  captures, number normalization, offline bilingual temporal retrieval, strict Korean/English Bank
-  of Korea May-2026 and November-2025 Outlook manifests, the approved `kv-core-doc-01`
-  documentary pair, and strict
-  execution/trace contract 1.0.0 with 13 deterministic public schemas. The trusted latest-only
-  snapshot registry, deterministic `read_snapshot_as_of` adapter, trusted synthetic retrieval
-  registry, typed `retrieve_temporal_documents` adapter, trusted historical STES registry, and
-  flat `resolve_stes_as_of` adapter are also complete. The snapshot boundary revalidates exact
-  bytes and rebuilt models at call time; the frozen three-tool callable registry, explicit
-  dispatcher, offline one-shot scripted/recorded/replay planner, internal deterministic
-  evidence-packet assembler, private offline executor, and five committed machine-readable
-  real-digest replay traces are complete as the first nine ADR 0008 slices and work unit C. The
-  traces were generated through the real private executor, `ScriptedPlanner`, callable and artifact
-  registries, and retrieval corpus; they cover all four routes, all three tools, Korean and English,
-  explicit and implicit cutoffs, complete execution, planned abstention, and terminal tool
-  abstention. They stop at the first terminal result and expose no partial evidence. The source
-  package and 13 public schemas remain unchanged.
-  The completed 2026-08-11 replay-trace feature commit is `883815b`; the source descriptor pins 32
-  entries and executor digest
-  `08f45dab6a36a49cb7d0b588a69236942cd61534540bd4de0772010402dada64`.
-- The 2026-08-19 draft-pair feature commit is `f2d2523`. It adds exactly the two draft records and
-  their focused tests; the frozen matrix, source bundle, rights decisions, public schemas, and
-  source package are unchanged.
-- The 2026-08-20 approval feature commit is `473a733`. It records only the named review decision,
-  approval metadata, lifecycle tag, file move into `core/`, and focused-test transition; the
-  record substance, frozen matrix, source bundle, rights decisions, public schemas, source
-  package, and execution runtime are unchanged.
-- The 2026-08-20 current-account draft feature commit is `50c4d9c`. It adds exactly
-  `kv-core-data-03-ko` and `kv-core-data-03-en` plus six focused tests, using only the existing
-  `ecos-301y017-snapshot-20260717` evidence whose use in KOR-RTD is owner-approved. The frozen
-  matrix, approved core, source bundle, rights decisions, public schemas, traces, source package,
-  and execution runtime are unchanged.
-- The 2026-08-21 approval feature commit is `db6700e`. It records only the named review decision,
-  approval metadata, lifecycle tag, file move into `core/`, and focused-test transition; the
-  record substance, frozen matrix, source bundle, rights decisions, public schemas, source
-  package, and execution runtime are unchanged.
-- The 2026-08-21 KOSIS CPI draft feature commit is `5e0da06`. It adds exactly
-  `kv-core-data-04-ko` and `kv-core-data-04-en` plus six focused tests, using only the existing
-  `kosis-cpi-snapshot-20260717` evidence whose use in KOR-RTD is owner-approved (ADR 0007). The
-  frozen matrix, approved core, source bundle, rights decisions, public schemas, traces, source
-  package, and execution runtime are unchanged.
-- The 2026-08-25 approval feature commit is `95c5e61`. It records only the named review decision,
-  approval metadata, lifecycle tag, file move into `core/`, and focused-test transition; the
-  record substance, frozen matrix, source bundle, rights decisions, public schemas, source
-  package, and execution runtime are unchanged.
-- The 2026-08-25 OECD scope abstention draft feature commit is `c20619d`. It adds exactly
-  `kv-core-abstain-02-ko` and `kv-core-abstain-02-en` plus six focused tests, binding no source
-  unit and using only the committed rights catalog as the fail-closed basis: the normalised CLI
-  the questions ask for is a neighboring measure outside the sole owner-approved OECD raw-data
-  scope (Korea's monthly amplitude-adjusted CLI, `KOR.M.LI_AA.IX._T`, ADR 0007). The frozen
-  matrix, approved core, source bundle, rights decisions, public schemas, traces, source package,
-  and execution runtime are unchanged.
-- The 2026-08-26 approval feature commit is `4c29b1d`. It records only the named review decision,
-  approval metadata, lifecycle tag, file move into `core/`, and focused-test transition; the
-  record substance, frozen matrix, source bundle, rights decisions, public schemas, source
-  package, and execution runtime are unchanged.
-- The 2026-08-26 CPI revision false-premise abstention draft feature commit is `77d247d`. It adds
-  exactly `kv-core-abstain-03-ko` and `kv-core-abstain-03-en` plus six focused tests, binding no
-  source unit and adding no evidence: the questions rest on the false premise that archived OECD
-  edition counts prove the Korean CPI was revised, and the gold behavior is to reject that
-  premise and abstain, because edition counts measure archive coverage and no owner-approved
-  raw-data decision covers the OECD Korea CPI revision series — raw OECD observations outside the
-  sole approved Korea monthly amplitude-adjusted CLI scope (`KOR.M.LI_AA.IX._T`, ADR 0007) remain
-  metadata-only. The frozen matrix, approved core, source bundle, rights decisions, public
-  schemas, traces, source package, and execution runtime are unchanged.
-- The 2026-08-26 CPI revision false-premise abstention approval feature commit is `5e14119`. It
-  records only the named review decision, approval metadata, lifecycle tag, file move into
-  `core/`, and focused-test transition; the record substance, frozen matrix, source bundle,
-  rights decisions, public schemas, source package, and execution runtime are unchanged.
-- The 2026-08-26 missing-as-of abstention draft feature commit is `fd7640b`. It adds exactly
-  `kv-core-abstain-04-ko` and `kv-core-abstain-04-en` plus six focused tests, binding no source
-  unit and adding no evidence: the questions ask for Korea's OECD amplitude-adjusted CLI value
-  for May 2026 using the vintage available at the time while omitting the as-of date the vintage
-  request depends on, and the gold behavior is to ask for the missing as-of and abstain, because
-  a vintage answer depends on its as-of cutoff and the fail-closed contract never executes
-  without an explicit `effective_as_of` and never guesses or defaults the cutoff — an assumed
-  cutoff can expose the wrong vintage and create temporal leakage. The frozen matrix, approved
-  core, source bundle, rights decisions, public schemas, traces, source package, and execution
-  runtime are unchanged.
-- The 2026-08-27 missing-as-of abstention approval feature commit is `dfcd191`. It records only
-  the named review decision, approval metadata, lifecycle tag, file move into `core/`, and
-  focused-test transition; the record substance, frozen matrix, source bundle, rights decisions,
-  public schemas, source package, and execution runtime are unchanged.
-- The 2026-08-27 ledger frontier abstention draft feature commit is `d1eb5ea`. It adds exactly
-  `kv-core-abstain-05-ko` and `kv-core-abstain-05-en` plus six focused tests, binding no source
-  unit and adding no evidence: the questions ask for Korea's OECD amplitude-adjusted CLI value
-  for May 2026 using only the vintage available as of August 15, 2026 — a cutoff beyond the
-  committed edition-availability ledger's completeness frontier (`complete_through`, the
-  2026-07-17 capture instant) — and the gold behavior is abstention with
-  `cutoff_beyond_complete_through`, because past the frontier the ledger cannot certify which
-  editions had become available or when, and the fail-closed resolver must not infer editions
-  beyond the frontier or expose a value. The frozen matrix, approved core, source bundle,
-  rights decisions, public schemas, traces, source package, and execution runtime are
-  unchanged.
-- The 2026-08-27 ledger frontier abstention approval feature commit is `16d3dfd`. It records only
-  the named review decision, approval metadata, lifecycle tag, file move into `core/`, and
-  focused-test transition; the record substance, frozen matrix, source bundle, rights decisions,
-  public schemas, source package, and execution runtime are unchanged.
-- The 2026-08-27 BOK outlook CLI combined draft feature commit is `933c0e9`. It adds exactly
-  `kv-core-both-01-ko` and `kv-core-both-01-en` plus seven focused tests — the first combined
-  `documents_and_data` pair authored in the core (train split) — binding document unit
-  `bok-outlook-release-2026-05` and data unit `oecd-stes-edition-202607` exactly as the frozen
-  matrix allocates. Each record carries exactly one page-anchored document evidence entry for
-  the report's 2026 GDP growth projection of 2.6%, well above the February forecast of 2.0%,
-  and one `resolve_stes_as_of` tool expectation reproducing the approved CLI gold (edition
-  `202607`, value `102.66`); both records share `as_of` `2026-07-09`, a cutoff both document
-  publications precede and by which the committed edition-availability ledger proves the CLI
-  edition was demonstrably available. The frozen matrix, approved core, source bundle, rights
-  decisions, public schemas, traces, source package, and execution runtime are unchanged.
-- The 2026-11-02 approval feature commit is `8bc88a1`. After the owner-directed label correction
-  `4365096`, it records only the named review decision, approval metadata, lifecycle tag, file
-  move into `core/`, and focused-test transition. The frozen matrix, source bundle, rights
-  decisions, public schemas, source package, and execution runtime are unchanged.
-- The 2026-11-02 November 2025 outlook manifest feature commit is `33a687a`. It adds
-  `bok-outlook-2025-11-ko` (registered 2025-11-27; `published_on` 2026-03-31 under ADR 0011)
-  and `bok-outlook-2025-11-en` (official English full translation, 2026-01-22) for document unit
-  `bok-outlook-release-2025-11`. Both
-  are `allowed` under the unchanged ADR 0009 family ruling, with three focused tests and the
-  verification log `docs/discovery/05_bok_outlook_2025_11_manifest_log.md`. The PDFs stay in the
-  Git-ignored `data/raw/`. No benchmark record, matrix row, rights decision, schema, trace, or
-  source module changed.
-- The 2026-11-02 ADR 0011 fix commit is `971d1c1`. The embedded PDF dates showed that the
-  Bank of Korea replaced attachments after registering their posts, so three document manifests
-  now date from their exact bytes: May 2026 Korean 2026-06-12, May 2026 English 2026-07-06, and
-  November 2025 Korean 2026-03-31. `kv-core-doc-01` moved its cutoffs and question dates to
-  2026-06-12 and 2026-07-06; Hyungbae Cho re-approved it at `2026-11-02T13:35:01Z`.
-  `kv-core-both-01` is unchanged.
-- The Korean/English `kv-core-doc-02` pair is approved in
-  `data/benchmark/core/core-batch-011.jsonl`. Hyungbae Cho approved both records on 2026-11-02;
-  their review timestamp is `2026-11-02T13:44:04Z`. The drafts came from feature commit
-  `5465eca`, and approval feature commit `6cdd13d` records only the named review decision,
-  approval metadata, lifecycle tag, file move into `core/`, and focused-test transition.
-- The Korean/English `kv-core-both-02` pair is approved in
-  `data/benchmark/core/core-batch-012.jsonl`. Hyungbae Cho approved both records on 2026-11-02;
-  their review timestamp is `2026-11-02T14:16:07Z`. The drafts came from feature commit
-  `c795aab`, and approval feature commit `6ecc946` records only the named review decision,
-  approval metadata, lifecycle tag, file move into `core/`, and focused-test transition. It is
-  the second approved combined `documents_and_data` pair and the first whose tool expectation is
-  `read_snapshot_as_of` rather than `resolve_stes_as_of`.
-- Exact next outcome: none selected. The owner chooses the next pair or slice. Every remaining
-  slot needs new official outlook manifests (the 2025-05, 2024-11, or 2024-05 releases) or the
-  reserved future data release.
-- Until the owner selects one, do not author, draft, or approve another pair; the approved core
-  count remains 26/40.
-- Not implemented yet: a provider or live-model integration or the bounded tool loop. The five
-  committed traces are deterministic offline replay artifacts, not provider recordings.
-- The planner boundary exists under `src/sovereignlab/execution/planner.py`; its recording registry
-  and entry format remain intentionally private. The assembler exists under
-  `src/sovereignlab/execution/assembler.py`; its function and error boundary remain internal and
-  are not package-level public exports. The executor exists under
-  `src/sovereignlab/execution/executor.py`; its function and error boundary are likewise private.
-  No committed provider recording path exists under `data/`.
-- The bounded tool loop is not part of this milestone; ADR 0008 defers it to v1.1.
-
-The authoritative live checkpoint and acceptance criteria are in
-`docs/project/04_macbook_handoff.md`. The filename is retained for history, but the document is now
-the cross-machine Windows continuation handoff.
-
-## Exact next slice — none selected (owner decision)
-
-The named human review of `kv-core-both-02` is complete. Hyungbae Cho approved both records on
-2026-11-02 in `6ecc946` without a substantive change. The approved core is 26/40, and no
-draft review candidate remains. The other 14 records are unauthored.
-
-- Do not select, draft, or approve another pair until the owner chooses one.
-- Do not alter the matrix, source, rights decisions, or public schemas, add probes, add a provider
-  or live-model call, start the deferred bounded loop, or initiate a paid operation as part of
-  choosing the next slice.
-
-Remaining slots, for the owner's choice:
-
-- `kv-core-doc-03`..`kv-core-doc-05` and `kv-core-both-03`..`kv-core-both-04` need the outlook
-  releases of 2025-05, 2024-11, and 2024-05, whose manifests are not yet committed.
-- `kv-core-both-05` and `kv-core-data-05` (`test` split) need the reserved future data release.
-
-Each of these documentary slots first needs new official document manifests under the ADR 0009
-family ruling and dated under ADR 0011, which is its own reviewable unit.
-
-## New-session onboarding procedure
-
-Before editing:
-
-1. From the repository root, run `git status --short --branch` **before** any switch or pull. If
-   the worktree is dirty, preserve the changes and investigate; do not switch, pull, reset, or
-   overwrite. Only from a clean worktree, switch to `main`, fast-forward from `origin`, and confirm
-   the worktree is still clean and aligned.
-2. Read the authority files below in order. Do not rely on a prior chat transcript.
-3. Create or verify the machine-local Python 3.12 environment and run the full offline baseline
-   under "Local setup and required checks."
-4. State back four facts before implementation: current milestone, approved core count, exact next
-   work unit, and hard stops.
-5. Do not start authoring: no next slice is selected. Ask the owner which pair or slice comes
-   next, and do not combine source expansion, probes, provider/live-model work, or a paid
-   operation with that choice.
-
-## Read before changing anything
-
-1. `docs/project/01_project_charter.md` — approved product and evaluation contract (v2.5).
-2. `docs/PROJECT_STATUS.md` — current milestone, completed work, next action, blockers, and validation evidence.
-3. `docs/decisions/` — accepted architecture and process decisions (ADR 0003 records the v2
-   reorientation; ADR 0004 records the v2.1 source-rights amendment; ADR 0005 records the v2.2
-   fail-closed edition-availability contract; ADR 0006 records the owner's employer-risk review;
-   ADR 0007 records the v2.3 exact KOSIS CPI and OECD CLI rights amendment; ADR 0008 records the
-   v2.4 typed function-calling execution contract and the v1.1 deferral of the bounded tool
-   loop; ADR 0009 records the v2.5 Bank of Korea Economic Outlook public-data rights amendment;
-   ADR 0010 keeps weekly captures archive-only until a superseding trusted registry admits them;
-   ADR 0011 dates document manifests no earlier than their exact attachment bytes).
-4. `docs/project/04_macbook_handoff.md` — cross-machine Windows setup, exact continuation order,
-   and next-unit acceptance criteria (legacy filename; skip files it lists that you already read
-   this session).
-5. `docs/discovery/01_concept_upgrade_proposal.md` — background rationale for v2: verified data facts, judged alternatives, risk register.
-6. `docs/project/05_evidence_contract_2_0_migration.md` — implemented evidence/rights contract
-   that the execution path must not change.
-7. `docs/project/07_core_authoring_matrix.md` — approved 40-record allocation, 26/40 review state,
-   and frozen human-review boundary.
-8. `docs/project/08_temporal_document_retrieval.md` — implemented cutoff-before-scoring retrieval
-   contract.
-9. `docs/project/09_typed_execution_trace_contract.md` — frozen execution surface, flat tool
-   arguments, replay provenance, and trace invariants.
-10. `docs/project/10_snapshot_reader_contract.md` — trusted latest-only registry, cutoff selection,
-   provider parsers, and failure taxonomy.
-11. `docs/project/11_temporal_retrieval_adapter_contract.md` — trusted synthetic corpus, typed
-   adapter, replay digest, and failure taxonomy.
-12. `docs/project/12_stes_adapter_contract.md` — trusted historical registry, ledger/rights/archive
-   joins and flat typed adapter.
-13. `docs/project/13_callable_dispatcher_contract.md` — frozen three-tool registry, explicit
-    dispatcher, composite replay provenance, and snapshot call-time hardening.
-14. `docs/project/14_offline_planner_contract.md` — implemented planner protocol, private exact-byte
-    recording boundary, request binding, and deterministic replay.
-15. `docs/project/15_evidence_packet_assembler_contract.md` — implemented private assembler,
-    ordered-result binding, abstention semantics, and no-partial-evidence boundary.
-16. `docs/project/16_offline_executor_contract.md` — implemented private executor, one-shot state
-    machine, sanitized failure mapping, real source-tree provenance, and validation evidence.
-17. `traces/README.md` — committed replay-artifact policy, deterministic regeneration command, and
-    the boundary between public replay artifacts and private recordings.
-18. The closest additional `AGENTS.md`, if a subdirectory adds one later.
-
-For the current checkpoint, also read `data/benchmark/core-authoring-matrix-v1.json`,
-`data/benchmark/README.md`, the approved records in
-`data/benchmark/core/core-batch-001.jsonl`, `core-batch-002.jsonl`, `core-batch-003.jsonl`,
-`core-batch-004.jsonl`, `core-batch-005.jsonl`, `core-batch-006.jsonl`, `core-batch-007.jsonl`,
-`core-batch-008.jsonl`, `core-batch-009.jsonl`, `core-batch-010.jsonl`, `core-batch-011.jsonl`,
-and `core-batch-012.jsonl`, the benchmark model and normalization code in
-`src/sovereignlab/schemas/benchmark.py` and `src/sovereignlab/normalization.py`, and
-`tests/benchmark/test_core_batch.py`, `test_bok_outlook_core.py`, `test_ecos_gdp_core.py`,
-`test_ecos_current_account_core.py`, `test_kosis_cpi_core.py`, `test_oecd_scope_abstain_core.py`,
-`test_cpi_revision_abstain_core.py`, `test_missing_as_of_abstain_core.py`,
-`test_ledger_frontier_abstain_core.py`, `test_bok_cli_both_core.py`,
-`test_bok_outlook_2025_11_core.py`, and `test_bok_gdp_both_core.py`. Treat the matrix allocation,
-approved records, source bundle, and human-review boundary as frozen.
-
-The charter is the scope authority. Do not expand sources, agents, UI, or infrastructure before the current milestone gate passes.
-
-## Working protocol
-
-- Work in small, reviewable units with one stated outcome.
-- Update `docs/PROJECT_STATUS.md` whenever a milestone state, blocker, cost, or next action changes.
-- Record consequential technical choices as an ADR in `docs/decisions/`.
-- Add or update tests in the same change as behavior.
-- Before committing, run the checks for the tier of the change (see "Validation tiers" below) and
-  record the commands in the status document.
-- Use conventional commit prefixes: `docs:`, `chore:`, `feat:`, `fix:`, `test:`, `refactor:`, `eval:`.
-- After green checks, commit in semantic units, push the current branch to `origin`, and confirm
-  the local/remote commit IDs match and the worktree is clean.
-- Do not rewrite or discard unrelated user changes.
-
-### Validation tiers
-
-Match the checks to what a commit changes. When a commit spans several tiers, use the highest.
-
-| What changed | Required checks |
+| Question | Where to look |
 | --- | --- |
-| Documentation only | `git diff --check` |
-| Benchmark records or `tests/benchmark/` only (drafts, approvals, lifecycle moves) | `python -m pytest tests/benchmark -p no:cacheprovider`, `python -m ruff check --no-cache .`, and `python -m ruff format --check .` |
-| Data artifacts: manifests, archives, ledgers, or rights catalogs | The benchmark tier plus `tests/retrieval`, `tests/schemas`, `tests/snapshots`, `tests/vintage`, and `tests/harvest`, or the full suite without coverage |
-| `src/`, schemas, scripts, workflows, or shared test fixtures such as `tests/conftest.py` | The full baseline under "Local setup and required checks" |
+| What is in scope? | [Project charter](docs/project/01_project_charter.md) |
+| Where are we, and what is next? | [Project status](docs/PROJECT_STATUS.md) |
+| How do the pieces fit together? | [Architecture](docs/architecture.md) |
+| Why was it decided this way? | [Decision records](docs/decisions/README.md) |
 
-- Only two tests outside `tests/benchmark/` read committed benchmark data, and both read only
-  `core-batch-001.jsonl`. Add `tests/vintage/test_adapter.py` and `tests/schemas/test_execution.py`
-  when that file changes.
-- The trusted-registry completeness tests read `data/manifests/` directly, which is why data
-  artifacts need the wider tier.
-- Run the full baseline at session start and once before a round's final push or handoff.
-- Whenever the test count changes, update the recorded baseline numbers;
-  `python -m pytest --collect-only -q` reports the count without running the suite.
+## Working agreement
 
-## Evidence and evaluation rules
+- Keep changes small, and add or update tests in the same change as the behaviour.
+- Before committing, run the checks below. That is the whole gate; there is no coverage target.
 
-- Freeze evaluation schemas and evidence-disjoint splits before model optimization.
-- Keep Korean and English results separately reportable.
-- Never let an `as_of` evidence packet include a source published after its cutoff — nor a data vintage/edition that did not exist at the cutoff.
-- A document manifest's `published_on` may not precede its exact hashed bytes: take the latest of
-  the landing-page date, the file's embedded creation/modification dates, and any publisher-stated
-  date (ADR 0011).
-- Harvester outputs are append-only: never rewrite, backdate, or backfill a committed snapshot; public commit history is the proof of capture dates.
-- Captures after a trusted registry's admission frontier stay archive-only until a superseding
-  registry version admits them; admission is a separate owner decision (ADR 0010).
-- Never commit raw ECOS/KOSIS observations unless the exact series has an owner-approved
-  source-specific classification and attribution ruling. Bank of Korea-produced ECOS statistics
-  and in-scope KOSIS domestic macro statistics may be `allowed` under their official use guides;
-  other-producer ECOS raw redistribution fails closed without an express producer-specific basis.
-  KOSIS international/North Korea statistics are not redistributed, and publications follow their
-  individual KOGL notices.
-- Raw OECD observations remain metadata-only except the exact owner-approved, OECD-produced Korea
-  monthly amplitude-adjusted CLI revision scope in ADR 0007. That exception does not authorize any
-  neighboring measure, geography, dataflow, or third-party component.
-- Official Bank of Korea-produced Economic Outlook reports and their official English full
-  translations are `allowed` public data under the owner-approved family ruling in ADR 0009 and
-  the Bank of Korea copyright policy's Public Data Act Article 19 branch. Attribute the Bank of
-  Korea, disclose modification/processing/transformation, and honor separately marked third-party
-  rights. Do not fabricate a KOGL type. Permission does not require automatic full-document
-  ingestion.
-- `SourceManifest` 2.0.0 requires a typed rights-decision link on every `allowed` data snapshot,
-  and bundle validation cross-checks it against the committed rights catalog. No raw observation
-  may be committed unless that link validates and the referenced decision is owner-approved
-  `allowed`.
-- Treat the project and its public data artifacts as non-commercial. Any future commercial-use path
-  requires an owner review and a superseding rights decision before collection or publication.
-- Report the two gold-set tiers separately (40 human-reviewed core vs machine-generated probes); never merge them into one count.
-- Qualify every "first" claim: "to our knowledge" + "for official statistics" + cite prior art (arXiv 2605.23497, Dallas Fed real-time OECD dataset, OECD MEI revisions database). Never claim "first Korean macro benchmark."
-- Do not claim OECD edition/backfill ranges beyond what a recorded verification spike confirmed.
-- When mentioning Korea's AI Basic Act, describe it precisely: it regulates "high-impact" (고영향) AI under a voluntary verification/certification regime — not "high-risk" AI with mandatory testing.
-- Frame the project as complementing public statistical infrastructure; never as exposing defects in official APIs.
-- Treat LLM judges as secondary diagnostics until calibrated against human review.
-- Describe the MVP briefing path as "typed function calling with committed traces" only, and only
-  after the minimal path ships. Do not use "agent", "agentic", "multi-step", "orchestration", or
-  "autonomous" in public-facing descriptions of in-window artifacts (README, CV, datasheets,
-  release notes, commit messages); the bounded tool loop is deferred to v1.1 (ADR 0008). Naming
-  the deferred loop in planning and decision documents is permitted.
-- Derive every CV number and README performance claim from committed artifacts and a reproducible command.
-- Preserve negative results and failure taxonomies.
-- Fine-tuning must target measurable behavior; changing facts belong in retrieval or deterministic tools.
+  ```bash
+  python -m ruff check .
+  python -m ruff format --check .
+  python -m pytest
+  ```
 
-## Data, security, and cost
+- After changing anything under `src/`, run
+  `python scripts/export_execution_replay_traces.py --write`. Each committed trace records a
+  digest of the source tree, and the test suite fails until the traces match.
+- After changing a schema model, run `python scripts/export_json_schemas.py`.
+- Use conventional commit prefixes: `feat:`, `fix:`, `docs:`, `test:`, `refactor:`, `chore:`,
+  `data:`, `eval:`.
+- Update `docs/PROJECT_STATUS.md` in place when the milestone, the approved-core count, a blocker,
+  or spend changes. Do not append session logs anywhere: Git history is the log.
+- Write a decision record only for a choice that changes scope, rights, a public contract, or the
+  evaluation method.
+- Do not rewrite or discard changes you did not make.
+
+## Decisions that belong to the owner
+
+Ask Hyungbae Cho before doing any of these.
+
+- **Approving a benchmark record.** Core records may be drafted by anyone, AI included, but enter
+  `data/benchmark/core/` only after the owner's named review. Approved records and the 40-record
+  matrix (`data/benchmark/core-authoring-matrix-v1.json`) change only through another owner review.
+- **Choosing which pair or slice to author next.**
+- **A rights decision**: classifying a source or series as redistributable, or widening a scope.
+- **Admitting new captures into an evidence registry.** Weekly captures stay archive-only until a
+  new registry version admits them (ADR 0010).
+- **Changing a public JSON Schema** under `data/schemas/`, or the charter's scope.
+- **Paid operations** (API, OCR, embeddings, GPU). Smoke-test first, record the cost in the status
+  page's spend ledger, and stay under the approved USD 100 ceiling.
+- **Dispatching the weekly capture workflow by hand.**
+
+## Evidence rules
+
+These rules are what make the benchmark trustworthy. They are not negotiable for convenience.
+
+- An `as_of` answer may use only documents published, and data vintages available, by the end of
+  the cutoff day in Asia/Seoul. When availability cannot be proven, abstain; never guess a date.
+- A document manifest's `published_on` is never earlier than its exact hashed bytes: take the
+  latest of the landing-page date, the file's embedded dates, and any publisher-stated date
+  (ADR 0011).
+- Each language edition of a document gets its own manifest, with its own date, URL, hash, and
+  licence. Never invent a manifest field to make validation pass.
+- Captures are append-only. Never rewrite, backdate, or backfill one; public commit history is the
+  proof of capture dates. The weekly gap from 2026-07-20 to 2026-11-02 is permanent and must be
+  disclosed wherever capture coverage is described.
+- Commit raw observations only for a series with an owner-approved `allowed` decision in the
+  rights catalog (ADRs 0004 and 0007). Everything else is metadata-only, including every OECD
+  measure other than Korea's monthly amplitude-adjusted CLI.
+- Bank of Korea Economic Outlook reports and their official English translations are allowed
+  public data (ADR 0009): attribute the Bank of Korea, disclose any transformation, honour
+  separately marked third-party rights, and keep the PDF bodies out of Git.
+- Public data artifacts are non-commercial. A commercial path needs an owner review and a new
+  rights decision first.
+- Report the human-reviewed core and the machine-generated probes as separate counts, and keep
+  Korean and English results separately reportable.
+- Freeze evaluation data and evidence-disjoint splits before optimizing a model, and keep negative
+  results. Facts that change belong in retrieval or deterministic tools, not in fine-tuning.
+
+## Public claims
+
+- Derive every number in the README, CV wording, or release notes from committed artifacts and a
+  reproducible command.
+- Describe the shipped path as "typed function calling with committed traces". Do not call it an
+  agent, agentic, multi-step, orchestration, or autonomous in public-facing text; the bounded tool
+  loop is deferred to v1.1 (ADR 0008).
+- Qualify any "first" claim as "to our knowledge, for official statistics" and cite prior art
+  (arXiv 2605.23497, the Dallas Fed real-time OECD dataset, the OECD MEI revisions database).
+  Never claim "first Korean macro benchmark".
+- Do not claim OECD edition or backfill ranges beyond what a recorded verification confirmed.
+- Korea's AI Basic Act regulates "high-impact" (고영향) AI under a voluntary verification and
+  certification regime. It is not a "high-risk" regime with mandatory testing.
+- Frame the project as complementing public statistical infrastructure, never as exposing defects
+  in official APIs, and never imply endorsement by the Bank of Korea, the OECD, Mistral, or any
+  other institution.
+- Treat LLM judges as secondary diagnostics until they are calibrated against human review.
+
+## Data and security
 
 - Use public sources only. Never add confidential Bank of Korea or applicant data.
-- Repository Apache-2.0 terms cover original project code and documentation unless noted; they do
-  not relicense source observations, which retain their recorded provider terms and attribution.
-- Do not commit downloaded source documents until redistribution rights are documented.
 - Never commit API keys, tokens, `.env`, credentials, private traces, or model weights.
-- Paid API, OCR, embedding, or GPU operations require a smoke test and an entry in the project status/cost record.
-- The approved initial external-spend ceiling is USD 100. Do not exceed it without Hyungbae's review.
-- Do not imply endorsement by the Bank of Korea, OECD, Mistral, or any other institution.
+- Apache-2.0 covers the project's own code and documentation. Source observations keep their
+  provider's terms and attribution.
 
-## Local setup and required checks
+## Setup
 
-Development happens on multiple machines; `.venv` is machine-local and must be recreated on each. Nothing in the repository may depend on machine-specific paths.
-
-Windows PowerShell:
-
-```powershell
-git status --short --branch
-git switch main
-git pull --ff-only origin main
-git status --short --branch
-
-$python312 = (Get-Command python -CommandType Application -ErrorAction Stop).Source
-& $python312 -c "import sys; assert sys.version_info[:2] == (3, 12), sys.version"
-if (-not (Test-Path .\.venv\Scripts\python.exe)) {
-    & $python312 -m venv .venv
-}
-$venvPython = (Resolve-Path .\.venv\Scripts\python.exe).Path
-& $venvPython -c "import sys; assert sys.version_info[:2] == (3, 12), sys.version"
-& $venvPython -m pip install -r requirements.txt
-& $venvPython scripts/export_json_schemas.py
-& $venvPython -m ruff check --no-cache .
-& $venvPython -m ruff format --check .
-& $venvPython -m pytest --cov=sovereignlab --cov-branch --cov-report=term-missing -p no:cacheprovider
-git diff --exit-code
-```
-
-macOS or Linux:
+Python 3.12 is required. `.venv` is machine-local, and nothing in the repository may depend on a
+machine-specific path.
 
 ```bash
-git status --short --branch
-git switch main
-git pull --ff-only origin main
-git status --short --branch
 python3.12 -m venv .venv
-source .venv/bin/activate
+source .venv/bin/activate            # Windows PowerShell: .\.venv\Scripts\Activate.ps1
 python -m pip install -r requirements.txt
-python scripts/export_json_schemas.py
-python -m ruff check --no-cache .
-python -m ruff format --check .
-python -m pytest --cov=sovereignlab --cov-branch --cov-report=term-missing -p no:cacheprovider
-git diff --exit-code
+python -m pytest
 ```
 
-The Windows user-level launcher has been unreliable. If `Get-Command python` does not resolve a
-working Python 3.12 runtime, use `where.exe python` or the workstation's installed-app inventory,
-then set `$python312` to the verified executable's full path for the current shell only. Never
-commit that machine-specific path. Do not reuse a `.venv` whose interpreter check fails.
-The Windows requirements include a `win32`-only `tzdata` pin because a standard Windows Python
-installation has no system IANA timezone database.
-
-The 2026-11-02 handoff baseline is 13 deterministic public schemas, 83 formatted Python files,
-1,199 passing tests, and 100% SovereignLab statement/branch coverage (4,679 statements, 1,568
-branches). The focused benchmark acceptance run is 82 passing tests. A different result is a
-diagnostic signal: stop before implementation and record the discrepancy in
-`docs/PROJECT_STATUS.md`.
+Offline checks need no API key. Copy `.env.example` to `.env` only for an approved API-backed run.
 
 ## Repository map
 
-- `src/sovereignlab/` — importable application and evaluation code.
-- `src/sovereignlab/snapshots/` — trusted latest-only registry and deterministic ECOS/KOSIS reader.
-- `src/sovereignlab/retrieval/` — cutoff-safe lexical retrieval, trusted synthetic corpus, and
-  typed document adapter.
-- `src/sovereignlab/execution/` — frozen three-tool callable registry, explicit deterministic
-  dispatcher, offline one-shot planner boundary, private deterministic evidence-packet assembler,
-  and private offline executor. The source package remains unchanged by the completed ninth ADR
-  0008 slice.
-- `scripts/export_execution_replay_traces.py` — fixed-scenario deterministic writer/checker for the
-  committed real-digest replay set.
-- `traces/` — public machine-readable replay artifacts and their publication/privacy policy. The
-  five v1 traces cover all routes and tools plus complete, planned-abstention, and terminal
-  tool-abstention outcomes without exposing private planner recordings.
-- `tests/` — offline tests; network calls must be mocked or replayed unless explicitly marked.
-- `data/` — public benchmark and metadata policy; ignored raw/interim material. The KOR-RTD archive layer (edition consolidations, harvester snapshots, manifests) lives here.
-- `artifacts/` — generated outputs policy; generated content is ignored by default.
-- `docs/project/` — charter and customer-facing scope.
-- `docs/discovery/` — role-gap and project-selection research.
-- `docs/application/` — milestone-gated CV/application language.
-- `docs/decisions/` — architecture decision records.
+- `src/sovereignlab/schemas/` — the public data contracts; `data/schemas/` holds their JSON Schema.
+- `src/sovereignlab/harvest/` — the weekly append-only capture of OECD metadata and the approved
+  ECOS/KOSIS series.
+- `src/sovereignlab/vintage/`, `snapshots/`, `retrieval/` — the three offline evidence tools and
+  the pinned evidence each one reads.
+- `src/sovereignlab/execution/` — planner, dispatcher, packet assembler, and executor.
+- `scripts/` — capture, schema export, and replay-trace export entry points.
+- `data/` — benchmark records, manifests, archives, availability ledgers, and rights catalogs.
+- `traces/` — committed replay traces.
+- `tests/` — offline tests; nothing calls the network.
+- `docs/` — charter, status, architecture, decision records, discovery notes, application wording.
+- `experiments/qlora/` — the one-step QLoRA compatibility harness.

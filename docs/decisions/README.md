@@ -36,3 +36,5 @@ Accepted records are not silently rewritten. Supersede them with a new ADR and c
   — **accepted 2026-11-02 (owner-approved weekly harvester repair)**
 - [0011 — Date document manifests no earlier than their exact attachment bytes](0011-document-publication-dates-follow-exact-bytes.md)
   — **accepted 2026-11-02 (owner-approved option A; `kv-core-doc-01` re-reviewed)**
+- [0012 — Right-size the engineering process, documents, code, and tests](0012-right-size-engineering-process.md)
+  — **accepted 2026-11-13 (owner-requested; amends ADR 0010 decisions 3, 4, and 6)**

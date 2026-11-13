@@ -1,9 +1,10 @@
 # SovereignLab application project description
 
 - Status: application-ready wording for the current M2 midpoint
-- Last updated: 2026-08-27
+- Last updated: 2026-11-13 (shortened; engineering counts removed after ADR 0012)
 - Disclosure level: verified implementation, compatibility, and deterministic offline replay
   results only; no provider/live, model-quality, or briefing-performance claim
+- Before use, check the approved-record count against `docs/PROJECT_STATUS.md`
 
 ## Detailed version
 
@@ -21,246 +22,50 @@ benchmark; and a reference briefing pipeline that will combine temporal RAG with
 statistical tools.
 
 The implemented KOR-RTD foundation combines OECD revision histories with an append-only weekly
-harvester for exact, rights-approved ECOS and KOSIS series (first captures committed 2026-07-17;
-the first weekly GitHub Actions capture committed 2026-11-02, after a repair that left a disclosed
-gap from 2026-07-20). Every committed snapshot is bound to a
-strict source manifest, SHA-256 checksum, capture timestamp, source-specific redistribution
-decision, and attribution rule. The initial archive includes real ECOS GDP and current-account
-captures, KOSIS national CPI, and a 75,060-row OECD Korea composite-leading-indicator archive across
-239 editions. A fail-closed as-of resolver selects only editions whose availability at the requested
-cutoff can be demonstrated; it abstains rather than inferring publication dates from monthly edition
-labels or falling back to an unverified row. Exact Decimal-based unit conversion, Korean
-large-number presentation, rounding, and grading tolerances are also frozen and tested.
+harvester for exact, rights-approved ECOS and KOSIS series. The first captures were committed on
+2026-07-17, and the weekly GitHub Actions capture has committed since 2026-11-02, after a repair
+that left a disclosed gap from 2026-07-20. Every committed snapshot is bound to a strict source
+manifest, SHA-256 checksum, capture timestamp, source-specific redistribution decision, and
+attribution rule. The archive includes real ECOS GDP and current-account captures, KOSIS national
+CPI, and a 75,060-row OECD Korea composite-leading-indicator archive across 239 editions. A
+fail-closed as-of resolver selects only editions whose availability at the requested cutoff can be
+demonstrated; it abstains rather than inferring publication dates from monthly edition labels or
+falling back to an unverified row. Exact Decimal-based unit conversion, Korean large-number
+presentation, rounding, and grading tolerances are also frozen and tested.
 
 The project passed its first milestone gate and is midway through the benchmark-and-baselines
-milestone. Its evidence, benchmark, core-authoring-matrix, availability-ledger, rights, and
-execution contracts are published as 13 synchronized deterministic JSON Schemas; the offline
-resolver is operational; the GitHub Actions harvester committed its first weekly capture on
-2026-11-02 after a registry-admission repair, so weekly capture coverage has a disclosed gap from
-2026-07-20; and 1,199 tests pass with 100% statement and branch coverage (4,679 statements, 1,568
-branches) across 83 formatted Python files. The
-40-question human-reviewed bilingual core is frozen as an allocation, and 26 of 40 records —
-initially AI-authored, then approved under
-named human review —
-are complete: a Korean/English data pair resolving the OECD CLI vintage available on 2026-07-09, an
-abstention pair for an earlier cutoff where no edition is provably available, and a documentary
-pair grounded in the Bank of Korea's May 2026 Economic Outlook and its independently dated official
-English translation, plus Korean/English data pairs over the 2026-07-17 ECOS GDP and
-current-account snapshots, a Korean/English data pair over the 2026-07-17 KOSIS national CPI
-snapshot, a Korean/English rights-based abstention pair for Korea's OECD normalised CLI, a
-neighboring measure outside the sole owner-approved OECD raw-data scope, a Korean/English
-false-premise abstention pair that rejects the premise that archived OECD edition counts prove
-the Korean CPI was revised, a Korean/English missing-as-of clarification abstention pair
-that asks for Korea's OECD amplitude-adjusted CLI for May 2026 while omitting the as-of date
-the vintage request depends on, a Korean/English test-split ledger-frontier abstention
-pair whose August 15, 2026 cutoff lies beyond the committed availability ledger's
-completeness frontier, and the first Korean/English combined document-plus-data pair, which
-pairs the Bank of Korea May 2026 outlook's 2026 growth projection with the demonstrably
-available July 2026 CLI vintage, and a second Korean/English documentary pair that recovers the
-November 2025 outlook's inflation rationale at each edition's own cutoff, and a second combined
-pair that pairs that outlook's 2025 growth forecast with 2025Q4 real GDP from the approved
-2026-07-17 ECOS snapshot. Offline
-bilingual temporal document retrieval is implemented over a committed
-synthetic Korean/English corpus — the real Bank of Korea report bodies are manifest-bound but not
-yet committed as searchable text — with publication-date filtering before scoring; regression
-tests on that corpus prove documents published after a question's cutoff cannot change eligible
-results or scores.
+milestone. Its evidence, benchmark, authoring-matrix, availability-ledger, rights, and execution
+contracts are published as 13 JSON Schemas. The 40-question human-reviewed bilingual core is frozen
+as an allocation, and 26 of 40 records — initially AI-authored, then approved under named human
+review — are complete. They cover documentary questions over the Bank of Korea's May 2026 and
+November 2025 Economic Outlooks and their independently dated official English translations; data
+questions over the OECD Korea CLI revision archive and the 2026-07-17 ECOS GDP, ECOS
+current-account, and KOSIS CPI snapshots; two combined document-plus-data pairs; and five
+abstention pairs, each for a different reason to decline: no provably available edition, an
+unapproved neighbouring OECD series, a false premise about revisions, a missing as-of date, and a
+cutoff beyond the availability ledger's completeness frontier. The offline test suite reproduces
+every approved gold answer by running the real tools against the committed evidence.
 
-The `kv-core-data-02` pair was completed as two drafts on 2026-08-19 and approved without a
-substantive change by Hyungbae Cho on 2026-08-20. It reads the 2026 Q1 seasonally adjusted real GDP
-value of 596,692.8 billion won from the 2026-07-17 ECOS snapshot whose use in KOR-RTD is
-owner-approved. The records now live in
-`data/benchmark/core/core-batch-003.jsonl`; the frozen matrix, source bundle, rights decisions,
-source package,
-public schemas, and execution runtime are unchanged. At that approval checkpoint, the focused
-benchmark suite passed 27 tests and the full baseline passed 1,135 tests across 72 formatted
-Python files.
+On the execution side, the project has shipped `typed function calling with committed traces`. A
+typed contract fixes the bilingual request, a four-route plan, three flat-argument tool calls and
+results, the evidence packet, and replay provenance. Bilingual document retrieval filters by
+publication date before scoring, over a committed synthetic Korean/English corpus; the real Bank of
+Korea report bodies are manifest-bound but not committed as searchable text. Five machine-readable
+traces cover all four routes, all three tools, Korean and English, explicit and implicit cutoffs,
+complete execution, planned abstention, and a tool abstention that stops later calls and exposes no
+partial evidence. These are deterministic offline replays rather than provider or live outputs, so
+they do not establish briefing quality or model performance. A pinned Ministral 3 3B QLoRA
+compatibility run also completed one optimizer step on a disposable RunPod A40/CUDA 13 instance,
+verifying NF4 loading, language-model-only LoRA boundaries, finite gradients, a changed adapter
+tensor, and adapter-only output. This is deliberately reported as a training-path compatibility
+result, not as evidence of improved model quality.
 
-The `kv-core-data-03` pair was completed as two AI-authored drafts in feature commit `50c4d9c`
-and approved without a substantive change by Hyungbae Cho on 2026-08-21. It reads the May 2026
-seasonally adjusted current-account value of 38,121.1 million US dollars from the existing
-2026-07-17 ECOS snapshot whose use in KOR-RTD is owner-approved. The records now live in
-`data/benchmark/core/core-batch-004.jsonl`, with only the annotation status, reviewer fields, and
-lifecycle tag changed; the frozen matrix, source bundle, rights decisions, 13 public schemas, five
-committed traces, source package, and execution runtime are unchanged. That approval brought the
-approved core to 10 of 40 records. At that approval checkpoint the focused benchmark suite passed
-33 tests across four files and the full baseline passed 1,141 tests across 73 formatted Python
-files.
-
-The `kv-core-data-04` pair was completed as two AI-authored drafts in feature commit `5e0da06`
-and approved without a substantive change by Hyungbae Cho on 2026-08-25. It reads the June 2026
-national all-items consumer price index of 119.99 (2020=100) from the existing committed
-2026-07-17 KOSIS snapshot whose use in KOR-RTD is owner-approved under ADR 0007. The records now
-live in `data/benchmark/core/core-batch-005.jsonl`, with only the annotation status, reviewer
-fields, and lifecycle tag changed; the frozen matrix, source bundle, rights decisions, 13 public
-schemas, five committed traces, source package, and execution runtime are unchanged. That
-approval brought the approved core to 12 of 40 records and completed the data route's four
-authorable pairs (`kv-core-data-01` through `kv-core-data-04`); the fifth data pair
-`kv-core-data-05` stays reserved on the deliberately unauthored test-split unit. At that approval
-checkpoint the focused benchmark suite passed 39 tests across five files and the full baseline
-passed 1,147 tests across 74 formatted Python files.
-
-The `kv-core-abstain-02` pair was completed as two AI-authored drafts in feature commit `c20619d`
-and approved without a substantive change by Hyungbae Cho on 2026-08-26. Both questions ask for
-Korea's OECD normalised composite leading indicator value for May 2026 using only the vintage
-available as of 2026-07-09 — a neighboring measure outside the sole owner-approved OECD raw-data
-scope, Korea's monthly amplitude-adjusted CLI (`KOR.M.LI_AA.IX._T`, ADR 0007) — so the approved
-gold behavior is abstention on the missing rights basis. The pair binds no document or data units
-and carries no tool expectations and no reference answer, only a language-matched abstention
-reason that names the approved scope, forbids substituting the approved series or exposing an
-unapproved observation, and leaks no observation value. The cutoff is deliberately one where the
-approved amplitude-adjusted scope does resolve (edition 202607, value 102.66), and a focused
-contrast test proves the approved abstention is rights-driven, not availability-driven — this is
-the second approved abstention pair after `kv-core-abstain-01` and the first approved pair whose
-fail-closed basis is a rights boundary rather than the availability ledger. The records now live
-in `data/benchmark/core/core-batch-006.jsonl`, with only the annotation status, reviewer fields,
-and lifecycle tag changed; the frozen matrix, source bundle, rights decisions, 13 public schemas,
-five committed traces, source package, and execution runtime are unchanged. That approval
-brought the approved core to 14 of 40 records. At that approval checkpoint the focused
-benchmark suite passed 45 tests across six files and the full baseline passed 1,153 tests
-across 75 formatted Python files.
-
-The `kv-core-abstain-03` pair was completed as two AI-authored drafts in feature commit `77d247d`
-and approved without a substantive change by Hyungbae Cho on 2026-08-26. Both questions rest on
-the false premise that the many archived OECD editions of Korea's consumer price index prove the
-Korean CPI was revised just as many times, and ask for before-and-after November 2019 CPI values
-using only the vintage available as of 2026-07-17 — so the approved gold behavior is to reject
-the premise and abstain: archived edition counts measure archive coverage, not actual revisions,
-and KOR-RTD holds no owner-approved raw-data decision for the OECD Korea CPI revision series —
-raw OECD observations outside the sole approved Korea monthly amplitude-adjusted CLI scope
-(`KOR.M.LI_AA.IX._T`) remain metadata-only — so no before-and-after CPI observation can be
-served and the system must not fabricate revision values or expose an unapproved observation.
-The pair binds no document or data units and carries no tool expectations and no reference
-answer, only a language-matched abstention reason. Focused tests additionally prove that the
-rights catalog's only OECD decision is the approved CLI scope, that the serialized records leak
-no observation value and no snapshot identifier, and that the only approved CPI evidence in
-KOR-RTD — the KOSIS latest-only snapshot — carries `vintage_semantics=latest_only`, so committed
-evidence cannot serve any CPI revision by construction. This is the third approved abstention
-pair after the availability-frontier `kv-core-abstain-01` and neighboring-scope
-`kv-core-abstain-02` pairs, and the first approved false-premise rejection pair. The records now
-live in `data/benchmark/core/core-batch-007.jsonl`, with only the annotation status, reviewer
-fields, and lifecycle tag changed; the frozen matrix, source bundle, rights decisions, 13 public
-schemas, five committed traces, source package, and execution runtime are unchanged. That
-approval brought the approved core to 16 of 40 records. At that approval checkpoint the focused
-benchmark suite passed 51 tests across seven files and the full baseline passed 1,159 tests
-across 76 formatted Python files.
-
-The `kv-core-abstain-04` pair was completed as two AI-authored drafts in feature commit `fd7640b`
-and approved without a substantive change by Hyungbae Cho on 2026-08-27 — a dev-split abstention
-pair, the second dev-split pair after `kv-core-data-04`. Both questions ask for Korea's OECD
-amplitude-adjusted CLI value for May 2026 using the vintage available at the time, while
-omitting the as-of date the vintage request depends on — so the approved gold behavior is to ask
-for the missing as-of and abstain: a vintage answer depends on its as-of cutoff, and KOR-RTD's
-fail-closed contract never executes without an explicit `effective_as_of` and never guesses or
-defaults the cutoff, because an assumed cutoff can expose the wrong vintage and create temporal
-leakage. The pair binds no document or data units and carries no tool expectations and no
-reference answer, only a language-matched abstention reason. Focused tests additionally prove
-that the questions contain no as-of phrase while both abstention reasons demand an explicit
-`effective_as_of`, that the serialized records leak no observation value and no snapshot or
-ledger identifier, and that the same request resolves once an explicit cutoff of 2026-07-09 is
-supplied — edition 202607, value 102.66 from the owner-approved CLI scope — so the approved
-abstention is missing-cutoff driven, not availability- or rights-driven. This is the fourth
-approved abstention pair after the availability-frontier `kv-core-abstain-01`, neighboring-scope
-`kv-core-abstain-02`, and false-premise `kv-core-abstain-03` pairs, and the first approved
-missing-as-of clarification pair and first approved dev-split abstention pair. The records now
-live in `data/benchmark/core/core-batch-008.jsonl`, with only the annotation status, reviewer
-fields, and lifecycle tag changed; the frozen matrix, source bundle, rights decisions, 13 public
-schemas, five committed traces, source package, and execution runtime are unchanged. That
-approval brought the approved core to 18 of 40 records. At that approval checkpoint the focused
-benchmark suite passed 57 tests across eight files and the full baseline passed 1,165 tests
-across 77 formatted Python files.
-
-The `kv-core-abstain-05` pair was completed as two AI-authored drafts in feature commit `d1eb5ea`
-and approved without a substantive change by Hyungbae Cho on 2026-08-27 — a test-split abstention
-pair, the first test-split pair in the core. Both questions ask for Korea's OECD
-amplitude-adjusted CLI value for May 2026 using only the vintage available as of August 15,
-2026 — a cutoff beyond the committed edition-availability ledger's completeness frontier
-(`complete_through`, the 2026-07-17 capture instant) — so the approved gold behavior is
-abstention with `cutoff_beyond_complete_through`: past the frontier the ledger cannot certify
-which editions had become available or when, and the fail-closed resolver must not infer
-editions beyond the frontier or expose a value. The pair binds no document or data units and
-carries no tool expectations and no reference answer, only a language-matched abstention reason.
-Focused tests additionally prove that the ledger's cutoff for 2026-08-15 exceeds
-`complete_through` and `select_edition` abstains with `cutoff_beyond_complete_through`, that a
-pre-frontier cutoff of 2026-07-09 still selects edition 202607 — so the approved abstention is
-frontier-driven, not rights- or premise-driven — and that the serialized records leak no edition
-code, no observation value, and no snapshot or ledger identifier. This is the fifth approved
-abstention pair after the availability-frontier `kv-core-abstain-01`, neighboring-scope
-`kv-core-abstain-02`, false-premise `kv-core-abstain-03`, and missing-as-of
-`kv-core-abstain-04` pairs — completing approval of the abstention route's five pairs — and the
-first approved test-split pair. The records now live in
-`data/benchmark/core/core-batch-009.jsonl`, with only the annotation status, reviewer fields,
-and lifecycle tag changed; the frozen matrix, source bundle, rights decisions, 13 public
-schemas, five committed traces, source package, and execution runtime are unchanged. That
-approval brought the approved core to 20 of 40 records — the halfway mark of the frozen
-40-record matrix. At that approval checkpoint the focused benchmark suite passed 63 tests
-across nine files and the full baseline passed 1,171 tests across 78 formatted Python files.
-
-Feature commit `933c0e9` added the Korean/English `kv-core-both-01` pair as two AI-authored
-drafts in `data/benchmark/drafts/core-draft-010.jsonl` — the first combined
-`documents_and_data` pair authored in the core, a train-split pair on evidence group
-`eg-both-outlook-2026-05-cli-202607` binding the `bok-outlook-release-2026-05` document unit
-and the `oecd-stes-edition-202607` data unit exactly as the frozen matrix allocates. Each
-record carries exactly one page-anchored document evidence entry and one `resolve_stes_as_of`
-tool expectation, and both records share the 2026-07-09 `as_of`: both document publications
-precede that cutoff — under ADR 0011 the Korean report's exact PDF bytes date from 2026-06-12
-and its official English translation's from 2026-07-06 — and the committed
-edition-availability ledger proves CLI edition
-202607 was demonstrably available by it. The document claim reads the report's 2026 GDP growth
-projection of 2.6%, well above the February forecast of 2.0%, anchored to the Korean summary
-page 8 (요약 2/10 — 경제전망 요약) and the official English executive summary page 6, located
-in the owner-approved, hash-verified local PDF bodies re-fetched earlier into the Git-ignored
-`data/raw/`; the reference answers disclose summarization/paraphrase and attribute the Bank of
-Korea. The data gold mirrors the approved `kv-core-data-01` convention — CLI source
-`oecd-stes-cli-kor-li-aa-20260717t115302688498z` with vintage ledger
-`oecd-stes-ledger-20260717t115242998550z`, selected edition 202607, raw and normalized value
-102.66, canonical unit `oecd_amplitude_adjusted_index`, two display places, and normalization
-rule `oecd-stes-kor-li-aa-index-v1`. The commit added only these two records and seven focused
-tests covering the frozen allocation, a real `BenchmarkBundle` over both document manifests,
-the CLI manifest, the two constraint captures, the availability ledger, and the rights catalog,
-reproduction of the declared CLI gold through the real fail-closed resolver, bilingual
-document-plus-data claims, the English record failing closed before its release date (now
-2026-07-06 under ADR 0011), and a pre-availability ledger cutoff (2026-06-30) still
-abstaining.
-
-Hyungbae Cho approved both records on 2026-11-02. For the review, both official PDFs were
-re-fetched with owner approval and matched their manifests byte-for-byte, and both anchored
-pages carry the claimed projection and comparison. The review found one label defect: the
-English locator section's suffix `Economic outlook summary` does not appear on page 6.
-Commit `4365096` corrected it to the literal `Executive Summary ii` before approval, and no other
-field changed. Approval feature commit `8bc88a1` added the reviewer metadata and lifecycle tag
-and moved the pair to `data/benchmark/core/core-batch-010.jsonl`; the focused module is now
-`tests/benchmark/test_bok_cli_both_core.py`. This first approved combined `documents_and_data`
-pair brought the approved core to 22 of 40 records; at that point no draft was pending, and
-18 records remained unauthored. The focused benchmark suite then passed 70 tests across ten files. The frozen matrix,
-source bundle, rights decisions, 13 public schemas, five committed traces, source package, and
-execution runtime are unchanged, and no PDF body or extracted text entered Git.
-
-On the execution side, the project has shipped `typed function calling with committed traces`.
-A strict typed execution-and-trace contract freezes the bilingual request, four-route plan, exactly
-three flat-argument tool calls and results, evidence packets, and digest-linked replay provenance.
-Five machine-readable traces generated through the actual private executor, `ScriptedPlanner`, and
-committed callable and artifact registries, synthetic retrieval corpus, and historical data cover
-all four routes, all three tools, Korean and English, explicit and implicit cutoffs, complete
-execution, planned abstention, and terminal tool abstention. Terminal results stop further calls,
-and abstention exposes no partial evidence. The source package is unchanged; its 32-entry execution
-descriptor retains digest
-`08f45dab6a36a49cb7d0b588a69236942cd61534540bd4de0772010402dada64`, and the public surface remains
-13 deterministic JSON Schemas. These are deterministic offline replays rather than provider or
-live outputs, so they do not establish briefing quality or model performance. A
-pinned Ministral 3 3B QLoRA compatibility run also completed one optimizer step on a disposable
-RunPod A40/CUDA 13 instance, verifying NF4 loading,
-language-model-only LoRA boundaries, finite gradients, a changed adapter tensor, and adapter-only
-output. This is deliberately reported as a training-path compatibility result, not as evidence of
-improved model quality.
-
-No next pair or slice is selected yet; choosing it is the owner's decision. Later M2
-work authors the remaining core records plus a separately reported set of 200–300 deterministic
-revision probes and runs the four-variant baseline suite comparing
-closed-book generation, temporal RAG, RAG plus deterministic tools, and a QLoRA-tuned evidence
-router. Temporal-leakage rate—whether a system uses information that did not exist at the
-question's `as_of` date—is the headline metric; all performance claims will be derived only from
-committed evaluation artifacts.
+Later M2 work authors the remaining core records and a separately reported set of 200–300
+deterministic revision probes, and runs the four-variant baseline suite comparing closed-book
+generation, temporal RAG, RAG plus deterministic tools, and a QLoRA-tuned evidence router.
+Temporal-leakage rate — whether a system uses information that did not exist at the question's
+`as_of` date — is the headline metric; all performance claims will be derived only from committed
+evaluation artifacts.
 
 ## Brief version
 
@@ -269,85 +74,21 @@ committed evaluation artifacts.
 Building an evaluation-first Korean macroeconomic research stack that reconstructs what official
 statistics said at a historical `as_of` date. I implemented KOR-RTD's append-only ECOS/KOSIS
 harvester, OECD revision archive, strict provenance and source-rights contracts, fail-closed vintage
-resolver, and exact number-normalization rules, then froze a typed execution-and-trace contract —
-completing the project's 13 public JSON Schemas — and implemented cutoff-filtered bilingual
-temporal document retrieval over a committed synthetic corpus, all three deterministic evidence
-tools behind a replay-checked dispatcher, an offline scripted/immutable recorded-replay planner
-boundary, an internal deterministic evidence-packet assembler, and a private provenance-bound
-offline executor. Five real-digest offline replays now provide `typed function calling with
-committed traces`, covering all routes and tools, Korean and English, explicit and implicit cutoffs,
-complete execution, and terminal planned/tool abstention without partial evidence. The repository
-passes 1,199 tests with 100% statement and branch coverage (4,679 statements, 1,568 branches)
-across 83 formatted Python files. The frozen 40-record bilingual K-VINTAGE core has its first 26
-records reviewed and approved, including a
-Korean/English documentary pair over the Bank of Korea's May 2026 Economic Outlook and its later
-official English translation. A further Korean/English `kv-core-data-02` pair over the 2026-07-17
-ECOS GDP snapshot was approved by Hyungbae Cho on 2026-08-20, with the focused benchmark suite at
-27 passing tests at that checkpoint. The `kv-core-data-03` current-account pair, drafted over the
-existing ECOS snapshot whose use in KOR-RTD is owner-approved, was approved by Hyungbae Cho on
-2026-08-21, with the focused benchmark suite at 33 passing tests at that checkpoint, bringing the
-approved count to 10/40. The `kv-core-data-04` KOSIS CPI pair, drafted in feature commit
-`5e0da06` over the existing committed `kosis-cpi-snapshot-20260717` whose use in KOR-RTD is
-owner-approved (ADR 0007), was approved by Hyungbae Cho on 2026-08-25, with the focused benchmark
-suite at 39 passing tests at that checkpoint, bringing the approved count to 12/40. The
-`kv-core-abstain-02` pair, drafted in feature commit `c20619d` as a train-split abstention pair
-whose questions ask for Korea's OECD normalised CLI — a neighboring measure outside the sole
-owner-approved raw-data scope (`KOR.M.LI_AA.IX._T`, ADR 0007), so the gold behavior is a
-rights-based abstention that binds no source units and leaks no observation value — was approved
-by Hyungbae Cho on 2026-08-26, with the focused benchmark suite at 45 passing tests at that
-checkpoint, bringing the approved count to 14/40. The `kv-core-abstain-03` pair, drafted in
-feature commit `77d247d` as a train-split abstention pair whose questions rest on the false
-premise that the many archived OECD editions of Korea's consumer price index prove the Korean
-CPI was revised just as many times — so the gold behavior is to reject that premise and abstain,
-since edition counts measure archive coverage, not actual revisions, and no owner-approved
-raw-data decision covers the OECD Korea CPI revision series, with the pair binding no source
-units and its serialized records leaking no observation value and no snapshot identifier — was
-approved by Hyungbae Cho on 2026-08-26, with the focused benchmark suite at 51 passing tests at
-that checkpoint, bringing the approved count to 16/40. The `kv-core-abstain-04` pair, drafted
-in feature commit `fd7640b` as a dev-split abstention pair whose questions ask for Korea's OECD
-amplitude-adjusted CLI value for May 2026 using the vintage available at the time while
-omitting the as-of date the vintage request depends on — so the gold behavior is to ask for the
-missing as-of and abstain, since the fail-closed contract never executes without an explicit
-`effective_as_of` and never guesses or defaults the cutoff, with the pair binding no source
-units and its serialized records leaking no observation value and no snapshot or ledger
-identifier — was approved by Hyungbae Cho on 2026-08-27, with the focused benchmark suite at 57
-passing tests at that checkpoint, bringing the approved count to 18/40. The `kv-core-abstain-05`
-pair, drafted in feature commit `d1eb5ea` as a test-split abstention pair — the first authored
-for the test split — whose questions ask for Korea's OECD amplitude-adjusted CLI for May 2026
-using only the vintage available as of August 15, 2026, a cutoff beyond the committed
-availability ledger's `complete_through` frontier, the 2026-07-17 capture instant, so the gold
-behavior is abstention with `cutoff_beyond_complete_through`, since past that frontier the
-ledger cannot certify which editions had become available, with the pair binding no source
-units, a contrast test showing a pre-frontier 2026-07-09 cutoff still selects edition 202607,
-so the abstention is frontier-driven, and its serialized records leaking no edition code, no
-observation value, and no snapshot or ledger identifier — was approved by Hyungbae Cho on
-2026-08-27, with the focused benchmark suite at 63 passing tests at that checkpoint, bringing
-the approved count to 20/40 — the halfway mark of the frozen core, with the abstention route's
-five pairs all approved. Feature commit `933c0e9` subsequently added two `kv-core-both-01`
-drafts — the first combined `documents_and_data` pair, a train-split pair whose records each
-carry one page-anchored document evidence entry reading the Bank of Korea May 2026 outlook's
-2026 GDP growth projection of 2.6%, well above the February forecast of 2.0%, and one
-`resolve_stes_as_of` tool expectation reproducing CLI edition 202607, value 102.66, through the
-real fail-closed resolver at a shared 2026-07-09 as-of that the committed availability ledger
-demonstrably covers; a negative test proves the English record fails closed before its
-release date, and a ledger check proves a pre-availability cutoff still abstains.
-Hyungbae Cho approved that pair on 2026-11-02 after one owner-directed correction of the English
-evidence section label, bringing the approved count to 22/40. The same day, a check of the
-embedded PDF dates showed that the Bank of Korea had replaced report attachments after posting,
-so ADR 0011 dates every document manifest no earlier than its exact bytes. The documentary pair
-moved to the corrected cutoffs and was re-approved. A second documentary pair over the November
-2025 outlook's inflation rationale was then drafted and approved, bringing the approved core to
-24/40. A second combined pair over the November 2025 outlook and the approved ECOS GDP snapshot
-was then drafted and approved, bringing the approved core to 26/40 with 14 slots unauthored;
-focused validation is 82 tests across 12 files. I also
-verified the pinned Ministral 3 3B NF4/QLoRA training path on a disposable A40/CUDA 13 GPU without
-claiming model-quality gains. The next pair or slice is the owner's choice; later work covers the
-remaining core, separately reported deterministic revision probes, and the four-variant baseline
-suite, with temporal leakage as the headline metric.
+resolver, and exact number-normalization rules; a typed execution-and-trace contract within the
+project's 13 public JSON Schemas; cutoff-filtered bilingual document retrieval over a committed
+synthetic corpus; and three deterministic evidence tools with an offline executor. Five offline
+replays provide `typed function calling with committed traces`, covering all routes and tools,
+Korean and English, explicit and implicit cutoffs, complete execution, and planned and tool
+abstention without partial evidence. The frozen 40-record bilingual K-VINTAGE core has 26 records
+reviewed and approved, spanning documentary, data, combined, and abstention questions, each
+reproduced by the offline tests through the real tools. I also verified the pinned Ministral 3 3B
+NF4/QLoRA training path on a disposable A40/CUDA 13 GPU without claiming model-quality gains. Later
+work covers the remaining core, separately reported deterministic revision probes, and the
+four-variant baseline suite, with temporal leakage as the headline metric.
 
 ## Usage guardrails
 
-- Keep “In Progress” while the M2 benchmark and baseline work remains incomplete; deterministic
+- Keep "In Progress" while the M2 benchmark and baseline work remains incomplete; deterministic
   offline replay does not imply benchmark completion.
 - Describe the A40 result as QLoRA *compatibility*, not fine-tuning or model improvement.
 - Do not cite core-benchmark progress beyond the approved 26/40 records, and always report the
@@ -359,5 +100,5 @@ suite, with temporal leakage as the headline metric.
 - Describe the shipped minimal path only as `typed function calling with committed traces`. The
   bounded tool loop remains deferred to v1.1 (ADR 0008), and the committed replay artifacts do not
   support provider/live, model-quality, or briefing-performance claims.
-- If a novelty claim is needed, qualify it as “to our knowledge, for official statistics” and cite
+- If a novelty claim is needed, qualify it as "to our knowledge, for official statistics" and cite
   the prior art listed in the charter and future datasheet.
