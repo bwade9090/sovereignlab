@@ -1,4 +1,4 @@
-"""Repository-level offline fixtures shared by the trusted-registry tests."""
+"""Repository-level offline fixtures shared across the test suite."""
 
 import shutil
 from datetime import timedelta
@@ -20,6 +20,17 @@ _REPLAYED_ARCHIVE_PREFIXES = {
     "/301Y017/": "ecos/ecos-301y017-sa000-",
     "statisticsParameterData.do": "kosis/kosis-101-dt-1j22003-t-t10-",
 }
+
+
+@pytest.fixture(scope="session")
+def tool_registry():  # -> CallableToolRegistry
+    """The three committed v1 evidence registries behind the offline tools."""
+
+    # Imported here so the weekly capture gate, which runs only the data and harvester tests,
+    # does not depend on the execution package importing cleanly.
+    from sovereignlab.execution import load_committed_callable_tool_registry
+
+    return load_committed_callable_tool_registry(REPOSITORY_ROOT)
 
 
 @pytest.fixture

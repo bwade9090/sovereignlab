@@ -2,10 +2,10 @@
 
 import re
 from dataclasses import dataclass
-from decimal import ROUND_HALF_UP, Decimal
+from decimal import ROUND_HALF_UP, Decimal, localcontext
 from enum import StrEnum
 
-from sovereignlab.schemas import SourceSystem
+from sovereignlab.schemas import NormalizedObservation, SourceSystem
 
 _PLAIN_DECIMAL = re.compile(r"^[+-]?[0-9]+(?:\.[0-9]+)?$")
 
@@ -144,6 +144,26 @@ def normalize_source_value(rule: NormalizationRule, raw_text: str) -> Normalized
         raw_text=raw_text,
         exact_value=parse_source_decimal(raw_text) * rule.canonical_multiplier,
         unit=rule.canonical_unit,
+    )
+
+
+def normalized_observation(rule: NormalizationRule, raw_text: str) -> NormalizedObservation:
+    """Build the exact-decimal evidence form of one raw source value."""
+
+    with localcontext() as context:
+        context.prec = 256
+        normalized = normalize_source_value(rule, raw_text)
+        display_value = format_display(
+            normalized.exact_value,
+            places=rule.recommended_display_places,
+        )
+    return NormalizedObservation(
+        raw_value=raw_text,
+        normalization_rule_id=rule.rule_id,
+        normalized_value=format(normalized.exact_value, "f"),
+        canonical_unit=normalized.unit.value,
+        display_places=rule.recommended_display_places,
+        display_value=display_value,
     )
 
 
