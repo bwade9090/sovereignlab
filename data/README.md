@@ -34,8 +34,9 @@ decision fails validation.
 
 Repository layout:
 
-- `archive/oecd-stes/` — append-only OECD availability/content constraint XML; metadata only and
-  never observation rows under the current ruling.
+- `archive/oecd-stes/` — append-only OECD availability and content constraint XML (metadata
+  only), and the manually captured Korea CLI revision archives, the one OECD series with an
+  approved raw-data ruling (ADR 0007).
 - `archive/ecos/` — append-only raw responses for only owner-approved exact ECOS series; files are
   created only when `ECOS_API_KEY` is configured and the linked rights decision validates.
 - `archive/kosis/` — append-only raw responses for only owner-approved exact KOSIS domestic
@@ -58,8 +59,8 @@ Run one capture with `python scripts/harvest_weekly.py --repository-root .`. The
 append-only: a reused capture path fails instead of overwriting bytes. The weekly GitHub Actions
 workflow runs the same command, checks the captured artifacts with `tests/test_committed_data.py`
 and the harvester tests, and commits only `archive/`, `availability/`, and `manifests/` outputs.
-Captures taken after an evidence registry was frozen stay archive-only until a new registry
-version admits them (ADR 0010). The weekly capture record has a permanent gap from 2026-07-20 to
+Captures taken after the newest evidence version stay archive-only until the owner admits them
+in a new version (ADRs 0010 and 0013). The weekly capture record has a permanent gap from 2026-07-20 to
 2026-11-02, because every run in that period failed before committing. Files under `archive/` are
 marked binary in `.gitattributes` so Git cannot change provider line endings and invalidate the
 manifest hash.

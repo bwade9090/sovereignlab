@@ -1,8 +1,9 @@
 # Replay traces
 
 `replay/v1/` holds five `ExecutionTrace` 1.0.0 files produced by the offline executor from the
-fixed scenarios in `scripts/export_execution_replay_traces.py`. They are generated, not
-hand-written, and contain no provider response, credential, or machine-local path.
+fixed scenarios in `scripts/export_execution_replay_traces.py`, against evidence version 1 (the
+2026-07-17 registries). They are generated, not hand-written, and contain no provider response,
+credential, or machine-local path.
 
 ```bash
 python scripts/export_execution_replay_traces.py --check   # confirm the files are reproducible

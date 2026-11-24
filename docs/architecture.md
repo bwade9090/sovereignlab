@@ -67,20 +67,35 @@ digest is pinned in code. This keeps benchmark answers stable while weekly captu
 capture taken after a registry was frozen is archive-only until the owner admits it in a new
 registry version (ADR 0010).
 
-| Registry | Module | Contents |
-| --- | --- | --- |
-| `kor-rtd-latest-only-snapshot-registry-v1` | `snapshots/registry.py` | The 2026-07-17 ECOS GDP, ECOS current-account, and KOSIS CPI captures |
-| `kor-rtd-stes-resolver-registry-v1` | `vintage/registry.py` | The OECD CLI revision archive, both 2026-07-17 constraint captures and ledgers |
-| `synthetic-temporal-retrieval-corpus-v1` | `retrieval/registry.py` | The synthetic bilingual corpus in `data/fixtures/retrieval/` |
+Registries are admitted in numbered *evidence versions*. Version N pairs snapshot registry vN with
+STES registry vN; both versions share the synthetic corpus. An admitted version is never edited:
+to change what the tools can see, the owner admits a new version with a new ID and digest.
 
-Loading a registry verifies each archive against its manifest checksum, validates the rights
-links through `BenchmarkBundle`, checks that each manifest is the approved series it is bound to,
-and compares the registry digest with the pinned value. To change what a tool can see, add a new
-registry version with a new ID and digest; do not edit v1.
+| Version | Snapshot registry | STES registry | Admitted |
+| --- | --- | --- | --- |
+| 1 | The 2026-07-17 ECOS GDP, ECOS current-account, and KOSIS CPI captures | The 2026-07-17 Korea CLI archive and both 2026-07-17 constraint captures and ledgers | 2026-07-17 (ADR 0010 calls these v1) |
+| 2 | Every weekly capture through 2026-11-23 | The 2026-11-24 Korea CLI archive and every constraint capture and ledger through 2026-11-23 | 2026-11-24 (ADR 0013) |
 
-Under the v1 registries, `resolve_stes_as_of` answers only for cutoffs from 2026-07-08 through
-2026-07-16 (always edition `202607`), and `read_snapshot_as_of` only from 2026-07-17 onward. The
-two data tools therefore share no answerable cutoff today.
+The modules are `snapshots/registry.py`, `vintage/registry.py`, and, for the corpus
+`synthetic-temporal-retrieval-corpus-v1`, `retrieval/registry.py`. Loading a registry verifies
+each archive against its manifest checksum, validates the rights links through
+`BenchmarkBundle`, checks that each manifest is the approved series it is bound to, and compares
+the registry digest with the pinned value.
+
+Answerable cutoffs by version:
+
+- **v1:** `resolve_stes_as_of` answers only from 2026-07-08 through 2026-07-16 (edition `202607`)
+  and `read_snapshot_as_of` only from 2026-07-17 onward, so the two share no answerable cutoff.
+- **v2:** `resolve_stes_as_of` answers from 2026-07-08 through 2026-07-16 (`202607`), from
+  2026-10-08 through 2026-11-08 (`202610`), and from 2026-11-10 through 2026-11-22 (`202611`).
+  It abstains from 2026-07-17 through 2026-10-07, when editions `202608`–`202610` were neither
+  provably absent nor provably available (the cost of the weekly capture gap), and on 2026-11-09,
+  inside the bracket that dates edition `202611`. `read_snapshot_as_of` uses the newest of the
+  five captures taken by the cutoff.
+
+A newer version never changes the answer for an older cutoff: under v2, 2026-07-09 still selects
+edition `202607` and returns the same value as v1, only with v2's archive and ledger as its
+provenance.
 
 ## 3. The three tools
 
@@ -171,7 +186,7 @@ lower-level functions in `vintage/resolver.py` and `retrieval/temporal.py`. The 
 points are `execute_stes_as_of_call`, `execute_temporal_document_call`, and `read_snapshot_as_of`.
 
 **Committed traces.** `traces/replay/v1/` holds five traces produced by
-`scripts/export_execution_replay_traces.py`. They cover all four routes, all three tools, Korean
+`scripts/export_execution_replay_traces.py` against evidence v1. They cover all four routes, all three tools, Korean
 and English, explicit and implicit cutoffs, complete execution, a planned abstention, and a tool
 abstention that stops before a later planned call. Run the script with `--write` after changing
 `src/`, and with `--check` to confirm the committed files are reproducible.
@@ -189,6 +204,14 @@ A record carries the question, `as_of`, the expected route, page-anchored docume
 and/or tool expectations (the exact tool arguments and the facts the result must contain), a
 reference answer or an abstention reason, and review metadata. Records are drafted, reviewed by
 the owner, and then committed to `data/benchmark/core/`.
+
+A record is checked against one evidence version. A vintage gold was computed against a specific
+availability ledger, so a record whose tool expectation names a ledger belongs to the version
+whose active ledger that is; every other record is checked against the latest version, which
+must still reproduce it. New records should cite the latest version. Approved records are not
+migrated when a new version is admitted: `kv-core-data-01` and `kv-core-both-01` stay on v1. The
+abstention rationale of `kv-core-abstain-05` describes v1's frontier; under v2 the same cutoff
+still abstains, because editions `202608`–`202610` are unresolved there.
 
 `tests/benchmark/test_core.py` checks every committed record generically: it fills its matrix
 slot, carries the owner's review, forms a valid `BenchmarkBundle` with its evidence (no

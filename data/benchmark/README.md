@@ -52,7 +52,8 @@ committed, so check a locator against a copy whose size and SHA-256 match the ma
 ## Adding a pair
 
 1. The owner chooses the pair. Its evidence must already be committed: document manifests, or a
-   data unit that an evidence registry admits.
+   data unit that the latest evidence version admits. A vintage expectation names that version's
+   active ledger, which is how the tests know which version to check it against.
 2. Draft the Korean and English records in `drafts/core-draft-NNN.jsonl` with
    `annotation.status` set to `draft`.
 3. The owner reviews both records against this checklist:

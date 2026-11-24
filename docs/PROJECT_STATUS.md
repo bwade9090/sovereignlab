@@ -9,8 +9,10 @@ This page states the present and is edited in place. Git history is the log of h
 - **Approved core:** 26 of 40 records (13 of 20 Korean/English pairs). No draft is pending.
 - **Next step:** not selected. The owner chooses the next pair or slice; nothing is drafted or
   approved before that.
-- **Last structural change:** on 2026-11-13 the process, documents, code, and tests were reduced
-  to fit the project's size (ADR 0012). Data, schemas, and benchmark records were not changed.
+- **Latest change:** on 2026-11-24 the owner admitted evidence version 2 (ADR 0013): a second
+  capture of the Korea CLI archive and every weekly capture through 2026-11-23. It shows the
+  project's first ledger-proven revision: the May 2026 Korea CLI was 102.66 as of 2026-07-09 and
+  102.29 as of 2026-11-10. Version 1 and the approved records are unchanged.
 
 ## Benchmark core
 
@@ -49,7 +51,8 @@ What the remaining slots need before they can be authored:
   English manifests under ADR 0009, dated under ADR 0011, as its own reviewable unit.
 - `kv-core-data-05` and `kv-core-both-05` also need the reserved future data release
   (`reserved-future-data-release-test-01`): an independently captured, owner-approved release
-  with its manifest and availability evidence.
+  with its manifest and availability evidence. Edition `202611` and the November snapshots in
+  evidence v2 are candidates; designating one is the owner's decision.
 
 ## What exists
 
@@ -59,9 +62,12 @@ What the remaining slots need before they can be authored:
   ECOS GDP, ECOS current account, KOSIS national CPI, and the OECD Korea amplitude-adjusted CLI.
 - **Weekly harvester** — `sovereignlab.harvest.weekly`, run by GitHub Actions; append-only.
 - **Availability ledger and fail-closed resolver** — `sovereignlab.vintage`, tool
-  `resolve_stes_as_of`, over a 75,060-row OECD Korea CLI archive spanning 239 editions.
-- **Snapshot reader** — `sovereignlab.snapshots`, tool `read_snapshot_as_of`, over the three
-  2026-07-17 ECOS/KOSIS captures.
+  `resolve_stes_as_of`. Evidence v1 uses the 2026-07-17 Korea CLI archive (239 editions, through
+  `202607`); v2 uses the 2026-11-24 archive (242 editions, through `202611`).
+- **Snapshot reader** — `sovereignlab.snapshots`, tool `read_snapshot_as_of`, over the 2026-07-17
+  ECOS/KOSIS captures (v1) or every weekly capture through 2026-11-23 (v2).
+- **Evidence versions** — v1 and v2 coexist (ADR 0013). Vintage records are checked against the
+  version whose ledger they name; other records and new work use v2.
 - **Temporal retrieval** — `sovereignlab.retrieval`, tool `retrieve_temporal_documents`, over a
   synthetic bilingual corpus. Real report text is not committed or searchable.
 - **Document manifests** — the Bank of Korea May 2026 and November 2025 outlooks, Korean and
@@ -83,12 +89,15 @@ machine-generated probes, and the bounded tool loop (deferred to v1.1 by ADR 000
   GitHub often starts scheduled runs several hours late; manifests record the real capture time.
 - **Gate:** a capture is committed when `tests/test_committed_data.py` and the harvester tests
   pass on the runner.
-- **Captures so far:** `20261102t101403605391z` (commit `fe4f9a9`, an owner-authorized manual
-  dispatch) and `20261109t094531475775z` (commit `807e713`, the first scheduled run to succeed).
+- **Captures:** weekly since 2026-11-02 (`fe4f9a9`, an owner-authorized manual dispatch); the
+  first scheduled run to succeed was 2026-11-09 (`807e713`). Git history lists every capture.
+- **First observed OECD edition rollover:** the 2026-11-16 capture first saw edition `202611`,
+  absent at 2026-11-09T09:45Z and available by 2026-11-10T12:57Z. Charter §7 calls this the
+  primary live event; its 48-hour cited-note target was missed because nothing watched for it.
 - **Permanent gap:** none of the 16 scheduled runs from 2026-07-20 through 2026-11-02 committed a
   capture. Never backfill it, and disclose it wherever capture coverage is described.
-- **Archive-only:** captures after the 2026-07-17 registries are not used by the tools or the
-  benchmark until the owner admits them in a new registry version (ADR 0010).
+- **Archive-only:** captures after 2026-11-23 are not used by the tools or the benchmark until
+  the owner admits them in evidence version 3 (ADRs 0010 and 0013).
 - **If a scheduled run fails:** diagnose it before the following Monday. Do not dispatch manually
   without the owner's authorization.
 
@@ -107,11 +116,11 @@ machine-generated probes, and the bounded tool loop (deferred to v1.1 by ADR 000
   pass `--basetemp` pointing at a fresh OS temporary directory. `requirements.txt` pins `tzdata`
   for `win32` only, because a standard Windows Python has no IANA timezone database; keep it.
   Give large parametrized tests short explicit IDs, or Windows hits its environment-variable limit.
-- **Vintage coverage:** OECD edition codes do not encode release dates. The 2026-07-17 ledger used
-  by the tools resolves only edition `202607`; the 329 older editions are unresolved and abstain.
-  The archive-only ledgers additionally resolve `202608`–`202610` with `available_by` 2026-10-08
-  and `last_absent_at` at the 2026-07-17 capture, so if they are admitted, cutoffs between those
-  two dates will still abstain for those editions. That is the lasting cost of the capture gap.
+- **Vintage coverage:** OECD edition codes do not encode release dates, so an edition can be
+  dated only if a capture saw it appear. Under v2 the resolver answers from 2026-07-08 to
+  2026-07-16 (`202607`), 2026-10-08 to 2026-11-08 (`202610`), and 2026-11-10 to 2026-11-22
+  (`202611`). It abstains from 2026-07-17 to 2026-10-07, the lasting cost of the capture gap, and
+  on 2026-11-09. The 329 editions before `202607` remain undated.
 
 ## Spend ledger
 
@@ -154,3 +163,5 @@ Approvals of individual benchmark pairs are in the table above. The other closed
 - 2026-11-02 — weekly captures are archive-only until admitted (ADR 0010), and document manifests
   are dated from their exact bytes (ADR 0011).
 - 2026-11-13 — the engineering process, documents, code, and tests were reduced (ADR 0012).
+- 2026-11-24 — a second manual Korea CLI capture and evidence version 2, admitting every capture
+  through 2026-11-23 (ADR 0013).
