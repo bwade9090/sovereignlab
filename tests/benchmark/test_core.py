@@ -35,6 +35,30 @@ RECORDS_WITH_TOOLS = tuple(record for record in RECORDS if record.tool_expectati
 _TOOL_CALL = TypeAdapter(ToolCall)
 
 
+def _evidence_version(record: BenchmarkRecord, registries: dict[int, CallableToolRegistry]) -> int:
+    """Return the evidence version a record is checked against.
+
+    A vintage gold was computed against one availability ledger, so the record belongs to the
+    version whose active ledger it names. Every other record is checked against the latest
+    version, which must still reproduce it.
+    """
+
+    ledgers = {
+        expectation.vintage.ledger_id
+        for expectation in record.tool_expectations
+        if expectation.vintage is not None
+    }
+    if not ledgers:
+        return max(registries)
+    (ledger_id,) = ledgers
+    (version,) = (
+        version
+        for version, registry in registries.items()
+        if registry.stes_registry.active_ledger_id == ledger_id
+    )
+    return version
+
+
 def test_every_core_record_fills_its_slot_in_the_frozen_matrix() -> None:
     pairs = {pair.pair_id: pair for pair in MATRIX.pairs}
     record_ids = [record.record_id for record in RECORDS]
@@ -63,30 +87,39 @@ def test_every_core_record_carries_the_owner_review() -> None:
         assert "core" in record.tags, record.record_id
 
 
-def test_core_and_its_evidence_form_one_valid_bundle(tool_registry: CallableToolRegistry) -> None:
+def test_core_and_its_evidence_form_one_valid_bundle_per_evidence_version(
+    tool_registries: dict[int, CallableToolRegistry],
+) -> None:
     # The bundle validator rejects post-cutoff evidence, unresolvable vintages, broken rights
-    # links, and evidence shared across splits.
+    # links, and evidence shared across splits. A vintage must cite its version's active ledger,
+    # so records are grouped by the evidence version they are checked against.
     documents = tuple(
         SourceManifest.model_validate_json(path.read_bytes())
         for path in sorted((ROOT / "data" / "manifests").glob("bok-outlook-*.json"))
     )
-    snapshots = tuple(
-        artifact.manifest
-        for entry in tool_registry.snapshot_registry.entries
-        for artifact in entry.artifacts
-    )
-    stes = tool_registry.stes_registry
-    archives = tuple(
-        entry.data_artifact.manifest for entry in stes.entries if entry.data_artifact is not None
-    )
-    support = tuple(artifact.manifest for artifact in stes.support_artifacts)
+    grouped = {version: [] for version in tool_registries}
+    for record in RECORDS:
+        grouped[_evidence_version(record, tool_registries)].append(record)
 
-    BenchmarkBundle(
-        sources=(*documents, *snapshots, *archives, *support),
-        records=RECORDS,
-        availability_ledgers=tuple(artifact.ledger for artifact in stes.ledger_artifacts),
-        rights_catalogs=tuple(artifact.catalog for artifact in stes.catalog_artifacts),
-    )
+    for version, registry in tool_registries.items():
+        snapshots = tuple(
+            artifact.manifest
+            for entry in registry.snapshot_registry.entries
+            for artifact in entry.artifacts
+        )
+        stes = registry.stes_registry
+        archives = tuple(
+            entry.data_artifact.manifest
+            for entry in stes.entries
+            if entry.data_artifact is not None
+        )
+        support = tuple(artifact.manifest for artifact in stes.support_artifacts)
+        BenchmarkBundle(
+            sources=(*documents, *snapshots, *archives, *support),
+            records=tuple(grouped[version]),
+            availability_ledgers=tuple(artifact.ledger for artifact in stes.ledger_artifacts),
+            rights_catalogs=tuple(artifact.catalog for artifact in stes.catalog_artifacts),
+        )
 
 
 @pytest.mark.parametrize(
@@ -96,8 +129,9 @@ def test_core_and_its_evidence_form_one_valid_bundle(tool_registry: CallableTool
 )
 def test_the_offline_tools_reproduce_each_declared_gold(
     record: BenchmarkRecord,
-    tool_registry: CallableToolRegistry,
+    tool_registries: dict[int, CallableToolRegistry],
 ) -> None:
+    registry = tool_registries[_evidence_version(record, tool_registries)]
     for index, expectation in enumerate(record.tool_expectations):
         call = _TOOL_CALL.validate_python(
             {
@@ -108,7 +142,7 @@ def test_the_offline_tools_reproduce_each_declared_gold(
         )
         assert call.arguments.as_of == record.as_of
 
-        result = dispatch_tool_call(call=call, registry=tool_registry)
+        result = dispatch_tool_call(call=call, registry=registry)
 
         assert result.status is ToolOutcomeStatus.SUCCESS
         observed = result.payload.model_dump(mode="json")

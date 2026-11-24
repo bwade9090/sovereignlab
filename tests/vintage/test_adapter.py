@@ -17,12 +17,14 @@ from sovereignlab.schemas import (
     StesAsOfResult,
     ToolOutcomeStatus,
 )
-from sovereignlab.snapshots import load_committed_snapshot_registry
+from sovereignlab.snapshots import (
+    COMMITTED_SNAPSHOT_REGISTRIES,
+    load_committed_snapshot_registry,
+)
 from sovereignlab.vintage import (
     CLI_STES_BINDING,
-    COMMITTED_ACTIVE_STES_LEDGER_ID,
+    COMMITTED_STES_REGISTRIES,
     GDP_STES_BINDING,
-    STES_REGISTRY_DESCRIPTOR_SHA256,
     StesRegistry,
     StesRegistryEntry,
     StesSeriesBinding,
@@ -32,12 +34,20 @@ from sovereignlab.vintage import (
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
 CLI_SOURCE_ID = "oecd-stes-cli-kor-li-aa-20260717t115302688498z"
+LEDGER_ID = "oecd-stes-ledger-20260717t115242998550z"
+V2_CLI_SOURCE_ID = "oecd-stes-cli-kor-li-aa-20261124t010648941132z"
+V2_LEDGER_ID = "oecd-stes-ledger-20261123t104316607555z"
 _CSV_HEADER = "REF_AREA,FREQ,MEASURE,UNIT_MEASURE,ACTIVITY,EDITION,TIME_PERIOD,OBS_VALUE"
 
 
 @pytest.fixture(scope="module")
 def registry() -> StesRegistry:
-    return load_committed_stes_registry(REPOSITORY_ROOT)
+    return load_committed_stes_registry(REPOSITORY_ROOT, version=1)
+
+
+@pytest.fixture(scope="module")
+def registry_v2() -> StesRegistry:
+    return load_committed_stes_registry(REPOSITORY_ROOT, version=2)
 
 
 def _resolve(
@@ -87,7 +97,7 @@ def test_resolves_the_cli_value_from_the_edition_available_at_the_cutoff(
     assert evidence.observation.display_value == "102.66"
     assert evidence.observation.canonical_unit == "oecd_amplitude_adjusted_index"
     assert evidence.source_id == CLI_SOURCE_ID
-    assert evidence.ledger_id == COMMITTED_ACTIVE_STES_LEDGER_ID
+    assert evidence.ledger_id == LEDGER_ID
     assert evidence.rights_decision_id == CLI_STES_BINDING.rights_decision_id
 
 
@@ -166,8 +176,8 @@ def test_non_decimal_observation_abstains(registry: StesRegistry) -> None:
 
 
 def test_committed_registry_digest_is_pinned(registry: StesRegistry) -> None:
-    assert registry.descriptor_sha256 == STES_REGISTRY_DESCRIPTOR_SHA256
-    assert registry.active_ledger.ledger_id == COMMITTED_ACTIVE_STES_LEDGER_ID
+    assert registry.descriptor_sha256 == COMMITTED_STES_REGISTRIES[1].descriptor_sha256
+    assert registry.active_ledger.ledger_id == LEDGER_ID
     summary = registry.entry_for(CLI_STES_BINDING.scope).archive_summary
     assert summary is not None
     assert (summary.first_edition, summary.last_edition) == ("200604", "202607")
@@ -198,15 +208,98 @@ def test_loader_rejects_an_archive_holding_a_neighboring_series(
     )
 
     with pytest.raises(ValueError, match="neighboring series"):
-        load_committed_stes_registry(tmp_path)
+        load_committed_stes_registry(tmp_path, version=1)
 
 
 def test_a_later_weekly_capture_stays_archive_only(
-    weekly_capture_after_v1: tuple[Path, HarvestSummary],
+    fresh_weekly_capture: tuple[Path, HarvestSummary],
 ) -> None:
-    # ADR 0010: the v1 registries list their files explicitly, so a new capture changes nothing
-    # the tools or the benchmark can see until a new registry version admits it.
-    root, _ = weekly_capture_after_v1
+    # ADR 0010: every admitted registry version lists its files explicitly, so a new capture
+    # changes nothing the tools or the benchmark can see until a later version admits it.
+    root, _ = fresh_weekly_capture
 
-    assert load_committed_stes_registry(root).descriptor_sha256 == STES_REGISTRY_DESCRIPTOR_SHA256
-    load_committed_snapshot_registry(root)
+    for version, committed in COMMITTED_STES_REGISTRIES.items():
+        loaded = load_committed_stes_registry(root, version=version)
+        assert loaded.descriptor_sha256 == committed.descriptor_sha256
+    for version in COMMITTED_SNAPSHOT_REGISTRIES:
+        load_committed_snapshot_registry(root, version=version)
+
+
+# --- evidence v2: the 2026-11-24 archive and the ledgers through 2026-11-23 (ADR 0013) -------
+
+
+def test_v2_admits_the_november_archive_and_ledgers(registry_v2: StesRegistry) -> None:
+    assert registry_v2.descriptor_sha256 == COMMITTED_STES_REGISTRIES[2].descriptor_sha256
+    assert registry_v2.active_ledger.ledger_id == V2_LEDGER_ID
+    summary = registry_v2.entry_for(CLI_STES_BINDING.scope).archive_summary
+    assert summary is not None
+    assert (summary.first_edition, summary.last_edition) == ("200604", "202611")
+
+
+def test_v2_keeps_the_v1_answer_for_july_cutoffs(
+    registry: StesRegistry,
+    registry_v2: StesRegistry,
+) -> None:
+    # Admitting newer evidence never changes what an older cutoff could see.
+    old = _resolve(registry, date(2026, 7, 9)).payload
+    new = _resolve(registry_v2, date(2026, 7, 9)).payload
+
+    assert old is not None and new is not None
+    assert (new.selected_edition, new.observation) == (old.selected_edition, old.observation)
+    assert (new.source_id, new.ledger_id) == (V2_CLI_SOURCE_ID, V2_LEDGER_ID)
+
+
+@pytest.mark.parametrize(
+    ("as_of", "edition", "value"),
+    [
+        (date(2026, 7, 9), "202607", "102.66"),
+        (date(2026, 10, 8), "202610", "102.33"),
+        (date(2026, 11, 8), "202610", "102.33"),
+        (date(2026, 11, 10), "202611", "102.29"),
+        (date(2026, 11, 22), "202611", "102.29"),
+    ],
+)
+def test_v2_answers_may_2026_from_the_edition_available_at_each_cutoff(
+    registry_v2: StesRegistry,
+    as_of: date,
+    edition: str,
+    value: str,
+) -> None:
+    # The same month, revised twice: answering 102.29 at the July cutoff leaks the future.
+    evidence = _resolve(registry_v2, as_of).payload
+
+    assert evidence is not None
+    assert (evidence.selected_edition, evidence.observation.raw_value) == (edition, value)
+
+
+@pytest.mark.parametrize(
+    ("as_of", "reason"),
+    [
+        # Editions 202608-202610 were absent at the 2026-07-17 capture and are provably
+        # available only from 2026-10-08, so the weekly capture gap leaves this span unresolved.
+        (date(2026, 7, 17), "unresolved_newer_edition"),
+        (date(2026, 9, 15), "unresolved_newer_edition"),
+        (date(2026, 10, 7), "unresolved_newer_edition"),
+        # Edition 202611 was absent at 09:45 UTC on 2026-11-09 and available by 12:57 UTC on
+        # 2026-11-10, so the end of 2026-11-09 in Seoul falls inside that window.
+        (date(2026, 11, 9), "unresolved_newer_edition"),
+        # The newest ledger was captured mid-day on 2026-11-23.
+        (date(2026, 11, 23), "cutoff_beyond_complete_through"),
+    ],
+)
+def test_v2_abstains_where_availability_is_unproven(
+    registry_v2: StesRegistry,
+    as_of: date,
+    reason: str,
+) -> None:
+    assert _reason(_resolve(registry_v2, as_of)) == reason
+
+
+def test_v2_has_no_month_before_an_edition_published_it(registry_v2: StesRegistry) -> None:
+    # Edition 202610 ends at September 2026; October first appears in edition 202611.
+    assert _reason(_resolve(registry_v2, date(2026, 10, 8), period="2026-10")) == (
+        "missing_selected_row"
+    )
+    evidence = _resolve(registry_v2, date(2026, 11, 10), period="2026-10").payload
+    assert evidence is not None
+    assert evidence.observation.raw_value == "101.98"

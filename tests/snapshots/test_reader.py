@@ -19,15 +19,14 @@ from sovereignlab.schemas import (
     ToolOutcomeStatus,
 )
 from sovereignlab.snapshots import (
-    COMMITTED_RIGHTS_CATALOG_PATHS,
-    COMMITTED_SNAPSHOT_LOCATIONS,
+    COMMITTED_SNAPSHOT_REGISTRIES,
     ECOS_CURRENT_ACCOUNT_BINDING,
     ECOS_GDP_BINDING,
     KOSIS_CPI_BINDING,
-    SNAPSHOT_REGISTRY_DESCRIPTOR_SHA256,
     SnapshotAbstentionReason,
     SnapshotRegistry,
     SnapshotRegistryEntry,
+    SnapshotRegistryVersion,
     SnapshotSeriesBinding,
     load_committed_snapshot_registry,
     load_snapshot_registry,
@@ -40,7 +39,12 @@ CAPTURE_DAY = date(2026, 7, 17)
 
 @pytest.fixture(scope="module")
 def registry() -> SnapshotRegistry:
-    return load_committed_snapshot_registry(REPOSITORY_ROOT)
+    return load_committed_snapshot_registry(REPOSITORY_ROOT, version=1)
+
+
+@pytest.fixture(scope="module")
+def registry_v2() -> SnapshotRegistry:
+    return load_committed_snapshot_registry(REPOSITORY_ROOT, version=2)
 
 
 def _read(
@@ -302,7 +306,7 @@ def test_a_rebased_kosis_index_abstains_instead_of_mixing_base_years(
 def test_committed_registry_digest_is_pinned_and_covers_every_artifact(
     registry: SnapshotRegistry,
 ) -> None:
-    assert registry.descriptor_sha256 == SNAPSHOT_REGISTRY_DESCRIPTOR_SHA256
+    assert registry.descriptor_sha256 == COMMITTED_SNAPSHOT_REGISTRIES[1].descriptor_sha256
     base = _committed_artifact(registry, ECOS_GDP_BINDING)
     edited = _registry_with(registry, ECOS_GDP_BINDING, _artifact(base, b"{}"))
     assert edited.descriptor_sha256 != registry.descriptor_sha256
@@ -320,7 +324,7 @@ def test_loader_rejects_an_archive_that_differs_from_its_manifest(tmp_path: Path
     archive.write_bytes(archive.read_bytes() + b"\n")
 
     with pytest.raises(ValueError, match="does not match its manifest"):
-        load_committed_snapshot_registry(root)
+        load_committed_snapshot_registry(root, version=1)
 
 
 def test_loader_rejects_a_snapshot_without_an_allowed_rights_link(tmp_path: Path) -> None:
@@ -332,14 +336,62 @@ def test_loader_rejects_a_snapshot_without_an_allowed_rights_link(tmp_path: Path
     path.write_text(json.dumps(manifest, ensure_ascii=False), encoding="utf-8")
 
     with pytest.raises(ValueError, match="approved series binding"):
-        load_committed_snapshot_registry(root)
+        load_committed_snapshot_registry(root, version=1)
 
 
 def test_loader_rejects_two_snapshots_of_one_series_at_the_same_instant() -> None:
+    token = COMMITTED_SNAPSHOT_REGISTRIES[1].capture_tokens[0]
     with pytest.raises(ValueError, match="repeats a capture instant"):
         load_snapshot_registry(
             REPOSITORY_ROOT,
-            registry_id="test-snapshot-registry",
-            artifact_locations=(*COMMITTED_SNAPSHOT_LOCATIONS, COMMITTED_SNAPSHOT_LOCATIONS[0]),
-            rights_catalog_paths=COMMITTED_RIGHTS_CATALOG_PATHS,
+            SnapshotRegistryVersion(
+                registry_id="test-snapshot-registry",
+                descriptor_sha256="",
+                capture_tokens=(token, token),
+            ),
         )
+
+
+# --- evidence v2: every weekly capture through 2026-11-23 (ADR 0013) -------------------------
+
+
+def test_v2_admits_every_weekly_capture_and_pins_its_digest(registry_v2: SnapshotRegistry) -> None:
+    assert registry_v2.descriptor_sha256 == COMMITTED_SNAPSHOT_REGISTRIES[2].descriptor_sha256
+    assert {len(entry.artifacts) for entry in registry_v2.entries} == {5}
+
+
+def test_v2_answers_july_cutoffs_exactly_as_v1(
+    registry: SnapshotRegistry,
+    registry_v2: SnapshotRegistry,
+) -> None:
+    for binding, period in (
+        (ECOS_GDP_BINDING, "2026Q1"),
+        (ECOS_CURRENT_ACCOUNT_BINDING, "202605"),
+        (KOSIS_CPI_BINDING, "202606"),
+    ):
+        assert _read(registry_v2, binding, period) == _read(registry, binding, period)
+
+
+@pytest.mark.parametrize(
+    ("as_of", "expected"),
+    [
+        # The 2026-11-02 capture is the newest by 2026-11-08 and ends at August 2026.
+        (date(2026, 11, 8), None),
+        (date(2026, 11, 9), "58559.8"),
+        (date(2026, 12, 31), "58559.8"),
+    ],
+)
+def test_v2_sees_a_month_only_from_the_capture_that_first_held_it(
+    registry_v2: SnapshotRegistry,
+    as_of: date,
+    expected: str | None,
+) -> None:
+    result = _read(registry_v2, ECOS_CURRENT_ACCOUNT_BINDING, "202609", as_of=as_of)
+
+    if expected is None:
+        assert result.abstention is not None
+        assert result.abstention.reason_code == "missing_selected_row"
+    else:
+        assert result.payload is not None
+        assert result.payload.observation.raw_value == expected
+        assert result.payload.source_retrieved_at.date() <= as_of

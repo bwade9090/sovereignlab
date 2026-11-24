@@ -23,14 +23,24 @@ _REPLAYED_ARCHIVE_PREFIXES = {
 
 
 @pytest.fixture(scope="session")
-def tool_registry():  # -> CallableToolRegistry
-    """The three committed v1 evidence registries behind the offline tools."""
+def tool_registries():  # -> dict[int, CallableToolRegistry]
+    """Every admitted evidence version, by version number."""
 
     # Imported here so the weekly capture gate, which runs only the data and harvester tests,
     # does not depend on the execution package importing cleanly.
-    from sovereignlab.execution import load_committed_callable_tool_registry
+    from sovereignlab.execution import EVIDENCE_VERSIONS, load_committed_callable_tool_registry
 
-    return load_committed_callable_tool_registry(REPOSITORY_ROOT)
+    return {
+        version: load_committed_callable_tool_registry(REPOSITORY_ROOT, version=version)
+        for version in EVIDENCE_VERSIONS
+    }
+
+
+@pytest.fixture(scope="session")
+def tool_registry(tool_registries):  # -> CallableToolRegistry
+    """Evidence v1, which the committed traces replay."""
+
+    return tool_registries[1]
 
 
 @pytest.fixture
@@ -43,7 +53,7 @@ def committed_kor_rtd_inputs(tmp_path: Path) -> Path:
 
 
 @pytest.fixture
-def weekly_capture_after_v1(committed_kor_rtd_inputs: Path) -> tuple[Path, HarvestSummary]:
+def fresh_weekly_capture(committed_kor_rtd_inputs: Path) -> tuple[Path, HarvestSummary]:
     """Append one real harvester capture a week after the newest capture in the repository.
 
     The mocked providers replay each source's newest archived response bytes, so the run observes

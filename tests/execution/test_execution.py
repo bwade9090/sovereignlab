@@ -171,6 +171,23 @@ def test_registry_provenance_names_the_three_pinned_evidence_sets(
     )
 
 
+def test_evidence_v2_changes_only_the_artifact_registry_in_provenance(
+    tool_registries: dict[int, CallableToolRegistry],
+) -> None:
+    v1 = tool_registries[1].provenance()
+    v2 = tool_registries[2].provenance()
+
+    # The tool surface and the corpus are shared; only the data evidence moved (ADR 0013).
+    assert (v2.tool_registry_sha256, v2.retrieval_corpus_sha256) == (
+        v1.tool_registry_sha256,
+        v1.retrieval_corpus_sha256,
+    )
+    assert v2.artifact_registry_id == "kor-rtd-execution-artifact-registry-v2"
+    assert v2.artifact_registry_sha256 == (
+        "8af867fefb0295d64184d8189c443deffe2e454ecb73aebf1c549e3d4e590357"
+    )
+
+
 # --- planners -----------------------------------------------------------------------------
 
 

@@ -35,6 +35,8 @@ from sovereignlab.schemas import (  # noqa: E402
 )
 
 TRACE_DIRECTORY = ROOT / "traces" / "replay" / "v1"
+# The committed traces replay evidence v1, the 2026-07-17 registries (ADR 0013).
+EVIDENCE_VERSION = 1
 _RECORDED_AT = datetime(2026, 8, 11, 6, 0, tzinfo=UTC)
 _PLANNER_ID = "committed-replay-scripted-planner-v1"
 
@@ -235,7 +237,7 @@ def replay_scenarios() -> tuple[ReplayScenario, ...]:
 def render_replay_traces(repository_root: Path = ROOT) -> dict[str, bytes]:
     """Execute every scenario and return its trace file bytes by filename."""
 
-    registry = load_committed_callable_tool_registry(repository_root)
+    registry = load_committed_callable_tool_registry(repository_root, version=EVIDENCE_VERSION)
     rendered: dict[str, bytes] = {}
     for scenario in replay_scenarios():
         trace = execute_offline_request(

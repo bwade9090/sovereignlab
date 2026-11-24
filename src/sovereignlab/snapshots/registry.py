@@ -1,6 +1,5 @@
 """Explicit, digest-pinned registry of the committed latest-only ECOS/KOSIS snapshots."""
 
-from collections.abc import Sequence
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -21,11 +20,6 @@ from sovereignlab.schemas import (
     SourceManifest,
     SourceSystem,
     VintageSemantics,
-)
-
-SNAPSHOT_REGISTRY_ID = "kor-rtd-latest-only-snapshot-registry-v1"
-SNAPSHOT_REGISTRY_DESCRIPTOR_SHA256 = (
-    "67ebecf0aa15b5a2d53aff737cd28bd8779e3993abebca9e6c3d840f2006aa5b"
 )
 
 
@@ -196,44 +190,75 @@ class SnapshotArtifactLocation:
     archive_path: Path
 
 
-COMMITTED_SNAPSHOT_LOCATIONS = (
-    SnapshotArtifactLocation(
-        binding=ECOS_GDP_BINDING,
-        manifest_path=Path("data/manifests/ecos-200y108-10601-20260717t115242998550z.json"),
-        archive_path=Path("data/archive/ecos/ecos-200y108-10601-20260717t115242998550z.json"),
-    ),
-    SnapshotArtifactLocation(
-        binding=ECOS_CURRENT_ACCOUNT_BINDING,
-        manifest_path=Path("data/manifests/ecos-301y017-sa000-20260717t115242998550z.json"),
-        archive_path=Path("data/archive/ecos/ecos-301y017-sa000-20260717t115242998550z.json"),
-    ),
-    SnapshotArtifactLocation(
-        binding=KOSIS_CPI_BINDING,
-        manifest_path=Path("data/manifests/kosis-101-dt-1j22003-t-t10-20260717t115242998550z.json"),
-        archive_path=Path(
-            "data/archive/kosis/kosis-101-dt-1j22003-t-t10-20260717t115242998550z.json"
-        ),
-    ),
-)
 COMMITTED_RIGHTS_CATALOG_PATHS = (
     Path("data/rights/kor-rtd-rights-2026-07-16.json"),
     Path("data/rights/kor-rtd-rights-2026-07-17.json"),
 )
 
 
+@dataclass(frozen=True)
+class SnapshotRegistryVersion:
+    """One admitted version of the snapshot evidence: the weekly captures it lists.
+
+    Each capture token names one weekly capture, which holds one snapshot of every approved
+    series. The digest pins the exact bytes, so an admitted version never changes.
+    """
+
+    registry_id: str
+    descriptor_sha256: str
+    capture_tokens: tuple[str, ...]
+    rights_catalog_paths: tuple[Path, ...] = COMMITTED_RIGHTS_CATALOG_PATHS
+
+    @property
+    def artifact_locations(self) -> tuple[SnapshotArtifactLocation, ...]:
+        """Return the manifest and archive paths of every listed capture."""
+
+        return tuple(
+            SnapshotArtifactLocation(
+                binding=binding,
+                manifest_path=Path(f"data/manifests/{binding.document_family}-{token}.json"),
+                archive_path=Path(
+                    f"data/archive/{binding.source_system.value}/"
+                    f"{binding.document_family}-{token}.json"
+                ),
+            )
+            for token in self.capture_tokens
+            for binding in SNAPSHOT_SERIES_BINDINGS
+        )
+
+
+COMMITTED_SNAPSHOT_REGISTRIES = {
+    # v1: the 2026-07-17 captures that the approved records and the committed traces use.
+    1: SnapshotRegistryVersion(
+        registry_id="kor-rtd-latest-only-snapshot-registry-v1",
+        descriptor_sha256="67ebecf0aa15b5a2d53aff737cd28bd8779e3993abebca9e6c3d840f2006aa5b",
+        capture_tokens=("20260717t115242998550z",),
+    ),
+    # v2 (ADR 0013): every weekly capture through 2026-11-23.
+    2: SnapshotRegistryVersion(
+        registry_id="kor-rtd-latest-only-snapshot-registry-v2",
+        descriptor_sha256="446586437af5082d8cb09f32faae989bc42e1c5f641b6a9e82ea408053bc51ce",
+        capture_tokens=(
+            "20260717t115242998550z",
+            "20261102t101403605391z",
+            "20261109t094531475775z",
+            "20261116t093708472330z",
+            "20261123t104316607555z",
+        ),
+    ),
+}
+
+
 def load_snapshot_registry(
     repository_root: Path,
-    *,
-    registry_id: str,
-    artifact_locations: Sequence[SnapshotArtifactLocation],
-    rights_catalog_paths: Sequence[Path],
+    version: SnapshotRegistryVersion,
 ) -> SnapshotRegistry:
-    """Load explicitly listed snapshots and check their checksums and rights links."""
+    """Load the snapshots a version lists and check their checksums and rights links."""
 
     artifacts: dict[tuple[SourceSystem, str, str], list[SourceArtifact]] = {
         binding.scope: [] for binding in SNAPSHOT_SERIES_BINDINGS
     }
-    for location in artifact_locations:
+    for location in version.artifact_locations:
         artifact = load_source_artifact(
             repository_root,
             location.manifest_path,
@@ -249,13 +274,13 @@ def load_snapshot_registry(
         artifacts[location.binding.scope].append(artifact)
 
     registry = SnapshotRegistry(
-        registry_id=registry_id,
+        registry_id=version.registry_id,
         entries=tuple(
             SnapshotRegistryEntry(binding=binding, artifacts=tuple(artifacts[binding.scope]))
             for binding in SNAPSHOT_SERIES_BINDINGS
         ),
         catalog_artifacts=tuple(
-            load_catalog_artifact(repository_root, path) for path in rights_catalog_paths
+            load_catalog_artifact(repository_root, path) for path in version.rights_catalog_paths
         ),
     )
     # The bundle validator cross-checks every manifest's rights link against the catalogs.
@@ -269,18 +294,14 @@ def load_snapshot_registry(
     return registry
 
 
-def load_committed_snapshot_registry(repository_root: Path) -> SnapshotRegistry:
-    """Load snapshot registry v1: the three 2026-07-17 captures used by the benchmark."""
+def load_committed_snapshot_registry(repository_root: Path, *, version: int) -> SnapshotRegistry:
+    """Load one admitted version of the snapshot registry and check its pinned digest."""
 
-    registry = load_snapshot_registry(
-        repository_root,
-        registry_id=SNAPSHOT_REGISTRY_ID,
-        artifact_locations=COMMITTED_SNAPSHOT_LOCATIONS,
-        rights_catalog_paths=COMMITTED_RIGHTS_CATALOG_PATHS,
-    )
-    if registry.descriptor_sha256 != SNAPSHOT_REGISTRY_DESCRIPTOR_SHA256:
+    committed = COMMITTED_SNAPSHOT_REGISTRIES[version]
+    registry = load_snapshot_registry(repository_root, committed)
+    if registry.descriptor_sha256 != committed.descriptor_sha256:
         raise ValueError(
-            "committed snapshot registry changed; keep v1 as is and add a new registry version"
+            f"committed snapshot registry v{version} changed; keep it as is and add a new version"
         )
     return registry
 

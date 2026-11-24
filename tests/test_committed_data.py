@@ -105,9 +105,9 @@ def test_committed_archive_layer_is_self_consistent() -> None:
 
 
 def test_a_fresh_weekly_capture_keeps_the_archive_consistent(
-    weekly_capture_after_v1: tuple[Path, HarvestSummary],
+    fresh_weekly_capture: tuple[Path, HarvestSummary],
 ) -> None:
-    root, summary = weekly_capture_after_v1
+    root, summary = fresh_weekly_capture
 
     assert len(summary.manifest_paths) == len(summary.archive_paths) == 5
     check_kor_rtd_data(root)

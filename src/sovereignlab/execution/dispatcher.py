@@ -31,12 +31,23 @@ from sovereignlab.schemas import (
     ToolResult,
 )
 from sovereignlab.snapshots.reader import read_snapshot_as_of
-from sovereignlab.snapshots.registry import SnapshotRegistry, load_committed_snapshot_registry
+from sovereignlab.snapshots.registry import (
+    COMMITTED_SNAPSHOT_REGISTRIES,
+    SnapshotRegistry,
+    load_committed_snapshot_registry,
+)
 from sovereignlab.vintage.adapter import execute_stes_as_of_call
-from sovereignlab.vintage.registry import StesRegistry, load_committed_stes_registry
+from sovereignlab.vintage.registry import (
+    COMMITTED_STES_REGISTRIES,
+    StesRegistry,
+    load_committed_stes_registry,
+)
 
 CALLABLE_TOOL_REGISTRY_ID = "sovereignlab-deterministic-tool-registry-v1"
-EXECUTION_ARTIFACT_REGISTRY_ID = "kor-rtd-execution-artifact-registry-v1"
+# Evidence version N pairs snapshot registry vN with STES registry vN (ADR 0013).
+EVIDENCE_VERSIONS = tuple(sorted(COMMITTED_STES_REGISTRIES))
+if tuple(sorted(COMMITTED_SNAPSHOT_REGISTRIES)) != EVIDENCE_VERSIONS:
+    raise RuntimeError("snapshot and STES registries must admit the same versions")
 
 
 def _schema_sha256(model: type[BaseModel]) -> str:
@@ -140,6 +151,7 @@ class CallableToolRegistry:
     snapshot_registry: SnapshotRegistry
     temporal_corpus_registry: TemporalCorpusRegistry
     stes_registry: StesRegistry
+    artifact_registry_id: str
 
     def argument_schema(self, tool_name: ToolName) -> dict[str, object]:
         """Return the provider-facing JSON Schema for one tool's arguments."""
@@ -155,7 +167,7 @@ class CallableToolRegistry:
         return ToolRegistryProvenance(
             tool_registry_id=CALLABLE_TOOL_REGISTRY_ID,
             tool_registry_sha256=tool_registry_sha256(),
-            artifact_registry_id=EXECUTION_ARTIFACT_REGISTRY_ID,
+            artifact_registry_id=self.artifact_registry_id,
             artifact_registry_sha256=canonical_sha256(
                 {
                     "registries": [
@@ -170,7 +182,7 @@ class CallableToolRegistry:
                             "sha256": self.snapshot_registry.descriptor_sha256,
                         },
                     ],
-                    "registry_id": EXECUTION_ARTIFACT_REGISTRY_ID,
+                    "registry_id": self.artifact_registry_id,
                     "schema_version": "1.0.0",
                 }
             ),
@@ -179,13 +191,18 @@ class CallableToolRegistry:
         )
 
 
-def load_committed_callable_tool_registry(repository_root: Path) -> CallableToolRegistry:
-    """Load the three committed v1 evidence registries."""
+def load_committed_callable_tool_registry(
+    repository_root: Path,
+    *,
+    version: int,
+) -> CallableToolRegistry:
+    """Load evidence version `version`: snapshot and STES registries vN and the corpus."""
 
     return CallableToolRegistry(
-        snapshot_registry=load_committed_snapshot_registry(repository_root),
+        snapshot_registry=load_committed_snapshot_registry(repository_root, version=version),
         temporal_corpus_registry=load_committed_temporal_corpus_registry(repository_root),
-        stes_registry=load_committed_stes_registry(repository_root),
+        stes_registry=load_committed_stes_registry(repository_root, version=version),
+        artifact_registry_id=f"kor-rtd-execution-artifact-registry-v{version}",
     )
 
 

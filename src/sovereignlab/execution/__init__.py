@@ -4,7 +4,7 @@ from sovereignlab.execution.assembler import assemble_evidence_packet
 from sovereignlab.execution.dispatcher import (
     CALLABLE_TOOL_DEFINITIONS,
     CALLABLE_TOOL_REGISTRY_ID,
-    EXECUTION_ARTIFACT_REGISTRY_ID,
+    EVIDENCE_VERSIONS,
     CallableToolDefinition,
     CallableToolRegistry,
     ToolRegistryProvenance,
@@ -29,7 +29,7 @@ from sovereignlab.execution.planner import (
 __all__ = [
     "CALLABLE_TOOL_DEFINITIONS",
     "CALLABLE_TOOL_REGISTRY_ID",
-    "EXECUTION_ARTIFACT_REGISTRY_ID",
+    "EVIDENCE_VERSIONS",
     "OFFLINE_EXECUTOR_ID",
     "CallableToolDefinition",
     "CallableToolRegistry",

@@ -2,7 +2,6 @@
 
 import csv
 import io
-from collections.abc import Sequence
 from dataclasses import dataclass
 from enum import StrEnum
 from pathlib import Path
@@ -26,8 +25,6 @@ from sovereignlab.schemas import (
     VintageSemantics,
 )
 
-STES_REGISTRY_ID = "kor-rtd-stes-resolver-registry-v1"
-STES_REGISTRY_DESCRIPTOR_SHA256 = "103eb3bea7beebadeb0a7e193ff76fc95b518a8a7bed6825d9eb1f25431fb420"
 STES_TABLE_ID = "DSD_STES_REVISIONS@DF_STES_REVISIONS"
 
 _SCOPE_COLUMNS = ("REF_AREA", "FREQ", "MEASURE", "UNIT_MEASURE", "ACTIVITY")
@@ -84,18 +81,26 @@ class StesSeriesBinding:
         }
 
 
-CLI_STES_BINDING = StesSeriesBinding(
-    ref_area="KOR",
-    freq="M",
-    measure="LI_AA",
-    unit_measure="IX",
-    activity="_T",
-    normalization_rule_id="oecd-stes-kor-li-aa-index-v1",
-    raw_evidence=RawEvidenceAvailability.ALLOWED,
-    source_id="oecd-stes-cli-kor-li-aa-20260717t115302688498z",
-    document_family="oecd-stes-cli-kor-li-aa",
-    rights_decision_id="oecd-stes-revisions-kor-m-li-aa-rights-v1",
-)
+def cli_binding(archive_token: str) -> StesSeriesBinding:
+    """Return the Korea amplitude-adjusted CLI series bound to one consolidated archive."""
+
+    return StesSeriesBinding(
+        ref_area="KOR",
+        freq="M",
+        measure="LI_AA",
+        unit_measure="IX",
+        activity="_T",
+        normalization_rule_id="oecd-stes-kor-li-aa-index-v1",
+        raw_evidence=RawEvidenceAvailability.ALLOWED,
+        source_id=f"oecd-stes-cli-kor-li-aa-{archive_token}",
+        document_family="oecd-stes-cli-kor-li-aa",
+        rights_decision_id="oecd-stes-revisions-kor-m-li-aa-rights-v1",
+    )
+
+
+# The CLI bound to the 2026-07-17 archive, as registry v1 admits it.
+CLI_STES_BINDING = cli_binding("20260717t115302688498z")
+# Korea's quarterly GDP in this flow is a valid call shape, but its raw data is not approved.
 GDP_STES_BINDING = StesSeriesBinding(
     ref_area="KOR",
     freq="Q",
@@ -105,7 +110,6 @@ GDP_STES_BINDING = StesSeriesBinding(
     normalization_rule_id="oecd-stes-kor-b1gq-q-xdc-billion-krw-v1",
     raw_evidence=RawEvidenceAvailability.UNAVAILABLE,
 )
-STES_SERIES_BINDINGS = (CLI_STES_BINDING, GDP_STES_BINDING)
 
 
 @dataclass(frozen=True)
@@ -254,52 +258,101 @@ class StesArtifactLocation:
     binding: StesSeriesBinding | None = None
 
 
-COMMITTED_STES_ARTIFACT_LOCATIONS = (
-    StesArtifactLocation(
-        binding=CLI_STES_BINDING,
-        manifest_path=Path("data/manifests/oecd-stes-cli-kor-li-aa-20260717t115302688498z.json"),
-        archive_path=Path(
-            "data/archive/oecd-stes/oecd-stes-cli-kor-li-aa-20260717t115302688498z.csv"
-        ),
-    ),
-    *(
-        StesArtifactLocation(
-            manifest_path=Path(f"data/manifests/oecd-stes-{role}-{token}.json"),
-            archive_path=Path(f"data/archive/oecd-stes/oecd-stes-{role}-{token}.xml"),
-        )
-        for token in ("20260717t101906273935z", "20260717t115242998550z")
-        for role in ("availableconstraint", "contentconstraint")
-    ),
-)
-COMMITTED_STES_LEDGER_PATHS = (
-    Path("data/availability/oecd-stes-ledger-20260717t101906273935z.json"),
-    Path("data/availability/oecd-stes-ledger-20260717t115242998550z.json"),
-)
-COMMITTED_STES_CATALOG_PATHS = (
+STES_CATALOG_PATHS = (
     Path("data/rights/kor-rtd-rights-2026-07-16.json"),
     Path("data/rights/kor-rtd-rights-2026-07-17.json"),
 )
-COMMITTED_ACTIVE_STES_LEDGER_ID = "oecd-stes-ledger-20260717t115242998550z"
-COMMITTED_COMPLETE_THROUGH_SOURCE_ID = "oecd-stes-availableconstraint-20260717t115242998550z"
-COMMITTED_CAPTURED_AT_SOURCE_ID = "oecd-stes-contentconstraint-20260717t115242998550z"
 
 
-def load_stes_registry(
-    repository_root: Path,
-    *,
-    registry_id: str,
-    artifact_locations: Sequence[StesArtifactLocation],
-    ledger_paths: Sequence[Path],
-    catalog_paths: Sequence[Path],
-    active_ledger_id: str,
-    complete_through_source_id: str,
-    captured_at_source_id: str,
-) -> StesRegistry:
-    """Load explicitly listed STES evidence and check checksums, rights, and ledger links."""
+@dataclass(frozen=True)
+class StesRegistryVersion:
+    """One admitted version of the STES evidence.
+
+    It names one consolidated Korea CLI archive and the OECD constraint captures, each with the
+    availability ledger built from it, oldest first; the newest ledger is the active one. The
+    digest pins the exact bytes, so an admitted version never changes.
+    """
+
+    registry_id: str
+    descriptor_sha256: str
+    cli_archive_token: str
+    capture_tokens: tuple[str, ...]
+    catalog_paths: tuple[Path, ...] = STES_CATALOG_PATHS
+
+    @property
+    def bindings(self) -> tuple[StesSeriesBinding, ...]:
+        """Return the callable series, with the CLI bound to this version's archive."""
+
+        return (cli_binding(self.cli_archive_token), GDP_STES_BINDING)
+
+    @property
+    def active_token(self) -> str:
+        """Return the capture token of the active ledger."""
+
+        return self.capture_tokens[-1]
+
+    @property
+    def artifact_locations(self) -> tuple[StesArtifactLocation, ...]:
+        """Return the CLI archive and every constraint capture this version lists."""
+
+        cli = cli_binding(self.cli_archive_token)
+        return (
+            StesArtifactLocation(
+                binding=cli,
+                manifest_path=Path(f"data/manifests/{cli.source_id}.json"),
+                archive_path=Path(f"data/archive/oecd-stes/{cli.source_id}.csv"),
+            ),
+            *(
+                StesArtifactLocation(
+                    manifest_path=Path(f"data/manifests/oecd-stes-{role}-{token}.json"),
+                    archive_path=Path(f"data/archive/oecd-stes/oecd-stes-{role}-{token}.xml"),
+                )
+                for token in self.capture_tokens
+                for role in ("availableconstraint", "contentconstraint")
+            ),
+        )
+
+    @property
+    def ledger_paths(self) -> tuple[Path, ...]:
+        """Return the ledger built from each listed constraint capture."""
+
+        return tuple(
+            Path(f"data/availability/oecd-stes-ledger-{token}.json")
+            for token in self.capture_tokens
+        )
+
+
+COMMITTED_STES_REGISTRIES = {
+    # v1: the 2026-07-17 archive and ledgers that the approved records and committed traces use.
+    1: StesRegistryVersion(
+        registry_id="kor-rtd-stes-resolver-registry-v1",
+        descriptor_sha256="103eb3bea7beebadeb0a7e193ff76fc95b518a8a7bed6825d9eb1f25431fb420",
+        cli_archive_token="20260717t115302688498z",
+        capture_tokens=("20260717t101906273935z", "20260717t115242998550z"),
+    ),
+    # v2 (ADR 0013): the 2026-11-24 archive and every ledger through 2026-11-23.
+    2: StesRegistryVersion(
+        registry_id="kor-rtd-stes-resolver-registry-v2",
+        descriptor_sha256="6e4a9f061a853d9e5b105edacc870d9d09b8926552c7ab46ce4d3675230f27e1",
+        cli_archive_token="20261124t010648941132z",
+        capture_tokens=(
+            "20260717t101906273935z",
+            "20260717t115242998550z",
+            "20261102t101403605391z",
+            "20261109t094531475775z",
+            "20261116t093708472330z",
+            "20261123t104316607555z",
+        ),
+    ),
+}
+
+
+def load_stes_registry(repository_root: Path, version: StesRegistryVersion) -> StesRegistry:
+    """Load the STES evidence a version lists and check checksums, rights, and ledger links."""
 
     data_artifacts: dict[tuple[str, str, str, str, str], SourceArtifact] = {}
     support_artifacts: list[SourceArtifact] = []
-    for location in artifact_locations:
+    for location in version.artifact_locations:
         artifact = load_source_artifact(
             repository_root,
             location.manifest_path,
@@ -312,7 +365,7 @@ def load_stes_registry(
             data_artifacts[location.binding.scope] = artifact
 
     entries = []
-    for binding in STES_SERIES_BINDINGS:
+    for binding in version.bindings:
         artifact = data_artifacts.get(binding.scope)
         if (artifact is not None) != (binding.raw_evidence is RawEvidenceAvailability.ALLOWED):
             raise ValueError("a STES series has a data archive exactly when its rights allow one")
@@ -326,17 +379,19 @@ def load_stes_registry(
             )
         )
 
+    complete_through_source_id = f"oecd-stes-availableconstraint-{version.active_token}"
+    captured_at_source_id = f"oecd-stes-contentconstraint-{version.active_token}"
     registry = StesRegistry(
-        registry_id=registry_id,
+        registry_id=version.registry_id,
         entries=tuple(entries),
         support_artifacts=tuple(support_artifacts),
         ledger_artifacts=tuple(
-            load_ledger_artifact(repository_root, path) for path in ledger_paths
+            load_ledger_artifact(repository_root, path) for path in version.ledger_paths
         ),
         catalog_artifacts=tuple(
-            load_catalog_artifact(repository_root, path) for path in catalog_paths
+            load_catalog_artifact(repository_root, path) for path in version.catalog_paths
         ),
-        active_ledger_id=active_ledger_id,
+        active_ledger_id=f"oecd-stes-ledger-{version.active_token}",
         complete_through_source_id=complete_through_source_id,
         captured_at_source_id=captured_at_source_id,
     )
@@ -363,22 +418,14 @@ def load_stes_registry(
     return registry
 
 
-def load_committed_stes_registry(repository_root: Path) -> StesRegistry:
-    """Load STES registry v1: the 2026-07-17 CLI archive, ledgers, and constraint captures."""
+def load_committed_stes_registry(repository_root: Path, *, version: int) -> StesRegistry:
+    """Load one admitted version of the STES registry and check its pinned digest."""
 
-    registry = load_stes_registry(
-        repository_root,
-        registry_id=STES_REGISTRY_ID,
-        artifact_locations=COMMITTED_STES_ARTIFACT_LOCATIONS,
-        ledger_paths=COMMITTED_STES_LEDGER_PATHS,
-        catalog_paths=COMMITTED_STES_CATALOG_PATHS,
-        active_ledger_id=COMMITTED_ACTIVE_STES_LEDGER_ID,
-        complete_through_source_id=COMMITTED_COMPLETE_THROUGH_SOURCE_ID,
-        captured_at_source_id=COMMITTED_CAPTURED_AT_SOURCE_ID,
-    )
-    if registry.descriptor_sha256 != STES_REGISTRY_DESCRIPTOR_SHA256:
+    committed = COMMITTED_STES_REGISTRIES[version]
+    registry = load_stes_registry(repository_root, committed)
+    if registry.descriptor_sha256 != committed.descriptor_sha256:
         raise ValueError(
-            "committed STES registry changed; keep v1 as is and add a new registry version"
+            f"committed STES registry v{version} changed; keep it as is and add a new version"
         )
     return registry
 
