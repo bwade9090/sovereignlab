@@ -4,21 +4,18 @@ Every check is driven by the committed records, so a newly approved pair is cove
 as its batch file lands in ``data/benchmark/core/``.
 """
 
+from collections.abc import Callable
 from pathlib import Path
 
 import pytest
-from pydantic import TypeAdapter
 
-from sovereignlab.execution import CallableToolRegistry, dispatch_tool_call
+from sovereignlab.execution import CallableToolRegistry
+from sovereignlab.probes import EDITION_SPLITS
 from sovereignlab.schemas import (
     AnnotationStatus,
-    BenchmarkBundle,
     BenchmarkRecord,
     CoreAuthoringMatrix,
     LanguageCode,
-    SourceManifest,
-    ToolCall,
-    ToolOutcomeStatus,
 )
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -32,7 +29,6 @@ RECORDS = tuple(
     if line
 )
 RECORDS_WITH_TOOLS = tuple(record for record in RECORDS if record.tool_expectations)
-_TOOL_CALL = TypeAdapter(ToolCall)
 
 
 def _evidence_version(record: BenchmarkRecord, registries: dict[int, CallableToolRegistry]) -> int:
@@ -89,37 +85,26 @@ def test_every_core_record_carries_the_owner_review() -> None:
 
 def test_core_and_its_evidence_form_one_valid_bundle_per_evidence_version(
     tool_registries: dict[int, CallableToolRegistry],
+    evidence_bundle: Callable[[list[BenchmarkRecord], CallableToolRegistry], object],
 ) -> None:
-    # The bundle validator rejects post-cutoff evidence, unresolvable vintages, broken rights
-    # links, and evidence shared across splits. A vintage must cite its version's active ledger,
-    # so records are grouped by the evidence version they are checked against.
-    documents = tuple(
-        SourceManifest.model_validate_json(path.read_bytes())
-        for path in sorted((ROOT / "data" / "manifests").glob("bok-outlook-*.json"))
-    )
+    # A vintage must cite its version's active ledger, so records are grouped by the evidence
+    # version they are checked against.
     grouped = {version: [] for version in tool_registries}
     for record in RECORDS:
         grouped[_evidence_version(record, tool_registries)].append(record)
 
     for version, registry in tool_registries.items():
-        snapshots = tuple(
-            artifact.manifest
-            for entry in registry.snapshot_registry.entries
-            for artifact in entry.artifacts
-        )
-        stes = registry.stes_registry
-        archives = tuple(
-            entry.data_artifact.manifest
-            for entry in stes.entries
-            if entry.data_artifact is not None
-        )
-        support = tuple(artifact.manifest for artifact in stes.support_artifacts)
-        BenchmarkBundle(
-            sources=(*documents, *snapshots, *archives, *support),
-            records=tuple(grouped[version]),
-            availability_ledgers=tuple(artifact.ledger for artifact in stes.ledger_artifacts),
-            rights_catalogs=tuple(artifact.catalog for artifact in stes.catalog_artifacts),
-        )
+        evidence_bundle(grouped[version], registry)
+
+
+def test_core_vintages_keep_each_oecd_edition_in_its_probe_split() -> None:
+    # The core and the tier-2 probes share OECD editions, so an edition belongs to one split in
+    # both tiers; otherwise training on probes would leak a core evaluation edition (ADR 0014).
+    for record in RECORDS_WITH_TOOLS:
+        for expectation in record.tool_expectations:
+            if expectation.vintage is not None:
+                edition = expectation.vintage.selected_edition
+                assert record.split is EDITION_SPLITS[edition], record.record_id
 
 
 @pytest.mark.parametrize(
@@ -130,26 +115,6 @@ def test_core_and_its_evidence_form_one_valid_bundle_per_evidence_version(
 def test_the_offline_tools_reproduce_each_declared_gold(
     record: BenchmarkRecord,
     tool_registries: dict[int, CallableToolRegistry],
+    assert_reproduced: Callable[[BenchmarkRecord, CallableToolRegistry], None],
 ) -> None:
-    registry = tool_registries[_evidence_version(record, tool_registries)]
-    for index, expectation in enumerate(record.tool_expectations):
-        call = _TOOL_CALL.validate_python(
-            {
-                "call_id": f"{record.record_id}-call-{index}",
-                "tool_name": expectation.tool_name,
-                "arguments": expectation.arguments,
-            }
-        )
-        assert call.arguments.as_of == record.as_of
-
-        result = dispatch_tool_call(call=call, registry=registry)
-
-        assert result.status is ToolOutcomeStatus.SUCCESS
-        observed = result.payload.model_dump(mode="json")
-        observed.update(observed.pop("observation"))
-        assert observed["source_id"] == expectation.source_id
-        declared = dict(fact.split("=", maxsplit=1) for fact in expectation.expected_facts)
-        assert {key: str(observed[key]) for key in declared} == declared
-        if expectation.vintage is not None:
-            assert observed["ledger_id"] == expectation.vintage.ledger_id
-            assert observed["selected_edition"] == expectation.vintage.selected_edition
+    assert_reproduced(record, tool_registries[_evidence_version(record, tool_registries)])

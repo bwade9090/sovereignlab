@@ -1,8 +1,11 @@
 """Fail-closed SDMX-CSV as-of resolution for the live STES revisions flow."""
 
 import csv
+import functools
 import hashlib
 import io
+import sys
+from dataclasses import dataclass
 from datetime import date
 from enum import StrEnum
 from typing import Annotated, cast
@@ -255,7 +258,14 @@ def _abstain(
 def _content_matches_manifest(payload: bytes, manifest: SourceManifest) -> bool:
     if len(payload) != manifest.byte_size:
         return False
-    return hashlib.sha256(payload).hexdigest() == manifest.content_sha256
+    return _sha256(payload) == manifest.content_sha256
+
+
+# An archive is immutable bytes that every call re-reads, so its digest and its parse are cached
+# by content. The cache changes only speed, never an outcome.
+@functools.lru_cache(maxsize=8)
+def _sha256(payload: bytes) -> str:
+    return hashlib.sha256(payload).hexdigest()
 
 
 def _manifest_dataflow_reference(manifest: SourceManifest) -> tuple[str, str | None] | None:
@@ -274,47 +284,88 @@ def _manifest_dataflow_reference(manifest: SourceManifest) -> tuple[str, str | N
     return f"{agency}:{flow}", version
 
 
-def _find_selected_row(
-    payload: bytes,
-    query: AsOfQuery,
-    selected_edition: str,
-) -> dict[str, str] | ResolverAbstentionReason:
+@dataclass(frozen=True)
+class _ArchiveIndex:
+    """One parse of an SDMX-CSV archive, keyed by the columns a query selects on.
+
+    ``observations`` maps the seven selection codes (series, edition, period) to their
+    ``OBS_VALUE`` strings in file order. Parsing stops at the first malformed row or CSV error,
+    which sets ``unusable``: a scan in file order would stop there too.
+    """
+
+    header_reason: ResolverAbstentionReason | None
+    observations: dict[tuple[str, ...], tuple[str, ...]]
+    unusable: bool
+
+
+@functools.lru_cache(maxsize=8)
+def _index_archive(payload: bytes) -> _ArchiveIndex:
     try:
         text = payload.decode("utf-8-sig")
         reader = csv.reader(io.StringIO(text, newline=""), strict=True)
         header = next(reader)
     except (UnicodeDecodeError, csv.Error, StopIteration):
-        return ResolverAbstentionReason.INVALID_SDMX_CSV
+        return _ArchiveIndex(ResolverAbstentionReason.INVALID_SDMX_CSV, {}, unusable=False)
 
     if not header or len(header) != len(set(header)):
-        return ResolverAbstentionReason.INVALID_SDMX_CSV
+        return _ArchiveIndex(ResolverAbstentionReason.INVALID_SDMX_CSV, {}, unusable=False)
     if any(column not in header for column in _REQUIRED_COLUMNS):
-        return ResolverAbstentionReason.MISSING_REQUIRED_COLUMNS
+        return _ArchiveIndex(ResolverAbstentionReason.MISSING_REQUIRED_COLUMNS, {}, unusable=False)
 
-    indexes = {column: header.index(column) for column in _REQUIRED_COLUMNS}
-    expected = (
-        *query.series.csv_dimensions(),
-        ("EDITION", selected_edition),
-        ("TIME_PERIOD", query.period),
-    )
-    match: dict[str, str] | None = None
+    key_indexes = tuple(header.index(column) for column in _REQUIRED_COLUMNS[:-1])
+    value_index = header.index("OBS_VALUE")
+    observations: dict[tuple[str, ...], list[str]] = {}
+    unusable = False
     try:
         for values in reader:
             if not values or all(not value.strip() for value in values):
                 continue
             if len(values) != len(header):
-                return ResolverAbstentionReason.INVALID_SDMX_CSV
-            if all(values[indexes[column]] == value for column, value in expected):
-                if match is not None:
-                    return ResolverAbstentionReason.DUPLICATE_SELECTED_ROW
-                match = {column: values[indexes[column]] for column in _REQUIRED_COLUMNS}
+                unusable = True
+                break
+            key = tuple(sys.intern(values[index]) for index in key_indexes)
+            observations.setdefault(key, []).append(values[value_index])
     except csv.Error:
-        return ResolverAbstentionReason.INVALID_SDMX_CSV
+        unusable = True
+    return _ArchiveIndex(
+        header_reason=None,
+        observations={key: tuple(found) for key, found in observations.items()},
+        unusable=unusable,
+    )
 
-    if match is None:
-        return ResolverAbstentionReason.MISSING_SELECTED_ROW
-    if not match["OBS_VALUE"].strip():
-        return ResolverAbstentionReason.BLANK_SELECTED_OBSERVATION
-    if len(match["OBS_VALUE"].strip()) > 10_000:
+
+def _find_selected_row(
+    payload: bytes,
+    query: AsOfQuery,
+    selected_edition: str,
+) -> dict[str, str] | ResolverAbstentionReason:
+    """Return the one row for the query's series, edition, and period, or why there is none.
+
+    The outcome is the one a scan in file order would reach: a second match before any
+    malformed row is a duplicate, and a malformed row or CSV error otherwise makes the
+    archive invalid.
+    """
+
+    index = _index_archive(payload)
+    if index.header_reason is not None:
+        return index.header_reason
+
+    selection = {
+        **dict(query.series.csv_dimensions()),
+        "EDITION": selected_edition,
+        "TIME_PERIOD": query.period,
+    }
+    key = tuple(selection[column] for column in _REQUIRED_COLUMNS[:-1])
+    found = index.observations.get(key, ())
+    if len(found) > 1:
+        return ResolverAbstentionReason.DUPLICATE_SELECTED_ROW
+    if index.unusable:
         return ResolverAbstentionReason.INVALID_SDMX_CSV
-    return match
+    if not found:
+        return ResolverAbstentionReason.MISSING_SELECTED_ROW
+    (observation,) = found
+    if not observation.strip():
+        return ResolverAbstentionReason.BLANK_SELECTED_OBSERVATION
+    if len(observation.strip()) > 10_000:
+        return ResolverAbstentionReason.INVALID_SDMX_CSV
+    return dict(zip(_REQUIRED_COLUMNS, (*key, observation), strict=True))
