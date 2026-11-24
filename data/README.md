@@ -44,8 +44,9 @@ Repository layout:
   rights decision validates.
 - `availability/` — immutable edition-availability ledgers whose inventories are derived from the
   same captured constraint bytes; historical ledgers are never rewritten.
-- `benchmark/` — the frozen 40-record core authoring matrix, review drafts, and the
-  human-reviewed core records; drafts are never reported as reviewed gold.
+- `benchmark/` — the frozen 40-record core authoring matrix, review drafts, the human-reviewed
+  core records, and the machine-generated tier-2 probes; drafts and probes are never reported as
+  reviewed gold.
 - `fixtures/` — synthetic examples, including the bilingual temporal-retrieval corpus, and later
   small redistributable recorded responses used by offline tests.
 - `manifests/` — source URL, publisher, publication date, retrieval time, checksum, language, and license notes.

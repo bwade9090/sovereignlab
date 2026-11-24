@@ -1,6 +1,6 @@
 # Architecture
 
-How KOR-RTD, the three evidence tools, the offline execution path, and the K-VINTAGE core fit
+How KOR-RTD, the three evidence tools, the offline execution path, and the K-VINTAGE benchmark fit
 together. The charter sets scope and the decision records explain why; this page describes what
 the code does. When this page and the code disagree, the code and its tests are right.
 
@@ -8,11 +8,11 @@ the code does. When this page and the code disagree, the code and its tests are 
 official sources ──► weekly capture ──► data/  (manifests, archives, ledgers, rights)
                                           │
                                           ▼
-                              evidence registries v1  (explicit, digest-pinned)
+                         evidence versions 1 and 2  (explicit, digest-pinned registries)
                                           │
         request ──► planner ──► dispatcher ──► three tools ──► evidence packet ──► trace
                                           ▲
-                     K-VINTAGE core records: every gold is reproduced through the same tools
+      K-VINTAGE core records and tier-2 probes: every gold is reproduced through the same tools
 ```
 
 ## 1. Data layer (KOR-RTD)
@@ -126,7 +126,8 @@ quarterly GDP in this flow, kept as a valid call shape so that tool-argument mat
 be evaluated); with `missing_selected_row`, `duplicate_selected_row`, or
 `blank_selected_observation` when the selected edition has no usable row for the period; and with
 `invalid_source_value` when the value is not a plain decimal. The resolver also abstains if the
-archive bytes or dataflow do not match the manifest and ledger.
+archive bytes or dataflow do not match the manifest and ledger. It parses an archive once and
+caches the parse by the archive's exact bytes; the cache does not change which row is selected.
 
 **`read_snapshot_as_of`** (`snapshots/`). Arguments: source system, table, item, period, `as_of`,
 and the normalization rule. It uses the newest registered capture whose `published_on` is on or
@@ -194,7 +195,12 @@ abstention that stops before a later planned call. Run the script with `--write`
 Not implemented: any provider or live-model call, and the bounded tool loop, which ADR 0008 defers
 to v1.1. The traces are deterministic offline replays, not model outputs.
 
-## 5. K-VINTAGE core
+## 5. K-VINTAGE benchmark
+
+K-VINTAGE has two tiers, which are always reported separately: the human-reviewed core and the
+machine-generated tier-2 probes.
+
+### Core
 
 `data/benchmark/core-authoring-matrix-v1.json` allocates 40 records: 20 Korean/English pairs, five
 per route, split three train, one dev, and one test per route. An evidence unit never appears in
@@ -217,6 +223,24 @@ still abstains, because editions `202608`–`202610` are unresolved there.
 slot, carries the owner's review, forms a valid `BenchmarkBundle` with its evidence (no
 post-cutoff source, no unresolvable vintage, no broken rights link, no evidence shared across
 splits), and each tool expectation is reproduced by running the real tool.
+
+### Tier-2 probes
+
+`sovereignlab.probes` generates `data/benchmark/probes/kv-probes-oecd-cli-v1.jsonl` from evidence
+v2 (ADR 0014). It holds Korean/English pairs about Korea's CLI. An *as-of value* pair asks for one
+month as of a cutoff (route `data`). A *future period* pair asks for a month that the edition
+available at the cutoff did not yet contain (route `abstain`). Every cutoff is a day on which the
+ledger selects the pair's edition. Every gold is the resolver's result for the record's exact
+arguments, so `scripts/generate_probes.py --check` regenerates the file byte for byte. An as-of
+value pair is tagged `revision-trap` when a later admitted edition holds a different value, which
+makes an answer from that edition detectably wrong.
+
+Each edition is one evidence group in one split: `202607` train, `202611` dev, `202610` test. The
+same holds for the core, whose reserved test-split data release is edition `202610`; a core record
+may use an OECD edition only in that edition's probe split. Probes stay drafts, and the documented
+human audit of a sample is pending; see the [probe README](../data/benchmark/probes/README.md).
+`tests/benchmark/test_probes.py` checks exact regeneration, the composition, one valid
+`BenchmarkBundle`, and that the typed tool dispatcher reproduces every data probe.
 
 ## 6. Public contracts
 

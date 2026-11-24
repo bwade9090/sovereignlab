@@ -40,3 +40,5 @@ Accepted records are not silently rewritten. Supersede them with a new ADR and c
   — **accepted 2026-11-13 (owner-requested; amends ADR 0010 decisions 3, 4, and 6)**
 - [0013 — Admit captures through 2026-11-23 as evidence version 2](0013-admit-captures-through-2026-11-23.md)
   — **accepted 2026-11-24 (owner-approved second CLI capture and registry admission)**
+- [0014 — Tier-2 probe set v1 and the edition split](0014-tier-2-probe-set-and-edition-split.md)
+  — **accepted 2026-11-24 (owner-requested generator; owner chose test = `202610`); audit pending**

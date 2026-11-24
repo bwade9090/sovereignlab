@@ -38,6 +38,11 @@ what comes next.
   briefing-performance result is claimed.
 - **The K-VINTAGE core** — human-reviewed Korean/English record pairs under
   `data/benchmark/core/`, each reproduced by the tools in the test suite.
+- **Tier-2 probes** — machine-generated Korean/English questions about Korea's OECD composite
+  leading indicator under `data/benchmark/probes/`: 266 as-of value records, many of them revision
+  traps, and 12 future-period abstentions. The resolver computes every gold, the set regenerates
+  byte for byte, and it is counted separately from the core. The human audit of a sample is still
+  pending.
 
 The searchable document corpus is a synthetic fixture. The real Bank of Korea reports are bound by
 manifest and page-anchored in the benchmark, but their text is not committed.

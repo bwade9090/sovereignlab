@@ -7,12 +7,16 @@ This page states the present and is edited in place. Git history is the log of h
 - **Milestone:** M2 — benchmark and baselines (charter v2.5 §7). The M1b week-1 gate passed on
   2026-07-18.
 - **Approved core:** 26 of 40 records (13 of 20 Korean/English pairs). No draft is pending.
-- **Next step:** not selected. The owner chooses the next pair or slice; nothing is drafted or
+- **Tier-2 probes:** 266 as-of value records and 12 future-period records in probe set v1,
+  counted apart from the core. The owner's audit of the sample is pending.
+- **Next step:** the owner audits the probe sample listed in `data/benchmark/probes/README.md`.
+  The next core pair or slice is not selected; the owner chooses it, and nothing is drafted or
   approved before that.
-- **Latest change:** on 2026-11-24 the owner admitted evidence version 2 (ADR 0013): a second
-  capture of the Korea CLI archive and every weekly capture through 2026-11-23. It shows the
-  project's first ledger-proven revision: the May 2026 Korea CLI was 102.66 as of 2026-07-09 and
-  102.29 as of 2026-11-10. Version 1 and the approved records are unchanged.
+- **Latest change:** on 2026-11-24 the tier-2 probe set v1 was generated from evidence version 2
+  (ADR 0014), split by OECD edition. The owner chose edition `202610` for test, which also makes
+  it the core's reserved test-split data release. Earlier that day the owner admitted evidence
+  version 2 (ADR 0013), whose May 2026 Korea CLI is 102.66 as of 2026-07-09 and 102.29 as of
+  2026-11-10: the project's first ledger-proven revision.
 
 ## Benchmark core
 
@@ -49,10 +53,30 @@ What the remaining slots need before they can be authored:
   `kv-core-doc-04` and `kv-core-both-04` need the November 2024 outlook; `kv-core-doc-05` and
   `kv-core-both-05` need the May 2024 outlook. Each release first needs its official Korean and
   English manifests under ADR 0009, dated under ADR 0011, as its own reviewable unit.
-- `kv-core-data-05` and `kv-core-both-05` also need the reserved future data release
-  (`reserved-future-data-release-test-01`): an independently captured, owner-approved release
-  with its manifest and availability evidence. Edition `202611` and the November snapshots in
-  evidence v2 are candidates; designating one is the owner's decision.
+- `kv-core-data-05` and `kv-core-both-05` use OECD edition `202610` from evidence v2 as their
+  test-split data release, by the owner's choice on 2026-11-24 (ADR 0014). Its manifest and
+  availability evidence are committed, so `kv-core-data-05` can be drafted once the owner selects
+  it. The matrix's placeholder unit `reserved-future-data-release-test-01` and its intent are
+  replaced in the owner's review of those pairs.
+
+## Tier-2 probes
+
+Probe set v1, `data/benchmark/probes/kv-probes-oecd-cli-v1.jsonl` (ADR 0014), is machine-generated
+from evidence v2. It is never counted with the core.
+
+| Edition | Split | As-of value | Revision traps among them | Future period |
+| --- | --- | ---: | ---: | ---: |
+| `202607` | train | 84 | 84 | 4 |
+| `202610` | test | 90 | 40 | 4 |
+| `202611` | dev | 92 | 0 | 4 |
+
+Counts are records, half Korean and half English; `python scripts/generate_probes.py --check`
+prints them. The 266 as-of value records are the charter's tier-2 data-route items. The 12
+future-period records are abstentions and are reported as a family of their own.
+
+- **Audit:** pending. The charter requires a documented human audit of a sample; the probe README
+  lists the 20 sampled pairs and the checks.
+- **Dev has no revision traps** until an edition newer than `202611` is admitted.
 
 ## What exists
 
@@ -80,8 +104,8 @@ What the remaining slots need before they can be authored:
   2026-07-18. It shows the training path loads, updates, and saves an adapter; it is not a
   model-quality result, and it does not need to be repeated.
 
-Not built: any provider or live-model integration, the four-variant baseline suite, the
-machine-generated probes, and the bounded tool loop (deferred to v1.1 by ADR 0008).
+Not built: any provider or live-model integration, the evaluation scorer, the four-variant
+baseline suite, and the bounded tool loop (deferred to v1.1 by ADR 0008).
 
 ## Weekly capture
 
@@ -165,3 +189,6 @@ Approvals of individual benchmark pairs are in the table above. The other closed
 - 2026-11-13 — the engineering process, documents, code, and tests were reduced (ADR 0012).
 - 2026-11-24 — a second manual Korea CLI capture and evidence version 2, admitting every capture
   through 2026-11-23 (ADR 0013).
+- 2026-11-24 — the tier-2 probe generator, with probes split by OECD edition: `202607` train,
+  `202610` test, and `202611` dev. Choosing `202610` for test also made it the core's reserved
+  test-split data release (ADR 0014).

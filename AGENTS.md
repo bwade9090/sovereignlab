@@ -31,6 +31,9 @@ headline metric; fine-tuning, RAG, and tools are means, not the mission.
 - After changing anything under `src/`, run
   `python scripts/export_execution_replay_traces.py --write`. Each committed trace records a
   digest of the source tree, and the test suite fails until the traces match.
+- After changing the probe generator or the evidence it reads, run
+  `python scripts/generate_probes.py --write`. The test suite fails until the committed probe set
+  equals a fresh generation.
 - After changing a schema model, run `python scripts/export_json_schemas.py`.
 - Use conventional commit prefixes: `feat:`, `fix:`, `docs:`, `test:`, `refactor:`, `chore:`,
   `data:`, `eval:`.
@@ -130,7 +133,8 @@ Offline checks need no API key. Copy `.env.example` to `.env` only for an approv
 - `src/sovereignlab/vintage/`, `snapshots/`, `retrieval/` — the three offline evidence tools and
   the pinned evidence each one reads.
 - `src/sovereignlab/execution/` — planner, dispatcher, packet assembler, and executor.
-- `scripts/` — capture, schema export, and replay-trace export entry points.
+- `src/sovereignlab/probes.py` — the tier-2 probe generator.
+- `scripts/` — capture, schema export, replay-trace export, and probe generation entry points.
 - `data/` — benchmark records, manifests, archives, availability ledgers, and rights catalogs.
 - `traces/` — committed replay traces.
 - `tests/` — offline tests; nothing calls the network.
